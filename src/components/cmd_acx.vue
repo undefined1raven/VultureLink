@@ -12,8 +12,8 @@ export default{
   },
   methods:{
     gen_float(){
-      socket.on('tx', payload => {
-        this.tx = payload.tx;
+      socket.on('ct', payload => {
+        this.tx = payload;
       });
     },
   }
