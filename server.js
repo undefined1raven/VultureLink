@@ -785,12 +785,12 @@ app.post('/auth_post', (req, res) => {
                     }
                 }
                 else {
-                    res.redirect('auth#00');
+                    res.redirect('/login#00');
                 }
             });
         }
         else {
-            res.redirect('auth#00');
+            res.redirect('/login#00');
         }
     });
 });

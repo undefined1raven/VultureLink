@@ -1,0 +1,25 @@
+<script>
+
+export default{
+    props:{
+        id: '',
+        for: '',
+        label: '',
+    }
+}
+
+</script>
+
+<template>
+    <label :for="for" :id="id" class="lb">{{this.label}}</label>
+</template>
+
+<style>
+.lb{
+  position: absolute;
+  color: #7e7e7e;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 1vw;
+  left: 13%;
+}
+</style>

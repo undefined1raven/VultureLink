@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Command from '../views/Command.vue'
 import Login from '../views/Login.vue'
+import Genesis from '../views/Genesis.vue'
 
 
 const router = createRouter({
@@ -23,6 +24,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/genesis',
+      name: 'genesis',
+      component: Genesis
     },
   ]
 })

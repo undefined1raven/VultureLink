@@ -2,12 +2,9 @@
 
 export default{
     props:{
-        id_l: '',
-        id_in: '',
-        for: '',
+        id: '',
         autocomplete: '',
         name: '',
-        label: '',
         type:'',
     }
 }
@@ -15,8 +12,7 @@ export default{
 </script>
 
 <template>
-    <label :for="for" :id="id_l" class="lb">{{this.label}}</label>
-    <input :type="type" tabindex="0" spellcheck="false" :autocomplete="autocomplete" :name="name" :id="id_in" class="in_field">
+    <input :type="type" tabindex="0" spellcheck="false" :autocomplete="autocomplete" :name="name" :id="id" class="in_field">
 </template>
 
 <style>
@@ -25,6 +21,7 @@ export default{
   color: #7e7e7e;
   font-family: 'Titillium Web', sans-serif;
   font-size: 1vw;
+  left: 13%;
 }
 .in_field{
   position: absolute;

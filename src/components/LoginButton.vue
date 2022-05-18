@@ -23,5 +23,6 @@ export default {
   outline: none;
   color: #999999;
   border: solid 1px #001485;
+  transition: linear background-color 0.1s;
 }
 </style>
