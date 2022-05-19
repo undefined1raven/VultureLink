@@ -10,7 +10,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: Command
+      component: () => import('../views/Command.vue')
     },
     {
       path: '/advanced_telemetry',
@@ -23,12 +23,12 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: () => import('../views/Login.vue')
     },
     {
       path: '/genesis',
       name: 'genesis',
-      component: Genesis
+      component: () => import('../views/Genesis.vue')
     },
   ]
 })
