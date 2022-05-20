@@ -1,7 +1,17 @@
 <script>
 import App from '../App.vue'
 
-const socket = io();
+let socket;
+setTimeout(() => {
+  if(io() != undefined){
+    socket = io();
+  }
+  else{
+    setTimeout(() => {
+    socket = io();
+    }, 600);
+  }
+}, 300);
 
 export default{
   data(){

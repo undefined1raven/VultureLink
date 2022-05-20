@@ -10,12 +10,12 @@ document.title = "New Account";
 
 <script lang="ts">
 export default {
-  methods:{
-    redirect(path){
+  methods: {
+    redirect(path) {
       window.location.pathname = path;
-    }
-  }  
-}
+    },
+  },
+};
 </script>
 
 <template>
@@ -62,21 +62,45 @@ export default {
       <InputField
         id="password_confirm_new_account_field"
         autocomplete="new-password"
-        name="password"
         type="password"
       ></InputField>
       <VultureConnectivityDecoDesktop />
+      <LoginButton
+        class="btn_size"
+        id="genesis_btn"
+        text="Create Account"
+        type="submit"
+      ></LoginButton>
     </form>
-      <LoginButton @click="redirect('login')" id="login_btn" text="Login"></LoginButton>
+    <LoginButton
+      class="btn_size"
+      @click="redirect('login')"
+      id="login_btn"
+      text="Login"
+    ></LoginButton>
   </main>
 </template>
 
 <style scoped>
-#login_btn {
+.btn_size {
   width: 10%;
   height: 4%;
+}
+#genesis_btn {
+  top: 60%;
+  left: 35.3%;
+  background-color: #2d00aa20;
+  border: solid 1px #2d00aa;
+}
+#genesis_btn:hover {
+  background-color: #2D00AA40;;
+}
+#login_btn {
   top: 60%;
   left: 20%;
+}
+#login_btn:hover {
+  background-color: #0c00af70;
 }
 #username_l {
   top: 31%;

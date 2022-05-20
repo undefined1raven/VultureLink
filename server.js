@@ -644,7 +644,7 @@ app.post('/adv_tele_logout', (req, res) => {
     });
     res.clearCookie('adv_tele_sio_ath');
     res.clearCookie('at');
-    res.redirect('/auth');
+    res.redirect('/login');
 });
 
 
@@ -808,6 +808,7 @@ app.post('/opsec_to_adv_tele', (req, res) => {
 
 
 app.post('/genesis_post', (req, res) => {
+    console.log(req.body)
     async function add_udb() {
         try {
             var es = await bcrypt.hash(req.body.password, 10);
@@ -833,6 +834,7 @@ app.post('/genesis_post', (req, res) => {
                 contact_emails_arr: [],
                 contact_phone_numbers_arr: [],
             });
+            console.log(uacq);
             uacq.save().then((r) => console.log(`${r.vid} added to DeepStorage`))
             console.log(`${uuid.v4()} saved to UAC`);
 
@@ -850,7 +852,7 @@ app.post('/genesis_post', (req, res) => {
         } catch (e) {
             res.redirect('genesis');
         }
-        res.redirect('/auth');
+        res.redirect('/login');
     }
     add_udb();
 });
@@ -962,7 +964,7 @@ app.get('/MFA_app', (req, res) => {
             if (data != null) {
                 res.sendFile(path.join(__dirname, 'dist/index.html'));
             } else {
-                res.redirect('/auth');
+                res.redirect('/login');
             }
         });
     }
