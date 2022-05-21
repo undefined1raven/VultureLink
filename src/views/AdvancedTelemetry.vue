@@ -42,25 +42,21 @@ export default {
 
   <DistanceIndicator
     id="lft_sonar_indi"
-    @click="ini()"
     :text="`${sonar_telemetry_obj.lft_sonar}`"
   ></DistanceIndicator>
 
   <DistanceIndicator
     id="bwd_sonar_indi"
-    @click="ini()"
     :text="`${sonar_telemetry_obj.bwd_sonar}`"
   ></DistanceIndicator>
 
   <DistanceIndicator
     id="rgt_sonar_indi"
-    @click="ini()"
     :text="`${sonar_telemetry_obj.rgt_sonar}`"
   ></DistanceIndicator>
 
   <DistanceIndicator
     id="gnd_sonar_indi"
-    @click="ini()"
     :text="`${sonar_telemetry_obj.gnd_sonar}`"
   ></DistanceIndicator>
 </template>
