@@ -5,15 +5,18 @@ export default {
   props: {
     placeholder: "",
     name: "",
+    id: "",
+    type: ""
   },
 };
 </script>
 
 <template>
   <input
+    :id="id"
     spellcheck="false"
     class="in"
-    type="number"
+    :type="type"
     :placeholder="placeholder"
     :name="name"
   />

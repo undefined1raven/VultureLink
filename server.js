@@ -775,7 +775,7 @@ function successful_auth_post(req, res, user, redirect) {
 
 
 app.post('/auth_post', (req, res) => {
-    UAC_v2.find({$or: [{ email: req.body.email }, {username: req.body.email}]}).exec().then(usr => {
+    UAC_v2.find({ $or: [{ email: req.body.email }, { username: req.body.email }] }).exec().then(usr => {
         if (usr.length > 0) {
             const user = usr[0];
             bcrypt.compare(req.body.password, user.password).then(rslt => {
@@ -1239,6 +1239,21 @@ app.post('/MFA_mobile_cr', (req, res) => {
 
 let json_parser = bodyParser.json();
 
+function redirect_id_assessment_fn(req, res, user) {
+    if (req.cookies.redirect_id == 0) {
+        res.clearCookie('redirect_id');
+        res.clearCookie('frstp_aprvd_tid');
+        successful_auth_post(req, res, user, false);
+        res.json({ response: true, target_path: '/advanced_telemetry' });
+    }
+    if (req.cookies.redirect_id == 1) {
+        res.clearCookie('redirect_id');
+        res.clearCookie('frstp_aprvd_tid');
+        successful_security_post(req, res, user, false);
+        res.json({ response: true, target_path: '/security' });
+    }
+}
+
 app.post('/MFA_TOTP_post', json_parser, (req, res) => {
     UAC_v2.find({ $or: [{ email: req.cookies.eor }, { username: req.cookies.eor }] }).exec().then(usr => {
         const user = usr[0];
@@ -1250,34 +1265,17 @@ app.post('/MFA_TOTP_post', json_parser, (req, res) => {
                 window: 6,
             });
             if (verified) {
-                if (req.cookies.redirect_id == 0) {
-                    res.clearCookie('redirect_id');
-                    res.clearCookie('frstp_aprvd_tid');
-                    successful_auth_post(req, res, user, false);
-                    res.json({ response: true, target_path: '/advanced_telemetry' });
-                }
-                if (req.cookies.redirect_id == 1) {
-                    res.clearCookie('redirect_id');
-                    res.clearCookie('frstp_aprvd_tid');
-                    successful_security_post(req, res, user, false);
-                    res.json({ response: true, target_path: '/security' });
-                }
+                redirect_id_assessment_fn(req, res, user);
             }
             else {
 
                 if (user.rcvry_codes_arr.find(elm => elm == req.body.backup_code) != undefined) {//verifying backup code
-                    if (req.cookies.redirect_id.path == 0) {
-                        successful_auth_post(req, res, user, false);
-                        res.json({ response: true, target_path: '/advanced_telemetry' });
-                    } else {
-                        let md_arr = user.rcvry_codes_arr;
-                        let ixn = md_arr.indexOf(req.body.backup_code);
-                        md_arr[ixn] = "CODE ALREADY USED";
-                        UAC_v2.findOneAndUpdate({ email: req.cookies.eor }, { rcvry_codes_arr: md_arr }, { upsert: true }, (err, doc) => { });//inavlidate backup code
+                    let md_arr = user.rcvry_codes_arr;
+                    let ixn = md_arr.indexOf(req.body.backup_code);
+                    md_arr[ixn] = "CODE ALREADY USED";
+                    UAC_v2.findOneAndUpdate({ $or: [{ email: req.cookies.eor }, { username: req.cookies.eor }] }, { rcvry_codes_arr: md_arr }, { upsert: true }, (err, doc) => { });//inavlidate backup code
 
-                        successful_security_post(req, res, user, false);
-                        res.json({ response: true, target_path: '/security' });
-                    }
+                    redirect_id_assessment_fn(req, res, user);
                 }
                 else {
                     res.json({ response: false });

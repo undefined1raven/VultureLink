@@ -35,7 +35,7 @@ export default {
 
       <InputFieldLabel
         id="email_l"
-        label="Email"
+        label="Email or Username"
         for="email_auth_field"
       ></InputFieldLabel>
 
@@ -48,7 +48,7 @@ export default {
 
       <InputFieldLabel
         id="password_l"
-        label="Passwod"
+        label="Password"
         for="password_auth_field"
       ></InputFieldLabel>
 
