@@ -427,8 +427,12 @@ io.on('connection', function (socket_l) {
         io.to(`${payload.vid}`).emit('gps_nav_pkg_rebound', payload.telemetry);
     });//Origin HID [02F] | GPS [heading, speed]
 
+    socket_l.on('sonar_telemetry_pkg', sonar_telemetry_payload => {
+        io.emit('sonar_telemetry_pkg_rebound', sonar_telemetry_payload.telemetry);//to(`${payload.vid}`)
+    });
+
     socket_l.on('sonar_1_rebound', function (payload) {
-        io.to(`${payload.vid}`).emit('sonar_data', payload.telemetry);
+        io.emit('sonar_1_dist', payload.telemetry);//to(`${payload.vid}`)
     });//Origin HID [02D-0] | Front Sonar distance(cm)
 
     socket_l.on('sonar_2_rebound', function (payload) {
