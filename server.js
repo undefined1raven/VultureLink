@@ -872,7 +872,7 @@ function auth_status(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-    res.redirect('auth');
+    res.redirect('login');
 }
 
 //----App Routes----//
@@ -1027,11 +1027,11 @@ function check_ua(req, res, red_d, red_m) {
                             rvpx = true;
                         }
                         else {
-                            res.redirect('auth');
+                            res.redirect('login');
                         }
                     }
                     catch {
-                        res.redirect('auth');
+                        res.redirect('login');
                         rvpx = false;
                     }
 
@@ -1066,21 +1066,21 @@ function check_ua(req, res, red_d, red_m) {
                         }
                     }
                     else {
-                        // res.redirect('auth');
+                        // res.redirect('login');
                     }
                 }
                 else {
-                    res.redirect('auth');
+                    res.redirect('login');
                 }
             });
         }
         else {
-            res.redirect('auth');
+            res.redirect('login');
         }
     }
     catch
     {
-        res.redirect('auth');
+        res.redirect('login');
     }
 }
 
