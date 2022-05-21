@@ -3,13 +3,8 @@ import Background from "@/components/BaseBackgroundImg.vue";
 import DistanceIndicator from "@/components/AdvancedTeleBaseDistanceIndi.vue";
 </script>
 
-<script >
-let socket;
-setTimeout(() => {
-  if (io() != undefined) {
-    socket = io();
-  }
-}, 300);
+<script>
+let socket = io();
 
 export default {
   data() {
