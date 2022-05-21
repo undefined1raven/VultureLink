@@ -22,6 +22,7 @@ export default {
 <template>
   <main>
     <Background></Background>
+    <Label id="primary_label" text="Additional Security Step"></Label>
     <BaseWideLogo />
     <form action="/auth_post" method="post">
       <InputField

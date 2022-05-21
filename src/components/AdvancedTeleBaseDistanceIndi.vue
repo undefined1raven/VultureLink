@@ -21,7 +21,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #fff;
+  color: #FFF;
+  font-weight: 300;
   font-size: 1.2vw;
   font-family: "Titillium Web", sans-serif;
   border: solid 1px rgb(44, 44, 44);

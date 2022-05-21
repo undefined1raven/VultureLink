@@ -15,9 +15,6 @@ const router = createRouter({
     {
       path: '/advanced_telemetry',
       name: 'advanced_telemetry',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AdvancedTelemetry.vue')
     },    
     {
@@ -29,6 +26,11 @@ const router = createRouter({
       path: '/genesis',
       name: 'genesis',
       component: () => import('../views/Genesis.vue')
+    },
+    {
+      path: '/MFA_TOTP',
+      name: 'MFA_TOTP',
+      component: () => import('../views/MFA_TOTP.vue')
     },
   ]
 })

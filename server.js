@@ -48,7 +48,7 @@ const { ToadScheduler, SimpleIntervalJob, AsyncTask, Task } = require('toad-sche
 const uap = require('useragent');
 const user_profile_gen_functions = require('./user_profile_gen_functions.js');
 const encryptor = require('simple-encryptor')(secrets.GPE);//process.env.WEB_RELAY_ENCRYPTION_KEY
-
+const bodyParser = require('body-parser');
 
 user_profile_gen_functions.gen_pilot_u_access_array()
 const gen_admin_u_access_array = (acid, role) => user_profile_gen_functions.gen_admin_u_access_array(acid, role);
@@ -775,7 +775,7 @@ function successful_auth_post(req, res, user, redirect) {
 
 
 app.post('/auth_post', (req, res) => {
-    UAC_v2.find({ email: req.body.email }).exec().then(usr => {
+    UAC_v2.find({$or: [{ email: req.body.email }, {username: req.body.email}]}).exec().then(usr => {
         if (usr.length > 0) {
             const user = usr[0];
             bcrypt.compare(req.body.password, user.password).then(rslt => {
@@ -954,7 +954,7 @@ app.get('/MFA_TOTP', (req, res) => {
             res.sendFile(path.join(__dirname, 'dist/index.html'));
         }
         else {
-            res.redirect('auth');
+            res.redirect('login');
         }
     }
 });
@@ -1237,8 +1237,10 @@ app.post('/MFA_mobile_cr', (req, res) => {
     });
 });
 
-app.post('/MFA_TOTP_post', (req, res) => {
-    UAC_v2.find({ email: req.body.email }).exec().then(usr => {
+let json_parser = bodyParser.json();
+
+app.post('/MFA_TOTP_post', json_parser, (req, res) => {
+    UAC_v2.find({ $or: [{ email: req.cookies.eor }, { username: req.cookies.eor }] }).exec().then(usr => {
         const user = usr[0];
         if (usr.length > 0) {
             var verified = mfa_mgr.totp.verify({
@@ -1251,36 +1253,39 @@ app.post('/MFA_TOTP_post', (req, res) => {
                 if (req.cookies.redirect_id == 0) {
                     res.clearCookie('redirect_id');
                     res.clearCookie('frstp_aprvd_tid');
-                    successful_auth_post(req, res, user, true);
+                    successful_auth_post(req, res, user, false);
+                    res.json({ response: true, target_path: '/advanced_telemetry' });
                 }
                 if (req.cookies.redirect_id == 1) {
                     res.clearCookie('redirect_id');
                     res.clearCookie('frstp_aprvd_tid');
-                    successful_security_post(req, res, user, true);
+                    successful_security_post(req, res, user, false);
+                    res.json({ response: true, target_path: '/security' });
                 }
             }
             else {
 
                 if (user.rcvry_codes_arr.find(elm => elm == req.body.backup_code) != undefined) {//verifying backup code
-                    if (req.cookies.redirect_id.path == '/advanced_telemetry') {
-                        successful_auth_post(req, res, user);
+                    if (req.cookies.redirect_id.path == 0) {
+                        successful_auth_post(req, res, user, false);
+                        res.json({ response: true, target_path: '/advanced_telemetry' });
                     } else {
                         let md_arr = user.rcvry_codes_arr;
                         let ixn = md_arr.indexOf(req.body.backup_code);
-
                         md_arr[ixn] = "CODE ALREADY USED";
-                        UAC_v2.findOneAndUpdate({ email: req.body.email }, { rcvry_codes_arr: md_arr }, { upsert: true }, (err, doc) => { });//inavlidate backup code
+                        UAC_v2.findOneAndUpdate({ email: req.cookies.eor }, { rcvry_codes_arr: md_arr }, { upsert: true }, (err, doc) => { });//inavlidate backup code
 
-                        successful_security_post(req, res, user, true);
+                        successful_security_post(req, res, user, false);
+                        res.json({ response: true, target_path: '/security' });
                     }
                 }
                 else {
-                    res.redirect('auth#00');
+                    res.json({ response: false });
                 }
             }
         }
         else {
-            res.redirect('auth#00');
+            res.json({ response: false });
         }
     });
 });
@@ -1288,10 +1293,12 @@ app.post('/MFA_TOTP_post', (req, res) => {
 function MFA_prep_and_redirect(req, res, user, redirect_id, tid) {
     set(ref(db, `frstp_aprvd_tids/${tid}`), { notification_sent: false, state: 'pending', tx: Date.now(), acid: user.acid });
     if (process.env.NODE_ENV === 'production') {
+        res.cookie('eor', req.body.email, { httpOnly: true, secure: true });
         res.cookie('frstp_aprvd_tid', { tid: tid, un: user.username, acid: user.acid }, { secure: true, httpOnly: true });
         res.cookie('redirect_id', redirect_id, { secure: true, httpOnly: true });
     }
     else {
+        res.cookie('eor', req.body.email, { httpOnly: true, secure: false });
         res.cookie('frstp_aprvd_tid', { tid: tid, un: user.username, acid: user.acid }, { secure: false, httpOnly: true });
         res.cookie('redirect_id', redirect_id, { secure: false, httpOnly: true });
     }
