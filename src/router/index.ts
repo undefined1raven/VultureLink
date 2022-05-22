@@ -32,6 +32,11 @@ const router = createRouter({
       name: 'MFA_TOTP',
       component: () => import('../views/MFA_TOTP.vue')
     },
+    {
+      path: '/MFA_app',
+      name: 'MFA_app',
+      component: () => import('../views/MFA_app.vue')
+    },
   ]
 })
 

@@ -646,8 +646,14 @@ app.post('/adv_tele_logout', (req, res) => {
             remove(ref(db, `adv_tele_aprvd_tids/${req.cookies.at.tid}`));
         }
     });
-    res.clearCookie('adv_tele_sio_ath');
     res.clearCookie('at');
+    res.clearCookie('sat');
+    res.clearCookie('adv_tele_sio_ath');
+    res.clearCookie('sio_ath');
+
+    res.clearCookie('wid');
+    res.clearCookie('eor');
+
     res.redirect('/login');
 });
 
@@ -759,11 +765,13 @@ function successful_auth_post(req, res, user, redirect) {
         add_activity_log_tdb(req, ip, 'Advanced Telemetry login', req.body.email);
         res.cookie('at', { tac: token, tid: tid, exp: at_expiry_date }, { httpOnly: true, secure: true, expires: at_expiry_date });
         res.cookie('adv_tele_sio_ath', tid, { secure: true });
+        res.cookie('wid', 'advanced_telemetry', { httpOnly: true, secure: true });
     }
     else {
         // add_activity_log_tdb(req, ip, 'Advanced Telemetry login', req.body.email);
         res.cookie('at', { tac: token, tid: tid, exp: at_expiry_date }, { httpOnly: true, expires: at_expiry_date });
         res.cookie('adv_tele_sio_ath', tid);
+        res.cookie('wid', 'advanced_telemetry', { httpOnly: true });
     }
     res.clearCookie('redirect_id');
     setTimeout(() => {
@@ -950,27 +958,34 @@ app.get('/login', (req, res) => {
 const MFA_TOTP_rate_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 30, interval: 'hour' });
 app.get('/MFA_TOTP', (req, res) => {
     if (rate_limiter_checker(MFA_TOTP_rate_limiter, res)) {
-        if (req.cookies.frstp_aprvd_tid != undefined) {
-            res.sendFile(path.join(__dirname, 'dist/index.html'));
+        MFA_conditional_renderer(req, res);
+    }
+});
+
+
+function MFA_conditional_renderer(req, res) {
+    if (req.cookies.frstp_aprvd_tid != undefined) {
+        get_snapshot_from_path(`frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`).then(snapshot => {
+            const data = snapshot.val();
+            if (data != null) {
+                res.sendFile(path.join(__dirname, 'dist/index.html'));
+            }
+        });
+    }
+    else {
+        if (req.cookies.wid != undefined) {
+            res.redirect(`/${req.cookies.wid}`);
         }
         else {
             res.redirect('login');
         }
     }
-});
-
+}
 
 const MFA_app_rate_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 30, interval: 'hour' });
 app.get('/MFA_app', (req, res) => {
     if (rate_limiter_checker(MFA_app_rate_limiter, res)) {
-        get_snapshot_from_path(`frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`).then(snapshot => {
-            const data = snapshot.val();
-            if (data != null) {
-                res.sendFile(path.join(__dirname, 'dist/index.html'));
-            } else {
-                res.redirect('/login');
-            }
-        });
+        MFA_conditional_renderer(req, res);
     }
 });
 
@@ -1054,9 +1069,11 @@ function check_ua(req, res, red_d, red_m) {
                         if (process.env.NODE_ENV === 'production') {
                             res.cookie('at', { tac: new_token, tid: ntid, exp: req.cookies.at.exp }, { httpOnly: true, secure: true });
                             res.cookie('adv_tele_sio_ath', ntid, { secure: true });
+                            res.cookie('wid', 'advanced_telemetry', { httpOnly: true, secure: true });
                         } else {
                             res.cookie('at', { tac: new_token, tid: ntid, exp: req.cookies.at.exp }, { httpOnly: true });
                             res.cookie('adv_tele_sio_ath', ntid);
+                            res.cookie('wid', 'advanced_telemetry', { httpOnly: true, secure: false });
                         }
                         if (req.useragent.isDesktop) {
                             res.sendFile(path.join(__dirname, 'dist/index.html'));
@@ -1140,28 +1157,25 @@ function opsec_check_ua(req, res, red_d, red_m, fred) {
                             algorithm: 'HS256',
                             expiresIn: 14400,
                         });
-
-                        if (process.env.NODE_ENV === 'production') {
-                            res.cookie('sio_ath', ntid, { secure: true });//sets the socket transport cookie to the new security token id
-                        }
-                        else {
-                            res.cookie('sio_ath', ntid);//sets the socket transport cookie to the new security token id
-                        }
-
+                        
                         const add_tid_to_rtdb = ref(db, `aprvd_tids/${ntid}`);
                         //adds the new security session token id to the rt db 
                         set(add_tid_to_rtdb, {
                             tx: Date.now(),
                             un: decoded_jwt.un
                         });
-
+                        
                         remove(ref(db, `aprvd_tids/${req.cookies.sat.tid}`));
-
+                        
                         if (process.env.NODE_ENV === 'production') {//sets the new security token id to the response 'tid' cookie
                             res.cookie('sat', { tac: new_token, tid: ntid }, { httpOnly: true, secure: true });
+                            res.cookie('sio_ath', ntid, { secure: true });//sets the socket transport cookie to the new security token id
+                            res.cookie('wid', 'security', { httpOnly: true, secure: true });
                         }
                         else {
                             res.cookie('sat', { tac: new_token, tid: ntid }, { httpOnly: true });
+                            res.cookie('sio_ath', ntid);//sets the socket transport cookie to the new security token id
+                            res.cookie('wid', 'security', { httpOnly: true, secure: false });
                         }
                         res.clearCookie('t_sec');//used to make sure the user passed the first step of auth
                         if (req.useragent.isDesktop) {
@@ -1204,11 +1218,13 @@ function successful_security_post(req, res, user, redirect) {
         add_activity_log_tdb(req, ip, 'Security login', req.body.email);
         res.cookie('sat', { tac: token, tid: tid }, { httpOnly: true, secure: true });
         res.cookie('sio_ath', tid, { secure: true });
+        res.cookie('wid', 'security', { httpOnly: true, secure: true });
     }
     else {
         // add_activity_log_tdb(req, ip, 'Security login', req.body.email);
         res.cookie('sat', { tac: token, tid: tid }, { httpOnly: true });
         res.cookie('sio_ath', tid);
+        res.cookie('wid', 'security', { httpOnly: true, secure: false });
     }
     res.clearCookie('redirect_id');
     if (redirect) {

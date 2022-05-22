@@ -1,9 +1,9 @@
 <script setup>
 import Background from "@/components/BaseBackgroundImg.vue";
 import Label from "@/components/Label.vue";
-import MfaTotpInput from "@/components/TheMfaTotpInput.vue";
-import ActionStatus from "@/components/DesktopActionStatusIndicator.vue";
 import OptionsButton from "@/components/MfaOptionsButton.vue";
+import ActionStatus from "@/components/DesktopActionStatusIndicator.vue";
+import MfaTotpInput from "@/components/TheMfaTotpInput.vue";
 
 document.title = "Vulture//MFA";
 </script>
@@ -77,6 +77,9 @@ export default {
         }, 50);
       }
     },
+    redirect(path){
+      window.location.pathname = path;
+    }
   },
 };
 </script>
@@ -112,6 +115,7 @@ export default {
     <OptionsButton
       id="vulture_app_option_btn"
       label="Send a notification to the Vulture App"
+      @click="redirect('MFA_app')"
     ></OptionsButton>
     <OptionsButton
       id="backup_code_option_btn"
