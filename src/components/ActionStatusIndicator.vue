@@ -24,8 +24,6 @@ export default {
 <style scoped>
 .indicator{
     position: absolute;
-    width: 15%;
-    height: 12.184259259%;
 }
 .ic{
     transition: fill linear 0.1s;

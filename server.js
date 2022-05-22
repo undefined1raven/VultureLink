@@ -958,7 +958,22 @@ app.get('/login', (req, res) => {
 const MFA_TOTP_rate_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 30, interval: 'hour' });
 app.get('/MFA_TOTP', (req, res) => {
     if (rate_limiter_checker(MFA_TOTP_rate_limiter, res)) {
-        MFA_conditional_renderer(req, res);
+        if (process.env.NODE_ENV === 'production') {
+            MFA_conditional_renderer(req, res);
+        }
+        else {
+            if (req.cookies.frstp_aprvd_tid != undefined) {
+                res.sendFile(path.join(__dirname, 'dist/index.html'));
+            }
+            else {
+                if (req.cookies.wid != undefined) {
+                    res.redirect(`/${req.cookies.wid}`);
+                }
+                else {
+                    res.redirect('login');
+                }
+            }
+        }
     }
 });
 
@@ -985,7 +1000,22 @@ function MFA_conditional_renderer(req, res) {
 const MFA_app_rate_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 30, interval: 'hour' });
 app.get('/MFA_app', (req, res) => {
     if (rate_limiter_checker(MFA_app_rate_limiter, res)) {
-        MFA_conditional_renderer(req, res);
+        if (process.env.NODE_ENV === 'production') {
+            MFA_conditional_renderer(req, res);
+        }
+        else {
+            if (req.cookies.frstp_aprvd_tid != undefined) {
+                res.sendFile(path.join(__dirname, 'dist/index.html'));
+            }
+            else {
+                if (req.cookies.wid != undefined) {
+                    res.redirect(`/${req.cookies.wid}`);
+                }
+                else {
+                    res.redirect('login');
+                }
+            }
+        }
     }
 });
 
@@ -1157,16 +1187,16 @@ function opsec_check_ua(req, res, red_d, red_m, fred) {
                             algorithm: 'HS256',
                             expiresIn: 14400,
                         });
-                        
+
                         const add_tid_to_rtdb = ref(db, `aprvd_tids/${ntid}`);
                         //adds the new security session token id to the rt db 
                         set(add_tid_to_rtdb, {
                             tx: Date.now(),
                             un: decoded_jwt.un
                         });
-                        
+
                         remove(ref(db, `aprvd_tids/${req.cookies.sat.tid}`));
-                        
+
                         if (process.env.NODE_ENV === 'production') {//sets the new security token id to the response 'tid' cookie
                             res.cookie('sat', { tac: new_token, tid: ntid }, { httpOnly: true, secure: true });
                             res.cookie('sio_ath', ntid, { secure: true });//sets the socket transport cookie to the new security token id
@@ -1307,14 +1337,14 @@ app.post('/MFA_TOTP_post', json_parser, (req, res) => {
 function MFA_prep_and_redirect(req, res, user, redirect_id, tid) {
     set(ref(db, `frstp_aprvd_tids/${tid}`), { notification_sent: false, state: 'pending', tx: Date.now(), acid: user.acid });
     if (process.env.NODE_ENV === 'production') {
-        res.cookie('eor', req.body.email, { httpOnly: true, secure: true });
+        res.cookie('eor', req.body.email, { httpOnly: false, secure: true });
         res.cookie('frstp_aprvd_tid', { tid: tid, un: user.username, acid: user.acid }, { secure: true, httpOnly: true });
-        res.cookie('redirect_id', redirect_id, { secure: true, httpOnly: true });
+        res.cookie('redirect_id', redirect_id, { secure: true, httpOnly: false });
     }
     else {
-        res.cookie('eor', req.body.email, { httpOnly: true, secure: false });
+        res.cookie('eor', req.body.email, { httpOnly: false, secure: false });
         res.cookie('frstp_aprvd_tid', { tid: tid, un: user.username, acid: user.acid }, { secure: false, httpOnly: true });
-        res.cookie('redirect_id', redirect_id, { secure: false, httpOnly: true });
+        res.cookie('redirect_id', redirect_id, { secure: false, httpOnly: false });
     }
 
     res.redirect(`/MFA_${user.acc_auth_methods_arr.first}`);
@@ -1619,17 +1649,19 @@ io.on('connection', socket => {
     });
 
     socket.on('login_res', login_res_payload => {
-        get_snapshot_from_path(`frstp_aprvd_tids/${login_res_payload.tid}`).then(snapshot => {
-            const data = snapshot.val();
-            if (data != null) {
-                if (login_res_payload.user_response) {
-                    set(ref(db, `frstp_aprvd_tids/${login_res_payload.tid}`), { tid: login_res_payload.tid, acid: login_res_payload.acid, state: true });
+        if(login_res_payload.tid != undefined){
+            get_snapshot_from_path(`frstp_aprvd_tids/${login_res_payload.tid}`).then(snapshot => {
+                const data = snapshot.val();
+                if (data != null) {
+                    if (login_res_payload.user_response) {
+                        set(ref(db, `frstp_aprvd_tids/${login_res_payload.tid}`), { tid: login_res_payload.tid, acid: login_res_payload.acid, state: true });
+                    }
+                    else {
+                        set(ref(db, `frstp_aprvd_tids/${login_res_payload.tid}`), { tid: login_res_payload.tid, acid: login_res_payload.acid, state: false });
+                    }
                 }
-                else {
-                    set(ref(db, `frstp_aprvd_tids/${login_res_payload.tid}`), { tid: login_res_payload.tid, acid: login_res_payload.acid, state: false });
-                }
-            }
-        });
+            });
+        }
     });
 
     socket.on('reset_pass', reset_pass_payload => {
@@ -2233,7 +2265,7 @@ io.on('connection', socket => {
 
     function req_un_exec(payload, snapshot) {
         if (socket_transport_authenticator(payload, snapshot)) {
-            UAC_v2.find({ email: payload.email }).exec().then(r => {
+            UAC_v2.find({ $or: [{ email: payload.uid }, { username: payload.uid }] }).exec().then(r => {
                 if (r.length > 0) {
                     const user = r[0];
                     io.to(socket.id).emit('un_res', { username: user.username, acid: user.acid });

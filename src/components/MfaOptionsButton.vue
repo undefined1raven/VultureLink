@@ -24,6 +24,7 @@ export default {
     align-items: center;
     justify-content: center;
     background-color: #0029FF00;
+    text-align: center;
 }
 .btn:hover{
     background-color: #000AFF20;

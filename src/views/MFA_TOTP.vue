@@ -2,7 +2,7 @@
 import Background from "@/components/BaseBackgroundImg.vue";
 import Label from "@/components/Label.vue";
 import OptionsButton from "@/components/MfaOptionsButton.vue";
-import ActionStatus from "@/components/DesktopActionStatusIndicator.vue";
+import ActionStatus from "@/components/ActionStatusIndicator.vue";
 import MfaTotpInput from "@/components/TheMfaTotpInput.vue";
 
 document.title = "Vulture//MFA";
@@ -77,9 +77,15 @@ export default {
         }, 50);
       }
     },
-    redirect(path){
+    redirect(path) {
       window.location.pathname = path;
+    },
+  },
+  mounted() {
+    if (sessionStorage.getItem("TOTP_redi_type") == "true") {
+      this.backup_code_reflex();
     }
+    sessionStorage.removeItem("TOTP_redi_type");
   },
 };
 </script>
@@ -137,6 +143,7 @@ export default {
 
   <ActionStatus
     id="MFA_TOTP_success_indi"
+    class="action_status_indi"
     :fill="'#' + action_status_color + '20'"
     :stroke="'#' + action_status_color"
   ></ActionStatus>
@@ -169,6 +176,10 @@ export default {
 </template>
 
 <style scoped>
+.action_status_indi {
+  width: 15%;
+  height: 12.184259259%;
+}
 #backup_code_input {
   font-size: 1.3vw;
   letter-spacing: 0.3vw;
