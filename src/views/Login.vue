@@ -11,11 +11,38 @@ document.title = "Vulture//Login";
 </script>
 
 <script lang="ts">
+let root = document.documentElement;
 export default {
+  data() {
+    return {
+      dynamic_input_field_height: "",
+      dynamic_button_height: "",
+      non_fields_visibile:
+        true /*hides all elements that are not input fields except the login button*/,
+    };
+  },
   methods: {
+    compute_input_field_height() {
+      if (root.clientHeight < 900 && root.clientWidth < 600) {
+        if (root.clientHeight < 400) {
+          this.non_fields_visibile = false;
+        } else {
+          this.non_fields_visibile = true;
+        }
+        this.dynamic_input_field_height = `${(44 * 100) / root.clientHeight}%`;
+        this.dynamic_button_height = `${(40 * 100) / root.clientHeight}%`;
+      } else {
+        this.dynamic_input_field_height = "4%";
+      }
+    },
     redirect(path) {
       window.location.pathname = path;
     },
+  },
+  mounted() {
+    window.onresize = () => {
+      this.compute_input_field_height();
+    };
   },
 };
 </script>
@@ -25,7 +52,7 @@ export default {
     <Background></Background>
     <MobileBackground></MobileBackground>
     <Label id="primary_label" text="Additional Security Step"></Label>
-    <BaseWideLogo />
+    <BaseWideLogo v-if="non_fields_visibile" />
     <form action="/auth_post" method="post">
       <InputField
         autofocus
@@ -33,6 +60,7 @@ export default {
         autocomplete="email"
         name="email"
         type="text"
+        :height="dynamic_input_field_height"
       ></InputField>
 
       <InputFieldLabel
@@ -46,6 +74,7 @@ export default {
         autocomplete="password"
         name="password"
         type="password"
+        :height="dynamic_input_field_height"
       ></InputField>
 
       <InputFieldLabel
@@ -54,12 +83,19 @@ export default {
         for="password_auth_field"
       ></InputFieldLabel>
 
-      <LoginButton id="login_btn" text="Log In" type="submit"></LoginButton>
+      <LoginButton
+        id="login_btn"
+        text="Log In"
+        type="submit"
+        :height="dynamic_button_height"
+      ></LoginButton>
     </form>
     <LoginButton
       @click="redirect('genesis')"
       id="new_account_btn"
       text="Create Account"
+      :height="dynamic_button_height"
+      v-if="non_fields_visibile"
     ></LoginButton>
   </main>
 </template>
@@ -128,6 +164,23 @@ export default {
     left: 19.444444444%;
     font-size: 3.9vw;
     background-color: #0000ff00;
+  }
+  @media only screen and (max-height: 400px) {
+    #email_l{
+      top: calc(28.125% + 0% - 6%);
+    }
+    #password_l{
+      top: calc(39.6875% + 13% - 6%);
+    }
+    #email_auth_field{
+      top: calc(28.125% + 0%);
+    }
+    #password_auth_field{
+      top: calc(39.6875% + 13%);
+    }
+    #login_btn{
+      top: 75%;
+    }
   }
 }
 </style>

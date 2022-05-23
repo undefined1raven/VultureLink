@@ -4,12 +4,13 @@ export default {
     id: "",
     text: "",
     type: "",
+    height: ""
   },
 };
 </script>
 
 <template>
-  <button class="login_btn" :type="type" :id="id">{{ this.text }}</button>
+  <button class="login_btn" :type="type" :id="id" :style="'height:' + height">{{ this.text }}</button>
 </template>
 
 <style scoped>

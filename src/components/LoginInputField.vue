@@ -5,6 +5,7 @@ export default {
     autocomplete: "",
     name: "",
     type: "",
+    height: ""
   },
 };
 </script>
@@ -17,6 +18,7 @@ export default {
     :autocomplete="autocomplete"
     :name="name"
     :id="id"
+    :style="'height: ' + height"
     class="in_field"
   />
 </template>
