@@ -5,6 +5,7 @@ import BasePrimaryLabel from "@/components/BasePrimaryLabel.vue";
 import InputField from "@/components/LoginInputField.vue";
 import InputFieldLabel from "@/components/LoginInputFieldLabel.vue";
 import LoginButton from "@/components/LoginButton.vue";
+import MobileBackground from "@/components/MobileBaseBackgroundImg.vue";
 
 document.title = "Vulture//Login";
 </script>
@@ -22,6 +23,7 @@ export default {
 <template>
   <main>
     <Background></Background>
+    <MobileBackground></MobileBackground>
     <Label id="primary_label" text="Additional Security Step"></Label>
     <BaseWideLogo />
     <form action="/auth_post" method="post">
@@ -99,5 +101,33 @@ export default {
 #password_auth_field {
   top: 50%;
   left: 20%;
+}
+@media only screen and (max-width: 768px) {
+  #email_l {
+    top: 25%;
+    left: 19.444444444%;
+  }
+  #password_l {
+    top: 36.5625%;
+    left: 19.444444444%;
+  }
+  #email_auth_field {
+    top: 28.125%;
+    left: 19.444444444%;
+  }
+  #password_auth_field {
+    top: 39.6875%;
+    left: 19.444444444%;
+  }
+  #login_btn {
+    top: 56.25%;
+    left: 19.444444444%;
+  }
+  #new_account_btn {
+    top: 65.25%;
+    left: 19.444444444%;
+    font-size: 3.9vw;
+    background-color: #0000ff00;
+  }
 }
 </style>

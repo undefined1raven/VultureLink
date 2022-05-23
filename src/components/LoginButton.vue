@@ -24,5 +24,17 @@ export default {
   color: #999999;
   border: solid 1px #001485;
   transition: linear background-color 0.1s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@media only screen and (max-width: 768px) {
+  .login_btn {
+    width: 61.388888889%;
+    height: 6.25%;
+    border: solid 1px #001aff;
+    font-size: 4vw;
+    background-color: #00000000;
+  }
 }
 </style>

@@ -20,4 +20,9 @@ export default {
   position: absolute;
   font-family: "Titillium Web", sans-serif;
 }
+@media only screen and (max-width: 768px) {
+    .l{
+      /* font-size: 3.7vw; */
+    }
+}
 </style>

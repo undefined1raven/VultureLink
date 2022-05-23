@@ -46,6 +46,11 @@ export default {
       current_user_un: "",
     };
   },
+  methods: {
+    handle_visibility_sig() {
+      this.login_req_details_obj.isVisible = false;
+    },
+  },
   mounted() {
     setTimeout(() => {
       socket.emit("req_un", {
@@ -126,6 +131,7 @@ export default {
     :tid="login_req_details_obj.tid"
     :current_user_acid="current_user_acid"
     :login_request_visible="login_req_details_obj.login_request_visible"
+    @visibility_switch_sig="handle_visibility_sig"
   ></LoginRequestOverlay>
 </template>
 

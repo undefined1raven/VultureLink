@@ -20,6 +20,9 @@ export default {
     isVisible: "",
   },
   methods: {
+    signal_visibility_switch() {
+      this.$emit("visibility_switch_sig");
+    },
     approve_btn_reflex(socket_ref, tid, current_user_acid) {
       socket_ref.emit("login_res", {
         tid: tid,
@@ -29,7 +32,7 @@ export default {
       this.action_status_color = "00FFF0";
       setTimeout(() => {
         this.action_status_color = "0500F0";
-        this.isVisible = false;
+        this.signal_visibility_switch();
       }, 700);
     },
     deny_btn_reflex(socket_ref, tid, current_user_acid) {
@@ -41,7 +44,7 @@ export default {
       this.action_status_color = "FF006B";
       setTimeout(() => {
         this.action_status_color = "0500F0";
-        this.isVisible = false;
+        this.signal_visibility_switch();
       }, 700);
     },
   },
