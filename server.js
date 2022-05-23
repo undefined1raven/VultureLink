@@ -630,12 +630,12 @@ async function get_snapshot_from_path(path) {
     return get(ref(db, path));
 }
 
-// if (process.env.NODE_ENV === 'production') {
-//    app.enable('trust proxy');
-//    app.use((req, res, next) => {
-//       req.secure ? next() : res.redirect('https://' + req.headers.host + req.url)
-//    });//HTTPS Auto-redirect // handled by cloudflare
-// }
+if (process.env.NODE_ENV === 'production') {
+   app.enable('trust proxy');
+   app.use((req, res, next) => {
+      req.secure ? next() : res.redirect('https://' + req.headers.host + req.url)
+   });//HTTPS Auto-redirect // handled by cloudflare
+}
 
 //----Authentication [beta]----//
 
@@ -667,77 +667,79 @@ app.post('/adv_tele_logout', (req, res) => {
 const MFA_mobile_poll_rate_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 675, interval: 'hour' });
 app.post('/MFA_mobile_poll', (req, res) => {
     if (rate_limiter_checker(MFA_mobile_poll_rate_limiter, res)) {
-        get_snapshot_from_path(`frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`).then(snapshot => {
-            const data = snapshot.val();
-            if (data != null) {
-                try {
-                    let agl = uap.parse(req.headers["user-agent"]);
-                    let os = agl.os.family;
-                    let os_version = agl.os.major;
+        if (req.cookies.frstp_aprvd_tid != undefined) {
+            get_snapshot_from_path(`frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`).then(snapshot => {
+                const data = snapshot.val();
+                if (data != null) {
+                    try {
+                        let agl = uap.parse(req.headers["user-agent"]);
+                        let os = agl.os.family;
+                        let os_version = agl.os.major;
 
-                    var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-                    let ipx = ip.split(',')[0];
-                    if (!data.notification_sent) {
-                        getipld(ipx).then(location => {
-                            try {
-                                set(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`), { notification_sent: true, state: data.state, tx: data.tx, acid: data.acid });
-                            } catch (e) { }
-                            io.to(`${data.acid}`).emit('login_req', { iso_code: location.country.iso_code, state: location.state.name, city: location.city.name, os: os, os_version: os_version, tx: Date.now(), tid: req.cookies.frstp_aprvd_tid.tid });
-                        }).catch(e => {
-                            try {
-                                set(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`), { notification_sent: true, state: data.state, tx: data.tx, acid: data.acid });
-                            } catch (e) { }
-                            io.to(`${data.acid}`).emit('login_req', { iso_code: false, state: false, city: false, os: os, os_version: os_version, tx: Date.now(), tid: req.cookies.frstp_aprvd_tid.tid });
-                        });
-                    }
+                        var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+                        let ipx = ip.split(',')[0];
+                        if (!data.notification_sent) {
+                            getipld(ipx).then(location => {
+                                try {
+                                    set(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`), { notification_sent: true, state: data.state, tx: data.tx, acid: data.acid });
+                                } catch (e) { }
+                                io.to(`${data.acid}`).emit('login_req', { iso_code: location.country.iso_code, state: location.state.name, city: location.city.name, os: os, os_version: os_version, tx: Date.now(), tid: req.cookies.frstp_aprvd_tid.tid });
+                            }).catch(e => {
+                                try {
+                                    set(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`), { notification_sent: true, state: data.state, tx: data.tx, acid: data.acid });
+                                } catch (e) { }
+                                io.to(`${data.acid}`).emit('login_req', { iso_code: false, state: false, city: false, os: os, os_version: os_version, tx: Date.now(), tid: req.cookies.frstp_aprvd_tid.tid });
+                            });
+                        }
 
-                    UAC_v2.find({ acid: req.cookies.frstp_aprvd_tid.acid }).then(r => {
-                        if (r.length > 0) {
-                            const user = r[0];
-                            if (data.state == true) {
-                                remove(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`));
-                                setTimeout(() => {
-                                    let user_acc_auth_methods_arr = user.acc_auth_methods_arr;
-                                    UAC_v2.findOneAndUpdate({ acid: req.cookies.frstp_aprvd_tid.acid }, { acc_auth_methods_arr: { TOTP: user_acc_auth_methods_arr.TOTP, security_key: user_acc_auth_methods_arr.security_key, app: true, email: user_acc_auth_methods_arr.email, first: user_acc_auth_methods_arr.first } }, { upsert: true }, (err, doc) => { });
-                                    if (req.cookies.redirect_id == 0) {
-                                        successful_auth_post(req, res, user, false);
-                                    }
-                                    if (req.cookies.redirect_id == 1) {
-                                        successful_security_post(req, res, user, false);
-                                    }
+                        UAC_v2.find({ acid: req.cookies.frstp_aprvd_tid.acid }).then(r => {
+                            if (r.length > 0) {
+                                const user = r[0];
+                                if (data.state == true) {
+                                    remove(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`));
+                                    setTimeout(() => {
+                                        let user_acc_auth_methods_arr = user.acc_auth_methods_arr;
+                                        UAC_v2.findOneAndUpdate({ acid: req.cookies.frstp_aprvd_tid.acid }, { acc_auth_methods_arr: { TOTP: user_acc_auth_methods_arr.TOTP, security_key: user_acc_auth_methods_arr.security_key, app: true, email: user_acc_auth_methods_arr.email, first: user_acc_auth_methods_arr.first } }, { upsert: true }, (err, doc) => { });
+                                        if (req.cookies.redirect_id == 0) {
+                                            successful_auth_post(req, res, user, false);
+                                        }
+                                        if (req.cookies.redirect_id == 1) {
+                                            successful_security_post(req, res, user, false);
+                                        }
+                                        res.clearCookie('frstp_aprvd_tid');
+                                        res.json({ failure_id: 'none', res_tx: Date.now(), redirect_id: req.cookies.redirect_id, result: true });
+                                        res.end();
+                                    }, 100);
+                                }
+                                if (data.state == false) {
+                                    remove(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`));
                                     res.clearCookie('frstp_aprvd_tid');
-                                    res.json({ failure_id: 'none', res_tx: Date.now(), redirect_id: req.cookies.redirect_id, result: true });
-                                    res.end();
-                                }, 100);
-                            }
-                            if (data.state == false) {
-                                remove(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`));
-                                res.clearCookie('frstp_aprvd_tid');
-                                res.json({ failure_id: 'user_denied_req', res_tx: Date.now(), result: false });
-                                res.end();
-                            }
-                            if (Math.abs(Date.now() - data.tx) > 180000) {
-                                res.json({ failure_id: 'request_timeout', res_tx: Date.now(), result: false });
-                                io.to(`${data.acid}`).emit('login_req_timeout_sig');
-                                remove(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`));
-                            }
-                            else {
-                                if (data.state != true && data.state != false) {
+                                    res.json({ failure_id: 'user_denied_req', res_tx: Date.now(), result: false });
                                     res.end();
                                 }
+                                if (Math.abs(Date.now() - data.tx) > 180000) {
+                                    res.json({ failure_id: 'request_timeout', res_tx: Date.now(), result: false });
+                                    io.to(`${data.acid}`).emit('login_req_timeout_sig');
+                                    remove(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`));
+                                }
+                                else {
+                                    if (data.state != true && data.state != false) {
+                                        res.end();
+                                    }
+                                }
                             }
-                        }
-                        else {
-                            res.json({ failure_id: 'failed_acid_fetch', res_tx: Date.now(), result: false });
-                        }
-                    });
+                            else {
+                                res.json({ failure_id: 'failed_acid_fetch', res_tx: Date.now(), result: false });
+                            }
+                        });
 
-                } catch (e) { res.json({ failure_id: 'cookie TID not in RTDB', res_tx: Date.now(), result: false }); }
-            }
-            else {
-                res.json({ failure_id: 'cookie TID not in RTDB [RTDB returned null]', res_tx: Date.now(), result: false });
-            }
-        });
+                    } catch (e) { res.json({ failure_id: 'cookie TID not in RTDB', res_tx: Date.now(), result: false }); }
+                }
+                else {
+                    res.json({ failure_id: 'cookie TID not in RTDB [RTDB returned null]', res_tx: Date.now(), result: false });
+                }
+            });
+        }
     }
 });
 
@@ -1649,7 +1651,7 @@ io.on('connection', socket => {
     });
 
     socket.on('login_res', login_res_payload => {
-        if(login_res_payload.tid != undefined){
+        if (login_res_payload.tid != undefined) {
             get_snapshot_from_path(`frstp_aprvd_tids/${login_res_payload.tid}`).then(snapshot => {
                 const data = snapshot.val();
                 if (data != null) {
