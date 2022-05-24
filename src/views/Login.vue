@@ -24,7 +24,7 @@ export default {
   methods: {
     compute_input_field_height() {
       if (root.clientHeight < 900 && root.clientWidth < 600) {
-        if (root.clientHeight < 400) {
+        if (root.clientHeight < 550) {
           this.non_fields_visibile = false;
         } else {
           this.non_fields_visibile = true;
