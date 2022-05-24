@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import Background from "@/components/BaseBackgroundImg.vue";
-import BaseWideLogo from "@/components/BaseWideLogo.vue";
+import AuroraLogo from "@/components/AuroraLogo.vue";
 import BasePrimaryLabel from "@/components/BasePrimaryLabel.vue";
 import InputField from "@/components/LoginInputField.vue";
 import InputFieldLabel from "@/components/LoginInputFieldLabel.vue";
 import LoginButton from "@/components/LoginButton.vue";
+import Label from "@/components/Label.vue";
 import MobileBackground from "@/components/MobileBaseBackgroundImg.vue";
 
 document.title = "Vulture//Login";
@@ -51,8 +52,12 @@ export default {
   <main>
     <Background></Background>
     <MobileBackground></MobileBackground>
-    <Label id="primary_label" text="Additional Security Step"></Label>
-    <BaseWideLogo v-if="non_fields_visibile" />
+    <Label
+      id="primary_label"
+      color="#888"
+      text="Log in"
+    ></Label>
+    <AuroraLogo id="logo" v-if="non_fields_visibile" />
     <form action="/auth_post" method="post">
       <InputField
         autofocus
@@ -101,6 +106,23 @@ export default {
 </template>
 
 <style scoped>
+#primary_label {
+  font-size: 1vw;
+  background-color: #1100aa30;
+  border-left: solid 1px #1100aa;
+  width: 6%;
+  height: 4%;
+  top: 28%;
+  left: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding-left: 0.3%;
+}
+#logo {
+  top: 20%;
+  left: 20%;
+}
 #new_account_btn {
   top: 60%;
   left: 20%;
@@ -139,6 +161,13 @@ export default {
   left: 20%;
 }
 @media only screen and (max-width: 768px) {
+  #primary_label{
+    display: none;
+  }
+  #logo {
+    top: 4.53125%;
+    left: 17.222222222%;
+  }
   #email_l {
     top: 25%;
     left: 19.444444444%;
@@ -166,19 +195,19 @@ export default {
     background-color: #0000ff00;
   }
   @media only screen and (max-height: 550px) {
-    #email_l{
+    #email_l {
       top: calc(28.125% + 0% - 6%);
     }
-    #password_l{
+    #password_l {
       top: calc(39.6875% + 13% - 6%);
     }
-    #email_auth_field{
+    #email_auth_field {
       top: calc(28.125% + 0%);
     }
-    #password_auth_field{
+    #password_auth_field {
       top: calc(39.6875% + 13%);
     }
-    #login_btn{
+    #login_btn {
       top: 75%;
     }
   }

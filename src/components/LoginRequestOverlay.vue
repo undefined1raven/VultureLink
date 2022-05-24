@@ -57,7 +57,6 @@ export default {
     <div id="bkg_darkner"></div>
     <Label
       id="login_request_l"
-      fontSize="2.2vh"
       color="#FFF"
       text="Login Request Detected"
     ></Label>
@@ -67,7 +66,6 @@ export default {
         <Label
           class="x_acx"
           id="timestamp_acx"
-          fontSize="2vh"
           color="#FFF"
           :text="timestamp"
         ></Label>
@@ -77,7 +75,6 @@ export default {
         <Label
           class="x_acx"
           id="not_important"
-          fontSize="2vh"
           color="#FFF"
           :text="location"
         ></Label>
@@ -87,7 +84,6 @@ export default {
         <Label
           class="x_acx"
           id="not_important"
-          fontSize="2vh"
           color="#FFF"
           :text="platform"
         ></Label>

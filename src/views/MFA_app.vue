@@ -63,13 +63,11 @@ export default {
   <Label
     id="primary_label"
     color="#FFF"
-    fontSize="1.1vw"
     text="Multi Factor Auth"
   ></Label>
   <Label
     id="description_l"
     color="#FFF"
-    fontSize="1vw"
     :text="'Check your Vulture App for the Login Request notification, and then tap ‘Approve’'"
     v-if="!backup_code_mode"
   ></Label>
@@ -173,6 +171,7 @@ div {
   top: 35.740740741%;
   left: 39.479166667%;
   width: 20%;
+  font-size: 1vw;
 }
 .ln {
   position: absolute;

@@ -95,20 +95,19 @@ export default {
   <Label
     id="primary_label"
     color="#FFF"
-    fontSize="1.1vw"
     text="Multi Factor Auth"
   ></Label>
   <Label
+    class="fs_1vw"
     id="description_l"
     color="#FFF"
-    fontSize="1vw"
     :text="'Check your authenticator app for the 6-digit code'"
     v-if="!backup_code_mode"
   ></Label>
   <Label
     id="description_l0"
     color="#FFF"
-    fontSize="1vw"
+    class="fs_1vw"
     text="Enter one of the recovery codes provided when you enabled MFA to your account"
     v-if="backup_code_mode"
   ></Label>
@@ -176,6 +175,9 @@ export default {
 </template>
 
 <style scoped>
+.fs_1vw{
+  font-size: 1vw;
+}
 .action_status_indi {
   width: 15%;
   height: 12.184259259%;
