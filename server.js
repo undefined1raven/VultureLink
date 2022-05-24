@@ -55,6 +55,7 @@ const gen_admin_u_access_array = (acid, role) => user_profile_gen_functions.gen_
 const gen_pilot_u_access_array = (acid, role) => user_profile_gen_functions.gen_pilot_u_access_array(acid, role);
 const gen_data_analyst_u_access_array = (acid, role) => user_profile_gen_functions.gen_data_analyst_u_access_array(acid, role);
 
+let json_parser = bodyParser.json();
 
 const sendgrid = require('@sendgrid/mail')
 sendgrid.setApiKey(secrets.SEND_GRID);
@@ -631,10 +632,10 @@ async function get_snapshot_from_path(path) {
 }
 
 if (process.env.NODE_ENV === 'production') {
-   app.enable('trust proxy');
-   app.use((req, res, next) => {
-      req.secure ? next() : res.redirect('https://' + req.headers.host + req.url)
-   });//HTTPS Auto-redirect // handled by cloudflare
+    app.enable('trust proxy');
+    app.use((req, res, next) => {
+        req.secure ? next() : res.redirect('https://' + req.headers.host + req.url)
+    });//HTTPS Auto-redirect // handled by cloudflare
 }
 
 //----Authentication [beta]----//
@@ -764,13 +765,13 @@ function successful_auth_post(req, res, user, redirect) {
     at_expiry_date.setHours(at_expiry_date.getHours() + 6);
 
     if (process.env.NODE_ENV === 'production') {
-        add_activity_log_tdb(req, ip, 'Advanced Telemetry login', req.body.email);
+        add_activity_log_tdb(req, ip, 'Advanced Telemetry login', req.body.user_identifier);
         res.cookie('at', { tac: token, tid: tid, exp: at_expiry_date }, { httpOnly: true, secure: true, expires: at_expiry_date });
         res.cookie('adv_tele_sio_ath', tid, { secure: true });
         res.cookie('wid', 'advanced_telemetry', { httpOnly: true, secure: true });
     }
     else {
-        // add_activity_log_tdb(req, ip, 'Advanced Telemetry login', req.body.email);
+        // add_activity_log_tdb(req, ip, 'Advanced Telemetry login', req.body.user_identifier);
         res.cookie('at', { tac: token, tid: tid, exp: at_expiry_date }, { httpOnly: true, expires: at_expiry_date });
         res.cookie('adv_tele_sio_ath', tid);
         res.cookie('wid', 'advanced_telemetry', { httpOnly: true });
@@ -784,8 +785,8 @@ function successful_auth_post(req, res, user, redirect) {
 }
 
 
-app.post('/auth_post', (req, res) => {
-    UAC_v2.find({ $or: [{ email: req.body.email }, { username: req.body.email }] }).exec().then(usr => {
+app.post('/auth_post', json_parser, (req, res) => {
+    UAC_v2.find({ $or: [{ email: req.body.user_identifier }, { username: req.body.user_identifier }] }).exec().then(usr => {
         if (usr.length > 0) {
             const user = usr[0];
             bcrypt.compare(req.body.password, user.password).then(rslt => {
@@ -795,16 +796,19 @@ app.post('/auth_post', (req, res) => {
                         MFA_prep_and_redirect(req, res, user, 0, tid);
                     }
                     else {
-                        successful_auth_post(req, res, user, true);
+                        successful_auth_post(req, res, user, false);
+                        setTimeout(() => {
+                            res.json({result: true, redirect_path: '/advanced_telemetry'});
+                        }, 50);
                     }
                 }
                 else {
-                    res.redirect('/login#00');
+                    res.json({result: false});
                 }
             });
         }
         else {
-            res.redirect('/login#00');
+            res.json({result: false});
         }
     });
 });
@@ -1285,8 +1289,6 @@ app.post('/MFA_mobile_cr', (req, res) => {
     });
 });
 
-let json_parser = bodyParser.json();
-
 function redirect_id_assessment_fn(req, res, user) {
     if (req.cookies.redirect_id == 0) {
         res.clearCookie('redirect_id');
@@ -1349,7 +1351,7 @@ function MFA_prep_and_redirect(req, res, user, redirect_id, tid) {
         res.cookie('redirect_id', redirect_id, { secure: false, httpOnly: false });
     }
 
-    res.redirect(`/MFA_${user.acc_auth_methods_arr.first}`);
+    res.json({result: true, redirect_path: `/MFA_${user.acc_auth_methods_arr.first}`});
 }
 
 app.post('/security_post', (req, res) => {

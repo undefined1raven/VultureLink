@@ -43,22 +43,37 @@ export default {
     redirect(path) {
       window.location.pathname = path;
     },
+    onSubmit(e) {
+      e.preventDefault();
+      fetch("/auth_post", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_identifier: e.target.user_identifier.value,
+          password: e.target.password.value,
+        }),
+      })
+        .then((res) => {
+          res.json().then((response_data) => {
+            if (response_data.result) {
+              window.location.pathname = response_data.redirect_path;
+            } else {
+              this.auth_error_label_visible = true;
+              setTimeout(() => {
+                this.auth_error_label_visible = false;
+              }, 1500);
+            }
+          });
+        })
+        .catch((e) => {
+          this.auth_error_actual = e;
+        });
+    },
   },
   mounted() {
     window.onresize = () => {
       this.compute_input_field_height();
     };
-    if (window.location.href.split("#").length > 1) {
-      this.auth_error_label_visible = true;
-      setTimeout(() => {
-        this.auth_error_label_visible = false;
-      }, 1500);
-      history.pushState(
-        "",
-        document.title,
-        window.location.pathname + window.location.search
-      );/*remove #00 hash from window location*/
-    }
   },
 };
 </script>
@@ -83,14 +98,15 @@ export default {
       ></Label>
     </Transition>
     <AuroraLogo id="logo" v-if="non_fields_visibile" />
-    <form action="/auth_post" method="post">
+    <form @submit="onSubmit" action="/auth_post" method="post">
       <InputField
         autofocus
         id="email_auth_field"
         autocomplete="email"
-        name="email"
+        name="user_identifier"
         type="text"
         :height="dynamic_input_field_height"
+        required=true
       ></InputField>
 
       <InputFieldLabel
@@ -105,6 +121,7 @@ export default {
         name="password"
         type="password"
         :height="dynamic_input_field_height"
+        required=true
       ></InputField>
 
       <InputFieldLabel
@@ -203,7 +220,7 @@ export default {
   #primary_label {
     display: none;
   }
-  #auth_error_label{
+  #auth_error_label {
     top: 19%;
     left: 19.444444444%;
     font-size: 3.9vw;
@@ -246,7 +263,7 @@ export default {
     background-color: #0000ff00;
   }
   @media only screen and (max-height: 550px) {
-    #auth_error_label{
+    #auth_error_label {
       top: 10%;
     }
     #email_l {
