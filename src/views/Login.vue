@@ -165,7 +165,7 @@ export default {
     font-size: 3.9vw;
     background-color: #0000ff00;
   }
-  @media only screen and (max-height: 400px) {
+  @media only screen and (max-height: 550px) {
     #email_l{
       top: calc(28.125% + 0% - 6%);
     }
