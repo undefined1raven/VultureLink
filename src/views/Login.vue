@@ -18,6 +18,9 @@ export default {
     return {
       dynamic_input_field_height: "",
       dynamic_button_height: "",
+      dynamic_error_label_height: "",
+      auth_error_label_visible: false,
+      auth_error_actual: "UNK00",
       non_fields_visibile:
         true /*hides all elements that are not input fields except the login button*/,
     };
@@ -32,6 +35,7 @@ export default {
         }
         this.dynamic_input_field_height = `${(44 * 100) / root.clientHeight}%`;
         this.dynamic_button_height = `${(40 * 100) / root.clientHeight}%`;
+        this.dynamic_error_label_height = `${(28 * 100) / root.clientHeight}%`;
       } else {
         this.dynamic_input_field_height = "4%";
       }
@@ -44,6 +48,17 @@ export default {
     window.onresize = () => {
       this.compute_input_field_height();
     };
+    if (window.location.href.split("#").length > 1) {
+      this.auth_error_label_visible = true;
+      setTimeout(() => {
+        this.auth_error_label_visible = false;
+      }, 1500);
+      history.pushState(
+        "",
+        document.title,
+        window.location.pathname + window.location.search
+      );/*remove #00 hash from window location*/
+    }
   },
 };
 </script>
@@ -52,11 +67,21 @@ export default {
   <main>
     <Background></Background>
     <MobileBackground></MobileBackground>
-    <Label
-      id="primary_label"
-      color="#888"
-      text="Log in"
-    ></Label>
+    <Transition name="fade_in">
+      <Label
+        v-if="!auth_error_label_visible"
+        id="primary_label"
+        color="#888"
+        text="Log in"
+      ></Label>
+      <Label
+        v-if="auth_error_label_visible"
+        id="auth_error_label"
+        color="#FF0040"
+        :text="'Auth Failed [' + auth_error_actual + ']'"
+        :style="'height: ' + dynamic_error_label_height"
+      ></Label>
+    </Transition>
     <AuroraLogo id="logo" v-if="non_fields_visibile" />
     <form action="/auth_post" method="post">
       <InputField
@@ -106,7 +131,8 @@ export default {
 </template>
 
 <style scoped>
-#primary_label {
+#primary_label,
+#auth_error_label {
   font-size: 1vw;
   background-color: #1100aa30;
   border-left: solid 1px #1100aa;
@@ -118,6 +144,11 @@ export default {
   align-items: center;
   justify-content: start;
   padding-left: 0.3%;
+}
+#auth_error_label {
+  background-color: #ff004030;
+  border-left: solid 1px #ff0040;
+  width: 12%;
 }
 #logo {
   top: 20%;
@@ -160,9 +191,29 @@ export default {
   top: 50%;
   left: 20%;
 }
+.fade_in-enter-active,
+.fade_in-leave-active {
+  transition: opacity linear 0.1s;
+}
+.fade_in-enter-from,
+.fade_in-leave-to {
+  opacity: 0;
+}
 @media only screen and (max-width: 768px) {
-  #primary_label{
+  #primary_label {
     display: none;
+  }
+  #auth_error_label{
+    top: 19%;
+    left: 19.444444444%;
+    font-size: 3.9vw;
+    width: 61.388888889%;
+    height: 4%;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-top: solid 1px #ff0040;
   }
   #logo {
     top: 4.53125%;
@@ -195,6 +246,9 @@ export default {
     background-color: #0000ff00;
   }
   @media only screen and (max-height: 550px) {
+    #auth_error_label{
+      top: 10%;
+    }
     #email_l {
       top: calc(28.125% + 0% - 6%);
     }

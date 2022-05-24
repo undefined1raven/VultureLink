@@ -5,7 +5,6 @@ import Background from "@/components/BaseBackgroundImg.vue";
 import Label from "@/components/Label.vue";
 import OptionsButton from "@/components/MfaOptionsButton.vue";
 import ActionStatus from "@/components/ActionStatusIndicator.vue";
-import HexButton from "@/components/HexButton.vue";
 </script>
 
 <script>
@@ -20,6 +19,7 @@ setInterval(() => {
         .json()
         .then((msg) => {
           if (msg.result == true) {
+            this.action_status_color = '00FFF0';
             setTimeout(() => {
               if (msg.redirect_id == 0) {
                 window.location.pathname = "/advanced_telemetry";
@@ -30,7 +30,10 @@ setInterval(() => {
             }, 700);
           }
           if (msg.result == false) {
-            window.location.pathname = "/advanced_telemetry";
+            this.action_status_color = 'FF006B';
+            setTimeout(() => {
+              window.location.pathname = "/advanced_telemetry";
+            }, 700);
           }
         })
         .catch((e) => {});
