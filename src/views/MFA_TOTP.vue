@@ -100,7 +100,14 @@ export default {
       }
     },
     redirect(path) {
-      window.location.pathname = path;
+      if (path != "MFA_app") {
+        window.location.pathname = path;
+      } else {
+        if (root.clientWidth > 768) {
+          //don't redirect mobile users to MFA app since that option isn't available for mobile
+          window.location.pathname = path;
+        }
+      }
     },
   },
   mounted() {
@@ -289,6 +296,10 @@ export default {
   top: 70.555555556%;
 }
 @media only screen and (max-width: 768px) {
+  #backup_code_input {
+    font-size: 6.7vw;
+    letter-spacing: 0.8vw;
+  }
   #security_key_option_btn,
   #backup_code_option_btn {
     top: calc(81.851851852% + 1.9%);
@@ -303,6 +314,13 @@ export default {
   #backup_code_option_btn,
   #recover_account_option_btn {
     top: calc(90.036296296% + 1.9%);
+  }
+  #vulture_app_option_btn {
+    color: #555;
+    border: solid 1px #222;
+  }
+  #vulture_app_option_btn:hover {
+    background-color: #000aff00;
   }
   #options_container_switch_btn {
     top: 88%;
@@ -321,15 +339,18 @@ export default {
     top: 82%;
   }
   #primary_label {
-    font-size: 5.2vw;
+    font-size: 4.4vw;
     left: 2%;
     top: 23.26875%;
   }
   #description_l,
   #description_l0 {
     top: 29%;
-    font-size: 4.8vw;
+    font-size: 4.3vw;
     left: 2%;
+  }
+  #description_l0 {
+    width: 80%;
   }
   .ln {
     width: 100%;
