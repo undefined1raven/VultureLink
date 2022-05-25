@@ -1251,13 +1251,13 @@ function successful_security_post(req, res, user, redirect) {
     });
     var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     if (process.env.NODE_ENV === 'production') {
-        add_activity_log_tdb(req, ip, 'Security login', req.body.email);
+        add_activity_log_tdb(req, ip, 'Security login', req.body.user_identifier);
         res.cookie('sat', { tac: token, tid: tid }, { httpOnly: true, secure: true });
         res.cookie('sio_ath', tid, { secure: true });
         res.cookie('wid', 'security', { httpOnly: true, secure: true });
     }
     else {
-        // add_activity_log_tdb(req, ip, 'Security login', req.body.email);
+        // add_activity_log_tdb(req, ip, 'Security login', req.body.user_identifier);
         res.cookie('sat', { tac: token, tid: tid }, { httpOnly: true });
         res.cookie('sio_ath', tid);
         res.cookie('wid', 'security', { httpOnly: true, secure: false });
@@ -1341,12 +1341,12 @@ app.post('/MFA_TOTP_post', json_parser, (req, res) => {
 function MFA_prep_and_redirect(req, res, user, redirect_id, tid) {
     set(ref(db, `frstp_aprvd_tids/${tid}`), { notification_sent: false, state: 'pending', tx: Date.now(), acid: user.acid });
     if (process.env.NODE_ENV === 'production') {
-        res.cookie('eor', req.body.email, { httpOnly: false, secure: true });
+        res.cookie('eor', req.body.user_identifier, { httpOnly: false, secure: true });
         res.cookie('frstp_aprvd_tid', { tid: tid, un: user.username, acid: user.acid }, { secure: true, httpOnly: true });
         res.cookie('redirect_id', redirect_id, { secure: true, httpOnly: false });
     }
     else {
-        res.cookie('eor', req.body.email, { httpOnly: false, secure: false });
+        res.cookie('eor', req.body.user_identifier, { httpOnly: false, secure: false });
         res.cookie('frstp_aprvd_tid', { tid: tid, un: user.username, acid: user.acid }, { secure: false, httpOnly: true });
         res.cookie('redirect_id', redirect_id, { secure: false, httpOnly: false });
     }
@@ -1355,7 +1355,7 @@ function MFA_prep_and_redirect(req, res, user, redirect_id, tid) {
 }
 
 app.post('/security_post', (req, res) => {
-    UAC_v2.find({ email: req.body.email }).exec().then(usr => {
+    UAC_v2.find({ email: req.body.user_identifier }).exec().then(usr => {
         if (usr.length > 0) {
             const user = usr[0];
             bcrypt.compare(req.body.pass, user.password).then(rslt => {
