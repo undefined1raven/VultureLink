@@ -26,7 +26,7 @@ export default {
     };
   },
   methods: {
-    compute_input_field_height() {
+    onResize() {
       if (root.clientHeight < 900 && root.clientWidth < 600) {
         if (root.clientHeight < 550) {
           this.non_fields_visibile = false;
@@ -59,6 +59,7 @@ export default {
               window.location.pathname = response_data.redirect_path;
             } else {
               this.auth_error_label_visible = true;
+              e.target.password.value = "";
               setTimeout(() => {
                 this.auth_error_label_visible = false;
               }, 1500);
@@ -72,7 +73,7 @@ export default {
   },
   mounted() {
     window.onresize = () => {
-      this.compute_input_field_height();
+      this.onResize();
     };
   },
 };
@@ -106,7 +107,7 @@ export default {
         name="user_identifier"
         type="text"
         :height="dynamic_input_field_height"
-        required=true
+        required="true"
       ></InputField>
 
       <InputFieldLabel
@@ -121,7 +122,7 @@ export default {
         name="password"
         type="password"
         :height="dynamic_input_field_height"
-        required=true
+        required="true"
       ></InputField>
 
       <InputFieldLabel

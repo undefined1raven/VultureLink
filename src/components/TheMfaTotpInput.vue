@@ -56,4 +56,14 @@ export default {
 .in[type="number"] {
   -moz-appearance: textfield;
 }
+@media only screen and (max-width: 768px){
+  .in{
+    width: 61.666666667%;
+    left: 50%;
+    transform: translate(-50%);
+    letter-spacing: 3.8vw;
+    font-size: 10vw;
+    height: 7.65625%;
+  }
+}
 </style>

@@ -29,4 +29,11 @@ export default {
 .btn:hover{
     background-color: #000AFF20;
 }
+@media only screen and (max-width: 768px){
+    .btn{
+        width: 45%;
+        height: 6%;
+        font-size: 4.1vw;
+    }
+}
 </style>

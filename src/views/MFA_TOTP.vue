@@ -1,9 +1,11 @@
 <script setup>
 import Background from "@/components/BaseBackgroundImg.vue";
+import AuroraLogo from "@/components/AuroraLogo.vue";
 import Label from "@/components/Label.vue";
 import OptionsButton from "@/components/MfaOptionsButton.vue";
 import ActionStatus from "@/components/ActionStatusIndicator.vue";
 import MfaTotpInput from "@/components/TheMfaTotpInput.vue";
+import MobileBackground from "@/components/MobileBaseBackgroundImg.vue";
 
 document.title = "Vulture//MFA";
 </script>
@@ -37,6 +39,7 @@ function MFA_TOTP_fetch_handle(e, token, backup_code, this_ref) {
     });
   });
 }
+let root = document.documentElement;
 
 export default {
   data() {
@@ -45,9 +48,28 @@ export default {
       options_visible: false,
       backup_code_mode: false,
       backup_code_option_btn_l: "Use a backup code",
+      dynamic_input_field_height: "",
+      dynamic_status_indicator_height: "",
+      non_fields_visibile: true,
     };
   },
   methods: {
+    onResize() {
+      if (root.clientHeight < 900 && root.clientWidth < 600) {
+        if (root.clientHeight < 550) {
+          this.non_fields_visibile = false;
+        } else {
+          this.non_fields_visibile = true;
+        }
+        this.dynamic_input_field_height = `${(53 * 100) / root.clientHeight}%`;
+        this.dynamic_status_indicator_height = `${
+          (103 * 100) / root.clientHeight
+        }%`;
+      } else {
+        this.dynamic_input_field_height = "4.537037037%";
+        this.dynamic_status_indicator_height = `12.184259259%`;
+      }
+    },
     assess_input(e) {
       const input = e.target.value;
       if (input.length > 5) {
@@ -86,13 +108,21 @@ export default {
       this.backup_code_reflex();
     }
     sessionStorage.removeItem("TOTP_redi_type");
+    window.onresize = () => {
+      this.onResize();
+    };
   },
 };
 </script>
 
 <template>
   <Background />
+  <MobileBackground />
+  <div v-if="non_fields_visibile" id="logo_bkg">
+    <AuroraLogo id="logo" />
+  </div>
   <Label
+    v-if="non_fields_visibile"
     id="primary_label"
     color="#FFF"
     text="Multi Factor Auth"
@@ -102,17 +132,17 @@ export default {
     id="description_l"
     color="#FFF"
     :text="'Check your authenticator app for the 6-digit code'"
-    v-if="!backup_code_mode"
+    v-if="!backup_code_mode && non_fields_visibile"
   ></Label>
   <Label
     id="description_l0"
     color="#FFF"
     class="fs_1vw"
     text="Enter one of the recovery codes provided when you enabled MFA to your account"
-    v-if="backup_code_mode"
+    v-if="backup_code_mode && non_fields_visibile"
   ></Label>
 
-  <div v-if="options_visible">
+  <div id="option_btns_container" v-if="options_visible && non_fields_visibile">
     <OptionsButton
       id="security_key_option_btn"
       label="Use a Security Key"
@@ -134,7 +164,7 @@ export default {
   </div>
 
   <OptionsButton
-    v-if="!options_visible"
+    v-if="!options_visible && non_fields_visibile"
     id="options_container_switch_btn"
     label="Show more authentication methods"
     @click="switch_options_visibility"
@@ -145,6 +175,7 @@ export default {
     class="action_status_indi"
     :fill="'#' + action_status_color + '20'"
     :stroke="'#' + action_status_color"
+    :style="'height: ' + dynamic_status_indicator_height"
   ></ActionStatus>
 
   <form id="MFA_TOTP_form" action="/MFA_TOTP_post" method="POST">
@@ -156,6 +187,7 @@ export default {
       placeholder="------"
       type="number"
       v-if="!backup_code_mode"
+      :style="'height: ' + dynamic_input_field_height"
     ></MfaTotpInput>
     <MfaTotpInput
       autofocus
@@ -165,17 +197,35 @@ export default {
       type="text"
       placeholder="_____________"
       v-if="backup_code_mode"
+      :style="'height: ' + dynamic_input_field_height"
     ></MfaTotpInput>
   </form>
 
-  <div id="line_container">
+  <div v-if="non_fields_visibile" id="line_container">
     <div id="ln_0" class="ln"></div>
     <div id="ln_1" class="ln"></div>
   </div>
 </template>
 
 <style scoped>
-.fs_1vw{
+#logo {
+  width: 80%;
+  height: 60%;
+}
+#logo_bkg {
+  position: absolute;
+  top: 17%;
+  left: 50%;
+  background-color: #0500ff20;
+  border-bottom: solid 1px #0500ff;
+  width: 21.822916667%;
+  height: 10%;
+  transform: translate(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fs_1vw {
   font-size: 1vw;
 }
 .action_status_indi {
@@ -237,6 +287,72 @@ export default {
 }
 #ln_1 {
   top: 70.555555556%;
+}
+@media only screen and (max-width: 768px) {
+  #security_key_option_btn,
+  #backup_code_option_btn {
+    top: calc(81.851851852% + 1.9%);
+    left: calc(10% + 14.9%);
+  }
+  #vulture_app_option_btn,
+  #recover_account_option_btn {
+    top: calc(81.851851852% + 1.9%);
+    left: calc(60% + 14.9%);
+    text-align: center;
+  }
+  #backup_code_option_btn,
+  #recover_account_option_btn {
+    top: calc(90.036296296% + 1.9%);
+  }
+  #options_container_switch_btn {
+    top: 88%;
+    width: 80%;
+    height: 6%;
+  }
+  #action_status_indi {
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%);
+  }
+  #ln_0 {
+    top: 21.5625%;
+  }
+  #ln_1 {
+    top: 82%;
+  }
+  #primary_label {
+    font-size: 5.2vw;
+    left: 2%;
+    top: 23.26875%;
+  }
+  #description_l,
+  #description_l0 {
+    top: 29%;
+    font-size: 4.8vw;
+    left: 2%;
+  }
+  .ln {
+    width: 100%;
+    left: 0;
+  }
+  #logo_bkg {
+    top: 11.5625%;
+    width: 100%;
+    height: 10%;
+  }
+  #TOTP_input,
+  #backup_code_input {
+    top: 40%;
+  }
+  @media only screen and (max-height: 550px) {
+    #TOTP_input,
+    #backup_code_input {
+      top: 20%;
+    }
+    #action_status_indi {
+      top: 70%;
+    }
+  }
 }
 </style>
 
