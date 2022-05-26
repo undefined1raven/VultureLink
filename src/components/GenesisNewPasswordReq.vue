@@ -19,19 +19,26 @@ export default {
   </div>
 </template>
 <style scoped>
+div{
+  user-select: none;
+}
 .password_req_l {
   position: absolute;
   transition: color linear 0.1s, border-color linear 0.1s;
+  font-family: "Titillium Web", sans-serif;
+  border-left-style: solid;
+  border-left-width: 1px;
+  width: 20%;
+  height: 2%;
+  font-size: 0.83vw;
+  padding-left: 0.5%;
 }
 @media only screen and (max-width: 768px) {
   .password_req_l {
     width: 60%;
     height: 2.1875%;
-    border-left-style: solid;
-    border-left-width: 1px;
     font-size: 3.5vw;
     padding-left: 2vw;
-    font-family: "Titillium Web", sans-serif;
   }
 }
 </style>

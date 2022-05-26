@@ -59,7 +59,7 @@ export default {
   <div id="logo_bkg">
     <AuroraLogo id="logo" />
   </div>
-  <Label id="primary_l" color="#FFF" text="\\Create New Account"></Label>
+  <Label id="primary_l" color="#FFF" text="Create New Account"></Label>
   <NewPasswordReqIndi
     id="length_req_indi"
     :color="password_length_req_l_color"
@@ -119,11 +119,6 @@ export default {
       for="password_new_account_field"
     ></InputFieldLabel>
 
-    <InputField
-      id="password_confirm_new_account_field"
-      autocomplete="new-password"
-      type="password"
-    ></InputField>
     <div id="m_ln_0"></div>
     <div id="m_ln_1"></div>
     <LoginButton
@@ -147,7 +142,6 @@ export default {
 #logo {
   width: 80%;
   height: 60%;
-  font-size: 3.9vw;
 }
 #dk_deco {
   display: flex;
@@ -157,7 +151,7 @@ export default {
   height: 4%;
 }
 #genesis_btn {
-  top: 60%;
+  top: 70%;
   left: 35.3%;
   background-color: #2d00aa20;
   border: solid 1px #2d00aa;
@@ -166,7 +160,7 @@ export default {
   background-color: #2d00aa40;
 }
 #login_btn {
-  top: 60%;
+  top: 70%;
   left: 20%;
 }
 #login_btn:hover {
@@ -187,7 +181,6 @@ export default {
 #password_confirm_new_account_field {
   top: 50%;
   left: 20%;
-  width: 12%;
 }
 #password_confirm_new_account_field {
   left: 33%;
@@ -205,16 +198,36 @@ export default {
 }
 #logo_bkg {
   position: absolute;
-  top: 17%;
-  left: 50%;
+  top: 12%;
+  left: 32.6%;
   background-color: #0500ff20;
   border-bottom: solid 1px #0500ff;
-  width: 21.822916667%;
+  width: 25%;
   height: 10%;
   transform: translate(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
+}
+#length_req_indi,
+#number_req_indi,
+#uppercase_letter_req_indi,
+#special_char_letter_req_indi {
+  top: calc(58.4375% - 3.2%);
+  left: 20%;
+}
+#number_req_indi {
+  top: calc(61.09375% - 3.2%);
+}
+#uppercase_letter_req_indi {
+  top: calc(63.75% - 3.2%);
+}
+#special_char_letter_req_indi {
+  top: calc(66.40625% - 3.2%);
+}
+#primary_l{
+  top: 24%;
+  left: 20%;
 }
 @media only screen and (max-width: 768px) {
   #length_req_indi,
@@ -230,7 +243,7 @@ export default {
   #uppercase_letter_req_indi {
     top: calc(63.75% - 2%);
   }
-  #special_char_letter_req_indi{
+  #special_char_letter_req_indi {
     top: calc(66.40625% - 2%);
   }
   #m_ln_0 {
