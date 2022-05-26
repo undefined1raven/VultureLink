@@ -8,15 +8,46 @@ import VultureConnectivityDecoDesktop from "@/components/TheVultureConnectivityD
 import MobileVultureConnectivityDecoDesktop from "@/components/MobileTheVultureConnectivityDeco.vue";
 import AuroraLogo from "@/components/AuroraLogo.vue";
 import Label from "@/components/Label.vue";
+import NewPasswordReqIndi from "@/components/GenesisNewPasswordReq.vue";
 
 document.title = "New Account";
 </script>
 
 <script lang="ts">
 export default {
+  data() {
+    return {
+      password_length_req_l_color: "#555",
+      password_number_req_l_color: "#555",
+      password_uppercase_req_l_color: "#555",
+      password_special_char_req_l_color: "#555",
+    };
+  },
   methods: {
     redirect(path) {
       window.location.pathname = path;
+    },
+    new_password_validation(e) {
+      if (e.target.value.length >= 8) {
+        this.password_length_req_l_color = "#FFF";
+      } else {
+        this.password_length_req_l_color = "#555";
+      }
+      if (e.target.value.match(/[0-9]/g)) {
+        this.password_number_req_l_color = "#FFF";
+      } else {
+        this.password_number_req_l_color = "#555";
+      }
+      if (e.target.value.match(/[A-Z]/g)) {
+        this.password_uppercase_req_l_color = "#FFF";
+      } else {
+        this.password_uppercase_req_l_color = "#555";
+      }
+      if (e.target.value.match(/\W|_/g)) {
+        this.password_special_char_req_l_color = "#FFF";
+      } else {
+        this.password_special_char_req_l_color = "#555";
+      }
     },
   },
 };
@@ -29,6 +60,26 @@ export default {
     <AuroraLogo id="logo" />
   </div>
   <Label id="primary_l" color="#FFF" text="\\Create New Account"></Label>
+  <NewPasswordReqIndi
+    id="length_req_indi"
+    :color="password_length_req_l_color"
+    v-text="'at least 8 characters'"
+  />
+  <NewPasswordReqIndi
+    id="number_req_indi"
+    :color="password_number_req_l_color"
+    v-text="'at least a number'"
+  />
+  <NewPasswordReqIndi
+    id="uppercase_letter_req_indi"
+    :color="password_uppercase_req_l_color"
+    v-text="'at least an uppercase letter'"
+  />
+  <NewPasswordReqIndi
+    id="special_char_letter_req_indi"
+    :color="password_special_char_req_l_color"
+    v-text="'at least a special character'"
+  />
   <form action="/genesis_post" method="post">
     <InputField
       autofocus
@@ -60,6 +111,7 @@ export default {
       autocomplete="new-password"
       name="password"
       type="password"
+      @input="new_password_validation"
     ></InputField>
     <InputFieldLabel
       id="password_l"
@@ -74,8 +126,6 @@ export default {
     ></InputField>
     <div id="m_ln_0"></div>
     <div id="m_ln_1"></div>
-    <VultureConnectivityDecoDesktop id="dk_deco" />
-    <MobileVultureConnectivityDecoDesktop id="m_deco" />
     <LoginButton
       class="btn_size"
       id="genesis_btn"
@@ -83,6 +133,8 @@ export default {
       type="submit"
     ></LoginButton>
   </form>
+  <VultureConnectivityDecoDesktop id="dk_deco" />
+  <MobileVultureConnectivityDecoDesktop id="m_deco" />
   <LoginButton
     class="btn_size"
     @click="redirect('login')"
@@ -165,6 +217,22 @@ export default {
   justify-content: center;
 }
 @media only screen and (max-width: 768px) {
+  #length_req_indi,
+  #number_req_indi,
+  #uppercase_letter_req_indi,
+  #special_char_letter_req_indi {
+    top: calc(58.4375% - 2%);
+    left: 16.944444444%;
+  }
+  #number_req_indi {
+    top: calc(61.09375% - 2%);
+  }
+  #uppercase_letter_req_indi {
+    top: calc(63.75% - 2%);
+  }
+  #special_char_letter_req_indi{
+    top: calc(66.40625% - 2%);
+  }
   #m_ln_0 {
     position: absolute;
     top: 78.90625%;

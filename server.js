@@ -852,7 +852,6 @@ app.post('/genesis_post', (req, res) => {
                 contact_emails_arr: [],
                 contact_phone_numbers_arr: [],
             });
-            console.log(uacq);
             uacq.save().then((r) => console.log(`${r.vid} added to DeepStorage`))
             console.log(`${uuid.v4()} saved to UAC`);
 

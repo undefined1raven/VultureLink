@@ -15,7 +15,7 @@ export default {
 <style>
 .lb {
   position: absolute;
-  color: #7e7e7e;
+  color: #999;
   font-family: "Titillium Web", sans-serif;
   font-size: 1vw;
   left: 13%;
