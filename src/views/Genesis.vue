@@ -4,6 +4,7 @@ import InputField from "@/components/LoginInputField.vue";
 import LoginButton from "@/components/LoginButton.vue";
 import InputFieldLabel from "@/components/LoginInputFieldLabel.vue";
 import VultureConnectivityDecoDesktop from "@/components/TheVultureConnectivityDeco.vue";
+import MobileVultureConnectivityDecoDesktop from "@/components/MobileTheVultureConnectivityDeco.vue";
 
 document.title = "New Account";
 </script>
@@ -64,7 +65,8 @@ export default {
         autocomplete="new-password"
         type="password"
       ></InputField>
-      <VultureConnectivityDecoDesktop />
+      <VultureConnectivityDecoDesktop id="dk_deco" />
+      <MobileVultureConnectivityDecoDesktop id="m_deco" />
       <LoginButton
         class="btn_size"
         id="genesis_btn"
@@ -82,6 +84,9 @@ export default {
 </template>
 
 <style scoped>
+#dk_deco {
+  display: flex;
+}
 .btn_size {
   width: 10%;
   height: 4%;
@@ -93,7 +98,7 @@ export default {
   border: solid 1px #2d00aa;
 }
 #genesis_btn:hover {
-  background-color: #2D00AA40;;
+  background-color: #2d00aa40;
 }
 #login_btn {
   top: 60%;
@@ -129,5 +134,19 @@ export default {
 #password_l {
   top: 51%;
   left: 14.3%;
+}
+#m_deco {
+  display: none;
+}
+@media only screen and (max-width: 768px) {
+  #dk_deco {
+    display: none;
+  }
+  #m_deco {
+    top: 80.625%;
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+  }
 }
 </style>

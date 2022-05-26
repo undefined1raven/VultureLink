@@ -1,5 +1,14 @@
+
+<script>
+export default({
+    props: {
+        id: ''
+    }
+});
+</script>
+
 <template>
-<svg id="vulture_connectivity_deco_desktop" width="355" height="539" viewBox="0 0 355 539" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg :id="id" class="vulture_connectivity_deco_desktop" width="355" height="539" viewBox="0 0 355 539" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="109" y="113.033" width="75" height="75" transform="rotate(-45 109 113.033)" fill="#000697" fill-opacity="0.01"/>
 <rect x="87" width="40" height="1" fill="#0000FF"/>
 <rect x="56" y="29.2843" width="40" height="1" transform="rotate(-45 56 29.2843)" fill="#0000FF"/>
@@ -92,7 +101,7 @@
 </svg>
 </template>
 <style>
-#vulture_connectivity_deco_desktop{
+.vulture_connectivity_deco_desktop{
     position: absolute;
     top: 18.148148148%;
     left: 69.21875%;
