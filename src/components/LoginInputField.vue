@@ -41,7 +41,7 @@ export default {
   font-size: 1vw;
   outline: none;
   border: solid 1px #02005e;
-  transition: border linear 0.1s;
+  transition: border linear 0.1s, background-color linear 0.1s;
 }
 .in_field::selection {
   color: #8a8a8a;

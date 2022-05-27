@@ -14,13 +14,24 @@ document.title = "New Account";
 </script>
 
 <script lang="ts">
+const email_regex =
+  /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+
 export default {
   data() {
     return {
+      error_label_visible: false,
+      error_label_text: "",
       password_length_req_l_color: "#555",
       password_number_req_l_color: "#555",
       password_uppercase_req_l_color: "#555",
       password_special_char_req_l_color: "#555",
+      username_field_background_color: "#02008850",
+      username_field_border_color: "",
+      email_field_background_color: "#02008850",
+      email_field_border_color: "",
+      password_field_background_color: "#02008850",
+      password_field_border_color: "",
     };
   },
   methods: {
@@ -48,6 +59,79 @@ export default {
       } else {
         this.password_special_char_req_l_color = "#555";
       }
+      this.password_field_background_color = "#02008850";
+      this.password_field_border_color = "";
+    },
+    onSubmit(e) {
+      e.preventDefault();
+      if (e.target.username.value == "") {
+        this.username_field_background_color = "#FF006B20";
+        this.username_field_border_color = "#FF006B";
+      }
+      if (e.target.email.value == "") {
+        this.email_field_background_color = "#FF006B20";
+        this.email_field_border_color = "#FF006B";
+      }
+      if (e.target.password.value == "") {
+        this.password_field_background_color = "#FF006B20";
+        this.password_field_border_color = "#FF006B";
+      }
+      if (e.target.password.value.length < 8) {
+        this.password_length_req_l_color = "#FF006B";
+      }
+      if (!e.target.password.value.match(/[0-9]/g)) {
+        this.password_number_req_l_color = "#FF006B";
+      }
+      if (!e.target.password.value.match(/[A-Z]/g)) {
+        this.password_uppercase_req_l_color = "#FF006B";
+      }
+      if (!e.target.password.value.match(/\W|_/g)) {
+        this.password_special_char_req_l_color = "#FF006B";
+      }
+      if (
+        e.target.username.value.length > 0 &&
+        e.target.email.value.length > 0 &&
+        e.target.email.value.match(email_regex) &&
+        e.target.password.value.length >= 8 &&
+        e.target.password.value.match(/[0-9]/g) &&
+        e.target.password.value.match(/[A-Z]/g) &&
+        e.target.password.value.match(/\W|_/g)
+      ) {
+        e.target.submit();
+      }
+    },
+    username_field_on_input(e) {
+      if (e.target.value.length >= 3) {
+        fetch("/doesUserExist", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: e.target.value }),
+        }).then((response) => {
+          response.json().then((res_data) => {
+            if (res_data.isUsernameTaken) {
+              this.error_label_text = "Username already taken";
+              this.error_label_visible = true;
+            } else {
+              this.error_label_visible = false;
+            }
+          });
+        });
+        this.username_field_background_color = "#02008850";
+        this.username_field_border_color = "";
+      }
+    },
+    email_field_on_input(e) {
+      if(!e.target.value.match(email_regex)){
+        this.error_label_text = 'Invalid email address';
+        this.error_label_visible = true;
+      }
+      else{
+        this.error_label_visible = false;
+      }
+      this.email_field_background_color = "#02008850";
+      this.email_field_border_color = "";
     },
   },
 };
@@ -56,10 +140,21 @@ export default {
 <template>
   <Background />
   <MobileBackground />
-  <div id="logo_bkg">
-    <AuroraLogo id="logo" />
-  </div>
-  <Label id="primary_l" color="#FFF" text="Create New Account"></Label>
+  <AuroraLogo id="logo" />
+  <Transition name="fade_in">
+    <Label
+      v-if="!error_label_visible"
+      id="primary_l"
+      color="#888"
+      v-text="'Create New Account'"
+    ></Label>
+    <Label
+      v-if="error_label_visible"
+      id="error_l"
+      color="#FF0040"
+      v-text="error_label_text"
+    ></Label>
+  </Transition>
   <NewPasswordReqIndi
     id="length_req_indi"
     :color="password_length_req_l_color"
@@ -80,13 +175,21 @@ export default {
     :color="password_special_char_req_l_color"
     v-text="'at least a special character'"
   />
-  <form action="/genesis_post" method="post">
+  <form @submit="onSubmit" action="/genesis_post" method="post">
     <InputField
       autofocus
       id="username_new_account_field"
       autocomplete="username"
       name="username"
       type="text"
+      :style="
+        'background-color: ' +
+        username_field_background_color +
+        '; border-color: ' +
+        username_field_border_color +
+        ';'
+      "
+      @input="username_field_on_input"
     ></InputField>
     <InputFieldLabel
       id="username_l"
@@ -99,6 +202,14 @@ export default {
       autocomplete="email"
       name="email"
       type="text"
+      :style="
+        'background-color: ' +
+        email_field_background_color +
+        '; border-color: ' +
+        email_field_border_color +
+        ';'
+      "
+      @input="email_field_on_input"
     ></InputField>
     <InputFieldLabel
       id="email_l"
@@ -111,6 +222,13 @@ export default {
       autocomplete="new-password"
       name="password"
       type="password"
+      :style="
+        'background-color: ' +
+        password_field_background_color +
+        '; border-color: ' +
+        password_field_border_color +
+        ';'
+      "
       @input="new_password_validation"
     ></InputField>
     <InputFieldLabel
@@ -139,9 +257,17 @@ export default {
 </template>
 
 <style scoped>
+.fade_in-enter-active,
+.fade_in-leave-active {
+  transition: opacity linear 0.1s;
+}
+.fade_in-enter-from,
+.fade_in-leave-to {
+  opacity: 0;
+}
 #logo {
-  width: 80%;
-  height: 60%;
+  top: 15%;
+  left: 20%;
 }
 #dk_deco {
   display: flex;
@@ -196,19 +322,6 @@ export default {
 #m_deco {
   display: none;
 }
-#logo_bkg {
-  position: absolute;
-  top: 12%;
-  left: 32.6%;
-  background-color: #0500ff20;
-  border-bottom: solid 1px #0500ff;
-  width: 25%;
-  height: 10%;
-  transform: translate(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 #length_req_indi,
 #number_req_indi,
 #uppercase_letter_req_indi,
@@ -225,11 +338,30 @@ export default {
 #special_char_letter_req_indi {
   top: calc(66.40625% - 3.2%);
 }
-#primary_l{
+#primary_l,
+#error_l {
+  font-size: 1vw;
+  background-color: #1100aa30;
+  border-left: solid 1px #1100aa;
+  width: 12%;
+  height: 4%;
   top: 24%;
   left: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding-left: 0.3%;
+}
+#error_l {
+  background-color: #ff004030;
+  border-left: solid 1px #ff0040;
+  width: 15%;
 }
 @media only screen and (max-width: 768px) {
+  #logo {
+    top: 4.53125%;
+    left: 17.222222222%;
+  }
   #length_req_indi,
   #number_req_indi,
   #uppercase_letter_req_indi,
@@ -292,7 +424,7 @@ export default {
   #password_confirm_new_account_field {
     top: 23.125%;
     left: 16.944444444%;
-    width: 61.388888889%;
+    width: 65.279611111%;
   }
   #email_new_account_field {
     top: 35.625%;
@@ -304,15 +436,21 @@ export default {
     top: 55.9375%;
     display: none;
   }
-  #primary_l {
-    top: 13.125%;
-    left: 1.388888889%;
+  #primary_l,
+  #error_l {
+    top: 14%;
+    left: 16.944444444%;
     font-size: 3.9vw;
+    width: 66.79611111%;
+    height: 4%;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-bottom: solid 1px #10a;
   }
-  #logo_bkg {
-    top: 0;
-    width: 100%;
-    height: 10%;
+  #error_l {
+    border-bottom: solid 1px #ff0040;
   }
   #dk_deco {
     display: none;

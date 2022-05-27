@@ -798,17 +798,17 @@ app.post('/auth_post', json_parser, (req, res) => {
                     else {
                         successful_auth_post(req, res, user, false);
                         setTimeout(() => {
-                            res.json({result: true, redirect_path: '/advanced_telemetry'});
+                            res.json({ result: true, redirect_path: '/advanced_telemetry' });
                         }, 50);
                     }
                 }
                 else {
-                    res.json({result: false});
+                    res.json({ result: false });
                 }
             });
         }
         else {
-            res.json({result: false});
+            res.json({ result: false });
         }
     });
 });
@@ -817,6 +817,19 @@ function gen_rc() {
     return `${uuid.v4().split('-')[0].toUpperCase()}-${uuid.v4().split('-')[3].toUpperCase()}`;
 }
 
+const doesUserExist_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 4000, interval: 'hour' });
+app.post('/doesUserExist', json_parser, (req, res) => {
+    if (rate_limiter_checker(doesUserExist_limiter, res)) {
+        UAC_v2.findOne({ username: req.body.username }).exec().then(query_res => {
+            if (query_res) {
+                res.json({ isUsernameTaken: true });
+            }
+            else {
+                res.json({ isUsernameTaken: false });
+            }
+        });
+    }
+});
 
 app.post('/opsec_to_adv_tele', (req, res) => {
     res.clearCookie('sat');
@@ -826,7 +839,6 @@ app.post('/opsec_to_adv_tele', (req, res) => {
 
 
 app.post('/genesis_post', (req, res) => {
-    console.log(req.body)
     async function add_udb() {
         try {
             var es = await bcrypt.hash(req.body.password, 10);
@@ -1350,7 +1362,7 @@ function MFA_prep_and_redirect(req, res, user, redirect_id, tid) {
         res.cookie('redirect_id', redirect_id, { secure: false, httpOnly: false });
     }
 
-    res.json({result: true, redirect_path: `/MFA_${user.acc_auth_methods_arr.first}`});
+    res.json({ result: true, redirect_path: `/MFA_${user.acc_auth_methods_arr.first}` });
 }
 
 app.post('/security_post', (req, res) => {

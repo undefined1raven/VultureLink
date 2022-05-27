@@ -13,6 +13,9 @@ export default {
 </template>
 
 <style>
+label{
+  user-select: none;
+}
 .lb {
   position: absolute;
   color: #999;
