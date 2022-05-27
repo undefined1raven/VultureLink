@@ -37,6 +37,10 @@ export default {
       username_field_visible: true,
       email_field_visible: true,
       password_field_visible: true,
+      dynamic_input_field_height: "",
+      dynamic_error_label_height: "",
+      dynamic_button_height: "",
+      dynamic_password_req_label_height: "",
     };
   },
   mounted() {
@@ -46,7 +50,14 @@ export default {
   },
   methods: {
     onResize() {
-      if (root.clientWidth < 768) {
+      if (root.clientWidth < 900 && root.clientWidth < 600) {
+        this.dynamic_button_height = `${(40 * 100) / root.clientHeight}%`;
+        this.dynamic_input_field_height = `${(44 * 100) / root.clientHeight}%`;
+        this.dynamic_error_label_height = `${(34 * 100) / root.clientHeight}%`;
+        this.dynamic_password_req_label_height = `${
+          (14 * 100) / root.clientHeight
+        }%`;
+
         if (root.clientHeight < 550) {
           this.virtual_keyboard_visible = true;
         } else {
@@ -185,39 +196,45 @@ export default {
   <AuroraLogo v-if="!virtual_keyboard_visible" id="logo" />
   <Transition name="fade_in">
     <Label
-      v-if="!error_label_visible"
+      v-if="!error_label_visible && !virtual_keyboard_visible"
       id="primary_l"
       color="#888"
       v-text="'Create New Account'"
+      :style="'height: ' + dynamic_error_label_height"
     ></Label>
     <Label
       v-if="error_label_visible"
       id="error_l"
       color="#FF0040"
       v-text="error_label_text"
+      :style="'height: ' + dynamic_error_label_height"
     ></Label>
   </Transition>
   <NewPasswordReqIndi
     id="length_req_indi"
     :color="password_length_req_l_color"
+    :height="dynamic_password_req_label_height"
     v-text="'at least 8 characters'"
     v-if="password_field_visible"
   />
   <NewPasswordReqIndi
     id="number_req_indi"
     :color="password_number_req_l_color"
+    :height="dynamic_password_req_label_height"
     v-text="'at least a number'"
     v-if="password_field_visible"
   />
   <NewPasswordReqIndi
     id="uppercase_letter_req_indi"
     :color="password_uppercase_req_l_color"
+    :height="dynamic_password_req_label_height"
     v-text="'at least an uppercase letter'"
     v-if="password_field_visible"
   />
   <NewPasswordReqIndi
     id="special_char_letter_req_indi"
     :color="password_special_char_req_l_color"
+    :height="dynamic_password_req_label_height"
     v-text="'at least a special character'"
     v-if="password_field_visible"
   />
@@ -233,7 +250,8 @@ export default {
         username_field_background_color +
         '; border-color: ' +
         username_field_border_color +
-        ';'
+        '; height: ' +
+        dynamic_input_field_height
       "
       @input="username_field_on_input"
       @click="username_field_on_click"
@@ -256,7 +274,8 @@ export default {
         email_field_background_color +
         '; border-color: ' +
         email_field_border_color +
-        ';'
+        '; height: ' +
+        dynamic_input_field_height
       "
       @input="email_field_on_input"
       @click="email_field_on_click"
@@ -279,7 +298,8 @@ export default {
         password_field_background_color +
         '; border-color: ' +
         password_field_border_color +
-        ';'
+        '; height: ' +
+        dynamic_input_field_height
       "
       @input="new_password_validation"
       @click="password_field_on_click"
@@ -293,12 +313,13 @@ export default {
     ></InputFieldLabel>
 
     <div v-if="!virtual_keyboard_visible" id="m_ln_0"></div>
-    <div id="m_ln_1"></div>
+    <div :style="'height: ' + dynamic_button_height" id="m_ln_1"></div>
     <LoginButton
       class="btn_size"
       id="genesis_btn"
       text="Create Account"
       type="submit"
+      :style="'height:' + dynamic_button_height"
     ></LoginButton>
   </form>
   <VultureConnectivityDecoDesktop
@@ -314,6 +335,7 @@ export default {
     @click="redirect('login')"
     id="login_btn"
     text="Login"
+    :style="'height:' + dynamic_button_height"
   ></LoginButton>
 </template>
 
@@ -364,13 +386,9 @@ export default {
   top: 40%;
   left: 20%;
 }
-#password_new_account_field,
-#password_confirm_new_account_field {
+#password_new_account_field {
   top: 50%;
   left: 20%;
-}
-#password_confirm_new_account_field {
-  left: 33%;
 }
 #email_l {
   top: 41%;
@@ -481,8 +499,7 @@ export default {
   }
   #username_new_account_field,
   #email_new_account_field,
-  #password_new_account_field,
-  #password_confirm_new_account_field {
+  #password_new_account_field {
     top: 23.125%;
     left: 16.944444444%;
     width: 65.279611111%;
@@ -492,10 +509,6 @@ export default {
   }
   #password_new_account_field {
     top: 48.4375%;
-  }
-  #password_confirm_new_account_field {
-    top: 55.9375%;
-    display: none;
   }
   #primary_l,
   #error_l {
@@ -521,6 +534,42 @@ export default {
     left: 50%;
     transform: translate(-50%);
     display: flex;
+  }
+  @media only screen and (max-height: 550px) {
+    #primary_l,
+    #error_l {
+      top: 5%;
+    }
+    #username_l,
+    #email_l,
+    #password_l {
+      top: 20%;
+    }
+    #username_new_account_field,
+    #email_new_account_field,
+    #password_new_account_field {
+      top: 30%;
+    }
+    #genesis_btn,
+    #login_btn,
+    #m_ln_1 {
+      top: 85%;
+    }
+    #length_req_indi,
+    #number_req_indi,
+    #uppercase_letter_req_indi,
+    #special_char_letter_req_indi {
+      top: calc(52% - 2%);
+    }
+    #number_req_indi {
+      top: calc(60% - 2%);
+    }
+    #uppercase_letter_req_indi {
+      top: calc(68% - 2%);
+    }
+    #special_char_letter_req_indi {
+      top: calc(76% - 2%);
+    }
   }
 }
 </style>
