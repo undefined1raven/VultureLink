@@ -61,7 +61,7 @@ export default {
       window.location.pathname = path;
     },
     password_field_on_click() {
-      if (root.clientHeight < 768) {
+      if (root.clientHeight < 768 && root.clientWidth < 768) {
         this.username_field_visible = false;
         this.email_field_visible = false;
         this.password_field_visible = true;
@@ -130,7 +130,7 @@ export default {
       }
     },
     username_field_on_click() {
-      if (root.clientHeight < 768) {
+      if (root.clientHeight < 768 && root.clientWidth < 768) {
         this.username_field_visible = true;
         this.email_field_visible = false;
         this.password_field_visible = false;
@@ -159,7 +159,7 @@ export default {
       }
     },
     email_field_on_click() {
-      if (root.clientHeight < 768) {
+      if (root.clientHeight < 768 && root.clientWidth < 768) {
         this.username_field_visible = false;
         this.email_field_visible = true;
         this.password_field_visible = false;
