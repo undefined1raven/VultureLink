@@ -41,6 +41,9 @@ export default {
       dynamic_error_label_height: "",
       dynamic_button_height: "",
       dynamic_password_req_label_height: "",
+      username_field_input_text: '',
+      email_field_input_text: '',
+      password_field_input_text: '',
     };
   },
   mounted() {
@@ -62,9 +65,14 @@ export default {
           this.virtual_keyboard_visible = true;
         } else {
           this.virtual_keyboard_visible = false;
+
           this.username_field_visible = true;
           this.email_field_visible = true;
           this.password_field_visible = true;
+
+          document.getElementById('username_new_account_field').value = this.username_field_input_text;
+          document.getElementById('email_new_account_field').value = this.email_field_input_text;
+          document.getElementById('password_new_account_field').value = this.password_field_input_text ;
         }
       }
     },
@@ -73,12 +81,15 @@ export default {
     },
     password_field_on_click() {
       if (root.clientHeight < 768 && root.clientWidth < 768) {
+        this.save_input_text();
+
         this.username_field_visible = false;
         this.email_field_visible = false;
         this.password_field_visible = true;
       }
     },
-    new_password_validation(e) {
+    new_password_on_input(e) {
+      this.password_field_input_text = e.target.value;
       if (e.target.value.length >= 8) {
         this.password_length_req_l_color = "#FFF";
       } else {
@@ -140,14 +151,23 @@ export default {
         e.target.submit();
       }
     },
-    username_field_on_click() {
+    save_input_text(){
+      this.username_field_input_text = document.getElementById('username_new_account_field').value;
+      this.email_field_input_text = document.getElementById('email_new_account_field').value;
+      this.password_field_input_text = document.getElementById('password_new_account_field').value;
+    },
+    username_field_on_click(e) {
       if (root.clientHeight < 768 && root.clientWidth < 768) {
+        this.save_input_text();
+
         this.username_field_visible = true;
         this.email_field_visible = false;
         this.password_field_visible = false;
       }
     },
     username_field_on_input(e) {
+      this.username_field_input_text = e.target.value;
+      this.error_label_visible = false;
       if (e.target.value.length >= 3) {
         fetch("/doesUserExist", {
           method: "POST",
@@ -171,12 +191,15 @@ export default {
     },
     email_field_on_click() {
       if (root.clientHeight < 768 && root.clientWidth < 768) {
+        this.save_input_text();
+
         this.username_field_visible = false;
         this.email_field_visible = true;
         this.password_field_visible = false;
       }
     },
     email_field_on_input(e) {
+      this.email_field_input_text = e.target.value;
       if (!e.target.value.match(email_regex)) {
         this.error_label_text = "Invalid email address";
         this.error_label_visible = true;
@@ -301,7 +324,7 @@ export default {
         '; height: ' +
         dynamic_input_field_height
       "
-      @input="new_password_validation"
+      @input="new_password_on_input"
       @click="password_field_on_click"
       v-if="password_field_visible"
     ></InputField>
