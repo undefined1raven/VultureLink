@@ -9,6 +9,7 @@ import MobileVultureConnectivityDecoDesktop from "@/components/MobileTheVultureC
 import AuroraLogo from "@/components/AuroraLogo.vue";
 import Label from "@/components/Label.vue";
 import NewPasswordReqIndi from "@/components/GenesisNewPasswordReq.vue";
+import { RSA_PKCS1_PADDING } from "constants";
 
 document.title = "New Account";
 </script>
@@ -16,7 +17,7 @@ document.title = "New Account";
 <script lang="ts">
 const email_regex =
   /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-
+const root = document.documentElement;
 export default {
   data() {
     return {
@@ -32,11 +33,39 @@ export default {
       email_field_border_color: "",
       password_field_background_color: "#02008850",
       password_field_border_color: "",
+      virtual_keyboard_visible: false,
+      username_field_visible: true,
+      email_field_visible: true,
+      password_field_visible: true,
+    };
+  },
+  mounted() {
+    window.onresize = () => {
+      this.onResize();
     };
   },
   methods: {
+    onResize() {
+      if (root.clientWidth < 768) {
+        if (root.clientHeight < 550) {
+          this.virtual_keyboard_visible = true;
+        } else {
+          this.virtual_keyboard_visible = false;
+          this.username_field_visible = true;
+          this.email_field_visible = true;
+          this.password_field_visible = true;
+        }
+      }
+    },
     redirect(path) {
       window.location.pathname = path;
+    },
+    password_field_on_focus() {
+      if (root.clientHeight < 550) {
+        this.username_field_visible = false;
+        this.email_field_visible = false;
+        this.password_field_visible = true;
+      }
     },
     new_password_validation(e) {
       if (e.target.value.length >= 8) {
@@ -100,6 +129,13 @@ export default {
         e.target.submit();
       }
     },
+    username_field_on_focus() {
+      if (root.clientHeight < 550) {
+        this.username_field_visible = true;
+        this.email_field_visible = false;
+        this.password_field_visible = false;
+      }
+    },
     username_field_on_input(e) {
       if (e.target.value.length >= 3) {
         fetch("/doesUserExist", {
@@ -122,12 +158,18 @@ export default {
         this.username_field_border_color = "";
       }
     },
-    email_field_on_input(e) {
-      if(!e.target.value.match(email_regex)){
-        this.error_label_text = 'Invalid email address';
-        this.error_label_visible = true;
+    email_field_on_focus() {
+      if (root.clientHeight < 550) {
+        this.username_field_visible = false;
+        this.email_field_visible = true;
+        this.password_field_visible = false;
       }
-      else{
+    },
+    email_field_on_input(e) {
+      if (!e.target.value.match(email_regex)) {
+        this.error_label_text = "Invalid email address";
+        this.error_label_visible = true;
+      } else {
         this.error_label_visible = false;
       }
       this.email_field_background_color = "#02008850";
@@ -140,7 +182,7 @@ export default {
 <template>
   <Background />
   <MobileBackground />
-  <AuroraLogo id="logo" />
+  <AuroraLogo v-if="!virtual_keyboard_visible" id="logo" />
   <Transition name="fade_in">
     <Label
       v-if="!error_label_visible"
@@ -159,21 +201,25 @@ export default {
     id="length_req_indi"
     :color="password_length_req_l_color"
     v-text="'at least 8 characters'"
+    v-if="password_field_visible"
   />
   <NewPasswordReqIndi
     id="number_req_indi"
     :color="password_number_req_l_color"
     v-text="'at least a number'"
+    v-if="password_field_visible"
   />
   <NewPasswordReqIndi
     id="uppercase_letter_req_indi"
     :color="password_uppercase_req_l_color"
     v-text="'at least an uppercase letter'"
+    v-if="password_field_visible"
   />
   <NewPasswordReqIndi
     id="special_char_letter_req_indi"
     :color="password_special_char_req_l_color"
     v-text="'at least a special character'"
+    v-if="password_field_visible"
   />
   <form @submit="onSubmit" action="/genesis_post" method="post">
     <InputField
@@ -190,11 +236,14 @@ export default {
         ';'
       "
       @input="username_field_on_input"
+      @focus="username_field_on_focus"
+      v-if="username_field_visible"
     ></InputField>
     <InputFieldLabel
       id="username_l"
       label="Username>\\"
       for="username_new_account_field"
+      v-if="username_field_visible"
     ></InputFieldLabel>
 
     <InputField
@@ -210,11 +259,14 @@ export default {
         ';'
       "
       @input="email_field_on_input"
+      @focus="email_field_on_focus"
+      v-if="email_field_visible"
     ></InputField>
     <InputFieldLabel
       id="email_l"
       label="Email>\\"
       for="email_new_account_field"
+      v-if="email_field_visible"
     ></InputFieldLabel>
 
     <InputField
@@ -230,14 +282,17 @@ export default {
         ';'
       "
       @input="new_password_validation"
+      @focus="password_field_on_focus"
+      v-if="password_field_visible"
     ></InputField>
     <InputFieldLabel
       id="password_l"
       label="Passwod>\\"
       for="password_new_account_field"
+      v-if="password_field_visible"
     ></InputFieldLabel>
 
-    <div id="m_ln_0"></div>
+    <div v-if="!virtual_keyboard_visible" id="m_ln_0"></div>
     <div id="m_ln_1"></div>
     <LoginButton
       class="btn_size"
@@ -246,8 +301,14 @@ export default {
       type="submit"
     ></LoginButton>
   </form>
-  <VultureConnectivityDecoDesktop id="dk_deco" />
-  <MobileVultureConnectivityDecoDesktop id="m_deco" />
+  <VultureConnectivityDecoDesktop
+    v-if="!virtual_keyboard_visible"
+    id="dk_deco"
+  />
+  <MobileVultureConnectivityDecoDesktop
+    v-if="!virtual_keyboard_visible"
+    id="m_deco"
+  />
   <LoginButton
     class="btn_size"
     @click="redirect('login')"
