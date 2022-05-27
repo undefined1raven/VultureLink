@@ -60,8 +60,8 @@ export default {
     redirect(path) {
       window.location.pathname = path;
     },
-    password_field_on_focus() {
-      if (root.clientHeight < 550) {
+    password_field_on_click() {
+      if (root.clientHeight < 768) {
         this.username_field_visible = false;
         this.email_field_visible = false;
         this.password_field_visible = true;
@@ -129,8 +129,8 @@ export default {
         e.target.submit();
       }
     },
-    username_field_on_focus() {
-      if (root.clientHeight < 550) {
+    username_field_on_click() {
+      if (root.clientHeight < 768) {
         this.username_field_visible = true;
         this.email_field_visible = false;
         this.password_field_visible = false;
@@ -158,8 +158,8 @@ export default {
         this.username_field_border_color = "";
       }
     },
-    email_field_on_focus() {
-      if (root.clientHeight < 550) {
+    email_field_on_click() {
+      if (root.clientHeight < 768) {
         this.username_field_visible = false;
         this.email_field_visible = true;
         this.password_field_visible = false;
@@ -236,7 +236,7 @@ export default {
         ';'
       "
       @input="username_field_on_input"
-      @focus="username_field_on_focus"
+      @click="username_field_on_click"
       v-if="username_field_visible"
     ></InputField>
     <InputFieldLabel
@@ -259,7 +259,7 @@ export default {
         ';'
       "
       @input="email_field_on_input"
-      @focus="email_field_on_focus"
+      @click="email_field_on_click"
       v-if="email_field_visible"
     ></InputField>
     <InputFieldLabel
@@ -282,7 +282,7 @@ export default {
         ';'
       "
       @input="new_password_validation"
-      @focus="password_field_on_focus"
+      @click="password_field_on_click"
       v-if="password_field_visible"
     ></InputField>
     <InputFieldLabel
