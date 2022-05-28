@@ -14,7 +14,6 @@ document.title = "Vulture//Login";
 <script lang="ts">
 let root = document.documentElement;
 
-
 export default {
   data() {
     return {

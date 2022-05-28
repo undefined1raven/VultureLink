@@ -621,6 +621,7 @@ app.use((req, res, next) => {
     res.setHeader('X-Frame-Options', "SAMEORIGIN");
     res.setHeader('X-Content-Type-Options', "nosniff");
     res.setHeader('X-powered-by', 'antimatter');
+    res.set('Cache-Control', 'no-store');
     res.setHeader('Permissions-Policy', "autoplay=(self), camera=(), geolocation=(self), microphone=(), usb=(self), interest-cohort=()");
     next();
 });
@@ -932,6 +933,7 @@ function rate_limiter_checker(rate_limiter, res) {
 const auth_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 50, interval: 'hour' });
 app.get('/login', (req, res) => {
     if (rate_limiter_checker(auth_limiter, res)) {
+        res.set('Cache-Control', 'no-store');
         let rvpx = false;
         if (req.cookies.at != undefined) {
             get_snapshot_from_path(`adv_tele_aprvd_tids/${req.cookies.at.tid}`).then(snapshot => {
@@ -960,6 +962,7 @@ app.get('/login', (req, res) => {
                     }
                 }
                 else {
+                    clear_all_session_cookies(res);
                     res.clearCookie('frstp_aprvd_tid');
                     res.sendFile(path.join(__dirname, 'dist/index.html'));
                 }
@@ -1073,9 +1076,18 @@ app.get('/security', (req, res) => {
 
 const adv_tele_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 300, interval: 'hour' });
 
+function clear_all_session_cookies(res){
+    res.clearCookie('at');
+    res.clearCookie('sat');
+    res.clearCookie('adv_tele_sio_ath');
+    res.clearCookie('sio_ath');
+    res.clearCookie('wid');
+    res.clearCookie('eor');
+}
+
 function check_ua(req, res, red_d, red_m) {
     try {
-        if (req.cookies.at != undefined) {
+        if (req.cookies.at != undefined && req.cookies.adv_tele_sio_ath != undefined) {
             let rvpx = false;
             get_snapshot_from_path(`adv_tele_aprvd_tids/${req.cookies.at.tid}`).then(snapshot => {
                 const data = snapshot.val();
@@ -1134,16 +1146,22 @@ function check_ua(req, res, red_d, red_m) {
                     }
                 }
                 else {
+                    // clear_all_session_cookies(res);
+                    console.log('wtf1')
                     res.redirect('login');
                 }
             });
         }
         else {
+            // clear_all_session_cookies(res);
+            console.log('wtf2')
             res.redirect('login');
         }
     }
     catch
     {
+        // clear_all_session_cookies(res);
+        console.log('wtf3')
         res.redirect('login');
     }
 }
@@ -1441,8 +1459,12 @@ function socket_transport_authenticator(payload, snapshot) {
 const genesis_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 20, interval: 'hour' });
 app.get('/genesis', (req, res) => {
     if (rate_limiter_checker(genesis_limiter, res)) {
-        console.log(`[01][Genesis] | ${Math.round(genesis_limiter.getTokensRemaining())} tokens remaining | Status Code [${res.statusCode}]`);
-        res.sendFile(path.join(__dirname, 'dist/index.html'));
+        if(req.cookies.at != undefined && req.cookies.adv_tele_sio_ath != undefined){
+            res.redirect('/advanced_telemetry');
+        }else{            
+            console.log(`[01][Genesis] | ${Math.round(genesis_limiter.getTokensRemaining())} tokens remaining | Status Code [${res.statusCode}]`);
+            res.sendFile(path.join(__dirname, 'dist/index.html'));
+        }
     }
 });
 

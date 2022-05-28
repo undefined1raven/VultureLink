@@ -12,13 +12,6 @@ document.title = "Vulture//MFA";
 
 <script>
 
-window.onpageshow = () => {
-  if(sessionStorage.getItem('history_management') == undefined){
-    window.location.reload();
-    sessionStorage.setItem('history_management', '1');
-  }
-};
-
 function MFA_TOTP_fetch_handle(e, token, backup_code, this_ref) {
   fetch("/MFA_TOTP_post", {
     method: "POST",
