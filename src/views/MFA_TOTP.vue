@@ -8,12 +8,12 @@ import MfaTotpInput from "@/components/TheMfaTotpInput.vue";
 import MobileBackground from "@/components/MobileBaseBackgroundImg.vue";
 
 document.title = "Vulture//MFA";
-</script>
-
-<script>
 if (sessionStorage.getItem("wid") != null) {
   window.location.pathname = sessionStorage.getItem("wid");
 }
+</script>
+
+<script>
 
 function MFA_TOTP_fetch_handle(e, token, backup_code, this_ref) {
   fetch("/MFA_TOTP_post", {
@@ -27,7 +27,6 @@ function MFA_TOTP_fetch_handle(e, token, backup_code, this_ref) {
     }),
   }).then((res) => {
     res.json().then((data) => {
-      console.log(data);
       if (!data.response) {
         this_ref.action_status_color = "FF006B";
         setTimeout(() => {
