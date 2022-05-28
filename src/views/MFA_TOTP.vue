@@ -8,9 +8,8 @@ import MfaTotpInput from "@/components/TheMfaTotpInput.vue";
 import MobileBackground from "@/components/MobileBaseBackgroundImg.vue";
 
 document.title = "Vulture//MFA";
-if (sessionStorage.getItem("wid") != null) {
-  window.location.pathname = sessionStorage.getItem("wid");
-}
+
+window.onunload = () => {}
 </script>
 
 <script>
