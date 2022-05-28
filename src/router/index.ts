@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import Genesis from '../views/Genesis.vue'
 
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
