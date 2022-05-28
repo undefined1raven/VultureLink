@@ -9,7 +9,6 @@ import MobileVultureConnectivityDecoDesktop from "@/components/MobileTheVultureC
 import AuroraLogo from "@/components/AuroraLogo.vue";
 import Label from "@/components/Label.vue";
 import NewPasswordReqIndi from "@/components/GenesisNewPasswordReq.vue";
-import { RSA_PKCS1_PADDING } from "constants";
 
 document.title = "New Account";
 </script>
