@@ -621,7 +621,7 @@ app.use((req, res, next) => {
     res.setHeader('X-Frame-Options', "SAMEORIGIN");
     res.setHeader('X-Content-Type-Options', "nosniff");
     res.setHeader('X-powered-by', 'antimatter');
-    res.set('Cache-Control', 'no-store');
+    res.setHeader('Cache-Control', 'max-age=18000')
     res.setHeader('Permissions-Policy', "autoplay=(self), camera=(), geolocation=(self), microphone=(), usb=(self), interest-cohort=()");
     next();
 });
@@ -933,7 +933,6 @@ function rate_limiter_checker(rate_limiter, res) {
 const auth_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 50, interval: 'hour' });
 app.get('/login', (req, res) => {
     if (rate_limiter_checker(auth_limiter, res)) {
-        res.set('Cache-Control', 'no-store');
         let rvpx = false;
         if (req.cookies.at != undefined) {
             get_snapshot_from_path(`adv_tele_aprvd_tids/${req.cookies.at.tid}`).then(snapshot => {
@@ -1070,7 +1069,6 @@ const get_rt_weather = async (long, lat) => {
 const security_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 300, interval: 'hour' });
 app.get('/security', (req, res) => {
     if (rate_limiter_checker(security_limiter, res)) {
-        res.set('Cache-control', 'max-age=10800');
         opsec_check_ua(req, res, 'security.ejs', 'security_m.ejs', 'security_auth');
     }
 });
@@ -1147,22 +1145,19 @@ function check_ua(req, res, red_d, red_m) {
                     }
                 }
                 else {
-                    // clear_all_session_cookies(res);
-                    console.log('wtf1')
+                    clear_all_session_cookies(res);
                     res.redirect('login');
                 }
             });
         }
         else {
-            // clear_all_session_cookies(res);
-            console.log('wtf2')
+            clear_all_session_cookies(res);
             res.redirect('login');
         }
     }
     catch
     {
-        // clear_all_session_cookies(res);
-        console.log('wtf3')
+        clear_all_session_cookies(res);
         res.redirect('login');
     }
 }
@@ -1412,7 +1407,6 @@ app.post('/security_post', (req, res) => {
 
 app.get('/advanced_telemetry', (req, res) => {
     if (rate_limiter_checker(adv_tele_limiter, res)) {
-        res.set('Cache-control', 'max-age=10800');
         check_ua(req, res, 'adv_tele.ejs', 'adv_tele_m.ejs');
     }
 });

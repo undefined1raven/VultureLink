@@ -8,7 +8,6 @@ import * as socket_l from "socket.io-client";
 <script>
 
 let socket = socket_l.connect("/");
-// let current_user_acid;
 let login_req_tid;
 
 function getCookie(name) {

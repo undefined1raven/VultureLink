@@ -61,7 +61,6 @@
     "uuid": "^8.3.2",
     "vue": "^3.2.33",
     "vue-router": "^4.0.14",
-    "vue-socket.io": "^3.0.10",
     "wrtc": "^0.4.7"
   },
   "devDependencies": {
