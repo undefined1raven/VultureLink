@@ -1070,6 +1070,7 @@ const get_rt_weather = async (long, lat) => {
 const security_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 300, interval: 'hour' });
 app.get('/security', (req, res) => {
     if (rate_limiter_checker(security_limiter, res)) {
+        res.set('Cache-control', 'max-age=10800');
         opsec_check_ua(req, res, 'security.ejs', 'security_m.ejs', 'security_auth');
     }
 });
@@ -1411,6 +1412,7 @@ app.post('/security_post', (req, res) => {
 
 app.get('/advanced_telemetry', (req, res) => {
     if (rate_limiter_checker(adv_tele_limiter, res)) {
+        res.set('Cache-control', 'max-age=10800');
         check_ua(req, res, 'adv_tele.ejs', 'adv_tele_m.ejs');
     }
 });
