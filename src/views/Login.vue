@@ -9,7 +9,6 @@ import Label from "@/components/Label.vue";
 import MobileBackground from "@/components/MobileBaseBackgroundImg.vue";
 
 document.title = "Vulture//Login";
-window.onunload = () => {}
 </script>
 
 <script lang="ts">

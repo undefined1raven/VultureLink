@@ -8,8 +8,6 @@ import MfaTotpInput from "@/components/TheMfaTotpInput.vue";
 import MobileBackground from "@/components/MobileBaseBackgroundImg.vue";
 
 document.title = "Vulture//MFA";
-
-window.onunload = () => {}
 </script>
 
 <script>

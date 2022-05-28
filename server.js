@@ -621,7 +621,7 @@ app.use((req, res, next) => {
     res.setHeader('X-Frame-Options', "SAMEORIGIN");
     res.setHeader('X-Content-Type-Options', "nosniff");
     res.setHeader('X-powered-by', 'antimatter');
-    res.setHeader('Cache-Control', 'max-age=18000')
+    res.setHeader('Cache-Control', 'no-store')
     res.setHeader('Permissions-Policy', "autoplay=(self), camera=(), geolocation=(self), microphone=(), usb=(self), interest-cohort=()");
     next();
 });
