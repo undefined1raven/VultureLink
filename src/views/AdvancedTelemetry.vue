@@ -3,9 +3,14 @@ import Background from "@/components/BaseBackgroundImg.vue";
 import DistanceIndicator from "@/components/AdvancedTeleBaseDistanceIndi.vue";
 import LoginRequestOverlay from "@/components/LoginRequestOverlay.vue";
 import * as socket_l from "socket.io-client";
+import { WSASERVICE_NOT_FOUND } from 'constants';
 </script>
 
 <script>
+
+window.onpageshow = () => {
+  sessionStorage.setItem('wid', '/advanced_telemetry');
+}
 
 let socket = socket_l.connect("/");
 let login_req_tid;

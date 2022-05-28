@@ -12,6 +12,12 @@ document.title = "Vulture//MFA";
 
 <script>
 
+window.onpageshow = () => {
+  if(sessionStorage.getItem('wid') != null){
+    window.location.pathname = sessionStorage.getItem('wid');
+  }
+}
+
 function MFA_TOTP_fetch_handle(e, token, backup_code, this_ref) {
   fetch("/MFA_TOTP_post", {
     method: "POST",
