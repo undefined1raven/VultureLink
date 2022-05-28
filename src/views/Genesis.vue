@@ -34,16 +34,13 @@ export default {
       password_field_background_color: "#02008850",
       password_field_border_color: "",
       virtual_keyboard_visible: false,
-      username_field_visible: true,
-      email_field_visible: true,
-      password_field_visible: true,
       dynamic_input_field_height: "",
       dynamic_error_label_height: "",
       dynamic_button_height: "",
       dynamic_password_req_label_height: "",
-      username_field_input_text: '',
-      email_field_input_text: '',
-      password_field_input_text: '',
+      username_field_input_opacity: 1,
+      email_field_input_opacity: 1,
+      password_field_input_opacity: 1,
     };
   },
   mounted() {
@@ -66,13 +63,9 @@ export default {
         } else {
           this.virtual_keyboard_visible = false;
 
-          this.username_field_visible = true;
-          this.email_field_visible = true;
-          this.password_field_visible = true;
-
-          document.getElementById('username_new_account_field').value = this.username_field_input_text;
-          document.getElementById('email_new_account_field').value = this.email_field_input_text;
-          document.getElementById('password_new_account_field').value = this.password_field_input_text ;
+          this.username_field_input_opacity = 1;
+          this.email_field_input_opacity = 1;
+          this.password_field_input_opacity = 1;
         }
       }
     },
@@ -81,15 +74,11 @@ export default {
     },
     password_field_on_click() {
       if (root.clientHeight < 768 && root.clientWidth < 768) {
-        this.save_input_text();
-
-        this.username_field_visible = false;
-        this.email_field_visible = false;
-        this.password_field_visible = true;
+        this.username_field_input_opacity = 0;
+        this.email_field_input_opacity = 0;
       }
     },
     new_password_on_input(e) {
-      this.password_field_input_text = e.target.value;
       if (e.target.value.length >= 8) {
         this.password_length_req_l_color = "#FFF";
       } else {
@@ -151,22 +140,14 @@ export default {
         e.target.submit();
       }
     },
-    save_input_text(){
-      this.username_field_input_text = document.getElementById('username_new_account_field').value;
-      this.email_field_input_text = document.getElementById('email_new_account_field').value;
-      this.password_field_input_text = document.getElementById('password_new_account_field').value;
-    },
     username_field_on_click(e) {
       if (root.clientHeight < 768 && root.clientWidth < 768) {
-        this.save_input_text();
+        this.password_field_input_opacity = 0;
+        this.email_field_input_opacity = 0;
 
-        this.username_field_visible = true;
-        this.email_field_visible = false;
-        this.password_field_visible = false;
       }
     },
     username_field_on_input(e) {
-      this.username_field_input_text = e.target.value;
       this.error_label_visible = false;
       if (e.target.value.length >= 3) {
         fetch("/doesUserExist", {
@@ -191,15 +172,12 @@ export default {
     },
     email_field_on_click() {
       if (root.clientHeight < 768 && root.clientWidth < 768) {
-        this.save_input_text();
+        this.password_field_input_opacity = 0;
+        this.username_field_input_opacity = 0;
 
-        this.username_field_visible = false;
-        this.email_field_visible = true;
-        this.password_field_visible = false;
       }
     },
     email_field_on_input(e) {
-      this.email_field_input_text = e.target.value;
       if (!e.target.value.match(email_regex)) {
         this.error_label_text = "Invalid email address";
         this.error_label_visible = true;
@@ -238,28 +216,28 @@ export default {
     :color="password_length_req_l_color"
     :height="dynamic_password_req_label_height"
     v-text="'at least 8 characters'"
-    v-if="password_field_visible"
+    :style="'opacity: ' + password_field_input_opacity"
   />
   <NewPasswordReqIndi
     id="number_req_indi"
     :color="password_number_req_l_color"
     :height="dynamic_password_req_label_height"
     v-text="'at least a number'"
-    v-if="password_field_visible"
+    :style="'opacity: ' + password_field_input_opacity"
   />
   <NewPasswordReqIndi
     id="uppercase_letter_req_indi"
     :color="password_uppercase_req_l_color"
     :height="dynamic_password_req_label_height"
     v-text="'at least an uppercase letter'"
-    v-if="password_field_visible"
+    :style="'opacity: ' + password_field_input_opacity"
   />
   <NewPasswordReqIndi
     id="special_char_letter_req_indi"
     :color="password_special_char_req_l_color"
     :height="dynamic_password_req_label_height"
     v-text="'at least a special character'"
-    v-if="password_field_visible"
+    :style="'opacity: ' + password_field_input_opacity"
   />
   <form @submit="onSubmit" action="/genesis_post" method="post">
     <InputField
@@ -274,17 +252,18 @@ export default {
         '; border-color: ' +
         username_field_border_color +
         '; height: ' +
-        dynamic_input_field_height
+        dynamic_input_field_height +
+        ';opacity: ' +
+        username_field_input_opacity
       "
       @input="username_field_on_input"
       @click="username_field_on_click"
-      v-if="username_field_visible"
     ></InputField>
     <InputFieldLabel
       id="username_l"
       label="Username>\\"
       for="username_new_account_field"
-      v-if="username_field_visible"
+      :style="'opacity: ' + username_field_input_opacity"
     ></InputFieldLabel>
 
     <InputField
@@ -298,17 +277,18 @@ export default {
         '; border-color: ' +
         email_field_border_color +
         '; height: ' +
-        dynamic_input_field_height
+        dynamic_input_field_height +
+        ';opacity: ' +
+        email_field_input_opacity
       "
       @input="email_field_on_input"
       @click="email_field_on_click"
-      v-if="email_field_visible"
     ></InputField>
     <InputFieldLabel
       id="email_l"
       label="Email>\\"
       for="email_new_account_field"
-      v-if="email_field_visible"
+      :style="'opacity: ' + email_field_input_opacity"
     ></InputFieldLabel>
 
     <InputField
@@ -322,17 +302,18 @@ export default {
         '; border-color: ' +
         password_field_border_color +
         '; height: ' +
-        dynamic_input_field_height
+        dynamic_input_field_height +
+        ';opacity: ' +
+        password_field_input_opacity
       "
       @input="new_password_on_input"
       @click="password_field_on_click"
-      v-if="password_field_visible"
     ></InputField>
     <InputFieldLabel
       id="password_l"
       label="Passwod>\\"
       for="password_new_account_field"
-      v-if="password_field_visible"
+      :style="'opacity: ' + password_field_input_opacity"
     ></InputFieldLabel>
 
     <div v-if="!virtual_keyboard_visible" id="m_ln_0"></div>
