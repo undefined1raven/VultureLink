@@ -18,7 +18,7 @@ export default {
   position: absolute;
   width: 11.71875%;
   height: 12.407407407%;
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
   color: #FFF;

@@ -3,7 +3,7 @@ import Background from "@/components/BaseBackgroundImg.vue";
 import DistanceIndicator from "@/components/AdvancedTeleBaseDistanceIndi.vue";
 import LoginRequestOverlay from "@/components/LoginRequestOverlay.vue";
 import * as socket_l from "socket.io-client";
-import { WSASERVICE_NOT_FOUND } from 'constants';
+import Overview from "@/components/TheAdvancedTelemetryOverview.vue"
 </script>
 
 <script>
@@ -137,6 +137,7 @@ export default {
     :login_request_visible="login_req_details_obj.login_request_visible"
     @visibility_switch_sig="handle_visibility_sig"
   ></LoginRequestOverlay>
+  <Overview></Overview>
 </template>
 
 <style scoped>
