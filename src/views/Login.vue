@@ -33,7 +33,7 @@ export default {
   methods: {
     user_identifier_field_onInput(e) {
       if (e.target.value.length > 0) {
-        if (root.clientWidth > 768 && root.clientHeight > 900) {
+        if (root.clientWidth > 1200) {
           this.user_identifier_field_borderColor = "";
           this.user_identifier_field_backgroundColor = "#02008850";
         } else {
@@ -44,7 +44,7 @@ export default {
     },
     password_field_onInput(e) {
       if (e.target.value.length > 0) {
-        if (root.clientWidth > 768 && root.clientHeight > 900) {
+        if (root.clientWidth > 1200) {
           this.password_field_borderColor = "";
           this.password_field_backgroundColor = "#02008850";
         } else {
@@ -261,7 +261,7 @@ export default {
 .fade_in-leave-to {
   opacity: 0;
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1200px) {
   #primary_label {
     display: none;
   }
