@@ -5,7 +5,9 @@ export default {
     autocomplete: "",
     name: "",
     type: "",
-    height: ""
+    height: "",
+    backgroundColor: '',
+    borderColor: ''
   },
 };
 </script>
@@ -18,7 +20,7 @@ export default {
     :autocomplete="autocomplete"
     :name="name"
     :id="id"
-    :style="'height: ' + height"
+    :style="'height: ' + height + '; border-color: ' + borderColor + '; background-color: ' + backgroundColor"
     class="in_field"
   />
 </template>

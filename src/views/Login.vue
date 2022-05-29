@@ -17,6 +17,10 @@ let root = document.documentElement;
 export default {
   data() {
     return {
+      user_identifier_field_borderColor: "",
+      user_identifier_field_backgroundColor: "",
+      password_field_borderColor: "",
+      password_field_backgroundColor: "",
       dynamic_input_field_height: "",
       dynamic_button_height: "",
       dynamic_error_label_height: "",
@@ -27,6 +31,28 @@ export default {
     };
   },
   methods: {
+    user_identifier_field_onInput(e) {
+      if (e.target.value.length > 0) {
+        if (root.clientWidth > 768 && root.clientHeight > 900) {
+          this.user_identifier_field_borderColor = "";
+          this.user_identifier_field_backgroundColor = "#02008850";
+        } else {
+          this.user_identifier_field_borderColor = "#0f00bb";
+          this.user_identifier_field_backgroundColor = "#02008800";
+        }
+      }
+    },
+    password_field_onInput(e) {
+      if (e.target.value.length > 0) {
+        if (root.clientWidth > 768 && root.clientHeight > 900) {
+          this.password_field_borderColor = "";
+          this.password_field_backgroundColor = "#02008850";
+        } else {
+          this.password_field_borderColor = "#0f00bb";
+          this.password_field_backgroundColor = "#02008800";
+        }
+      }
+    },
     onResize() {
       if (root.clientHeight < 900 && root.clientWidth < 600) {
         if (root.clientHeight < 550) {
@@ -46,30 +72,43 @@ export default {
     },
     onSubmit(e) {
       e.preventDefault();
-      fetch("/auth_post", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_identifier: e.target.user_identifier.value,
-          password: e.target.password.value,
-        }),
-      })
-        .then((res) => {
-          res.json().then((response_data) => {
-            if (response_data.result) {
-              window.location.pathname = response_data.redirect_path;
-            } else {
-              this.auth_error_label_visible = true;
-              e.target.password.value = "";
-              setTimeout(() => {
-                this.auth_error_label_visible = false;
-              }, 1500);
-            }
-          });
+      if (e.target.user_identifier.value == "") {
+        this.user_identifier_field_borderColor = "#FF006B";
+        this.user_identifier_field_backgroundColor = "#FF006B20";
+      }
+      if (e.target.password.value == "") {
+        this.password_field_borderColor = "#FF006B";
+        this.password_field_backgroundColor = "#FF006B20";
+      }
+      if (
+        e.target.user_identifier.value != "" &&
+        e.target.password.value != ""
+      ) {
+        fetch("/auth_post", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_identifier: e.target.user_identifier.value,
+            password: e.target.password.value,
+          }),
         })
-        .catch((e) => {
-          this.auth_error_actual = e;
-        });
+          .then((res) => {
+            res.json().then((response_data) => {
+              if (response_data.result) {
+                window.location.pathname = response_data.redirect_path;
+              } else {
+                this.auth_error_label_visible = true;
+                e.target.password.value = "";
+                setTimeout(() => {
+                  this.auth_error_label_visible = false;
+                }, 1500);
+              }
+            });
+          })
+          .catch((e) => {
+            this.auth_error_actual = e;
+          });
+      }
     },
   },
   mounted() {
@@ -108,7 +147,9 @@ export default {
         name="user_identifier"
         type="text"
         :height="dynamic_input_field_height"
-        required="true"
+        :borderColor="user_identifier_field_borderColor"
+        :backgroundColor="user_identifier_field_backgroundColor"
+        @input="user_identifier_field_onInput"
       ></InputField>
 
       <InputFieldLabel
@@ -123,7 +164,9 @@ export default {
         name="password"
         type="password"
         :height="dynamic_input_field_height"
-        required="true"
+        :borderColor="password_field_borderColor"
+        :backgroundColor="password_field_backgroundColor"
+        @input="password_field_onInput"
       ></InputField>
 
       <InputFieldLabel
