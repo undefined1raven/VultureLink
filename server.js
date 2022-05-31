@@ -748,8 +748,7 @@ app.post('/MFA_mobile_poll', (req, res) => {
 
 function successful_auth_post(req, res, user, redirect) {
     const tid = `${uuid.v4()}${uuid.v4()}`;
-    const un = user.username;
-    const token = jwt.sign({ un: un, tid: tid }, jwt_scrt, {
+    const token = jwt.sign({ acid: user.acid, tid: tid }, jwt_scrt, {
         algorithm: 'HS256',
         expiresIn: 21600,//6h ttl
     });
@@ -757,7 +756,7 @@ function successful_auth_post(req, res, user, redirect) {
     const add_tid_to_rtdb = ref(db, `adv_tele_aprvd_tids/${tid}`);
     set(add_tid_to_rtdb, {
         tx: Date.now(),
-        un: user.username,
+        acid: user.acid,
         mobile: req.useragent.isMobile
     });
     var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -770,12 +769,14 @@ function successful_auth_post(req, res, user, redirect) {
         res.cookie('at', { tac: token, tid: tid, exp: at_expiry_date }, { httpOnly: true, secure: true, expires: at_expiry_date });
         res.cookie('adv_tele_sio_ath', tid, { secure: true });
         res.cookie('wid', 'advanced_telemetry', { httpOnly: true, secure: true });
+        res.cookie('acid', user.acid, { secure: true });
     }
     else {
         // add_activity_log_tdb(req, ip, 'Advanced Telemetry login', req.body.user_identifier);
         res.cookie('at', { tac: token, tid: tid, exp: at_expiry_date }, { httpOnly: true, expires: at_expiry_date });
         res.cookie('adv_tele_sio_ath', tid);
         res.cookie('wid', 'advanced_telemetry', { httpOnly: true });
+        res.cookie('acid', user.acid, { secure: false });
     }
     res.clearCookie('redirect_id');
     setTimeout(() => {
@@ -1075,7 +1076,7 @@ app.get('/security', (req, res) => {
 
 const adv_tele_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 300, interval: 'hour' });
 
-function clear_all_session_cookies(res){
+function clear_all_session_cookies(res) {
     res.clearCookie('at');
     res.clearCookie('sat');
     res.clearCookie('adv_tele_sio_ath');
@@ -1096,7 +1097,7 @@ function check_ua(req, res, red_d, red_m) {
                     let decoded_jwt;
                     try {
                         decoded_jwt = jwt.verify(verf, jwt_scrt);
-                        if (decoded_jwt.tid == req.cookies.at.tid && decoded_jwt.un == data.un) {
+                        if (decoded_jwt.tid == req.cookies.at.tid && decoded_jwt.acid == data.acid) {
                             rvpx = true;
                         }
                         else {
@@ -1111,7 +1112,7 @@ function check_ua(req, res, red_d, red_m) {
                     if (rvpx) {
                         let ntid = `${uuid.v4()}${uuid.v4()}`;
 
-                        const new_token = jwt.sign({ un: decoded_jwt.un, tid: ntid }, jwt_scrt, {
+                        const new_token = jwt.sign({ acid: decoded_jwt.acid, tid: ntid }, jwt_scrt, {
                             algorithm: 'HS256',
                             expiresIn: 21600,//6h TTL 
                         });
@@ -1119,7 +1120,7 @@ function check_ua(req, res, red_d, red_m) {
                         const add_tid_to_rtdb = ref(db, `adv_tele_aprvd_tids/${ntid}`);
                         set(add_tid_to_rtdb, {
                             tx: data.tx,
-                            un: decoded_jwt.un,
+                            acid: decoded_jwt.acid,
                             mobile: req.useragent.isMobile
                         });
                         remove(ref(db, `adv_tele_aprvd_tids/${req.cookies.at.tid}`));
@@ -1455,9 +1456,9 @@ function socket_transport_authenticator(payload, snapshot) {
 const genesis_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 20, interval: 'hour' });
 app.get('/genesis', (req, res) => {
     if (rate_limiter_checker(genesis_limiter, res)) {
-        if(req.cookies.at != undefined && req.cookies.adv_tele_sio_ath != undefined){
+        if (req.cookies.at != undefined && req.cookies.adv_tele_sio_ath != undefined) {
             res.redirect('/advanced_telemetry');
-        }else{            
+        } else {
             console.log(`[01][Genesis] | ${Math.round(genesis_limiter.getTokensRemaining())} tokens remaining | Status Code [${res.statusCode}]`);
             res.sendFile(path.join(__dirname, 'dist/index.html'));
         }
@@ -2095,32 +2096,36 @@ io.on('connection', socket => {
 
     function req_vulture_array_status_exec(payload, snapshot) {
         if (socket_transport_authenticator(payload, snapshot)) {
-            get(ref(db, 'active_vultures/')).then(active_vultures_snapshot => {
-                UAC_v2.find({ acid: payload.acid }).exec().then(r => {
-                    if (r.length > 0) {
-                        let vow = r[0].vow;
-                        let vow_status = [];
-                        const data = active_vultures_snapshot.val();
-                        if (data != null) {
-                            for (let ix = 0; ix < vow.length; ix++) {
-                                if (data[vow[ix].vid] == undefined) {
-                                    vow_status.push({ vid: vow[ix].vid, vn: vow[ix].vn, status: 'ready' });
+            if (snapshot.val().acid == payload.acid) {
+                get(ref(db, 'active_vultures/')).then(active_vultures_snapshot => {
+                    UAC_v2.find({ acid: payload.acid }).exec().then(r => {
+                        if (r.length > 0) {
+                            let vow = r[0].vow;
+                            let vow_status = [];
+                            const data = active_vultures_snapshot.val();
+                            if (data != null) {
+                                for (let ix = 0; ix < vow.length; ix++) {
+                                    if (data[vow[ix].vid] == undefined) {
+                                        vow_status.push({ vid: vow[ix].vid, vn: vow[ix].vn, status: 'ready' });
+                                    }
+                                    else {
+                                        vow_status.push({ vid: vow[ix].vid, vn: vow[ix].vn, status: 'active' });
+                                    }
                                 }
-                                else {
-                                    vow_status.push({ vid: vow[ix].vid, vn: vow[ix].vn, status: 'active' });
+                                io.to(socket.id).emit('vulture_array_status_res', { vulture_array_status: vow_status });
+                            }
+                            else {
+                                for (let ix = 0; ix < vow.length; ix++) {
+                                    vow_status[ix] = { vid: vow[ix].vid, vn: vow[ix].vn, status: 'ready' };
                                 }
+                                io.to(socket.id).emit('vulture_array_status_res', { vulture_array_status: vow_status });
                             }
-                            io.to(socket.id).emit('vulture_array_status_res', { vulture_array_status: vow_status });
                         }
-                        else {
-                            for (let ix = 0; ix < vow.length; ix++) {
-                                vow_status[ix] = { vid: vow[ix].vid, vn: vow[ix].vn, status: 'ready' };
-                            }
-                            io.to(socket.id).emit('vulture_array_status_res', { vulture_array_status: vow_status });
-                        }
-                    }
+                    });
                 });
-            });
+            } else {
+                io.to(socket.id).emit('sio_transport_auth_failed_sig');
+            }
         }
     }
 

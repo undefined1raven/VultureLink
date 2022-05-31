@@ -52,6 +52,7 @@ export default {
     },
   },
   mounted() {
+    this.current_user_acid = getCookie('acid');
     socket.emit("req_un", {
       origin: "adv_tele",
       ath: getCookie("adv_tele_sio_ath"),
@@ -60,12 +61,6 @@ export default {
 
     socket.on("un_res", (un) => {
       this.current_user_un = un.username;
-      this.current_user_acid = un.acid;
-      socket.emit("req_vow", {
-        origin: "adv_tele",
-        ath: getCookie("adv_tele_sio_ath"),
-        acid: this.current_user_acid,
-      });
       socket.emit("add_socket_to_acid_room", {
         sid: socket.id,
         acid: this.current_user_acid,
@@ -103,7 +98,7 @@ export default {
   ></LoginRequestOverlay>
   <Overview
     :socket_ref="socket_ref"
-    :current_user_acid="current_user_acid"
+    :current_user_acid="`${getCookie('acid')}`"
   ></Overview>
 </template>
 
