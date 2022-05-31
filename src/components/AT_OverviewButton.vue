@@ -66,8 +66,8 @@ export default {
 }
 .overview_button_container {
   position: absolute;
-  width: 33.333333333%;
-  height: 18.721973094%;
+  width: 29.774489077%;
+  height: 13.901345291%;
 }
 .path {
   transition: stroke linear 0.1s, fill linear 0.1s;

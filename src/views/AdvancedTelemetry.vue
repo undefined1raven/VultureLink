@@ -3,14 +3,13 @@ import Background from "@/components/BaseBackgroundImg.vue";
 import DistanceIndicator from "@/components/AdvancedTeleBaseDistanceIndi.vue";
 import LoginRequestOverlay from "@/components/LoginRequestOverlay.vue";
 import * as socket_l from "socket.io-client";
-import Overview from "@/components/TheAdvancedTelemetryOverview.vue"
+import Overview from "@/components/TheAdvancedTelemetryOverview.vue";
 </script>
 
 <script>
-
 window.onpageshow = () => {
-  sessionStorage.setItem('wid', '/advanced_telemetry');
-}
+  sessionStorage.setItem("wid", "/advanced_telemetry");
+};
 
 let socket = socket_l.connect("/");
 let login_req_tid;
@@ -33,13 +32,6 @@ function unix_tx_formatter(unix_time) {
 export default {
   data() {
     return {
-      sonar_telemetry_obj: {
-        fwd_sonar: 0,
-        lft_sonar: 0,
-        bwd_sonar: 0,
-        rgt_sonar: 0,
-        gnd_sonar: 0,
-      },
       login_req_details_obj: {
         timestamp: "",
         location: "",
@@ -48,8 +40,10 @@ export default {
         tid: "",
         isVisible: false,
       },
+      socket_ref: socket,
       current_user_acid: "",
       current_user_un: "",
+      vulture_status_array: "",
     };
   },
   methods: {
@@ -68,11 +62,6 @@ export default {
       this.current_user_un = un.username;
       this.current_user_acid = un.acid;
       socket.emit("req_vow", {
-        origin: "adv_tele",
-        ath: getCookie("adv_tele_sio_ath"),
-        acid: this.current_user_acid,
-      });
-      socket.emit("req_vulture_array_status", {
         origin: "adv_tele",
         ath: getCookie("adv_tele_sio_ath"),
         acid: this.current_user_acid,
@@ -101,31 +90,6 @@ export default {
 
 <template>
   <Background />
-  <DistanceIndicator
-    id="fwd_sonar_indi"
-    :text="`${sonar_telemetry_obj.fwd_sonar}`"
-  ></DistanceIndicator>
-
-  <DistanceIndicator
-    id="lft_sonar_indi"
-    :text="`${sonar_telemetry_obj.lft_sonar}`"
-  ></DistanceIndicator>
-
-  <DistanceIndicator
-    id="bwd_sonar_indi"
-    :text="`${sonar_telemetry_obj.bwd_sonar}`"
-  ></DistanceIndicator>
-
-  <DistanceIndicator
-    id="rgt_sonar_indi"
-    :text="`${sonar_telemetry_obj.rgt_sonar}`"
-  ></DistanceIndicator>
-
-  <DistanceIndicator
-    id="gnd_sonar_indi"
-    :text="`${sonar_telemetry_obj.gnd_sonar}`"
-  ></DistanceIndicator>
-
   <LoginRequestOverlay
     :isVisible="login_req_details_obj.isVisible"
     :timestamp="login_req_details_obj.timestamp"
@@ -137,7 +101,10 @@ export default {
     :login_request_visible="login_req_details_obj.login_request_visible"
     @visibility_switch_sig="handle_visibility_sig"
   ></LoginRequestOverlay>
-  <Overview></Overview>
+  <Overview
+    :socket_ref="socket_ref"
+    :current_user_acid="current_user_acid"
+  ></Overview>
 </template>
 
 <style scoped>

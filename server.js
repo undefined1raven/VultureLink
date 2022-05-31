@@ -2104,17 +2104,17 @@ io.on('connection', socket => {
                         if (data != null) {
                             for (let ix = 0; ix < vow.length; ix++) {
                                 if (data[vow[ix].vid] == undefined) {
-                                    vow_status.push({ vid: vow[ix].vid, vn: vow[ix].vn, vulture_status: false });
+                                    vow_status.push({ vid: vow[ix].vid, vn: vow[ix].vn, status: 'ready' });
                                 }
                                 else {
-                                    vow_status.push({ vid: vow[ix].vid, vn: vow[ix].vn, vulture_status: true });
+                                    vow_status.push({ vid: vow[ix].vid, vn: vow[ix].vn, status: 'active' });
                                 }
                             }
                             io.to(socket.id).emit('vulture_array_status_res', { vulture_array_status: vow_status });
                         }
                         else {
                             for (let ix = 0; ix < vow.length; ix++) {
-                                vow_status[ix] = { vid: vow[ix].vid, vn: vow[ix].vn, vulture_status: false };
+                                vow_status[ix] = { vid: vow[ix].vid, vn: vow[ix].vn, status: 'ready' };
                             }
                             io.to(socket.id).emit('vulture_array_status_res', { vulture_array_status: vow_status });
                         }
