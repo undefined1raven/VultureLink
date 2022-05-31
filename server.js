@@ -1199,7 +1199,7 @@ function opsec_check_ua(req, res, red_d, red_m, fred) {
                     let decoded_jwt;
                     try {
                         decoded_jwt = jwt.verify(verf, jwt_scrt);//validates the session JWT 
-                        if (decoded_jwt.tid == req.cookies.sat.tid && decoded_jwt.un == data.un) {
+                        if (decoded_jwt.tid == req.cookies.sat.tid && decoded_jwt.acid == data.acid) {
                             jvs = true;
                         }
                         else {
@@ -1215,7 +1215,7 @@ function opsec_check_ua(req, res, red_d, red_m, fred) {
 
                         let ntid = `${uuid.v4()}${uuid.v4()}`;//generates the new security token id
 
-                        const new_token = jwt.sign({ un: decoded_jwt.un, tid: ntid }, jwt_scrt, {
+                        const new_token = jwt.sign({ acid: decoded_jwt.acid, tid: ntid }, jwt_scrt, {
                             algorithm: 'HS256',
                             expiresIn: 14400,
                         });
@@ -1224,7 +1224,7 @@ function opsec_check_ua(req, res, red_d, red_m, fred) {
                         //adds the new security session token id to the rt db 
                         set(add_tid_to_rtdb, {
                             tx: Date.now(),
-                            un: decoded_jwt.un
+                            acid: decoded_jwt.acid
                         });
 
                         remove(ref(db, `aprvd_tids/${req.cookies.sat.tid}`));
@@ -1265,7 +1265,7 @@ function opsec_check_ua(req, res, red_d, red_m, fred) {
 function successful_security_post(req, res, user, redirect) {
     const un = user.username;
     const tid = `${uuid.v4()}${uuid.v4()}`;
-    const token = jwt.sign({ un: un, tid: tid }, jwt_scrt, {
+    const token = jwt.sign({ acid: user.acid, tid: tid }, jwt_scrt, {
         algorithm: 'HS256',
         expiresIn: 14400,
     });
@@ -1273,7 +1273,7 @@ function successful_security_post(req, res, user, redirect) {
     const add_tid_to_rtdb = ref(db, `aprvd_tids/${tid}`);
     set(add_tid_to_rtdb, {
         tx: Date.now(),
-        un: user.username
+        acid: user.acid
     });
     var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     if (process.env.NODE_ENV === 'production') {
