@@ -5,7 +5,6 @@ import Label from "@/components/Label.vue";
 </script>
 
 <script>
-
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -15,7 +14,7 @@ function getCookie(name) {
 export default {
   props: {
     socket_ref: "",
-    current_user_acid: ""
+    current_user_acid: "",
   },
   data() {
     return {
@@ -23,24 +22,24 @@ export default {
     };
   },
   mounted() {
-      this.socket_ref.on("refresh_vulture_array_status_sig", () => {
-        this.socket_ref.emit("req_vulture_array_status", {
-          origin: "adv_tele",
-          ath: getCookie("adv_tele_sio_ath"),
-          acid: this.current_user_acid,
-        });
-      });
-  
+    this.socket_ref.on("refresh_vulture_array_status_sig", () => {
       this.socket_ref.emit("req_vulture_array_status", {
         origin: "adv_tele",
         ath: getCookie("adv_tele_sio_ath"),
         acid: this.current_user_acid,
       });
-  
-      this.socket_ref.on("vulture_array_status_res", (res) => {
-        console.log(res.vulture_array_status);
-        this.vulture_array_status = res.vulture_array_status;
-      });
+    });
+
+    this.socket_ref.emit("req_vulture_array_status", {
+      origin: "adv_tele",
+      ath: getCookie("adv_tele_sio_ath"),
+      acid: this.current_user_acid,
+    });
+
+    this.socket_ref.on("vulture_array_status_res", (res) => {
+      console.log(res.vulture_array_status);
+      this.vulture_array_status = res.vulture_array_status;
+    });
   },
 };
 </script>
@@ -62,7 +61,6 @@ export default {
       system_label="PROPULSION"
       stroke="#00FFF0"
     ></OverviewButton>
-
     <OverviewButton
       id="dynamics_overview_btn"
       system_label="DYNAMICS"
@@ -78,7 +76,6 @@ export default {
       system_label="AUTONOMY"
       stroke="#00FFF0"
     ></OverviewButton>
-
     <OverviewButton
       id="nav_overview_btn"
       system_label="NAVIGATION"
@@ -91,14 +88,97 @@ export default {
     ></OverviewButton>
     <Label id="overview_l" v-text="'Systems Overview'" color="#FFF"></Label>
   </div>
+  <div id="ln_container">
+    <div id="vulture_selector_ln_0" class="ln ln_h"></div>
+    <div id="vulture_selector_ln_1" class="ln ln_h"></div>
+    <div id="vulture_selector_ln_2" class="ln ln_v"></div>
+    <div id="vulture_selector_ln_3" class="ln ln_v"></div>
+    <div id="vulture_selector_ln_4" class="ln ln_v"></div>
+    <div id="vulture_selector_ln_5" class="ln ln_h"></div>
+    <div id="vulture_selector_ln_6" class="ln ln_h"></div>
+  </div>
   <div id="vulture_selector_container">
     <VultureSelectorList
       :id="'vulture_selector_list'"
       :vulture_array_status="vulture_array_status"
     />
+    <Label id="vulture_selector_l" v-text="'Vulture Selector'" color="#FFF"></Label>
+    <Label id="vulture_selector_legend_unavailable" class="vulture_selector_legend_x" v-text="'Unavailable'" color="#585858"></Label>
+    <Label id="vulture_selector_legend_fault" class="vulture_selector_legend_x" v-text="'Requires Attention'" color="#FF006B"></Label>
+    <Label id="vulture_selector_legend_ready" class="vulture_selector_legend_x" v-text="'Ready'" color="#0500FF"></Label>
+    <Label id="vulture_selector_legend_active" class="vulture_selector_legend_x" v-text="'Active'" color="#00FFF0"></Label>
   </div>
 </template>
 <style scoped>
+.vulture_selector_legend_x{
+  font-size: 0.8vw;
+  top: 39.877777778%;
+}
+#vulture_selector_legend_unavailable{
+  border-top: solid 2px #585858;
+  left: 3.958333333%;
+}
+#vulture_selector_legend_fault{
+  border-top: solid 2px #FF006B;
+  left: 8.177083333%;
+}
+#vulture_selector_legend_ready{
+  border-top: solid 2px #0500FF;
+  left: 14.791666667%;
+}
+#vulture_selector_legend_active{
+  border-top: solid 2px #00FFF0;
+  left: 17.291666667%;
+}
+#vulture_selector_l{
+  top: 14.351851852%;
+  left: 0.78125%;
+}
+.ln {
+  position: absolute;
+  background-color: #2c2c2c;
+}
+.ln_v{
+  width: 0.11vh;
+}
+.ln_h{
+  height: 0.11vh;
+}
+#vulture_selector_ln_0 {
+  top: 12.685185185%;
+  left: 1.041666667%;
+  width: 21.875%;
+}
+#vulture_selector_ln_1 {
+  top: 12.685185185%;
+  left: 23.958333333%;
+  width: 1.614583333%;
+}
+#vulture_selector_ln_2{
+  top: 12.685185185%;
+  left: 24.739583333%;
+  height: 1.481481481%;
+}
+#vulture_selector_ln_3{
+  top: 16.018518519%;
+  left: 24.739583333%;
+  height: 23.148148148%;
+}
+#vulture_selector_ln_4{
+  top: 41.018518519%;
+  left: 24.739583333%;
+  height: 2.87037037%;
+}
+#vulture_selector_ln_5{
+  top: 42.407407407%;
+  left: 23.75%;
+  width: 1.041666667%;
+}
+#vulture_selector_ln_6{
+  top: 42.407407407%;
+  left: 1.041666667%;
+  width: 21.666666667%;
+}
 #overview_l {
   top: -4.820627803%;
   left: 0;

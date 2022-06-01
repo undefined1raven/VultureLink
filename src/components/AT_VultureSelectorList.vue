@@ -33,7 +33,7 @@ export default {
   <div :id="id">
     <VultureVowListItem
       v-for="vulture in vulture_array_status"
-      :key="vulture.vn"
+      :key="vulture.vid"
       :vn="vulture.vn"
       :color="color_from_status(vulture.status)"
     />
@@ -42,7 +42,7 @@ export default {
 <style scoped>
 #vulture_selector_list {
   position: absolute;
-  top: 12.777777778%;
+  top: 18.481481481%;
   left: 0.78125%;
   width: 21.770833333%;
   height: 20.555555556%;
