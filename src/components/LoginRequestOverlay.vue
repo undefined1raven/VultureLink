@@ -4,24 +4,48 @@ import ActionStatus from "@/components/ActionStatusIndicator.vue";
 </script>
 
 <script>
+
+function unix_tx_formatter(unix_time) {
+  let dt = new Date(unix_time);
+
+  return `${("0" + dt.getHours()).slice(-2)}:${("0" + dt.getMinutes()).slice(
+    -2
+  )}:${("0" + dt.getSeconds()).slice(-2)}:${("0" + dt.getMilliseconds()).slice(
+    -3
+  )}`;
+}
+
 export default {
   data() {
     return {
       action_status_color: "0500F0",
+      tid: "",
+      location: "",
+      timestamp: "",
+      platform: "",
+      isVisible: "",
     };
   },
   props: {
-    tid: "",
     current_user_acid: "",
     socket_ref: "",
-    location: "",
-    timestamp: "",
-    platform: "",
-    isVisible: "",
+  },
+  mounted() {
+    this.socket_ref.on("login_req", (login_req_payload) => {
+      this.isVisible = true;
+      this.signal_visibility_status_update(true);
+      this.tid = login_req_payload.tid;
+      this.timestamp = unix_tx_formatter(
+        login_req_payload.tx
+      );
+      this.location = `${login_req_payload.state}, ${login_req_payload.city} [${login_req_payload.iso_code}]`;
+      this.platform = `${login_req_payload.os} ${login_req_payload.os_version}`;
+    });
   },
   methods: {
-    signal_visibility_switch() {
-      this.$emit("visibility_switch_sig");
+    signal_visibility_status_update(isVisible) {
+      this.isVisible = isVisible;
+      this.$emit("visibility_status_update", isVisible);
     },
     approve_btn_reflex(socket_ref, tid, current_user_acid) {
       socket_ref.emit("login_res", {
@@ -32,7 +56,7 @@ export default {
       this.action_status_color = "00FFF0";
       setTimeout(() => {
         this.action_status_color = "0500F0";
-        this.signal_visibility_switch();
+        this.signal_visibility_status_update(false);
       }, 700);
     },
     deny_btn_reflex(socket_ref, tid, current_user_acid) {
@@ -44,7 +68,7 @@ export default {
       this.action_status_color = "FF006B";
       setTimeout(() => {
         this.action_status_color = "0500F0";
-        this.signal_visibility_switch();
+        this.signal_visibility_status_update(false);
       }, 700);
     },
   },
@@ -67,7 +91,7 @@ export default {
           class="x_acx"
           id="timestamp_acx"
           color="#FFF"
-          :text="timestamp"
+          v-text="timestamp"
         ></Label>
       </div>
       <div id="location_container" class="detail_container">
@@ -76,7 +100,7 @@ export default {
           class="x_acx"
           id="not_important"
           color="#FFF"
-          :text="location"
+          v-text="location"
         ></Label>
       </div>
       <div id="platform_container" class="detail_container">
@@ -85,7 +109,7 @@ export default {
           class="x_acx"
           id="not_important"
           color="#FFF"
-          :text="platform"
+          v-text="platform"
         ></Label>
       </div>
     </div>

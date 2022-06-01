@@ -1,9 +1,11 @@
 <script setup>
 import Background from "@/components/BaseBackgroundImg.vue";
-import DistanceIndicator from "@/components/AdvancedTeleBaseDistanceIndi.vue";
+import Label from "@/components/Label.vue";
+import DistanceIndicator from "@/components/AT_BaseDistanceIndi.vue";
 import LoginRequestOverlay from "@/components/LoginRequestOverlay.vue";
 import * as socket_l from "socket.io-client";
 import Overview from "@/components/TheAdvancedTelemetryOverview.vue";
+import VultureLogo from "@/components/VultureLogo.vue";
 </script>
 
 <script>
@@ -19,15 +21,6 @@ function getCookie(name) {
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop().split(";").shift();
 }
-function unix_tx_formatter(unix_time) {
-  let dt = new Date(unix_time);
-
-  return `${("0" + dt.getHours()).slice(-2)}:${("0" + dt.getMinutes()).slice(
-    -2
-  )}:${("0" + dt.getSeconds()).slice(-2)}:${("0" + dt.getMilliseconds()).slice(
-    -3
-  )}`;
-}
 
 export default {
   data() {
@@ -36,7 +29,6 @@ export default {
         timestamp: "",
         location: "",
         platform: "",
-        socket_ref: socket,
         tid: "",
         isVisible: false,
       },
@@ -47,12 +39,12 @@ export default {
     };
   },
   methods: {
-    handle_visibility_sig() {
-      this.login_req_details_obj.isVisible = false;
+    visibility_status_update_handler(visibility_status_update) {
+      this.login_req_details_obj.isVisible = visibility_status_update;
     },
   },
   mounted() {
-    this.current_user_acid = getCookie('acid');
+    this.current_user_acid = getCookie("acid");
     socket.emit("req_un", {
       origin: "adv_tele",
       ath: getCookie("adv_tele_sio_ath"),
@@ -70,57 +62,47 @@ export default {
     socket.on("sonar_telemetry_pkg_rebound", (payload) => {
       this.sonar_telemetry_obj = payload;
     });
-    socket.on("login_req", (login_req_payload) => {
-      this.login_req_details_obj.isVisible = true;
-      this.login_req_details_obj.tid = login_req_payload.tid;
-      this.login_req_details_obj.timestamp = unix_tx_formatter(
-        login_req_payload.tx
-      );
-      this.login_req_details_obj.location = `${login_req_payload.state}, ${login_req_payload.city} [${login_req_payload.iso_code}]`;
-      this.login_req_details_obj.platform = `${login_req_payload.os} ${login_req_payload.os_version}`;
-    });
   },
 };
 </script>
 
 <template>
   <Background />
+  <VultureLogo id="vulture_logo" />
+  <Label id="adv_tele_l" v-text="'\\\\Advanced Telemetry'" color="#FFF"></Label>
   <LoginRequestOverlay
     :isVisible="login_req_details_obj.isVisible"
     :timestamp="login_req_details_obj.timestamp"
     :location="login_req_details_obj.location"
     :platform="login_req_details_obj.platform"
-    :socket_ref="login_req_details_obj.socket_ref"
+    :socket_ref="socket_ref"
     :tid="login_req_details_obj.tid"
     :current_user_acid="current_user_acid"
     :login_request_visible="login_req_details_obj.login_request_visible"
-    @visibility_switch_sig="handle_visibility_sig"
+    @visibility_status_update="visibility_status_update_handler"
   ></LoginRequestOverlay>
   <Overview
+    v-if="!login_req_details_obj.isVisible"
     :socket_ref="socket_ref"
     :current_user_acid="`${getCookie('acid')}`"
   ></Overview>
 </template>
 
 <style scoped>
-#fwd_sonar_indi {
-  top: 20%;
-  left: 30%;
+#vulture_logo {
+  top: 3.888888889%;
+  left: 0.885416667%;
 }
-#lft_sonar_indi {
-  top: 30%;
-  left: 10%;
-}
-#rgt_sonar_indi {
-  top: 30%;
-  left: 50%;
-}
-#bwd_sonar_indi {
-  top: 50%;
-  left: 30%;
-}
-#gnd_sonar_indi {
-  top: 70%;
-  left: 30%;
+#adv_tele_l {
+  top: 3.888888889%;
+  left: 16.73125%;
+  height: 4.444444444%;
+  width: 11.514583333%;
+  background-color: #1100aa30;
+  border-left: solid 1px #1100aa;
+  display: flex;
+  align-items: center;
+  padding-left: 0.7%;
+  font-size: 1vw;
 }
 </style>

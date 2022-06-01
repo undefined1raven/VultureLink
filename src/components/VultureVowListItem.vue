@@ -94,6 +94,7 @@ div{
   border: solid 1px #515151;
   left: 92.583732057%;
   transform: rotate(-45deg);
+  transition: background-color linear 0.1s;
 }
 .vulture_main_mouse_cover {
   position: absolute;
@@ -125,6 +126,7 @@ div{
   height: 100%;
   border: solid 1px #555;
   z-index: 0;
+  transition: background-color linear 0.1s, border linear 0.1s;
 }
 .vulture_id_l {
   width: 65.550239234%;

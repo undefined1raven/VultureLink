@@ -93,7 +93,6 @@ export default {
       system_label="NETWORK"
       stroke="#00FFF0"
     ></OverviewButton>
-    <Label id="overview_l" v-text="'Systems Overview'" color="#FFF"></Label>
   </div>
   <div id="ln_container">
     <div id="vulture_selector_ln_0" class="ln ln_h"></div>
@@ -155,27 +154,27 @@ export default {
 #vulture_selector_ln_0 {
   top: 12.685185185%;
   left: 1.041666667%;
-  width: 21.875%;
+  width: 21.666666667%;
 }
 #vulture_selector_ln_1 {
   top: 12.685185185%;
-  left: 23.958333333%;
-  width: 1.614583333%;
+  left: 23.723958333%;
+  width: 2.083333333%;
 }
 #vulture_selector_ln_2{
   top: 12.685185185%;
   left: 24.739583333%;
-  height: 1.481481481%;
+  height: 1.851851852%;
 }
 #vulture_selector_ln_3{
-  top: 16.018518519%;
+  top: 16.481481481%;
   left: 24.739583333%;
-  height: 23.148148148%;
+  height: 22.314814815%;
 }
 #vulture_selector_ln_4{
-  top: 41.018518519%;
+  top: 40.601851852%;
   left: 24.739583333%;
-  height: 2.87037037%;
+  height: 3.703703704%;
 }
 #vulture_selector_ln_5{
   top: 42.407407407%;
@@ -198,7 +197,6 @@ export default {
   left: 25.989583333%;
   width: 73.90625%;
   height: 82.592592593%;
-  border-top: solid 1px #2400ff;
 }
 #sonar_array_overview_btn,
 #nav_overview_btn,

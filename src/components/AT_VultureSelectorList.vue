@@ -75,10 +75,10 @@ export default {
 }
 
 #vulture_selector_list::-webkit-scrollbar-thumb { /* Foreground */
-    background: #1F00DE80;
+    background: #000083;
 }
 #vulture_selector_list::-webkit-scrollbar-track { /* Background */
-    background: #00000000;
+    background: #00008360;
 }
 
 </style>
