@@ -1,5 +1,6 @@
 <script setup>
 import VultureSelectorList from "@/components/AT_VultureSelectorList.vue";
+import DockSelectorList from "@/components/AT_DockSelectorList.vue";
 import OverviewButton from "@/components/AT_OverviewButton.vue";
 import Label from "@/components/Label.vue";
 </script>
@@ -19,16 +20,26 @@ export default {
   data() {
     return {
       vulture_array_status: "",
+      dock_array: [
+        { id: "Dock XBA-1", paired_vultures: [{ vid: "vid" }] },
+        { id: "Dock XBA-1", paired_vultures: [{ vid: "vid" }] },
+        { id: "Dock XBA-1", paired_vultures: [{ vid: "vid" }] },
+        { id: "Dock XBA-1", paired_vultures: [{ vid: "vid" }] },
+      ],
     };
   },
   methods: {
-    new_target_vid_sig_handler(pvid, vid){
-      this.socket_ref.emit('new_target_vid', {ath: getCookie('adv_tele_sio_ath'), pvid: pvid, vid: vid});
-    }
+    new_target_vid_sig_handler(pvid, vid) {
+      this.socket_ref.emit("new_target_vid", {
+        ath: getCookie("adv_tele_sio_ath"),
+        pvid: pvid,
+        vid: vid,
+      });
+    },
   },
   mounted() {
-    this.socket_ref.on('sonar_telemetry_pkg_rebound', sonar_telemetry_pkg => {
-      console.log(sonar_telemetry_pkg)
+    this.socket_ref.on("sonar_telemetry_pkg_rebound", (sonar_telemetry_pkg) => {
+      console.log(sonar_telemetry_pkg);
     });
     this.socket_ref.on("refresh_vulture_array_status_sig", () => {
       this.socket_ref.emit("req_vulture_array_status", {
@@ -94,50 +105,96 @@ export default {
       stroke="#00FFF0"
     ></OverviewButton>
   </div>
-  <div id="ln_container">
-    <div id="vulture_selector_ln_0" class="ln ln_h"></div>
-    <div id="vulture_selector_ln_1" class="ln ln_h"></div>
-    <div id="vulture_selector_ln_2" class="ln ln_v"></div>
-    <div id="vulture_selector_ln_3" class="ln ln_v"></div>
-    <div id="vulture_selector_ln_4" class="ln ln_v"></div>
-    <div id="vulture_selector_ln_5" class="ln ln_h"></div>
-    <div id="vulture_selector_ln_6" class="ln ln_h"></div>
-  </div>
   <div id="vulture_selector_container">
+    <div id="vulture_selector_ln_container">
+      <div id="vulture_selector_ln_0" class="ln ln_h"></div>
+      <div id="vulture_selector_ln_1" class="ln ln_h"></div>
+      <div id="vulture_selector_ln_2" class="ln ln_v"></div>
+      <div id="vulture_selector_ln_3" class="ln ln_v"></div>
+      <div id="vulture_selector_ln_4" class="ln ln_v"></div>
+      <div id="vulture_selector_ln_5" class="ln ln_h"></div>
+      <div id="vulture_selector_ln_6" class="ln ln_h"></div>
+    </div>
     <VultureSelectorList
       @new_target_vid_sig="new_target_vid_sig_handler"
       :id="'vulture_selector_list'"
       :vulture_array_status="vulture_array_status"
     />
-    <Label id="vulture_selector_l" v-text="'Vulture Selector'" color="#FFF"></Label>
-    <Label id="vulture_selector_legend_unavailable" class="vulture_selector_legend_x" v-text="'Unavailable'" color="#585858"></Label>
-    <Label id="vulture_selector_legend_fault" class="vulture_selector_legend_x" v-text="'Requires Attention'" color="#FF006B"></Label>
-    <Label id="vulture_selector_legend_ready" class="vulture_selector_legend_x" v-text="'Ready'" color="#0500FF"></Label>
-    <Label id="vulture_selector_legend_active" class="vulture_selector_legend_x" v-text="'Active'" color="#00FFF0"></Label>
+    <Label
+      id="vulture_selector_l"
+      v-text="'Vulture Selector'"
+      color="#FFF"
+    ></Label>
+    <Label
+      id="vulture_selector_legend_unavailable"
+      class="vulture_selector_legend_x"
+      v-text="'Unavailable'"
+      color="#585858"
+    ></Label>
+    <Label
+      id="vulture_selector_legend_fault"
+      class="vulture_selector_legend_x"
+      v-text="'Requires Attention'"
+      color="#FF006B"
+    ></Label>
+    <Label
+      id="vulture_selector_legend_ready"
+      class="vulture_selector_legend_x"
+      v-text="'Ready'"
+      color="#0500FF"
+    ></Label>
+    <Label
+      id="vulture_selector_legend_active"
+      class="vulture_selector_legend_x"
+      v-text="'Active'"
+      color="#00FFF0"
+    ></Label>
+  </div>
+  <div id="dock_selector_container">
+    <div id="dock_selector_ln_container">
+      <div id="dock_selector_ln_0" class="ln ln_v"></div>
+      <div id="dock_selector_ln_1" class="ln ln_h"></div>
+    </div>
+    <Label id="dock_selector_l" color="#FFF" v-text="'Dock Selector'"></Label>
+    <DockSelectorList :id="'dock_selector_list'" :dock_array="dock_array" />
   </div>
 </template>
 <style scoped>
-.vulture_selector_legend_x{
+#dock_selector_ln_0 {
+  top: 46.111111111%;
+  left: 24.739583333%;
+  height: 31.296296296%;
+}
+#dock_selector_ln_1 {
+  top: 80.648148148%;
+  left: 1.041666667%;
+  width: 21.666666667%;
+}
+#dock_selector_l {
+  top: calc(44.074074074% - 1%);
+  left: 0.78125%;
+}
+.vulture_selector_legend_x {
   font-size: 0.8vw;
   top: 39.877777778%;
 }
-#vulture_selector_legend_unavailable{
+#vulture_selector_legend_unavailable {
   border-top: solid 2px #585858;
   left: 3.958333333%;
 }
-#vulture_selector_legend_fault{
-  border-top: solid 2px #FF006B;
+#vulture_selector_legend_fault {
+  border-top: solid 2px #ff006b;
   left: 8.177083333%;
 }
-#vulture_selector_legend_ready{
-  border-top: solid 2px #0500FF;
+#vulture_selector_legend_ready {
+  border-top: solid 2px #0500ff;
   left: 14.791666667%;
 }
-#vulture_selector_legend_active{
-  border-top: solid 2px #00FFF0;
+#vulture_selector_legend_active {
+  border-top: solid 2px #00fff0;
   left: 17.291666667%;
 }
-#vulture_selector_l{
+#vulture_selector_l {
   top: 14.351851852%;
   left: 0.78125%;
 }
@@ -145,10 +202,10 @@ export default {
   position: absolute;
   background-color: #2c2c2c;
 }
-.ln_v{
+.ln_v {
   width: 0.11vh;
 }
-.ln_h{
+.ln_h {
   height: 0.11vh;
 }
 #vulture_selector_ln_0 {
@@ -161,27 +218,27 @@ export default {
   left: 23.723958333%;
   width: 2.083333333%;
 }
-#vulture_selector_ln_2{
+#vulture_selector_ln_2 {
   top: 12.685185185%;
   left: 24.739583333%;
   height: 1.851851852%;
 }
-#vulture_selector_ln_3{
+#vulture_selector_ln_3 {
   top: 16.481481481%;
   left: 24.739583333%;
   height: 22.314814815%;
 }
-#vulture_selector_ln_4{
+#vulture_selector_ln_4 {
   top: 40.601851852%;
   left: 24.739583333%;
   height: 3.703703704%;
 }
-#vulture_selector_ln_5{
+#vulture_selector_ln_5 {
   top: 42.407407407%;
   left: 23.75%;
   width: 1.041666667%;
 }
-#vulture_selector_ln_6{
+#vulture_selector_ln_6 {
   top: 42.407407407%;
   left: 1.041666667%;
   width: 21.666666667%;
