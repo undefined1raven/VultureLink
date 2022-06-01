@@ -9,8 +9,11 @@ import VultureFlatDeco from "@/components/VultureFlatDeco.vue";
 export default {
   props: {
     vn: "",
+    vid: "",
     color: "",
     selected: "",
+    selected_vn: "",
+    index: "",
   },
   methods: {
     vulture_main_mouse_cover_onMouseEnter() {
@@ -24,6 +27,14 @@ export default {
     vulture_main_mouse_cover_onMouseLeave() {
       this.backgroundColor = "#00000000";
     },
+    vulture_main_mouse_cover_onClick(){
+      this.$emit('onVultureSelected', this.vid, this.vn);
+    }
+  },
+  mounted(){
+    if(this.index == 0){
+      this.$emit('onVultureSelected', this.vid, this.vn);
+    }
   },
   data() {
     return {
@@ -40,17 +51,32 @@ export default {
     <div :style="`border-color: ${color}; background-color: ${backgroundColor};`" class="vulture_main_area"></div>
     <div :style="`background-color: ${color}`" class="vulture_side_status_indi"></div>
     <div class="vulture_id_l">{{ vn }}</div>
-    <div class="vulture_selected_l">Selected</div>
+    <Transition name="vulture_selector_t">
+      <div v-if="selected_vn == vn" :style="main_area_style" class="vulture_selected_indi"></div>
+    </Transition>
+
     <VultureFlatDeco class="vulture_deco" :color="color"/>
     <div
       @mouseenter="vulture_main_mouse_cover_onMouseEnter"
       @mouseleave="vulture_main_mouse_cover_onMouseLeave"
+      @click="vulture_main_mouse_cover_onClick"
       class="vulture_main_mouse_cover"
     ></div>
   </div>
 </template>
 
 <style scoped>
+.vulture_selector_t-enter-active,
+.vulture_selector_t-leave-active {
+  transition: opacity linear 0.1s;
+}
+.vulture_selector_t-enter-from,
+.vulture_selector_t-leave-to {
+  opacity: 0;
+}
+div{
+  user-select: none;
+}
 .vulture_vow_list_item_container {
   margin-top: 1px;
   margin-bottom: 2%;
@@ -60,6 +86,14 @@ export default {
   align-items: center;
   justify-content: center;
   position: relative;
+}
+.vulture_selected_indi{
+  position: absolute;
+  width: 0.8vw;
+  height: 0.8vw;
+  border: solid 1px #515151;
+  left: 92.583732057%;
+  transform: rotate(-45deg);
 }
 .vulture_main_mouse_cover {
   position: absolute;

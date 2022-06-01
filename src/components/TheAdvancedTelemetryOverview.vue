@@ -21,7 +21,15 @@ export default {
       vulture_array_status: "",
     };
   },
+  methods: {
+    new_target_vid_sig_handler(pvid, vid){
+      this.socket_ref.emit('new_target_vid', {ath: getCookie('adv_tele_sio_ath'), pvid: pvid, vid: vid});
+    }
+  },
   mounted() {
+    this.socket_ref.on('sonar_telemetry_pkg_rebound', sonar_telemetry_pkg => {
+      console.log(sonar_telemetry_pkg)
+    });
     this.socket_ref.on("refresh_vulture_array_status_sig", () => {
       this.socket_ref.emit("req_vulture_array_status", {
         origin: "adv_tele",
@@ -37,7 +45,6 @@ export default {
     });
 
     this.socket_ref.on("vulture_array_status_res", (res) => {
-      console.log(res.vulture_array_status);
       this.vulture_array_status = res.vulture_array_status;
     });
   },
@@ -99,6 +106,7 @@ export default {
   </div>
   <div id="vulture_selector_container">
     <VultureSelectorList
+      @new_target_vid_sig="new_target_vid_sig_handler"
       :id="'vulture_selector_list'"
       :vulture_array_status="vulture_array_status"
     />

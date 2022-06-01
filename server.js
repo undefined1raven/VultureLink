@@ -429,7 +429,7 @@ io.on('connection', function (socket_l) {
     });//Origin HID [02F] | GPS [heading, speed]
 
     socket_l.on('sonar_telemetry_pkg', sonar_telemetry_payload => {
-        io.emit('sonar_telemetry_pkg_rebound', sonar_telemetry_payload.telemetry);//to(`${payload.vid}`)
+        io.to(`${sonar_telemetry_payload.vid}`).emit('sonar_telemetry_pkg_rebound', sonar_telemetry_payload.telemetry);//to(`${payload.vid}`)
     });
 
     socket_l.on('sonar_1_rebound', function (payload) {

@@ -10,6 +10,13 @@ export default {
     vulture_array_status: "",
     id: "",
   },
+  data(){
+    return{
+      selected_vn: '',
+      target_vid: '',
+      pvid: ''
+    }
+  },
   methods: {
     color_from_status(vulture_status) {
       if (vulture_status == "active") {
@@ -25,6 +32,12 @@ export default {
         return "#FF006B";
       }
     },
+    onVultureSelected(vid, vn){
+      this.selected_vn = vn;
+      this.pvid = this.target_vid;
+      this.target_vid = vid;
+      this.$emit('new_target_vid_sig', this.pvid, vid);
+    }
   },
 };
 </script>
@@ -32,10 +45,14 @@ export default {
 <template>
   <div :id="id">
     <VultureVowListItem
-      v-for="vulture in vulture_array_status"
+      v-for="(vulture, index) in vulture_array_status"
       :key="vulture.vid"
       :vn="vulture.vn"
+      :vid="vulture.vid"
+      :selected_vn="selected_vn"
+      :index="index"
       :color="color_from_status(vulture.status)"
+      @onVultureSelected="onVultureSelected"
     />
   </div>
 </template>
