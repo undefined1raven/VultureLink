@@ -34,6 +34,7 @@ export default {
   mounted(){
     if(this.index == 0){
       this.$emit('onVultureSelected', this.vid, this.vn);
+      this.$emit('hide_loading_deco_sig');
     }
   },
   data() {

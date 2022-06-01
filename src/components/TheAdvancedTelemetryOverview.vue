@@ -2,6 +2,7 @@
 import VultureSelectorList from "@/components/AT_VultureSelectorList.vue";
 import DockSelectorList from "@/components/AT_DockSelectorList.vue";
 import OverviewButton from "@/components/AT_OverviewButton.vue";
+import BaseMenuButton from "@/components/BaseMenuButton.vue";
 import Label from "@/components/Label.vue";
 </script>
 
@@ -29,6 +30,9 @@ export default {
     };
   },
   methods: {
+    redirect(path) {
+      window.location.pathname = path;
+    },
     new_target_vid_sig_handler(pvid, vid) {
       this.socket_ref.emit("new_target_vid", {
         ath: getCookie("adv_tele_sio_ath"),
@@ -154,16 +158,68 @@ export default {
     <div id="dock_selector_ln_container">
       <div id="dock_selector_ln_0" class="ln ln_v"></div>
       <div id="dock_selector_ln_1" class="ln ln_h"></div>
+      <div id="dock_selector_ln_2" class="ln ln_v"></div>
+      <div id="dock_selector_ln_3" class="ln ln_h"></div>
     </div>
     <Label id="dock_selector_l" color="#FFF" v-text="'Dock Selector'"></Label>
     <DockSelectorList :id="'dock_selector_list'" :dock_array="dock_array" />
   </div>
+  <div id="menu_container">
+    <div id="menu_ln_container">
+      <div id="menu_ln_0" class="ln ln_v"></div>
+      <div id="menu_ln_1_2"></div>
+      <div id="menu_ln_3" class="ln ln_h"></div>
+    </div>
+    <BaseMenuButton v-text="'Command'" @click="redirect('/')" id="cmd_btn" />
+    <BaseMenuButton
+      v-text="'Security'"
+      @click="redirect('/security')"
+      id="security_btn"
+    />
+  </div>
 </template>
 <style scoped>
+#dock_selector_ln_3{
+  top: 80.648148148%;
+  left: 23.75%;
+  width: 1.041666667%;
+}
+#dock_selector_ln_2{
+  top: 78.842592593%;
+  left: 24.739583333%;
+  height: 3.703703704%;
+}
+#menu_ln_3 {
+  top: 96.944444444%;
+  left: 1.041666667%;
+  width: 21.666666667%;
+}
+#menu_ln_1_2 {
+  position: absolute;
+  top: calc(95.092592593% - 0.24%);
+  left: 23.697916667%;
+  width: 1.0416666666667vw;
+  height: 1.0416666666667vw;
+  border-right: solid 1px #2c2c2c;
+  border-bottom: solid 1px #2c2c2c;
+}
+#menu_ln_0 {
+  top: 84.351851852%;
+  left: 24.739583333%;
+  height: 8.981481481%;
+}
+#cmd_btn {
+  top: 83.148148148%;
+  left: 3.645833333%;
+}
+#security_btn {
+  top: 90%;
+  left: 3.645833333%;
+}
 #dock_selector_ln_0 {
   top: 46.111111111%;
   left: 24.739583333%;
-  height: 31.296296296%;
+  height: 30.925925926%;
 }
 #dock_selector_ln_1 {
   top: 80.648148148%;

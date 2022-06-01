@@ -2,6 +2,7 @@
 <script setup>
 import Label from "@/components/Label.vue";
 import VultureVowListItem from "@/components/VultureVowListItem.vue";
+import VultureArrayLoadingDeco from "@/components/VultureArrayLoadingDeco.vue";
 </script>
 
 <script>
@@ -14,7 +15,8 @@ export default {
     return{
       selected_vn: '',
       target_vid: '',
-      pvid: ''
+      pvid: '',
+      isDecoVisible: true,
     }
   },
   methods: {
@@ -37,6 +39,9 @@ export default {
       this.pvid = this.target_vid;
       this.target_vid = vid;
       this.$emit('new_target_vid_sig', this.pvid, vid);
+    },
+    hide_loading_deco_sig_handler(){
+      this.isDecoVisible = false;
     }
   },
 };
@@ -44,6 +49,7 @@ export default {
 
 <template>
   <div :id="id">
+    <VultureArrayLoadingDeco v-if="isDecoVisible" id="vulture_array_loading_deco"/>
     <VultureVowListItem
       v-for="(vulture, index) in vulture_array_status"
       :key="vulture.vid"
@@ -53,10 +59,17 @@ export default {
       :index="index"
       :color="color_from_status(vulture.status)"
       @onVultureSelected="onVultureSelected"
+      @hide_loading_deco_sig="hide_loading_deco_sig_handler"
     />
   </div>
 </template>
 <style scoped>
+#vulture_array_loading_deco{
+  top: 13.963963964%;
+  left: 24.641148325%;
+  width: 50.495215311%;
+  height: 71.653153153%;
+}
 #vulture_selector_list {
   position: absolute;
   top: 18.481481481%;
