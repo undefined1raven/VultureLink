@@ -28,6 +28,7 @@ const uuid = require('uuid');
 const UAC = require('./models/udata.js');
 const UAC_v2 = require('./models/udata_v2.js');
 const VULTURE_SCH = require('./models/vulture_model.js');
+const DOCK_SCH = require('./models/dock_model.js');
 const fs = require('fs');
 const strategy = require('passport-local').Strategy;
 const crypto = require('crypto');
@@ -210,6 +211,7 @@ function remove_vulture_to_vow(email, vn) {//todo
     //     }
     // });
 }
+
 
 
 function rem_ebv(arr_0, arr, arr_1, arr_2, val) {
@@ -639,6 +641,8 @@ if (process.env.NODE_ENV === 'production') {
     });//HTTPS Auto-redirect // handled by cloudflare
 }
 
+
+
 //----Authentication [beta]----//
 
 app.post('/adv_tele_logout', (req, res) => {
@@ -839,6 +843,14 @@ app.post('/opsec_to_adv_tele', (req, res) => {
     res.redirect('advanced_telemetry');
 });
 
+// const dock_model = new DOCK_SCH({
+//     dock_id: uuid.v4(),
+//     vid_array: [],
+//     payload_array: [],
+//     user_access_array: []
+// });
+// dock_model.save();
+
 
 app.post('/genesis_post', (req, res) => {
     async function add_udb() {
@@ -863,6 +875,7 @@ app.post('/genesis_post', (req, res) => {
                 acc_rcvry_methods_arr: [],
                 rcvry_codes_arr: [gen_rc(), gen_rc(), gen_rc(), gen_rc(), gen_rc(), gen_rc(), gen_rc(), gen_rc()],
                 vow: [{ vid: nvid, vn: nvn }],
+                dock_array: [],
                 contact_emails_arr: [],
                 contact_phone_numbers_arr: [],
             });
@@ -1449,7 +1462,10 @@ app.get('/gnd_cam_broadcaster', (req, res) => {
 function socket_transport_authenticator(payload, snapshot) {
     const data = snapshot.val();
     if (data != null) {
-        return check_sio_ath(payload, data);
+        return true;
+    }
+    else {
+        return false;
     }
 }
 
@@ -2140,6 +2156,30 @@ io.on('connection', socket => {
                 req_vulture_array_status_exec(req_vulture_array_status_payload, adv_tele_snapshot);
             });
         }
+    });
+
+    socket.on('req_dock_array', req_dock_array_payload => {
+        get_snapshot_from_path(`aprvd_tids/${req_dock_array_payload.ath}`).then(snapshot => {
+            if (snapshot != null) {
+                UAC_v2.findOne({ acid: req_dock_array_payload.acid }).exec().then(user => {
+                    let dock_array = [];
+                    for (let ix = 0; ix < user.dock_array.length; ix++) {
+                        DOCK_SCH.findOne({ dock_id: user.dock_array[ix].dock_id }).exec().then(dock_obj => {
+                            if (dock_obj != null) {
+                                dock_array.push(dock_obj);
+                                if (dock_array.length == user.dock_array.length) {
+                                    setTimeout(() => {
+                                        io.to(socket.id).emit('dock_array_res', { dock_array: dock_array });
+                                    }, 100);
+                                }
+                            }
+                        });
+                    }
+                });
+            } else {
+                io.to(socket.id).emit('sio_transport_auth_failed_sig');
+            }
+        });
     });
 
     function req_vow_exec(payload, snapshot) {

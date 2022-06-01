@@ -10,6 +10,7 @@ const auth_creds_sch = new Schema({
     acid: {type: String, required: true},
     did: {type: Array},
     vow: {type: Array, required: true},
+    dock_array: {type: Array, required: true},
     mfa_tkn: {type: Object, required: true},
     acc_auth_methods_arr: {type: Object, required: true},
     acc_rcvry_methods_arr: {type: Object, required: true},

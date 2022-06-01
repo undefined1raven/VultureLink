@@ -4,6 +4,8 @@ import DockSelectorList from "@/components/AT_DockSelectorList.vue";
 import OverviewButton from "@/components/AT_OverviewButton.vue";
 import BaseMenuButton from "@/components/BaseMenuButton.vue";
 import Label from "@/components/Label.vue";
+import { get } from "http";
+import { computed } from '@vue/runtime-core';
 </script>
 
 <script>
@@ -14,6 +16,12 @@ function getCookie(name) {
 }
 
 export default {
+  provide(){
+    return{
+      vulture_array_status: computed(() => this.vulture_array_status),
+      dock_array: computed(() => this.dock_array)
+    }
+  },
   props: {
     socket_ref: "",
     current_user_acid: "",
@@ -21,12 +29,7 @@ export default {
   data() {
     return {
       vulture_array_status: "",
-      dock_array: [
-        { id: "Dock XBA-1", paired_vultures: [{ vid: "vid" }] },
-        { id: "Dock XBA-1", paired_vultures: [{ vid: "vid" }] },
-        { id: "Dock XBA-1", paired_vultures: [{ vid: "vid" }] },
-        { id: "Dock XBA-1", paired_vultures: [{ vid: "vid" }] },
-      ],
+      dock_array: [],
     };
   },
   methods: {
@@ -45,6 +48,8 @@ export default {
     this.socket_ref.on("sonar_telemetry_pkg_rebound", (sonar_telemetry_pkg) => {
       console.log(sonar_telemetry_pkg);
     });
+
+    ///-- vulture array status management --///
     this.socket_ref.on("refresh_vulture_array_status_sig", () => {
       this.socket_ref.emit("req_vulture_array_status", {
         origin: "adv_tele",
@@ -52,16 +57,26 @@ export default {
         acid: this.current_user_acid,
       });
     });
-
     this.socket_ref.emit("req_vulture_array_status", {
       origin: "adv_tele",
       ath: getCookie("adv_tele_sio_ath"),
       acid: this.current_user_acid,
     });
-
     this.socket_ref.on("vulture_array_status_res", (res) => {
       this.vulture_array_status = res.vulture_array_status;
     });
+    //[][][][][]
+
+    ///-- dock array event management --///
+    this.socket_ref.emit("req_dock_array", {
+      ath: getCookie("adv_tele_sio_ath"),
+      origin: "adv_tele",
+      acid: this.current_user_acid,
+    });
+    this.socket_ref.on("dock_array_res", (res) => {
+      this.dock_array = res.dock_array;
+    });
+    //[][][][][]
   },
 };
 </script>
@@ -162,7 +177,11 @@ export default {
       <div id="dock_selector_ln_3" class="ln ln_h"></div>
     </div>
     <Label id="dock_selector_l" color="#FFF" v-text="'Dock Selector'"></Label>
-    <DockSelectorList :id="'dock_selector_list'" :dock_array="dock_array" />
+    <DockSelectorList
+      :id="'dock_selector_list'"
+      :vulture_array_status="vulture_array_status"
+      :dock_array="dock_array"
+    />
   </div>
   <div id="menu_container">
     <div id="menu_ln_container">
@@ -179,12 +198,12 @@ export default {
   </div>
 </template>
 <style scoped>
-#dock_selector_ln_3{
+#dock_selector_ln_3 {
   top: 80.648148148%;
   left: 23.75%;
   width: 1.041666667%;
 }
-#dock_selector_ln_2{
+#dock_selector_ln_2 {
   top: 78.842592593%;
   left: 24.739583333%;
   height: 3.703703704%;

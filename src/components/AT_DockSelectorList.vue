@@ -7,6 +7,7 @@ export default {
   props: {
     id: "",
     dock_array: "",
+    vulture_array_status: "",
   },
 };
 </script>
@@ -14,6 +15,9 @@ export default {
   <div :id="id">
     <DockListItem
       v-for="(dock, index) in dock_array"
+      :dock_name="dock.dock_name"
+      :dock_obj="dock"
+      :vulture_array_status="vulture_array_status"
       :key="index"
       color="#515151"
     ></DockListItem>
