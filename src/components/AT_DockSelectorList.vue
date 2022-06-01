@@ -25,7 +25,7 @@ export default {
   top: calc(49.722222222% - 2.2%);
   left: 4.583333333%;
   width: 15.625%;
-  height: calc(28.240740741% + 4%);
+  height: calc(28.240740741% + 5%);
   gap: 3%;
   display: flex;
   flex-flow: column wrap;
