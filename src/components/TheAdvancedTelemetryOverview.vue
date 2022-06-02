@@ -47,24 +47,30 @@ export default {
     },
     onDockSelected(dock_obj) {
       this.selected_dock_obj = dock_obj;
-      this.dynamic_vulture_selector_array();
+      this.dynamic_vulture_selector_array_gen();
     },
-    dynamic_vulture_selector_array() {
-      let l_docked_vultures_array = [];
-      for(let ix = 0; ix < this.selected_dock_obj.vid_array.length; ix++){
-        let find_res = this.vulture_array_status.find( ({ vid }) => vid == this.selected_dock_obj.vid_array[ix].vid);
-        if(find_res != undefined){
-          l_docked_vultures_array.push(find_res);
+    dynamic_vulture_selector_array_gen() {
+      if (this.selected_dock_obj != false) {
+        let l_docked_vultures_array = [];
+        for (let ix = 0; ix < this.selected_dock_obj.vid_array.length; ix++) {
+          let find_res = this.vulture_array_status.find(
+            ({ vid }) => vid == this.selected_dock_obj.vid_array[ix].vid
+          );
+          if (find_res != undefined) {
+            l_docked_vultures_array.push(find_res);
+          }
+          if (ix == this.selected_dock_obj.vid_array.length - 1) {
+            this.docked_vultures_array = l_docked_vultures_array;
+          }
         }
-        if(ix == this.selected_dock_obj.vid_array.length - 1){
-          this.docked_vultures_array = l_docked_vultures_array;
-        }
+      } else {
+        this.docked_vultures_array = this.vulture_array_status;
       }
     },
   },
   mounted() {
     this.socket_ref.on("sonar_telemetry_pkg_rebound", (sonar_telemetry_pkg) => {
-      console.log(sonar_telemetry_pkg);
+      // console.log(sonar_telemetry_pkg);
     });
 
     ///-- vulture array status management --///

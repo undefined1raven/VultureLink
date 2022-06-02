@@ -26,7 +26,11 @@ export default {
   },
   methods: {
     main_area_onClick(){
-      this.$emit('new_target_dock_id_sig', this.dock_obj);
+      if(this.selected_dock_id != this.dock_obj.dock_id){
+        this.$emit('new_target_dock_id_sig', this.dock_obj);
+      }else{
+        this.$emit('new_target_dock_id_sig', false);
+      }
     },
     main_area_onMouseEnter() {
       this.main_area_background_color_style = `background-color: ${this.color}20;`;
