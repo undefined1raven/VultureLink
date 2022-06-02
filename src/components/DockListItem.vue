@@ -10,6 +10,13 @@ export default {
     dock_name: "",
     dock_obj: "",
     vulture_array_status: "",
+    selected_dock_id: "",
+    index: "",
+  },
+  mounted(){
+    if(this.index == 0){
+      this.$emit('new_target_dock_id_sig', this.dock_obj);
+    }
   },
   data() {
     return {
@@ -18,11 +25,14 @@ export default {
     };
   },
   methods: {
+    main_area_onClick(){
+      this.$emit('new_target_dock_id_sig', this.dock_obj);
+    },
     main_area_onMouseEnter() {
       this.main_area_background_color_style = `background-color: ${this.color}20;`;
     },
     main_area_onMouseLeave() {
-      this.main_area_background_color_style = `#00000000`;
+      this.main_area_background_color_style = `background-color: #00000000;`;
     },
     color_from_status(vulture_status) {
       if (vulture_status == "active") {
@@ -43,11 +53,15 @@ export default {
     },
     parse_vulture_array_status(vulture_array, index) {
       this.dock_paired_vultures_array = [];
-        if (this.dock_obj.vid_array[index] != undefined) {
-          return `background-color: ${this.color_from_status(vulture_array[index].status)}; border-color: ${this.color_from_status(vulture_array[index].status)};`;
-        } else {
-          return `background-color: #51515100; border-color: #515151;`;
-        }
+      if (this.dock_obj.vid_array[index] != undefined) {
+        return `background-color: ${this.color_from_status(
+          vulture_array[index].status
+        )}; border-color: ${this.color_from_status(
+          vulture_array[index].status
+        )};`;
+      } else {
+        return `background-color: #51515100; border-color: #515151;`;
+      }
     },
   },
 };
@@ -59,7 +73,9 @@ export default {
       :style="main_area_background_color_style + 'border-color: ' + color"
       class="dock_main_area"
     ></div>
+    <Transition name="dock_selector_t">
     <svg
+      v-if="selected_dock_id == dock_obj.dock_id"
       class="dock_selection_indi"
       width="25"
       height="25"
@@ -69,6 +85,7 @@ export default {
     >
       <path d="M0 0H25L13.2353 11.8056L0 25V0Z" :fill="color" />
     </svg>
+    </Transition>
     <div class="dock_menu_btn_container">
       <div class="menu_btn_dot dot_0"></div>
       <div class="menu_btn_dot dot_1"></div>
@@ -96,11 +113,20 @@ export default {
       class="main_area_mouse_cover"
       @mouseenter="main_area_onMouseEnter"
       @mouseleave="main_area_onMouseLeave"
+      @click="main_area_onClick"
     ></div>
   </div>
 </template>
 
 <style scoped>
+.dock_selector_t-enter-active,
+.dock_selector_t-leave-active {
+  transition: opacity linear 0.1s;
+}
+.dock_selector_t-enter-from,
+.dock_selector_t-leave-to {
+  opacity: 0;
+}
 div {
   user-select: none;
 }

@@ -9,6 +9,17 @@ export default {
     dock_array: "",
     vulture_array_status: "",
   },
+  data(){
+    return{
+      selected_dock_id: '',
+    }
+  },
+  methods: {
+    onDockSelected(dock_obj){
+      this.selected_dock_id = dock_obj.dock_id;
+      this.$emit('new_target_dock_id_sig', dock_obj);
+    }
+  }
 };
 </script>
 <template>
@@ -19,7 +30,10 @@ export default {
       :dock_obj="dock"
       :vulture_array_status="vulture_array_status"
       :key="index"
-      color="#515151"
+      :index="index"
+      color="#0500ff"
+      :selected_dock_id="selected_dock_id"
+      @new_target_dock_id_sig="onDockSelected"
     ></DockListItem>
   </div>
 </template>

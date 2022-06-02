@@ -5,7 +5,7 @@ import OverviewButton from "@/components/AT_OverviewButton.vue";
 import BaseMenuButton from "@/components/BaseMenuButton.vue";
 import Label from "@/components/Label.vue";
 import { get } from "http";
-import { computed } from '@vue/runtime-core';
+import { computed } from "@vue/runtime-core";
 </script>
 
 <script>
@@ -16,11 +16,11 @@ function getCookie(name) {
 }
 
 export default {
-  provide(){
-    return{
+  provide() {
+    return {
       vulture_array_status: computed(() => this.vulture_array_status),
-      dock_array: computed(() => this.dock_array)
-    }
+      dock_array: computed(() => this.dock_array),
+    };
   },
   props: {
     socket_ref: "",
@@ -30,6 +30,8 @@ export default {
     return {
       vulture_array_status: "",
       dock_array: [],
+      selected_dock_obj: "",
+      docked_vultures_array: [],
     };
   },
   methods: {
@@ -42,6 +44,22 @@ export default {
         pvid: pvid,
         vid: vid,
       });
+    },
+    onDockSelected(dock_obj) {
+      this.selected_dock_obj = dock_obj;
+      this.dynamic_vulture_selector_array();
+    },
+    dynamic_vulture_selector_array() {
+      let l_docked_vultures_array = [];
+      for(let ix = 0; ix < this.selected_dock_obj.vid_array.length; ix++){
+        let find_res = this.vulture_array_status.find( ({ vid }) => vid == this.selected_dock_obj.vid_array[ix].vid);
+        if(find_res != undefined){
+          l_docked_vultures_array.push(find_res);
+        }
+        if(ix == this.selected_dock_obj.vid_array.length - 1){
+          this.docked_vultures_array = l_docked_vultures_array;
+        }
+      }
     },
   },
   mounted() {
@@ -137,7 +155,7 @@ export default {
     <VultureSelectorList
       @new_target_vid_sig="new_target_vid_sig_handler"
       :id="'vulture_selector_list'"
-      :vulture_array_status="vulture_array_status"
+      :vulture_array_status="docked_vultures_array"
     />
     <Label
       id="vulture_selector_l"
@@ -181,6 +199,7 @@ export default {
       :id="'dock_selector_list'"
       :vulture_array_status="vulture_array_status"
       :dock_array="dock_array"
+      @new_target_dock_id_sig="onDockSelected"
     />
   </div>
   <div id="menu_container">

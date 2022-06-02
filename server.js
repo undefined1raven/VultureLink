@@ -845,9 +845,11 @@ app.post('/opsec_to_adv_tele', (req, res) => {
 
 // const dock_model = new DOCK_SCH({
 //     dock_id: uuid.v4(),
-//     vid_array: [],
+//     dock_name: 'Dock FXN-7',
+//     vid_array: [{vid: '2932c024-5409-4099-b239-9dc95f778f28'}, {vid: '202cf027-49ef-4cb2-8147-e98331a38ac5'}, {vid: 'bf4e40bc-7abe-4e3e-afe7-e5e691d4f8ed'}],
 //     payload_array: [],
-//     user_access_array: []
+//     user_access_array: [{acid: '88d9e113-520b-45d0-9370-213dc2557a40'}]
+
 // });
 // dock_model.save();
 
