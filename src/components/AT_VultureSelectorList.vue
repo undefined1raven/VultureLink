@@ -91,7 +91,7 @@ export default {
     background: #000083;
 }
 #vulture_selector_list::-webkit-scrollbar-track { /* Background */
-    background: #00008360;
+    background: #00008300;
 }
 
 </style>

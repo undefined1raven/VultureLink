@@ -1,29 +1,36 @@
 
 <script setup>
 import DockListItem from "@/components/DockListItem.vue";
+import Label from "@/components/Label.vue";
 </script>
 <script>
 export default {
   props: {
-    id: "",
     dock_array: "",
     vulture_array_status: "",
   },
-  data(){
-    return{
-      selected_dock_id: '',
-    }
+  data() {
+    return {
+      selected_dock_id: "",
+    };
   },
   methods: {
-    onDockSelected(dock_obj){
+    onDockSelected(dock_obj) {
       this.selected_dock_id = dock_obj.dock_id;
-      this.$emit('new_target_dock_id_sig', dock_obj);
-    }
-  }
+      this.$emit("new_target_dock_id_sig", dock_obj);
+    },
+  },
 };
 </script>
 <template>
-  <div :id="id">
+    <div id="dock_selector_ln_container">
+      <div id="dock_selector_ln_0" class="ln ln_v"></div>
+      <div id="dock_selector_ln_1" class="ln ln_h"></div>
+      <div id="dock_selector_ln_2" class="ln ln_v"></div>
+      <div id="dock_selector_ln_3" class="ln ln_h"></div>
+    </div>
+  <Label id="dock_selector_l" color="#FFF" v-text="'Dock Selector'"></Label>
+  <div id="dock_selector_list">
     <DockListItem
       v-for="(dock, index) in dock_array"
       :dock_name="dock.dock_name"
@@ -38,6 +45,40 @@ export default {
   </div>
 </template>
 <style scoped>
+.ln {
+  position: absolute;
+  background-color: #2c2c2c;
+}
+.ln_v {
+  width: 0.11vh;
+}
+.ln_h {
+  height: 0.11vh;
+}
+#dock_selector_ln_3 {
+  top: 80.648148148%;
+  left: 23.75%;
+  width: 1.041666667%;
+}
+#dock_selector_ln_2 {
+  top: 78.842592593%;
+  left: 24.739583333%;
+  height: 3.703703704%;
+}
+#dock_selector_ln_0 {
+  top: 46.111111111%;
+  left: 24.739583333%;
+  height: 30.925925926%;
+}
+#dock_selector_ln_1 {
+  top: 80.648148148%;
+  left: 1.041666667%;
+  width: 21.666666667%;
+}
+#dock_selector_l {
+  top: calc(44.074074074% - 1%);
+  left: 0.78125%;
+}
 #dock_selector_list {
   position: absolute;
   top: calc(49.722222222% - 2.2%);
@@ -46,6 +87,6 @@ export default {
   height: calc(28.240740741% + 5%);
   gap: 3%;
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: row wrap;
 }
 </style>

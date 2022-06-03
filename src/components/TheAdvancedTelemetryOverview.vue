@@ -4,7 +4,6 @@ import DockSelectorList from "@/components/AT_DockSelectorList.vue";
 import OverviewButton from "@/components/AT_OverviewButton.vue";
 import BaseMenuButton from "@/components/BaseMenuButton.vue";
 import Label from "@/components/Label.vue";
-import { get } from "http";
 import { computed } from "@vue/runtime-core";
 </script>
 
@@ -194,15 +193,7 @@ export default {
     ></Label>
   </div>
   <div id="dock_selector_container">
-    <div id="dock_selector_ln_container">
-      <div id="dock_selector_ln_0" class="ln ln_v"></div>
-      <div id="dock_selector_ln_1" class="ln ln_h"></div>
-      <div id="dock_selector_ln_2" class="ln ln_v"></div>
-      <div id="dock_selector_ln_3" class="ln ln_h"></div>
-    </div>
-    <Label id="dock_selector_l" color="#FFF" v-text="'Dock Selector'"></Label>
     <DockSelectorList
-      :id="'dock_selector_list'"
       :vulture_array_status="vulture_array_status"
       :dock_array="dock_array"
       @new_target_dock_id_sig="onDockSelected"
@@ -223,16 +214,6 @@ export default {
   </div>
 </template>
 <style scoped>
-#dock_selector_ln_3 {
-  top: 80.648148148%;
-  left: 23.75%;
-  width: 1.041666667%;
-}
-#dock_selector_ln_2 {
-  top: 78.842592593%;
-  left: 24.739583333%;
-  height: 3.703703704%;
-}
 #menu_ln_3 {
   top: 96.944444444%;
   left: 1.041666667%;
@@ -259,20 +240,6 @@ export default {
 #security_btn {
   top: 90%;
   left: 3.645833333%;
-}
-#dock_selector_ln_0 {
-  top: 46.111111111%;
-  left: 24.739583333%;
-  height: 30.925925926%;
-}
-#dock_selector_ln_1 {
-  top: 80.648148148%;
-  left: 1.041666667%;
-  width: 21.666666667%;
-}
-#dock_selector_l {
-  top: calc(44.074074074% - 1%);
-  left: 0.78125%;
 }
 .vulture_selector_legend_x {
   font-size: 0.8vw;
