@@ -1,7 +1,7 @@
 
 <script setup>
 import VultureFlatDeco from "@/components/VultureFlatDeco.vue";
-
+import Label from "@/components/Label.vue";
 
 </script>
 
@@ -14,6 +14,7 @@ export default {
     selected: "",
     selected_vn: "",
     index: "",
+    isEmpty: "",
   },
   methods: {
     vulture_main_mouse_cover_onMouseEnter() {
@@ -28,7 +29,9 @@ export default {
       this.backgroundColor = "#00000000";
     },
     vulture_main_mouse_cover_onClick(){
-      this.$emit('onVultureSelected', this.vid, this.vn);
+      if(!this.isEmpty){
+        this.$emit('onVultureSelected', this.vid, this.vn);
+      }
     }
   },
   mounted(){
@@ -50,8 +53,9 @@ export default {
 <template>
   <div class="vulture_vow_list_item_container">
     <div :style="`border-color: ${color}; background-color: ${backgroundColor};`" class="vulture_main_area"></div>
-    <div :style="`background-color: ${color}`" class="vulture_side_status_indi"></div>
-    <div class="vulture_id_l">{{ vn }}</div>
+    <div v-if="isEmpty == undefined" :style="`background-color: ${color}`" class="vulture_side_status_indi"></div>
+    <Label v-if="isEmpty" class="empty_l" color="#515151" v-text="'EMPTY'"></Label>
+    <div v-if="isEmpty == undefined" class="vulture_id_l">{{ vn }}</div>
     <Transition name="vulture_selector_t">
       <div v-if="selected_vn == vn" :style="main_area_style" class="vulture_selected_indi"></div>
     </Transition>
@@ -67,6 +71,9 @@ export default {
 </template>
 
 <style scoped>
+.empty_l{
+  font-size: 0.9vw;
+}
 .vulture_selector_t-enter-active,
 .vulture_selector_t-leave-active {
   transition: opacity linear 0.1s;
@@ -125,7 +132,7 @@ div{
   left: 1.196172249%;
   width: 98.803827751%;
   height: 100%;
-  border: solid 1px #555;
+  border: solid 1px #515151;
   z-index: 0;
   transition: background-color linear 0.1s, border linear 0.1s;
 }

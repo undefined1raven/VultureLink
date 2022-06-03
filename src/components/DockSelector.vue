@@ -23,25 +23,27 @@ export default {
 };
 </script>
 <template>
+  <div id="dock_selector_container">
     <div id="dock_selector_ln_container">
       <div id="dock_selector_ln_0" class="ln ln_v"></div>
       <div id="dock_selector_ln_1" class="ln ln_h"></div>
       <div id="dock_selector_ln_2" class="ln ln_v"></div>
       <div id="dock_selector_ln_3" class="ln ln_h"></div>
     </div>
-  <Label id="dock_selector_l" color="#FFF" v-text="'Dock Selector'"></Label>
-  <div id="dock_selector_list">
-    <DockListItem
-      v-for="(dock, index) in dock_array"
-      :dock_name="dock.dock_name"
-      :dock_obj="dock"
-      :vulture_array_status="vulture_array_status"
-      :key="index"
-      :index="index"
-      color="#0500ff"
-      :selected_dock_id="selected_dock_id"
-      @new_target_dock_id_sig="onDockSelected"
-    ></DockListItem>
+    <Label id="dock_selector_l" color="#FFF" v-text="'Dock Selector'"></Label>
+    <div id="dock_selector_list">
+      <DockListItem
+        v-for="(dock, index) in dock_array"
+        :dock_name="dock.dock_name"
+        :dock_obj="dock"
+        :vulture_array_status="vulture_array_status"
+        :key="index"
+        :index="index"
+        color="#0500ff"
+        :selected_dock_id="selected_dock_id"
+        @new_target_dock_id_sig="onDockSelected"
+      ></DockListItem>
+    </div>
   </div>
 </template>
 <style scoped>

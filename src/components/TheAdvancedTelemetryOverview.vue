@@ -1,9 +1,10 @@
 <script setup>
-import VultureSelectorList from "@/components/AT_VultureSelectorList.vue";
-import DockSelectorList from "@/components/AT_DockSelectorList.vue";
+import VultureSelector from "@/components/VultureSelector.vue";
+import DockSelector from "@/components/DockSelector.vue";
 import OverviewButton from "@/components/AT_OverviewButton.vue";
 import BaseMenuButton from "@/components/BaseMenuButton.vue";
 import Label from "@/components/Label.vue";
+import VultureStatus from "@/components/AT_VultureStatus.vue";
 import { computed } from "@vue/runtime-core";
 </script>
 
@@ -24,6 +25,7 @@ export default {
   props: {
     socket_ref: "",
     current_user_acid: "",
+    vulture_connection_status: "",
   },
   data() {
     return {
@@ -31,6 +33,7 @@ export default {
       dock_array: [],
       selected_dock_obj: "",
       docked_vultures_array: [],
+      selected_vulture_vid: "",
     };
   },
   methods: {
@@ -38,6 +41,8 @@ export default {
       window.location.pathname = path;
     },
     new_target_vid_sig_handler(pvid, vid) {
+      this.selected_vulture_vid = vid;
+      this.$emit('new_selected_vulture_vid', {vid: vid});
       this.socket_ref.emit("new_target_vid", {
         ath: getCookie("adv_tele_sio_ath"),
         pvid: pvid,
@@ -51,12 +56,16 @@ export default {
     dynamic_vulture_selector_array_gen() {
       if (this.selected_dock_obj != false) {
         let l_docked_vultures_array = [];
-        for (let ix = 0; ix < this.selected_dock_obj.vid_array.length; ix++) {
-          let find_res = this.vulture_array_status.find(
-            ({ vid }) => vid == this.selected_dock_obj.vid_array[ix].vid
-          );
-          if (find_res != undefined) {
-            l_docked_vultures_array.push(find_res);
+        for (let ix = 0; ix < 4; ix++) {
+          if (this.selected_dock_obj.vid_array[ix] != undefined) {
+            let find_res = this.vulture_array_status.find(
+              ({ vid }) => vid == this.selected_dock_obj.vid_array[ix].vid
+            );
+            if (find_res != undefined) {
+              l_docked_vultures_array.push(find_res);
+            }
+          } else {
+            l_docked_vultures_array.push({ empty: true });
           }
           if (ix == this.selected_dock_obj.vid_array.length - 1) {
             this.docked_vultures_array = l_docked_vultures_array;
@@ -147,58 +156,17 @@ export default {
       stroke="#00FFF0"
     ></OverviewButton>
   </div>
-  <div id="vulture_selector_container">
-    <div id="vulture_selector_ln_container">
-      <div id="vulture_selector_ln_0" class="ln ln_h"></div>
-      <div id="vulture_selector_ln_1" class="ln ln_h"></div>
-      <div id="vulture_selector_ln_2" class="ln ln_v"></div>
-      <div id="vulture_selector_ln_3" class="ln ln_v"></div>
-      <div id="vulture_selector_ln_4" class="ln ln_v"></div>
-      <div id="vulture_selector_ln_5" class="ln ln_h"></div>
-      <div id="vulture_selector_ln_6" class="ln ln_h"></div>
-    </div>
-    <VultureSelectorList
-      @new_target_vid_sig="new_target_vid_sig_handler"
-      :id="'vulture_selector_list'"
-      :vulture_array_status="docked_vultures_array"
-    />
-    <Label
-      id="vulture_selector_l"
-      v-text="'Vulture Selector'"
-      color="#FFF"
-    ></Label>
-    <Label
-      id="vulture_selector_legend_unavailable"
-      class="vulture_selector_legend_x"
-      v-text="'Unavailable'"
-      color="#585858"
-    ></Label>
-    <Label
-      id="vulture_selector_legend_fault"
-      class="vulture_selector_legend_x"
-      v-text="'Requires Attention'"
-      color="#FF006B"
-    ></Label>
-    <Label
-      id="vulture_selector_legend_ready"
-      class="vulture_selector_legend_x"
-      v-text="'Ready'"
-      color="#0500FF"
-    ></Label>
-    <Label
-      id="vulture_selector_legend_active"
-      class="vulture_selector_legend_x"
-      v-text="'Active'"
-      color="#00FFF0"
-    ></Label>
-  </div>
-  <div id="dock_selector_container">
-    <DockSelectorList
-      :vulture_array_status="vulture_array_status"
-      :dock_array="dock_array"
-      @new_target_dock_id_sig="onDockSelected"
-    />
-  </div>
+  <VultureSelector
+    @new_target_vid_sig="new_target_vid_sig_handler"
+    :id="'vulture_selector_list'"
+    :vulture_array_status="docked_vultures_array"
+  ></VultureSelector>
+  <DockSelector
+    :vulture_array_status="vulture_array_status"
+    :dock_array="dock_array"
+    @new_target_dock_id_sig="onDockSelected"
+  ></DockSelector>
+  <VultureStatus :vulture_connection_status="vulture_connection_status" :vulture_array_status="vulture_array_status" :selected_vulture_vid="selected_vulture_vid"></VultureStatus>
   <div id="menu_container">
     <div id="menu_ln_container">
       <div id="menu_ln_0" class="ln ln_v"></div>
@@ -241,30 +209,6 @@ export default {
   top: 90%;
   left: 3.645833333%;
 }
-.vulture_selector_legend_x {
-  font-size: 0.8vw;
-  top: 39.877777778%;
-}
-#vulture_selector_legend_unavailable {
-  border-top: solid 2px #585858;
-  left: 3.958333333%;
-}
-#vulture_selector_legend_fault {
-  border-top: solid 2px #ff006b;
-  left: 8.177083333%;
-}
-#vulture_selector_legend_ready {
-  border-top: solid 2px #0500ff;
-  left: 14.791666667%;
-}
-#vulture_selector_legend_active {
-  border-top: solid 2px #00fff0;
-  left: 17.291666667%;
-}
-#vulture_selector_l {
-  top: 14.351851852%;
-  left: 0.78125%;
-}
 .ln {
   position: absolute;
   background-color: #2c2c2c;
@@ -274,41 +218,6 @@ export default {
 }
 .ln_h {
   height: 0.11vh;
-}
-#vulture_selector_ln_0 {
-  top: 12.685185185%;
-  left: 1.041666667%;
-  width: 21.666666667%;
-}
-#vulture_selector_ln_1 {
-  top: 12.685185185%;
-  left: 23.723958333%;
-  width: 2.083333333%;
-}
-#vulture_selector_ln_2 {
-  top: 12.685185185%;
-  left: 24.739583333%;
-  height: 1.851851852%;
-}
-#vulture_selector_ln_3 {
-  top: 16.481481481%;
-  left: 24.739583333%;
-  height: 22.314814815%;
-}
-#vulture_selector_ln_4 {
-  top: 40.601851852%;
-  left: 24.739583333%;
-  height: 3.703703704%;
-}
-#vulture_selector_ln_5 {
-  top: 42.407407407%;
-  left: 23.75%;
-  width: 1.041666667%;
-}
-#vulture_selector_ln_6 {
-  top: 42.407407407%;
-  left: 1.041666667%;
-  width: 21.666666667%;
 }
 #overview_l {
   top: -4.820627803%;

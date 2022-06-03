@@ -57,7 +57,7 @@ const gen_pilot_u_access_array = (acid, role) => user_profile_gen_functions.gen_
 const gen_data_analyst_u_access_array = (acid, role) => user_profile_gen_functions.gen_data_analyst_u_access_array(acid, role);
 
 let json_parser = bodyParser.json();
-
+let vulture_ping_unix;
 const sendgrid = require('@sendgrid/mail')
 sendgrid.setApiKey(secrets.SEND_GRID);
 const msg = {
@@ -584,14 +584,26 @@ io.on('connection', function (socket_l) {
 
     ////--Ping Emitters--////
 
-    socket_l.on('local_relay_ping_back', payload => {
-        var latency = Math.round((((Date.now() - ini_lping_time)) * 100) / 100)
-        io.to(`${payload.vid}`).emit('local_ping_paint', latency);
+    socket_l.on('vulture_ping_echo', payload => {
+        var latency = Math.round((((Date.now() - vulture_ping_unix)) * 100) / 100);
+        let vulture_connection_status;
+        if(Math.abs(Date.now() - vulture_ping_unix) > 3000){
+            vulture_connection_status = false;
+            io.to(`${payload.vid}`).emit('vulture_connection_vitals', {latency: latency, status: vulture_connection_status});
+        }
+        else{
+            vulture_connection_status = true;
+            io.to(`${payload.vid}`).emit('vulture_connection_vitals', {latency: latency, status: vulture_connection_status});
+        }
     });//Vulture ⇄ this ⇄ Advanced_Telemetry F/E, Command | Computed Latency Emitter
 
+    socket_l.on('vulture_connection_vitals_res', vulture_connection_vitals_res_payload => {
+        io.to(`${vulture_connection_vitals_res_payload.vid}`).emit('vulture_connection_vitals_res', vulture_connection_vitals_res_payload);
+    });
+
     setInterval(function () {
-        socket_l.emit('local_relay_ping');
-        ini_lping_time = Date.now();
+        socket_l.emit('vulture_ping');
+        vulture_ping_unix = Date.now();
     }, 2000);//this ⇄ Vulture 
 
 
@@ -852,6 +864,7 @@ app.post('/opsec_to_adv_tele', (req, res) => {
 
 // });
 // dock_model.save();
+
 
 
 app.post('/genesis_post', (req, res) => {
@@ -1519,6 +1532,16 @@ io.on('connection', socket => {
 
     console.log(`Connection detected | SIDx [${socket.id}]`);
     ////--Data flow routing demo [In-progress]--////
+
+
+    ///-- Vulture Ping --///
+    socket.on('req_vulture_connection_vitals', req_vulture_connection_vitals_payload => {
+        get_snapshot_from_path(`adv_tele_aprvd_tids/${req_vulture_connection_vitals_payload.ath}`).then(snapshot => {
+            if(snapshot.val() != null){
+                io.to(`${req_vulture_connection_vitals_payload.vid}`).emit('req_vulture_connection_vitals');
+            }
+        });
+    });
 
     var mx_acid;
     ///-TLP-///
@@ -2444,12 +2467,12 @@ io.on('connection', socket => {
     ///this ⇄ Vulture
     setInterval(() => {
         if (Math.abs(local_server_unix - Date.now()) > 3500) {
-            local_server_cs = true;
-        }
-        else {
             local_server_cs = false;
         }
-        socket.emit('local_server_cs_sr', local_server_cs);
+        else {
+            local_server_cs = true;
+        }
+        socket.emit('vulture_connection_status', local_server_cs);
     }, 250);//Checks connection between: this ⇄ Vulture | Emits results to: Advanced_Telemetry F/E 
 
 

@@ -35,12 +35,24 @@ export default {
       socket_ref: socket,
       current_user_acid: "",
       current_user_un: "",
+      selected_vulture_vid: "",
       vulture_status_array: "",
+      vulture_connection: {
+        status: "",
+        last_unix: "",
+        signal_emit_last_unix: "",
+        latency: "",
+      },
     };
   },
   methods: {
     visibility_status_update_handler(visibility_status_update) {
       this.login_req_details_obj.isVisible = visibility_status_update;
+    },
+    new_selected_vulture_vid_handler(obj) {
+      this.selected_vulture_vid = obj.vid;
+      this.last_unix = 0;
+      this.vulture_connection.status = null;
     },
   },
   mounted() {
@@ -50,7 +62,6 @@ export default {
       ath: getCookie("adv_tele_sio_ath"),
       uid: getCookie("eor"),
     });
-
     socket.on("un_res", (un) => {
       this.current_user_un = un.username;
       socket.emit("add_socket_to_acid_room", {
@@ -62,6 +73,26 @@ export default {
     socket.on("sonar_telemetry_pkg_rebound", (payload) => {
       this.sonar_telemetry_obj = payload;
     });
+
+    ///-- Selected Vulture Connection Status Management --///
+    setInterval(() => {
+      socket.emit("req_vulture_connection_vitals", {
+        ath: getCookie("adv_tele_sio_ath"),
+        vid: this.selected_vulture_vid,
+      });
+      this.signal_emit_last_unix = Date.now();
+
+      if (Math.abs(Date.now() - this.vulture_connection.last_unix) > 1000) {
+        this.vulture_connection.status = false;
+      } else {
+        this.vulture_connection.status = true;
+      }
+    }, 300);
+
+    socket.on("vulture_connection_vitals_res", (connection_vitals) => {
+      this.vulture_connection.last_unix = connection_vitals.tx;
+    });
+    //[][][][][]
   },
 };
 </script>
@@ -85,6 +116,8 @@ export default {
     v-if="!login_req_details_obj.isVisible"
     :socket_ref="socket_ref"
     :current_user_acid="`${getCookie('acid')}`"
+    :vulture_connection_status="vulture_connection.status"
+    @new_selected_vulture_vid="new_selected_vulture_vid_handler"
   ></Overview>
 </template>
 
