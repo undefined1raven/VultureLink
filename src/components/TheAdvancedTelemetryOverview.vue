@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      vulture_array_status: "",
+      vulture_array_status: this.get_vulture_array_status_cache(),
       dock_array: [],
       selected_dock_obj: "",
       docked_vultures_array: [],
@@ -32,6 +32,16 @@ export default {
     };
   },
   methods: {
+    get_vulture_array_status_cache() {
+      if (
+        localStorage.getItem("vulture_array_status") == [] ||
+        localStorage.getItem("vulture_array_status") == null
+      ) {
+        return "";
+      } else {
+        return localStorage.getItem("vulture_array_status");
+      }
+    },
     redirect(path) {
       window.location.pathname = path;
     },
@@ -81,8 +91,8 @@ export default {
     });
 
     ///-- vulture array status management --///
-    if (localStorage.getItem("vulture_array_status") != []) {
-      console.log('used from local storage')
+    if (localStorage.getItem("vulture_array_status") != [] && localStorage.getItem("vulture_array_status") != null) {
+      console.log("used from local storage");
       this.vulture_array_received = true;
       this.vulture_array_status = JSON.parse(
         localStorage.getItem("vulture_array_status")
@@ -106,7 +116,7 @@ export default {
     this.socket_ref.on("vulture_array_status_res", (res) => {
       this.vulture_array_received = true;
       this.vulture_array_status = res.vulture_array_status;
-      localStorage.setItem("vulture_array_status", res.vulture_array_status)
+      localStorage.setItem("vulture_array_status", JSON.stringify(res.vulture_array_status));
     });
     //[][][][][]
 
