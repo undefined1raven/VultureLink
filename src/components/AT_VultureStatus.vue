@@ -7,15 +7,17 @@ import Label from "@/components/Label.vue";
 <script>
 export default {
   props: {
-    selected_vulture_vid: "",
+    selected_vulture_obj: "",
     vulture_array_status: "",
     vulture_connection_status: "",
   },
   methods: {
-    selected_vulture_obj_from_vid() {
-      return this.vulture_array_status.find(
-        ({ vid }) => vid == this.selected_vulture_vid
-      );
+    vulture_obj_validator(){
+      if(this.selected_vulture_obj == undefined){
+        return {vn: "", vid: ""}
+      }else{
+        return this.selected_vulture_obj
+      }
     },
     vulture_connection_status_parser() {
       if (this.vulture_connection_status == true) {
@@ -45,7 +47,7 @@ export default {
         ></Label>
         <Label
           id="vulture_id_actual"
-          v-text="selected_vulture_obj_from_vid().vn"
+          v-text="vulture_obj_validator().vn"
           color="#FFF"
           class="vulture_x_actual"
         ></Label>

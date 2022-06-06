@@ -57,17 +57,19 @@ export default {
   },
   mounted() {
     this.current_user_acid = getCookie("acid");
+    socket.emit("add_socket_to_acid_room", {
+      sid: socket.id,
+      acid: this.current_user_acid,
+    });
+
     socket.emit("req_un", {
       origin: "adv_tele",
       ath: getCookie("adv_tele_sio_ath"),
       uid: getCookie("eor"),
     });
+    
     socket.on("un_res", (un) => {
       this.current_user_un = un.username;
-      socket.emit("add_socket_to_acid_room", {
-        sid: socket.id,
-        acid: this.current_user_acid,
-      });
     });
 
     socket.on("sonar_telemetry_pkg_rebound", (payload) => {
