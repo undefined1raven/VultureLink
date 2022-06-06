@@ -1435,9 +1435,10 @@ app.post('/security_post', (req, res) => {
 
 
 app.get('/advanced_telemetry', (req, res) => {
-    if (rate_limiter_checker(adv_tele_limiter, res)) {
-        check_ua(req, res, 'adv_tele.ejs', 'adv_tele_m.ejs');
-    }
+    // if (rate_limiter_checker(adv_tele_limiter, res)) {
+    //     check_ua(req, res, 'adv_tele.ejs', 'adv_tele_m.ejs');
+    // }
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
 // const auth_ckr_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 50, interval: 'hour' });

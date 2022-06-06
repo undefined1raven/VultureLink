@@ -82,7 +82,7 @@ export default {
       });
       this.signal_emit_last_unix = Date.now();
 
-      if (Math.abs(Date.now() - this.vulture_connection.last_unix) > 1000) {
+      if (Math.abs(Date.now() - this.vulture_connection.last_unix) > 700) {
         this.vulture_connection.status = false;
       } else {
         this.vulture_connection.status = true;
