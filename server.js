@@ -587,13 +587,13 @@ io.on('connection', function (socket_l) {
     socket_l.on('vulture_ping_echo', payload => {
         var latency = Math.round((((Date.now() - vulture_ping_unix)) * 100) / 100);
         let vulture_connection_status;
-        if(Math.abs(Date.now() - vulture_ping_unix) > 3000){
+        if (Math.abs(Date.now() - vulture_ping_unix) > 3000) {
             vulture_connection_status = false;
-            io.to(`${payload.vid}`).emit('vulture_connection_vitals', {latency: latency, status: vulture_connection_status});
+            io.to(`${payload.vid}`).emit('vulture_connection_vitals', { latency: latency, status: vulture_connection_status });
         }
-        else{
+        else {
             vulture_connection_status = true;
-            io.to(`${payload.vid}`).emit('vulture_connection_vitals', {latency: latency, status: vulture_connection_status});
+            io.to(`${payload.vid}`).emit('vulture_connection_vitals', { latency: latency, status: vulture_connection_status });
         }
     });//Vulture ⇄ this ⇄ Advanced_Telemetry F/E, Command | Computed Latency Emitter
 
@@ -1538,7 +1538,7 @@ io.on('connection', socket => {
     ///-- Vulture Ping --///
     socket.on('req_vulture_connection_vitals', req_vulture_connection_vitals_payload => {
         get_snapshot_from_path(`adv_tele_aprvd_tids/${req_vulture_connection_vitals_payload.ath}`).then(snapshot => {
-            if(snapshot.val() != null){
+            if (snapshot.val() != null) {
                 io.to(`${req_vulture_connection_vitals_payload.vid}`).emit('req_vulture_connection_vitals');
             }
         });
@@ -2188,18 +2188,20 @@ io.on('connection', socket => {
         get_snapshot_from_path(`aprvd_tids/${req_dock_array_payload.ath}`).then(snapshot => {
             if (snapshot != null) {
                 UAC_v2.findOne({ acid: req_dock_array_payload.acid }).exec().then(user => {
-                    let dock_array = [];
-                    for (let ix = 0; ix < user.dock_array.length; ix++) {
-                        DOCK_SCH.findOne({ dock_id: user.dock_array[ix].dock_id }).exec().then(dock_obj => {
-                            if (dock_obj != null) {
-                                dock_array.push(dock_obj);
-                                if (dock_array.length == user.dock_array.length) {
-                                    setTimeout(() => {
-                                        io.to(socket.id).emit('dock_array_res', { dock_array: dock_array });
-                                    }, 100);
+                    if (user != null) {
+                        let dock_array = [];
+                        for (let ix = 0; ix < user.dock_array.length; ix++) {
+                            DOCK_SCH.findOne({ dock_id: user.dock_array[ix].dock_id }).exec().then(dock_obj => {
+                                if (dock_obj != null) {
+                                    dock_array.push(dock_obj);
+                                    if (dock_array.length == user.dock_array.length) {
+                                        setTimeout(() => {
+                                            io.to(socket.id).emit('dock_array_res', { dock_array: dock_array });
+                                        }, 100);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 });
             } else {
