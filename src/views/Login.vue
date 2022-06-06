@@ -95,6 +95,7 @@ export default {
           .then((res) => {
             res.json().then((response_data) => {
               if (response_data.result) {
+                sessionStorage.setItem('vulture_array_status', response_data.vulture_array_status);
                 window.location.pathname = response_data.redirect_path;
               } else {
                 this.auth_error_label_visible = true;

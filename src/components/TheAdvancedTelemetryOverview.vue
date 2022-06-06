@@ -27,7 +27,7 @@ export default {
       dock_array: [],
       selected_dock_obj: "",
       docked_vultures_array: [],
-      selected_vulture_obj: {vn: "", vid: ""},
+      selected_vulture_obj: { vn: "", vid: "" },
       vulture_array_received: false,
     };
   },
@@ -36,9 +36,11 @@ export default {
       window.location.pathname = path;
     },
     new_target_vid_sig_handler(pvid, _vid) {
-      if(this.vulture_array_received){
-        this.selected_vulture_obj = this.vulture_array_status.find(({vid}) => vid == _vid);
-        this.$emit('new_selected_vulture_vid', {vid: _vid});
+      if (this.vulture_array_received) {
+        this.selected_vulture_obj = this.vulture_array_status.find(
+          ({ vid }) => vid == _vid
+        );
+        this.$emit("new_selected_vulture_vid", { vid: _vid });
         this.socket_ref.emit("new_target_vid", {
           ath: getCookie("adv_tele_sio_ath"),
           pvid: pvid,
@@ -79,6 +81,13 @@ export default {
     });
 
     ///-- vulture array status management --///
+    if (sessionStorage.getItem("vulture_array_status") != undefined) {
+      this.vulture_array_received = true;
+      this.vulture_array_status = JSON.parse(sessionStorage.getItem(
+        "vulture_array_status"
+      ));
+    }
+
     this.socket_ref.on("refresh_vulture_array_status_sig", () => {
       this.socket_ref.emit("req_vulture_array_status", {
         origin: "adv_tele",
@@ -86,11 +95,11 @@ export default {
         acid: this.current_user_acid,
       });
     });
-    this.socket_ref.emit("req_vulture_array_status", {
-      origin: "adv_tele",
-      ath: getCookie("adv_tele_sio_ath"),
-      acid: this.current_user_acid,
-    });
+    // this.socket_ref.emit("req_vulture_array_status", {
+    //   origin: "adv_tele",
+    //   ath: getCookie("adv_tele_sio_ath"),
+    //   acid: this.current_user_acid,
+    // });
     this.socket_ref.on("vulture_array_status_res", (res) => {
       this.vulture_array_received = true;
       this.vulture_array_status = res.vulture_array_status;
@@ -103,7 +112,7 @@ export default {
       ath: getCookie("adv_tele_sio_ath"),
       origin: "adv_tele",
       acid: this.current_user_acid,
-    })
+    });
     delta = Date.now();
     this.socket_ref.on("dock_array_res", (res) => {
       this.dock_array = res.dock_array;
@@ -167,7 +176,11 @@ export default {
     :dock_array="dock_array"
     @new_target_dock_id_sig="onDockSelected"
   ></DockSelector>
-  <VultureStatus :vulture_connection_status="vulture_connection_status" :vulture_array_status="vulture_array_status" :selected_vulture_obj="selected_vulture_obj"></VultureStatus>
+  <VultureStatus
+    :vulture_connection_status="vulture_connection_status"
+    :vulture_array_status="vulture_array_status"
+    :selected_vulture_obj="selected_vulture_obj"
+  ></VultureStatus>
   <div id="menu_container">
     <div id="menu_ln_container">
       <div id="menu_ln_0" class="ln ln_v"></div>

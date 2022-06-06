@@ -56,45 +56,47 @@ export default {
     },
   },
   mounted() {
-    this.current_user_acid = getCookie("acid");
-    socket.emit("add_socket_to_acid_room", {
-      sid: socket.id,
-      acid: this.current_user_acid,
-    });
-
-    socket.emit("req_un", {
-      origin: "adv_tele",
-      ath: getCookie("adv_tele_sio_ath"),
-      uid: getCookie("eor"),
-    });
-    
-    socket.on("un_res", (un) => {
-      this.current_user_un = un.username;
-    });
-
-    socket.on("sonar_telemetry_pkg_rebound", (payload) => {
-      this.sonar_telemetry_obj = payload;
-    });
-
-    ///-- Selected Vulture Connection Status Management --///
-    setInterval(() => {
-      socket.emit("req_vulture_connection_vitals", {
-        ath: getCookie("adv_tele_sio_ath"),
-        vid: this.selected_vulture_vid,
+    if (getCookie("adv_tele_sio_ath") != undefined) {
+      this.current_user_acid = getCookie("acid");
+      socket.emit("add_socket_to_acid_room", {
+        sid: socket.id,
+        acid: this.current_user_acid,
       });
-      this.signal_emit_last_unix = Date.now();
 
-      if (Math.abs(Date.now() - this.vulture_connection.last_unix) > 700) {
-        this.vulture_connection.status = false;
-      } else {
-        this.vulture_connection.status = true;
-      }
-    }, 300);
+      socket.emit("req_un", {
+        origin: "adv_tele",
+        ath: getCookie("adv_tele_sio_ath"),
+        uid: getCookie("eor"),
+      });
 
-    socket.on("vulture_connection_vitals_res", (connection_vitals) => {
-      this.vulture_connection.last_unix = connection_vitals.tx;
-    });
-    //[][][][][]
+      socket.on("un_res", (un) => {
+        this.current_user_un = un.username;
+      });
+
+      socket.on("sonar_telemetry_pkg_rebound", (payload) => {
+        this.sonar_telemetry_obj = payload;
+      });
+
+      ///-- Selected Vulture Connection Status Management --///
+      setInterval(() => {
+        socket.emit("req_vulture_connection_vitals", {
+          ath: getCookie("adv_tele_sio_ath"),
+          vid: this.selected_vulture_vid,
+        });
+        this.signal_emit_last_unix = Date.now();
+
+        if (Math.abs(Date.now() - this.vulture_connection.last_unix) > 700) {
+          this.vulture_connection.status = false;
+        } else {
+          this.vulture_connection.status = true;
+        }
+      }, 300);
+
+      socket.on("vulture_connection_vitals_res", (connection_vitals) => {
+        this.vulture_connection.last_unix = connection_vitals.tx;
+      });
+      //[][][][][]
+    }
   },
 };
 </script>

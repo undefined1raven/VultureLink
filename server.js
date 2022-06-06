@@ -815,8 +815,9 @@ app.post('/auth_post', json_parser, (req, res) => {
                     }
                     else {
                         successful_auth_post(req, res, user, false);
+
                         setTimeout(() => {
-                            res.json({ result: true, redirect_path: '/advanced_telemetry' });
+                            res.json({ result: true, redirect_path: '/advanced_telemetry', vulture_array_status: vow_status });
                         }, 50);
                     }
                 }
@@ -1344,17 +1345,44 @@ app.post('/MFA_mobile_cr', (req, res) => {
 });
 
 function redirect_id_assessment_fn(req, res, user) {
+    ///-- Retrieve Vulture Array Status --///
+    let vow_status = [];
+    get(ref(db, 'active_vultures/')).then(active_vultures_snapshot => {
+        let vow = user.vow;
+        const data = active_vultures_snapshot.val();
+        if (data != null) {
+            for (let ix = 0; ix < vow.length; ix++) {
+                if (data[vow[ix].vid] == undefined) {
+                    vow_status.push({ vid: vow[ix].vid, vn: vow[ix].vn, status: 'ready' });
+                }
+                else {
+                    vow_status.push({ vid: vow[ix].vid, vn: vow[ix].vn, status: 'active' });
+                }
+            }
+        }
+        else {
+            for (let ix = 0; ix < vow.length; ix++) {
+                vow_status[ix] = { vid: vow[ix].vid, vn: vow[ix].vn, status: 'ready' };
+            }
+        }
+    });
+    //[][][][][][][][][]
+
     if (req.cookies.redirect_id == 0) {
         res.clearCookie('redirect_id');
         res.clearCookie('frstp_aprvd_tid');
         successful_auth_post(req, res, user, false);
-        res.json({ response: true, target_path: '/advanced_telemetry' });
+
+        setTimeout(() => {
+            res.json({ response: true, target_path: '/advanced_telemetry', vulture_array_status: vow_status });
+        }, 100);
     }
     if (req.cookies.redirect_id == 1) {
         res.clearCookie('redirect_id');
         res.clearCookie('frstp_aprvd_tid');
         successful_security_post(req, res, user, false);
-        res.json({ response: true, target_path: '/security' });
+        res.json({ response: true, target_path: '/security', vulture_array_status: vow_status });
+
     }
 }
 
@@ -1435,10 +1463,9 @@ app.post('/security_post', (req, res) => {
 
 
 app.get('/advanced_telemetry', (req, res) => {
-    // if (rate_limiter_checker(adv_tele_limiter, res)) {
-    //     check_ua(req, res, 'adv_tele.ejs', 'adv_tele_m.ejs');
-    // }
-    res.sendFile(path.join(__dirname, 'dist/index.html'));
+    if (rate_limiter_checker(adv_tele_limiter, res)) {
+        check_ua(req, res, 'adv_tele.ejs', 'adv_tele_m.ejs');
+    }
 });
 
 // const auth_ckr_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 50, interval: 'hour' });
