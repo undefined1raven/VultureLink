@@ -817,7 +817,7 @@ app.post('/auth_post', json_parser, (req, res) => {
                         successful_auth_post(req, res, user, false);
 
                         setTimeout(() => {
-                            res.json({ result: true, redirect_path: '/advanced_telemetry', vulture_array_status: vow_status });
+                            res.json({ result: true, redirect_path: '/advanced_telemetry' });
                         }, 50);
                     }
                 }
@@ -1347,6 +1347,7 @@ app.post('/MFA_mobile_cr', (req, res) => {
 function redirect_id_assessment_fn(req, res, user) {
     ///-- Retrieve Vulture Array Status --///
     let vow_status = [];
+    let delta = Date.now();
     get(ref(db, 'active_vultures/')).then(active_vultures_snapshot => {
         let vow = user.vow;
         const data = active_vultures_snapshot.val();
@@ -1372,9 +1373,10 @@ function redirect_id_assessment_fn(req, res, user) {
         res.clearCookie('redirect_id');
         res.clearCookie('frstp_aprvd_tid');
         successful_auth_post(req, res, user, false);
+        console.log(Math.abs(Date.now() - delta));
 
         setTimeout(() => {
-            res.json({ response: true, target_path: '/advanced_telemetry', vulture_array_status: vow_status });
+            res.json({ response: true, target_path: '/advanced_telemetry', vulture_array_status: vow_status })
         }, 100);
     }
     if (req.cookies.redirect_id == 1) {

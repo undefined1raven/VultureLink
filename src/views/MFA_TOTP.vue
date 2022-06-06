@@ -33,7 +33,7 @@ function MFA_TOTP_fetch_handle(e, token, backup_code, this_ref) {
       } else {
         setTimeout(() => {
           this_ref.action_status_color = "00FFF0";
-          sessionStorage.setItem('vulture_array_status', JSON.stringify(data.vulture_array_status))
+          localStorage.setItem('vulture_array_status', JSON.stringify(data.vulture_array_status))
           window.location.pathname = data.target_path;
         }, 500);
       }
