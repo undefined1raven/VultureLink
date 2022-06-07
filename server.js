@@ -2173,6 +2173,7 @@ io.on('connection', socket => {
                         if (r.length > 0) {
                             let vow = r[0].vow;
                             let vow_status = [];
+                            let delta = Date.now()
                             const data = active_vultures_snapshot.val();
                             if (data != null) {
                                 for (let ix = 0; ix < vow.length; ix++) {
@@ -2183,12 +2184,14 @@ io.on('connection', socket => {
                                         vow_status.push({ vid: vow[ix].vid, vn: vow[ix].vn, status: 'active' });
                                     }
                                 }
+                                console.log(Math.abs(Date.now() - delta))
                                 io.to(socket.id).emit('vulture_array_status_res', { vulture_array_status: vow_status });
                             }
                             else {
                                 for (let ix = 0; ix < vow.length; ix++) {
                                     vow_status[ix] = { vid: vow[ix].vid, vn: vow[ix].vn, status: 'ready' };
                                 }
+                                console.log(Math.abs(Date.now() - delta))
                                 io.to(socket.id).emit('vulture_array_status_res', { vulture_array_status: vow_status });
                             }
                         }

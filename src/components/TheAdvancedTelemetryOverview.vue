@@ -86,6 +86,7 @@ export default {
     },
   },
   mounted() {
+    console.log(localStorage.getItem('vulture_arrray_status'))
     this.socket_ref.on("sonar_telemetry_pkg_rebound", (sonar_telemetry_pkg) => {
       // console.log(sonar_telemetry_pkg);
     });
