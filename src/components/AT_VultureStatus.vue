@@ -19,15 +19,22 @@ export default {
         return this.selected_vulture_obj;
       }
     },
-    vulture_current_mode_parser(){
-      if(this.selected_vulture_obj.status == 'ready'){
-        return {color: "#000AFF", text: "Stand By"}
+    vulture_current_status_parser() {
+      if (
+        this.selected_vulture_obj.vid == "" &&
+        this.selected_vulture_obj.vn == ""
+      ) {
+        //if selected vulture object is undefined
+        return { color: "#999", text: "Checking/|/" };
       }
-      if(this.selected_vulture_obj.status == 'active'){
-        return {color: "#00FFF0", text: "Active"}
+      if (this.selected_vulture_obj.status == "ready") {
+        return { color: "#000AFF", text: "Stand By" };
       }
-      if(this.selected_vulture_obj.status == 'fault'){
-        return {color: "#FF006B", text: "Requires Maintenence"}
+      if (this.selected_vulture_obj.status == "active") {
+        return { color: "#00FFF0", text: "Active" };
+      }
+      if (this.selected_vulture_obj.status == "fault") {
+        return { color: "#FF006B", text: "Requires Maintenence" };
       }
     },
     vulture_connection_status_parser() {
@@ -77,30 +84,84 @@ export default {
           class="vulture_x_actual"
         ></Label>
       </div>
-      <div id="vulture_current_mode_container" class="data_container">
+      <div id="vulture_current_status_container" class="data_container">
         <Label
-          id="vulture_current_mode_l"
+          id="vulture_current_status_l"
           v-text="'Vulture Status'"
           color="#FFF"
           class="vulture_x_l"
         ></Label>
         <Label
-          id="vulture_current_mode_actual"
-          v-text="vulture_current_mode_parser().text"
-          :color="vulture_current_mode_parser().color"
+          id="vulture_current_status_actual"
+          v-text="vulture_current_status_parser().text"
+          :color="vulture_current_status_parser().color"
           class="vulture_x_actual"
         ></Label>
       </div>
+      <div id="vulture_mounted_payloads_container" class="data_container">
+        <Label
+          id="vulture_mounted_payloads_l"
+          v-text="'Mounted Payloads'"
+          color="#FFF"
+          class="vulture_x_l"
+        ></Label>
+        <div id="vulture_payload_0" class="payload_port_container">
+          <Label class="bay_l" color="#7A7A7A" v-text="'Bay 1'"></Label>
+          <Label class="payload_l" color="#7A7A7A" v-text="'EMPTY'"></Label>
+          <Label class="payload_status" color="#7A7A7A" v-text="'--'"></Label>
+        </div>
+        <div id="vulture_payload_1" class="payload_port_container" style="background-color: #00FFF020">
+          <Label class="bay_l" color="#7A7A7A" v-text="'Bay 2'"></Label>
+          <Label class="payload_l" color="#FFF" v-text="'LIDAR Scanner'"></Label>
+          <Label class="payload_status" color="#00FFF0" v-text="'Ready'"></Label>
+        </div>
+      </div>
     </div>
-    <div id="vulture_current_mode_ln_container">
-      <div id="vulture_current_mode_ln_0" class="ln ln_h"></div>
-      <div id="vulture_current_mode_ln_1" class="ln ln_h"></div>
-      <div id="vulture_current_mode_ln_2" class="ln ln_v"></div>
+    <div id="vulture_current_status_ln_container">
+      <div id="vulture_current_status_ln_0" class="ln ln_h"></div>
+      <div id="vulture_current_status_ln_1" class="ln ln_h"></div>
+      <div id="vulture_current_status_ln_2" class="ln ln_v"></div>
     </div>
   </div>
 </template>
 <style scoped>
-#vulture_current_mode_container{
+.bay_l{
+  left: 0;
+  top: -62%;
+  font-size: .8vw;
+}
+#vulture_payload_1{
+  left: 53.86996904%;
+}
+#vulture_payload_0 {
+  left: 0%;
+}
+.payload_l {
+  font-size: 0.9vw;
+  top: -5%;
+}
+.payload_status {
+  font-size: 0.7vw;
+  top: 45%;
+}
+.payload_port_container {
+  position: absolute;
+  top: 53.333333333%;
+  width: 45.510835913%;
+  height: 34.166666667%;
+  background-color: #000aff20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#vulture_mounted_payloads_l {
+  top: 7.5%;
+}
+#vulture_mounted_payloads_container {
+  top: 53.281853282%;
+  height: 46.332046332%;
+}
+#vulture_current_status_container {
   top: 35.521235521%;
 }
 #vulture_connection_status_container {
