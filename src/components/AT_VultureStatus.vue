@@ -12,11 +12,22 @@ export default {
     vulture_connection_status: "",
   },
   methods: {
-    vulture_obj_validator(){
-      if(this.selected_vulture_obj == undefined){
-        return {vn: "", vid: ""}
-      }else{
-        return this.selected_vulture_obj
+    vulture_obj_validator() {
+      if (this.selected_vulture_obj == undefined) {
+        return { vn: "", vid: "" };
+      } else {
+        return this.selected_vulture_obj;
+      }
+    },
+    vulture_current_mode_parser(){
+      if(this.selected_vulture_obj.status == 'ready'){
+        return {color: "#000AFF", text: "Stand By"}
+      }
+      if(this.selected_vulture_obj.status == 'active'){
+        return {color: "#00FFF0", text: "Active"}
+      }
+      if(this.selected_vulture_obj.status == 'fault'){
+        return {color: "#FF006B", text: "Requires Maintenence"}
       }
     },
     vulture_connection_status_parser() {
@@ -66,15 +77,32 @@ export default {
           class="vulture_x_actual"
         ></Label>
       </div>
+      <div id="vulture_current_mode_container" class="data_container">
+        <Label
+          id="vulture_current_mode_l"
+          v-text="'Vulture Status'"
+          color="#FFF"
+          class="vulture_x_l"
+        ></Label>
+        <Label
+          id="vulture_current_mode_actual"
+          v-text="vulture_current_mode_parser().text"
+          :color="vulture_current_mode_parser().color"
+          class="vulture_x_actual"
+        ></Label>
+      </div>
     </div>
-    <div id="vulture_status_ln_container">
-      <div id="vulture_status_ln_0" class="ln ln_h"></div>
-      <div id="vulture_status_ln_1" class="ln ln_h"></div>
-      <div id="vulture_status_ln_2" class="ln ln_v"></div>
+    <div id="vulture_current_mode_ln_container">
+      <div id="vulture_current_mode_ln_0" class="ln ln_h"></div>
+      <div id="vulture_current_mode_ln_1" class="ln ln_h"></div>
+      <div id="vulture_current_mode_ln_2" class="ln ln_v"></div>
     </div>
   </div>
 </template>
 <style scoped>
+#vulture_current_mode_container{
+  top: 35.521235521%;
+}
 #vulture_connection_status_container {
   top: 17.760617761%;
 }

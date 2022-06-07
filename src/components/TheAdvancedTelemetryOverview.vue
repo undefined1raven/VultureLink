@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      vulture_array_status: this.get_vulture_array_status_cache(),
+      vulture_array_status: "",
       dock_array: [],
       selected_dock_obj: "",
       docked_vultures_array: [],
@@ -32,16 +32,6 @@ export default {
     };
   },
   methods: {
-    get_vulture_array_status_cache() {
-      if (
-        localStorage.getItem("vulture_array_status") == [] ||
-        localStorage.getItem("vulture_array_status") == null
-      ) {
-        return "";
-      } else {
-        return localStorage.getItem("vulture_array_status");
-      }
-    },
     redirect(path) {
       window.location.pathname = path;
     },
@@ -86,25 +76,16 @@ export default {
     },
   },
   mounted() {
-    console.log(localStorage.getItem('vulture_arrray_status'))
     this.socket_ref.on("sonar_telemetry_pkg_rebound", (sonar_telemetry_pkg) => {
       // console.log(sonar_telemetry_pkg);
     });
 
     ///-- vulture array status management --///
-    if (localStorage.getItem("vulture_array_status") != [] && localStorage.getItem("vulture_array_status") != null) {
-      console.log("used from local storage");
-      this.vulture_array_received = true;
-      this.vulture_array_status = JSON.parse(
-        localStorage.getItem("vulture_array_status")
-      );
-    } else {
-      this.socket_ref.emit("req_vulture_array_status", {
-        origin: "adv_tele",
-        ath: getCookie("adv_tele_sio_ath"),
-        acid: this.current_user_acid,
-      });
-    }
+    this.socket_ref.emit("req_vulture_array_status", {
+      origin: "adv_tele",
+      ath: getCookie("adv_tele_sio_ath"),
+      acid: this.current_user_acid,
+    });
 
     this.socket_ref.on("refresh_vulture_array_status_sig", () => {
       this.socket_ref.emit("req_vulture_array_status", {
@@ -117,7 +98,6 @@ export default {
     this.socket_ref.on("vulture_array_status_res", (res) => {
       this.vulture_array_received = true;
       this.vulture_array_status = res.vulture_array_status;
-      localStorage.setItem("vulture_array_status", JSON.stringify(res.vulture_array_status));
     });
     //[][][][][]
 

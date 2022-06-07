@@ -84,16 +84,22 @@ export default {
           vid: this.selected_vulture_vid,
         });
         this.signal_emit_last_unix = Date.now();
+      }, 200);
 
-        if (Math.abs(Date.now() - this.vulture_connection.last_unix) > 700) {
+      setInterval(() => {
+        if (Math.abs(Date.now() - this.vulture_connection.last_unix) > 600) {
           this.vulture_connection.status = false;
-        } else {
-          this.vulture_connection.status = true;
         }
-      }, 300);
+      }, 500);
 
       socket.on("vulture_connection_vitals_res", (connection_vitals) => {
-        this.vulture_connection.last_unix = connection_vitals.tx;
+        if (connection_vitals.vid == this.selected_vulture_vid) {
+          this.vulture_connection.status = true;
+          this.vulture_connection.last_unix = connection_vitals.tx;
+        } else {
+          this.vulture_connection.last_unix = 0;
+          this.vulture_connection.status = null;
+        }
       });
       //[][][][][]
     }
