@@ -29,6 +29,7 @@ const UAC = require('./models/udata.js');
 const UAC_v2 = require('./models/udata_v2.js');
 const VULTURE_SCH = require('./models/vulture_model.js');
 const DOCK_SCH = require('./models/dock_model.js');
+const RELAY_STATION_SCH = require('./models/relay_station_model.js');
 const fs = require('fs');
 const strategy = require('passport-local').Strategy;
 const crypto = require('crypto');
@@ -657,7 +658,7 @@ if (process.env.NODE_ENV === 'production') {
 
 //----Authentication [beta]----//
 
-app.post('/adv_tele_logout', (req, res) => {
+app.post('/logout', (req, res) => {
     get_snapshot_from_path(`adv_tele_aprvd_tids/${req.cookies.at.tid}`).then(snapshot => {
         const data = snapshot.val();
         if (data != null) {
@@ -856,16 +857,17 @@ app.post('/opsec_to_adv_tele', (req, res) => {
     res.redirect('advanced_telemetry');
 });
 
-// const dock_model = new DOCK_SCH({
-//     dock_id: uuid.v4(),
-//     dock_name: 'Dock FXN-7',
-//     vid_array: [{vid: '2932c024-5409-4099-b239-9dc95f778f28'}, {vid: '202cf027-49ef-4cb2-8147-e98331a38ac5'}, {vid: 'bf4e40bc-7abe-4e3e-afe7-e5e691d4f8ed'}],
-//     payload_array: [],
+// const dock_model = new RELAY_STATION_SCH({
+//     relay_station_id: uuid.v4(),
+//     dock_array: [{dock_id: '21f9a158-5953-48fc-a4f1-a9af2bf4d27d'}],
+//     relay_station_name: 'RS-1',
+//     activity_logs: [],
 //     user_access_array: [{acid: '88d9e113-520b-45d0-9370-213dc2557a40'}]
-
 // });
 // dock_model.save();
 
+// DOCK_SCH.findOneAndUpdate({dock_id: '536413de-9134-4c61-a859-1da3a12478f7'}, {relay_station_array: [{relay_station_id: '21f9a158-5953-48fc-a4f1-a9af2bf4d27d'}, {relay_station_id: '536413de-9134-4c61-a859-1da3a12478f7'}]}, {upsert: true}, (err, doc) => {});
+// RELAY_STATION_SCH.findOneAndUpdate({relay_station_id: 'e2b67ec5-bea9-4251-a58d-cfefd75294fd'}, {dock_array: [{dock_id: '21f9a158-5953-48fc-a4f1-a9af2bf4d27d'}]}, {upsert: true}, (err, doc) => {});
 
 
 app.post('/genesis_post', (req, res) => {
@@ -2214,6 +2216,26 @@ io.on('connection', socket => {
                 req_vulture_array_status_exec(req_vulture_array_status_payload, adv_tele_snapshot);
             });
         }
+    });
+
+    socket.on('req_relay_station_array', req_relay_station_array_payload => {
+        get_snapshot_from_path(`aprvd_tids/${req_relay_station_array_payload.ath}`).then(snapshot => {
+            if(snapshot != null){
+                let relay_station_array = [];
+                for(let ix = 0; ix < req_relay_station_array_payload.dock_array.length; ix++){
+                    for(let rs_array_ix = 0; rs_array_ix < req_relay_station_array_payload.dock_array[ix].relay_station_array.length; rs_array_ix++){
+                        let relay_station_ref = req_relay_station_array_payload.dock_array[ix].relay_station_array[rs_array_ix];
+
+                        RELAY_STATION_SCH.findOne({relay_station_id: relay_station_ref.relay_station_id}).exec().then(relay_station_obj => {
+                            if(relay_station_obj != null){
+                                relay_station_array.push(relay_station_obj);
+                                io.to(socket.id).emit('relay_station_array_res', {relay_station_array: relay_station_array});
+                            }
+                        });
+                    }
+                }
+            }
+        });
     });
 
     socket.on('req_dock_array', req_dock_array_payload => {

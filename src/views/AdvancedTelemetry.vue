@@ -6,6 +6,7 @@ import LoginRequestOverlay from "@/components/LoginRequestOverlay.vue";
 import * as socket_l from "socket.io-client";
 import Overview from "@/components/TheAdvancedTelemetryOverview.vue";
 import VultureLogo from "@/components/VultureLogo.vue";
+import UserDropdownMenu from "@/components/UserDropdownMenu.vue";
 </script>
 
 <script>
@@ -110,6 +111,7 @@ export default {
 <template>
   <Background />
   <VultureLogo id="vulture_logo" />
+  <UserDropdownMenu :username="current_user_un"/>
   <Label id="adv_tele_l" v-text="'\\\\Advanced Telemetry'" color="#FFF"></Label>
   <LoginRequestOverlay
     :isVisible="login_req_details_obj.isVisible"

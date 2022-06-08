@@ -11,34 +11,34 @@ document.title = "Vulture//MFA";
 </script>
 
 <script>
-
 function MFA_TOTP_fetch_handle(e, token, backup_code, this_ref) {
-  fetch("/MFA_TOTP_post", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      token: token,
-      backup_code: backup_code,
-    }),
-  }).then((res) => {
-    res.json().then((data) => {
-      if (!data.response) {
-        this_ref.action_status_color = "FF006B";
-        setTimeout(() => {
-          this_ref.action_status_color = "0500F0";
-          e.target.value = "";
-        }, 500);
-      } else {
-        setTimeout(() => {
-          this_ref.action_status_color = "00FFF0";
-          // localStorage.setItem('vulture_array_status', JSON.stringify(data.vulture_array_status))
-          window.location.pathname = data.target_path;
-        }, 500);
-      }
+  if (token.length > 5) {
+    fetch("/MFA_TOTP_post", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: token,
+        backup_code: backup_code,
+      }),
+    }).then((res) => {
+      res.json().then((data) => {
+        if (!data.response) {
+          this_ref.action_status_color = "FF006B";
+          setTimeout(() => {
+            this_ref.action_status_color = "0500F0";
+            e.target.value = "";
+          }, 500);
+        } else {
+          setTimeout(() => {
+            this_ref.action_status_color = "00FFF0";
+            window.location.pathname = data.target_path;
+          }, 500);
+        }
+      });
     });
-  });
+  }
 }
 let root = document.documentElement;
 
@@ -55,6 +55,9 @@ export default {
     };
   },
   methods: {
+    onSubmit(e) {
+      e.preventDefault();
+    },
     onResize() {
       if (root.clientHeight < 900 && root.clientWidth < 600) {
         if (root.clientHeight < 550) {
@@ -186,7 +189,12 @@ export default {
     :style="'height: ' + dynamic_status_indicator_height"
   ></ActionStatus>
 
-  <form id="MFA_TOTP_form" action="/MFA_TOTP_post" method="POST">
+  <form
+    id="MFA_TOTP_form"
+    @submit="onSubmit"
+    action="/MFA_TOTP_post"
+    method="POST"
+  >
     <MfaTotpInput
       autofocus
       id="TOTP_input"

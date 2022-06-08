@@ -5,6 +5,7 @@ import OverviewButton from "@/components/AT_OverviewButton.vue";
 import BaseMenuButton from "@/components/BaseMenuButton.vue";
 import Label from "@/components/Label.vue";
 import VultureStatus from "@/components/AT_VultureStatus.vue";
+import DockStatus from "@/components/AT_DockStatus.vue";
 import { computed } from "@vue/runtime-core";
 </script>
 
@@ -25,6 +26,7 @@ export default {
     return {
       vulture_array_status: "",
       dock_array: [],
+      relay_station_array: "",
       selected_dock_obj: "",
       docked_vultures_array: [],
       selected_vulture_obj: { vn: "", vid: "" },
@@ -32,6 +34,9 @@ export default {
     };
   },
   methods: {
+    req_relay_station_array_handler(args) {
+      console.log(args.selected_dock_obj);
+    },
     redirect(path) {
       window.location.pathname = path;
     },
@@ -109,6 +114,18 @@ export default {
     });
     this.socket_ref.on("dock_array_res", (res) => {
       this.dock_array = res.dock_array;
+
+      ///-- relay station array management --///
+      this.socket_ref.emit("req_relay_station_array", {
+        origin: "adv_tele",
+        ath: getCookie("adv_tele_sio_ath"),
+        acid: this.current_user_acid,
+        dock_array: res.dock_array,
+      });
+
+      this.socket_ref.on('relay_station_array_res', res => {
+        this.relay_station_array = res.relay_station_array;
+      });
     });
     //[][][][][]
   },
@@ -173,10 +190,17 @@ export default {
     :vulture_array_status="vulture_array_status"
     :selected_vulture_obj="selected_vulture_obj"
   ></VultureStatus>
+  <DockStatus
+    :selected_dock_obj="selected_dock_obj"
+    :dock_connection_status="true"
+    :relay_station_array="relay_station_array"
+  >
+  </DockStatus>
   <div id="menu_container">
     <div id="menu_ln_container">
       <div id="menu_ln_0" class="ln ln_v"></div>
-      <div id="menu_ln_1_2"></div>
+      <div id="menu_ln_1" class="ln ln_v"></div>
+      <div id="menu_ln_2" class="ln ln_h"></div>
       <div id="menu_ln_3" class="ln ln_h"></div>
     </div>
     <BaseMenuButton v-text="'Command'" @click="redirect('/')" id="cmd_btn" />
@@ -193,14 +217,15 @@ export default {
   left: 1.041666667%;
   width: 21.666666667%;
 }
-#menu_ln_1_2 {
-  position: absolute;
-  top: calc(95.092592593% - 0.24%);
-  left: 23.697916667%;
-  width: 1.0416666666667vw;
-  height: 1.0416666666667vw;
-  border-right: solid 1px #2c2c2c;
-  border-bottom: solid 1px #2c2c2c;
+#menu_ln_1 {
+  top: 95.185185185%;
+  left: 24.791666667%;
+  height: 1.851851852%;
+}
+#menu_ln_2 {
+  top: 96.944444444%;
+  left: 23.723958333%;
+  width: 2.0833333333333vw;
 }
 #menu_ln_0 {
   top: 84.351851852%;

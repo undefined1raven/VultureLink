@@ -7,7 +7,9 @@ const dock_atlas = new Schema({
     dock_name: {type: String, required: true},
     vid_array: {type: Array, required: true},
     payload_array: {type: Array, required: true},
+    relay_station_array: {type: Array, required: true},
     user_access_array: {type: Array, required: true},
+    activity_logs: {type: Array, required: true},
 }, {timestamps: true});
 
 const dock_model = mongoose.model('dock_atlas', dock_atlas);

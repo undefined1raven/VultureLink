@@ -76,7 +76,7 @@ export default {
           v-text="'Connection Status'"
           color="#FFF"
           class="vulture_x_l"
-        ></Label>
+        ></Label> 
         <Label
           id="vulture_connection_status_actual"
           v-text="vulture_connection_status_parser().text"
@@ -160,6 +160,7 @@ export default {
 #vulture_mounted_payloads_container {
   top: 53.281853282%;
   height: 46.332046332%;
+  border: none;
 }
 #vulture_current_status_container {
   top: 35.521235521%;

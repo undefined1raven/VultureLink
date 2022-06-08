@@ -146,7 +146,7 @@ export default {
 #vulture_selector_ln_5 {
   top: 42.407407407%;
   left: 23.75%;
-  width: 1.041666667%;
+  width: 2.0833333333333vw;
 }
 #vulture_selector_ln_6 {
   top: 42.407407407%;

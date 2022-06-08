@@ -95,20 +95,6 @@ export default {
         <path d="M0 0H25L13.2353 11.8056L0 25V0Z" :fill="color" />
       </svg>
     </Transition>
-    <div :style="'border-color: ' + color" class="dock_menu_btn_container">
-      <div
-        :style="color_style_parser(color)"
-        class="menu_btn_dot dot_0"
-      ></div>
-      <div
-        :style="color_style_parser(color)"
-        class="menu_btn_dot dot_1"
-      ></div>
-      <div
-        :style="color_style_parser(color)"
-        class="menu_btn_dot dot_2"
-      ></div>
-    </div>
     <div class="dock_id_l">{{ dock_name }}</div>
     <DockDeco class="dock_deco_position" :color="color" />
     <div
@@ -162,30 +148,6 @@ div {
   width: 100%;
   height: 100%;
   z-index: 3;
-}
-.dock_menu_btn_container {
-  position: absolute;
-  top: 3.571428571%;
-  left: 80.142857143%;
-  width: 1.0416666666667vw;
-  height: 1.0416666666667vw;
-  border: solid 1px #515151;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.dot_0 {
-  left: 25%;
-}
-.dot_2 {
-  left: 65%;
-}
-.menu_btn_dot {
-  position: absolute;
-  width: 0.10416666666667vw;
-  height: 0.10416666666667vw;
-  background-color: #515151;
-  transition: background-color linear 0.1s, border linear 0.1s;
 }
 .dock_deco_position {
   top: 52.142857143%;
