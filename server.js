@@ -866,7 +866,7 @@ app.post('/opsec_to_adv_tele', (req, res) => {
 // });
 // dock_model.save();
 
-// DOCK_SCH.findOneAndUpdate({dock_id: '536413de-9134-4c61-a859-1da3a12478f7'}, {relay_station_array: [{relay_station_id: '21f9a158-5953-48fc-a4f1-a9af2bf4d27d'}, {relay_station_id: '536413de-9134-4c61-a859-1da3a12478f7'}]}, {upsert: true}, (err, doc) => {});
+DOCK_SCH.findOneAndUpdate({dock_id: '21f9a158-5953-48fc-a4f1-a9af2bf4d27d'}, {relay_station_array: [{relay_station_id: '923642c2-e98f-4e3b-92cd-4b8689561164'}, {relay_station_id: '536413de-9134-4c61-a859-1da3a12478f7'}]}, {upsert: true}, (err, doc) => {});
 // RELAY_STATION_SCH.findOneAndUpdate({relay_station_id: 'e2b67ec5-bea9-4251-a58d-cfefd75294fd'}, {dock_array: [{dock_id: '21f9a158-5953-48fc-a4f1-a9af2bf4d27d'}]}, {upsert: true}, (err, doc) => {});
 
 

@@ -8,12 +8,14 @@ export default {
 </script>
 
 <template>
-<svg class="relay_station_deco" width="30" height="27" viewBox="0 0 30 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect shape-rendering="crispEdges" y="15" width="29" height="1.4" :fill="color"/>
-    <path shape-rendering="crispEdges" d="M18.0001 25.6065L28.5 15L29.0001 15.9999L18.7072 26.3136L18.0001 25.6065Z" :fill="color"/>
-    <rect shape-rendering="crispEdges" x="29.2605" y="11.3136" width="29" height="1.4" transform="rotate(-180 29.2605 11.3136)" :fill="color"/>
-    <path shape-rendering="crispEdges" d="M11.2604 0.707092L0.760498 11.3136L0.260437 10.3137L10.5533 -1.45234e-05L11.2604 0.707092Z" :fill="color"/>
+<svg class="relay_station_deco" width="35" height="32" viewBox="0 0 35 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect shape-rendering="geometricPrecision" y="18.5" width="34" height="1.5" fill="#00FFF0"/>
+    <path shape-rendering="geometricPrecision" d="M20 29.9376L32.5991 19.3657L34 20L33.5633 20.5147L20.9642 31.0867L20 29.9376Z" fill="#00FFF0"/>
+    <rect shape-rendering="geometricPrecision" x="34.073" y="12.5867" width="34" height="1.5" transform="rotate(-180 34.073 12.5867)" fill="#00FFF0"/>
+    <path shape-rendering="geometricPrecision" d="M14.073 1.14905L1.47385 11.721L0.0729974 11.0867L0.509667 10.5719L13.1088 -1.88053e-05L14.073 1.14905Z" fill="#00FFF0"/>
 </svg>
+
+
 
 </template>
 
