@@ -1,6 +1,7 @@
 <script setup>
 import Label from "@/components/Label.vue";
-import RelayStationsList from "@/components/RelayStationsList.vue";
+import RelayStationList from "@/components/RelayStationList.vue";
+import PayloadList from "@/components/PayloadList.vue";
 </script>
 
 <script>
@@ -57,10 +58,19 @@ export default {
           v-text="'Relay Stations Connected To'"
           color="#FFF"
         ></Label>
-        <RelayStationsList
+        <RelayStationList
           :relay_station_array="relay_station_array"
           :selected_dock_obj="selected_dock_obj"
-        ></RelayStationsList>
+        ></RelayStationList>
+      </div>
+      <div id="payload_list_container" class="data_container">
+        <Label
+          id="dock_payload_list_l"
+          color="#FFF"
+          class="dock_x_l"
+          v-text="'Available Payloads'"
+        ></Label>
+        <PayloadList :payload_array="selected_dock_obj.payload_array"></PayloadList>
       </div>
     </div>
     <div class="dock_status_ln_container">
@@ -79,6 +89,13 @@ export default {
   </div>
 </template>
 <style scoped>
+#dock_payload_list_l{
+  top: 4.035874439%;
+}
+#payload_list_container{
+  top: 61.904761905%;
+  height: 37.925170068%;
+}
 #dock_relay_station_list_l {
   top: 3.964757709%;
 }

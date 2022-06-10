@@ -34,9 +34,6 @@ export default {
     };
   },
   methods: {
-    req_relay_station_array_handler(args) {
-      console.log(args.selected_dock_obj);
-    },
     redirect(path) {
       window.location.pathname = path;
     },

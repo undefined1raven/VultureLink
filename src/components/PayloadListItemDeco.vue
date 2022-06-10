@@ -1,0 +1,18 @@
+
+
+<template>
+<svg class="payload_deco" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0.707107" y="17.6777" width="24" height="24" transform="rotate(-45 0.707107 17.6777)" stroke="#6100FF"/>
+    <circle cx="17.7" cy="17.6777" r="4.5" stroke="#6100FF"/>
+    <rect x="17.2" y="21.6777" width="1" height="13" fill="#6100FF"/>
+    <rect x="17.2" y="0.677673" width="1" height="13" fill="#6100FF"/>
+</svg>
+
+</template>
+<style scoped>
+.payload_deco{
+    position: absolute;
+    width: 10.947368421%;
+    height: 86.243902439%;
+}
+</style>
