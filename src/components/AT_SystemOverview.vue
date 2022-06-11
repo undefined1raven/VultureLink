@@ -3,8 +3,30 @@
 import OverviewButton from "@/components/AT_OverviewButton.vue";
 import Label from "@/components/Label.vue";
 </script>
+
+<script>
+export default {
+  props: {
+    vulture_connection_status: "",
+    vulture_hardware_status_obj: "",
+  },
+  methods: {
+    system_color_parser(sys_id) {
+      if (!this.vulture_connection_status) {
+        return "#0400D4";
+      } else {
+        if (this.vulture_hardware_status_obj[sys_id].overall_status) {
+          return "#00FFF0";
+        } else {
+          return "#FF006B";
+        }
+      }
+    },
+  },
+};
+</script>
 <template>
-    <div id="system_overview_ln_container">
+  <div id="system_overview_ln_container">
     <div id="system_menu_ln_0" class="ln ln_h"></div>
     <div id="system_menu_ln_1" class="ln ln_h"></div>
   </div>
@@ -13,42 +35,42 @@ import Label from "@/components/Label.vue";
     <OverviewButton
       id="sonar_array_overview_btn"
       system_label="SONAR ARRAY"
-      stroke="#00FFF0"
+      :stroke="system_color_parser('sonar_array')"
     ></OverviewButton>
     <OverviewButton
       id="power_overview_btn"
       system_label="POWER"
-      stroke="#00FFF0"
+      :stroke="'#0400D4'"
     ></OverviewButton>
     <OverviewButton
       id="propulsion_overview_btn"
       system_label="PROPULSION"
-      stroke="#00FFF0"
+      :stroke="'#0400D4'"
     ></OverviewButton>
     <OverviewButton
       id="dynamics_overview_btn"
       system_label="DYNAMICS"
-      stroke="#00FFF0"
+      :stroke="system_color_parser('dynamics')"
     ></OverviewButton>
     <OverviewButton
       id="optical_array_overview_btn"
       system_label="OPTICAL ARRAY"
-      stroke="#00FFF0"
+      :stroke="'#0400D4'"
     ></OverviewButton>
     <OverviewButton
       id="autonomy_overview_btn"
       system_label="AUTONOMY"
-      stroke="#00FFF0"
+      :stroke="'#0400D4'"
     ></OverviewButton>
     <OverviewButton
       id="nav_overview_btn"
       system_label="NAVIGATION"
-      stroke="#00FFF0"
+      :stroke="system_color_parser('navigation')"
     ></OverviewButton>
     <OverviewButton
       id="network_overview_btn"
       system_label="NETWORK"
-      stroke="#00FFF0"
+      :stroke="'#0400D4'"
     ></OverviewButton>
   </div>
 </template>

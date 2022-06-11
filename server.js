@@ -576,7 +576,11 @@ io.on('connection', function (socket_l) {
         omega_board_last_unix = Date.now();
     });//sets last unix for the Omega Hardware Interface Board
 
-    socket_l.on('sensor_array_hardware_cs', payload => {
+    socket_l.on('hardware_status', payload => {
+        io.to(`${payload.vid}`).emit('hardware_status', payload.telemetry);
+    });
+
+    socket_l.on('sensor_array_hardware_cs', payload => {//legacy
         io.to(`${payload.vid}`).emit('sensor_array_hardware_cs_server_relay', payload.telemetry);
     });//Origin Vulture | Hardware status for [IMU, axdl, sonar_1, sonar_2, sonar_3, sonar_4, sonar_5, GPS, Barometer] | Relayed to: Advanced_Telemetry F/E, Command
 
@@ -2585,7 +2589,7 @@ io.on('connection', socket => {
         else {
             cic_active_status = true;
         }
-        socket.emit('cic_active_status_s_relay', cic_active_status);
+        // socket.emit('cic_active_status_s_relay', cic_active_status);
     }, 250);//Checks connection between: this ⇄ Command | Emits results to: Advanced_Telemetry F/E
 
 

@@ -6,7 +6,6 @@ import Label from "@/components/Label.vue";
 import VultureStatus from "@/components/AT_VultureStatus.vue";
 import DockStatus from "@/components/AT_DockStatus.vue";
 import SystemOverview from "@/components/AT_SystemOverview.vue";
-import { computed } from "@vue/runtime-core";
 </script>
 
 <script>
@@ -21,6 +20,7 @@ export default {
     socket_ref: "",
     current_user_acid: "",
     vulture_connection_status: "",
+    vulture_hardware_status_obj: "",
   },
   data() {
     return {
@@ -131,7 +131,7 @@ export default {
 </script>
 
 <template>
-  <SystemOverview></SystemOverview>
+  <SystemOverview :vulture_connection_status="vulture_connection_status" :vulture_hardware_status_obj="vulture_hardware_status_obj"></SystemOverview>
   <VultureSelector
     @new_target_vid_sig="new_target_vid_sig_handler"
     :id="'vulture_selector_list'"

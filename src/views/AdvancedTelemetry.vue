@@ -44,6 +44,7 @@ export default {
         signal_emit_last_unix: "",
         latency: "",
       },
+      vulture_hardware_status_obj: "",
     };
   },
   methods: {
@@ -76,6 +77,11 @@ export default {
 
       socket.on("sonar_telemetry_pkg_rebound", (payload) => {
         this.sonar_telemetry_obj = payload;
+      });
+
+      ///-- Vulture Hardware Status Management --///
+      socket.on("hardware_status", (hardware_status_payload) => {
+        this.vulture_hardware_status_obj = hardware_status_payload;
       });
 
       ///-- Selected Vulture Connection Status Management --///
@@ -111,7 +117,7 @@ export default {
 <template>
   <Background />
   <VultureLogo id="vulture_logo" />
-  <UserDropdownMenu :username="current_user_un"/>
+  <UserDropdownMenu :username="current_user_un" />
   <Label id="adv_tele_l" v-text="'\\\\Advanced Telemetry'" color="#FFF"></Label>
   <LoginRequestOverlay
     :isVisible="login_req_details_obj.isVisible"
@@ -129,6 +135,7 @@ export default {
     :socket_ref="socket_ref"
     :current_user_acid="`${getCookie('acid')}`"
     :vulture_connection_status="vulture_connection.status"
+    :vulture_hardware_status_obj="vulture_hardware_status_obj"
     @new_selected_vulture_vid="new_selected_vulture_vid_handler"
   ></Overview>
 </template>
