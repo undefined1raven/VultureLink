@@ -612,10 +612,6 @@ io.on('connection', function (socket_l) {
         io.emit('be_rth_status_rqst');
     });
 
-    setInterval(function () {
-        socket_l.emit('input_pkg_local_relay_emitter', g_joystick_input_pkg);
-    }, 50);
-
 });
 //----Global Relay ⇄ Vulture Coms----//
 
@@ -2554,7 +2550,7 @@ io.on('connection', socket => {
         else {
             fwd_video_broadcaster_cs = true;
         }
-        io.emit('fwd_video_broadcaster_s_relay', fwd_video_broadcaster_cs);
+        // io.emit('fwd_video_broadcaster_s_relay', fwd_video_broadcaster_cs);
     }, 250);//Checks connection between: this ⇄ fwd_cam_broadcaster | Emits results to: Advanced_Telemetry F/E
 
 
@@ -2569,7 +2565,7 @@ io.on('connection', socket => {
         else {
             gnd_video_broadcaster_cs = true;
         }
-        io.emit('gnd_video_broadcaster_s_relay', gnd_video_broadcaster_cs);
+        // io.emit('gnd_video_broadcaster_s_relay', gnd_video_broadcaster_cs);
     }, 250);//Checks connection between: this ⇄ gnd_cam_broadcaster | Emits results to: Advanced_Telemetry F/E
 
 
@@ -2596,10 +2592,10 @@ io.on('connection', socket => {
     ///this ⇄ Vulture [Omega Hardware Interface Board]
     setInterval(() => {
         if (Math.abs(omega_board_last_unix - Date.now()) > 1000) {
-            socket.emit('omega_board_hs', false);
+            // socket.emit('omega_board_hs', false);
         }
         else {
-            socket.emit('omega_board_hs', true);
+            // socket.emit('omega_board_hs', true);
         }
     }, 100);//Emits Omega Board Hardware Status to: Advanced_Telemetry F/E
 
@@ -2641,11 +2637,6 @@ io.on('connection', socket => {
         g_joystick_input_pkg = j_in_pkg;
         socket.emit('input_pkg_server_relay', j_in_pkg);
     });
-
-
-    setInterval(() => {
-        io.emit('ct', Date.now());
-    }, 100);//this current unix emitter | Used by: Advanced_Telemetry F/E
 
 });
 //----Global Relay ⇄ F/E link----//
