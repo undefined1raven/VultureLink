@@ -87,7 +87,7 @@ export default {
       <div id="vulture_current_status_container" class="data_container">
         <Label
           id="vulture_current_status_l"
-          v-text="'Vulture Status'"
+          v-text="'Current Status'"
           color="#FFF"
           class="vulture_x_l"
         ></Label>

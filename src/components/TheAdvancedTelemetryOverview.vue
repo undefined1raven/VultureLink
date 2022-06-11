@@ -1,11 +1,11 @@
 <script setup>
 import VultureSelector from "@/components/VultureSelector.vue";
 import DockSelector from "@/components/DockSelector.vue";
-import OverviewButton from "@/components/AT_OverviewButton.vue";
 import BaseMenuButton from "@/components/BaseMenuButton.vue";
 import Label from "@/components/Label.vue";
 import VultureStatus from "@/components/AT_VultureStatus.vue";
 import DockStatus from "@/components/AT_DockStatus.vue";
+import SystemOverview from "@/components/AT_SystemOverview.vue";
 import { computed } from "@vue/runtime-core";
 </script>
 
@@ -27,7 +27,7 @@ export default {
       vulture_array_status: "",
       dock_array: [],
       relay_station_array: "",
-      selected_dock_obj: "",
+      selected_dock_obj: false,
       docked_vultures_array: [],
       selected_vulture_obj: { vn: "", vid: "" },
       vulture_array_received: false,
@@ -100,6 +100,7 @@ export default {
     this.socket_ref.on("vulture_array_status_res", (res) => {
       this.vulture_array_received = true;
       this.vulture_array_status = res.vulture_array_status;
+      this.dynamic_vulture_selector_array_gen();
     });
     //[][][][][]
 
@@ -120,7 +121,7 @@ export default {
         dock_array: res.dock_array,
       });
 
-      this.socket_ref.on('relay_station_array_res', res => {
+      this.socket_ref.on("relay_station_array_res", (res) => {
         this.relay_station_array = res.relay_station_array;
       });
     });
@@ -130,48 +131,7 @@ export default {
 </script>
 
 <template>
-  <div id="system_overview_container">
-    <OverviewButton
-      id="sonar_array_overview_btn"
-      system_label="SONAR ARRAY"
-      stroke="#00FFF0"
-    ></OverviewButton>
-    <OverviewButton
-      id="power_overview_btn"
-      system_label="POWER"
-      stroke="#00FFF0"
-    ></OverviewButton>
-    <OverviewButton
-      id="propulsion_overview_btn"
-      system_label="PROPULSION"
-      stroke="#00FFF0"
-    ></OverviewButton>
-    <OverviewButton
-      id="dynamics_overview_btn"
-      system_label="DYNAMICS"
-      stroke="#00FFF0"
-    ></OverviewButton>
-    <OverviewButton
-      id="optical_array_overview_btn"
-      system_label="OPTICAL ARRAY"
-      stroke="#00FFF0"
-    ></OverviewButton>
-    <OverviewButton
-      id="autonomy_overview_btn"
-      system_label="AUTONOMY"
-      stroke="#00FFF0"
-    ></OverviewButton>
-    <OverviewButton
-      id="nav_overview_btn"
-      system_label="NAVIGATION"
-      stroke="#00FFF0"
-    ></OverviewButton>
-    <OverviewButton
-      id="network_overview_btn"
-      system_label="NETWORK"
-      stroke="#00FFF0"
-    ></OverviewButton>
-  </div>
+  <SystemOverview></SystemOverview>
   <VultureSelector
     @new_target_vid_sig="new_target_vid_sig_handler"
     :id="'vulture_selector_list'"
@@ -251,38 +211,5 @@ export default {
   top: -4.820627803%;
   left: 0;
   font-size: 1.2vw;
-}
-#system_overview_container {
-  position: absolute;
-  top: 12.777777778%;
-  left: 25.989583333%;
-  width: 73.90625%;
-  height: 82.592592593%;
-}
-#sonar_array_overview_btn,
-#nav_overview_btn,
-#network_overview_btn,
-#optical_array_overview_btn {
-  top: 6.502242152%;
-  left: 68.217054264%;
-}
-#dynamics_overview_btn,
-#power_overview_btn,
-#autonomy_overview_btn,
-#propulsion_overview_btn {
-  top: 6.502242152%;
-  left: calc(32.769556025% + 10%);
-}
-#nav_overview_btn,
-#power_overview_btn {
-  top: calc(6.502242152% + (17.040358745% * 1));
-}
-#network_overview_btn,
-#propulsion_overview_btn {
-  top: calc(6.502242152% + (17.040358745% * 2));
-}
-#optical_array_overview_btn,
-#autonomy_overview_btn {
-  top: calc(6.502242152% + (17.040358745% * 3));
 }
 </style>

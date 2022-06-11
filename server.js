@@ -22,7 +22,6 @@ const useragent = require('express-useragent');
 const cmp = require('compression');
 const flash = require('express-flash');
 const session = require('cookie-session');
-const passport = require('passport');
 const mongoose = require('mongoose');
 const uuid = require('uuid');
 const UAC = require('./models/udata.js');
@@ -31,7 +30,6 @@ const VULTURE_SCH = require('./models/vulture_model.js');
 const DOCK_SCH = require('./models/dock_model.js');
 const RELAY_STATION_SCH = require('./models/relay_station_model.js');
 const fs = require('fs');
-const strategy = require('passport-local').Strategy;
 const crypto = require('crypto');
 const forge = require('node-forge');
 const { getMessaging } = require("firebase/messaging");
@@ -781,8 +779,10 @@ function successful_auth_post(req, res, user, redirect) {
     var at_expiry_date = new Date();
     at_expiry_date.setHours(at_expiry_date.getHours() + 6);
 
+    console.log(req.body.user_identifier)
     if (process.env.NODE_ENV === 'production') {
         add_activity_log_tdb(req, ip, 'Advanced Telemetry login', req.body.user_identifier);
+        // res.cookie('eor', req.body.user_identifier, { httpOnly: false, secure: true });
         res.cookie('at', { tac: token, tid: tid, exp: at_expiry_date }, { httpOnly: true, secure: true, expires: at_expiry_date });
         res.cookie('adv_tele_sio_ath', tid, { secure: true });
         res.cookie('wid', 'advanced_telemetry', { httpOnly: true, secure: true });
@@ -790,6 +790,7 @@ function successful_auth_post(req, res, user, redirect) {
     }
     else {
         // add_activity_log_tdb(req, ip, 'Advanced Telemetry login', req.body.user_identifier);
+        // res.cookie('eor', req.body.user_identifier, { httpOnly: false, secure: false });
         res.cookie('at', { tac: token, tid: tid, exp: at_expiry_date }, { httpOnly: true, expires: at_expiry_date });
         res.cookie('adv_tele_sio_ath', tid);
         res.cookie('wid', 'advanced_telemetry', { httpOnly: true });
@@ -817,9 +818,16 @@ app.post('/auth_post', json_parser, (req, res) => {
                     else {
                         successful_auth_post(req, res, user, false);
 
+                        if(process.env.NODE_ENV === 'production'){
+                            res.cookie('eor', req.body.user_identifier, { httpOnly: false, secure: true });
+                        }
+                        else{
+                            res.cookie('eor', req.body.user_identifier, { httpOnly: false, secure: false });
+                        }
+
                         setTimeout(() => {
                             res.json({ result: true, redirect_path: '/advanced_telemetry' });
-                        }, 50);
+                        }, 100);
                     }
                 }
                 else {
@@ -1347,39 +1355,42 @@ app.post('/MFA_mobile_cr', (req, res) => {
     });
 });
 
-function redirect_id_assessment_fn(req, res, user) {
+function retrieve_vulture_array_status(user, vow_array) {
     ///-- Retrieve Vulture Array Status --///
-    let vow_status = [];
-    let delta = Date.now();
+    vow_array = [];
     get(ref(db, 'active_vultures/')).then(active_vultures_snapshot => {
         let vow = user.vow;
         const data = active_vultures_snapshot.val();
         if (data != null) {
             for (let ix = 0; ix < vow.length; ix++) {
                 if (data[vow[ix].vid] == undefined) {
-                    vow_status.push({ vid: vow[ix].vid, vn: vow[ix].vn, status: 'ready' });
+                    vow_array.push({ vid: vow[ix].vid, vn: vow[ix].vn, status: 'ready' });
                 }
                 else {
-                    vow_status.push({ vid: vow[ix].vid, vn: vow[ix].vn, status: 'active' });
+                    vow_array.push({ vid: vow[ix].vid, vn: vow[ix].vn, status: 'active' });
                 }
             }
         }
         else {
             for (let ix = 0; ix < vow.length; ix++) {
-                vow_status[ix] = { vid: vow[ix].vid, vn: vow[ix].vn, status: 'ready' };
+                vow_array[ix] = { vid: vow[ix].vid, vn: vow[ix].vn, status: 'ready' };
             }
         }
     });
     //[][][][][][][][][]
+}
+
+function redirect_id_assessment_fn(req, res, user) {
+    let vow_status = [];
+    retrieve_vulture_array_status(user, vow_status);
 
     if (req.cookies.redirect_id == 0) {
         res.clearCookie('redirect_id');
         res.clearCookie('frstp_aprvd_tid');
         successful_auth_post(req, res, user, false);
-        console.log(Math.abs(Date.now() - delta));
 
         setTimeout(() => {
-            res.json({ response: true, target_path: '/advanced_telemetry', vulture_array_status: vow_status })
+            res.json({ response: true, target_path: '/advanced_telemetry' })
         }, 100);
     }
     if (req.cookies.redirect_id == 1) {
@@ -2176,7 +2187,6 @@ io.on('connection', socket => {
                         if (r.length > 0) {
                             let vow = r[0].vow;
                             let vow_status = [];
-                            let delta = Date.now()
                             const data = active_vultures_snapshot.val();
                             if (data != null) {
                                 for (let ix = 0; ix < vow.length; ix++) {
@@ -2187,14 +2197,12 @@ io.on('connection', socket => {
                                         vow_status.push({ vid: vow[ix].vid, vn: vow[ix].vn, status: 'active' });
                                     }
                                 }
-                                console.log(Math.abs(Date.now() - delta))
                                 io.to(socket.id).emit('vulture_array_status_res', { vulture_array_status: vow_status });
                             }
                             else {
                                 for (let ix = 0; ix < vow.length; ix++) {
                                     vow_status[ix] = { vid: vow[ix].vid, vn: vow[ix].vn, status: 'ready' };
                                 }
-                                console.log(Math.abs(Date.now() - delta))
                                 io.to(socket.id).emit('vulture_array_status_res', { vulture_array_status: vow_status });
                             }
                         }
@@ -2221,16 +2229,16 @@ io.on('connection', socket => {
 
     socket.on('req_relay_station_array', req_relay_station_array_payload => {
         get_snapshot_from_path(`aprvd_tids/${req_relay_station_array_payload.ath}`).then(snapshot => {
-            if(snapshot != null){
+            if (snapshot != null) {
                 let relay_station_array = [];
-                for(let ix = 0; ix < req_relay_station_array_payload.dock_array.length; ix++){
-                    for(let rs_array_ix = 0; rs_array_ix < req_relay_station_array_payload.dock_array[ix].relay_station_array.length; rs_array_ix++){
+                for (let ix = 0; ix < req_relay_station_array_payload.dock_array.length; ix++) {
+                    for (let rs_array_ix = 0; rs_array_ix < req_relay_station_array_payload.dock_array[ix].relay_station_array.length; rs_array_ix++) {
                         let relay_station_ref = req_relay_station_array_payload.dock_array[ix].relay_station_array[rs_array_ix];
 
-                        RELAY_STATION_SCH.findOne({relay_station_id: relay_station_ref.relay_station_id}).exec().then(relay_station_obj => {
-                            if(relay_station_obj != null){
+                        RELAY_STATION_SCH.findOne({ relay_station_id: relay_station_ref.relay_station_id }).exec().then(relay_station_obj => {
+                            if (relay_station_obj != null) {
                                 relay_station_array.push(relay_station_obj);
-                                io.to(socket.id).emit('relay_station_array_res', {relay_station_array: relay_station_array});
+                                io.to(socket.id).emit('relay_station_array_res', { relay_station_array: relay_station_array });
                             }
                         });
                     }

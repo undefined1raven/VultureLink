@@ -66,8 +66,8 @@ export default {
 }
 .overview_button_container {
   position: absolute;
-  width: 29.774489077%;
-  height: 13.901345291%;
+  width: 41.380999021%;
+  height: 15.581599124%;
 }
 .path {
   transition: stroke linear 0.1s, fill linear 0.1s;
@@ -80,6 +80,6 @@ export default {
   transform: translate(-50%, -50%);
   font-family: "Titillium Web", sans-serif;
   color: #fff;
-  font-size: 1vw;
+  font-size: 0.9vw;
 }
 </style>

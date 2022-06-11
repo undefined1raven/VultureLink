@@ -2,6 +2,7 @@
 import Label from "@/components/Label.vue";
 import RelayStationList from "@/components/RelayStationList.vue";
 import PayloadList from "@/components/PayloadList.vue";
+import DockDecoDetailed from "@/components/DockDecoDetailed.vue";
 </script>
 
 <script>
@@ -29,6 +30,10 @@ export default {
 
 <template>
   <div id="dock_status_container">
+    <div v-if="selected_dock_obj == ''" class="no_dock_selected_container">
+        <Label id="no_dock_selected_l" color="#FFF" v-text="'Select a Dock to see its status'"></Label>
+        <DockDecoDetailed id="no_dock_selected_deco"></DockDecoDetailed>
+    </div>
     <div class="dock_status_data_container">
       <Label id="dock_status_l" color="#FFF" v-text="'Dock Status'"></Label>
       <div id="dock_id_container" class="data_container">
@@ -89,12 +94,32 @@ export default {
   </div>
 </template>
 <style scoped>
+#no_dock_selected_deco{
+  top: 43.707482993%;
+}
+#no_dock_selected_l{
+  top: 34.523809524%;
+  font-size: 1.05vw;
+}
+.no_dock_selected_container{
+  position: absolute;
+  top: 42.5%;
+  left: 24.791666667%;
+  width: 21.979166667%;
+  height: 54.444444444%;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, .95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 #dock_payload_list_l{
   top: 4.035874439%;
 }
 #payload_list_container{
   top: 61.904761905%;
   height: 37.925170068%;
+  border: none;
 }
 #dock_relay_station_list_l {
   top: 3.964757709%;
