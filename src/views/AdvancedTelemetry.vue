@@ -1,5 +1,6 @@
 <script setup>
 import Background from "@/components/BaseBackgroundImg.vue";
+import MobileBackground from "@/components/MobileBaseBackgroundImg.vue";
 import Label from "@/components/Label.vue";
 import DistanceIndicator from "@/components/AT_BaseDistanceIndi.vue";
 import LoginRequestOverlay from "@/components/LoginRequestOverlay.vue";
@@ -40,6 +41,7 @@ export default {
       selected_vulture_vid: "",
       vulture_status_array: "",
       isMobile: false,
+      isMobileMenuVisible: false,
       vulture_connection: {
         status: "",
         last_unix: "",
@@ -50,6 +52,9 @@ export default {
     };
   },
   methods: {
+    m_menu_onVisibilityChange_handler(m_menu_visibility_status){
+      this.isMobileMenuVisible = m_menu_visibility_status;
+    },
     update_isMobile() {
       // device detection
       if (
@@ -138,6 +143,7 @@ export default {
 
 <template>
   <Background />
+  <MobileBackground />
   <VultureLogo id="vulture_logo" />
   <UserDropdownMenu :username="current_user_un" />
   <Label id="adv_tele_l" v-text="'\\\\Advanced Telemetry'" color="#FFF"></Label>
@@ -153,14 +159,17 @@ export default {
     @visibility_status_update="visibility_status_update_handler"
   ></LoginRequestOverlay>
   <Overview
-    v-if="!login_req_details_obj.isVisible"
+    v-if="!login_req_details_obj.isVisible && !isMobileMenuVisible"
     :socket_ref="socket_ref"
     :current_user_acid="`${getCookie('acid')}`"
     :vulture_connection_status="vulture_connection.status"
     :vulture_hardware_status_obj="vulture_hardware_status_obj"
     @new_selected_vulture_vid="new_selected_vulture_vid_handler"
   ></Overview>
-  <MobileNav v-if="isMobile"></MobileNav>
+  <MobileNav
+    @m_menu_onVisibilityChange="m_menu_onVisibilityChange_handler"
+    v-if="isMobile"
+  ></MobileNav>
 </template>
 
 <style scoped>

@@ -3,6 +3,7 @@
 import Label from "@/components/Label.vue";
 import DockDeco from "@/components/DockDeco.vue";
 import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
+import VultureSystemsDeco from "@/components/VultureSystemsDeco.vue";
 </script>
 
 <script>
@@ -16,6 +17,7 @@ export default {
   methods: {
     menu_btn_onClick() {
       this.isMenuVisible = !this.isMenuVisible;
+      this.$emit("m_menu_onVisibilityChange", this.isMenuVisible);
       if (this.isMenuVisible) {
         this.menu_btn_l = "Back";
       } else {
@@ -40,7 +42,14 @@ export default {
         </div>
         <div id="vulture_status_btn_container" class="square_menu_btn">
           <Label class="square_menu_l" v-text="'Vulture Status'"></Label>
-          <VultureDetailedDeco id="vulture_deco" class="square_menu_deco"></VultureDetailedDeco>
+          <VultureDetailedDeco
+            id="vulture_deco"
+            class="square_menu_deco"
+          ></VultureDetailedDeco>
+        </div>
+        <div id="vulture_systems_btn" class="menu_btn">
+            <Label class="menu_l" v-text="'Vulture Systems'"></Label>
+            <VultureSystemsDeco id="vulture_systems_deco"></VultureSystemsDeco>
         </div>
       </div>
     </Transition>
@@ -53,15 +62,34 @@ export default {
   </div>
 </template>
 <style scoped>
+#vulture_systems_deco{
+    left: 58.064516129%;
+}
+#vulture_systems_btn{
+    top: 41.765704584%;
+}
+.menu_btn {
+  position: absolute;
+  width: 86.111111111%;
+  height: 9.337860781%;
+  border: solid 1px #0500ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 #dock_deco {
   height: 35.885714286%;
   width: 30%;
 }
-#vulture_deco{
-    top: 37.142857143%;
+#vulture_deco {
+  top: 37.142857143%;
 }
 .square_menu_deco {
   top: 41.178571429%;
+}
+.menu_l{
+  left: 3.225806452%;
+  font-size: 4.6vw;
 }
 .square_menu_l {
   top: 5.714285714%;
@@ -83,7 +111,7 @@ export default {
 #vulture_status_btn_container {
   left: 54.166666667%;
 }
-.square_menu_btn:hover {
+.square_menu_btn:hover, .menu_btn:hover {
   background-color: #000aff20;
 }
 
@@ -101,8 +129,10 @@ export default {
   left: 0;
   width: 99.9%;
   height: 92.03125%;
-  background-color: rgba(0, 0, 0, 0.95);
   z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 #main_menu_btn {
   top: 92.03125%;
