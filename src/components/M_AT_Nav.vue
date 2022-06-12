@@ -4,6 +4,8 @@ import Label from "@/components/Label.vue";
 import DockDeco from "@/components/DockDeco.vue";
 import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
 import VultureSystemsDeco from "@/components/VultureSystemsDeco.vue";
+import CommandDeco from "@/components/CommandDeco.vue";
+import SecurityDeco from "@/components/SecurityDeco.vue";
 </script>
 
 <script>
@@ -15,6 +17,9 @@ export default {
     };
   },
   methods: {
+    redirect(pathname) {
+        window.location.pathname = pathname;
+    },
     menu_btn_onClick() {
       this.isMenuVisible = !this.isMenuVisible;
       this.$emit("m_menu_onVisibilityChange", this.isMenuVisible);
@@ -48,8 +53,17 @@ export default {
           ></VultureDetailedDeco>
         </div>
         <div id="vulture_systems_btn" class="menu_btn">
-            <Label class="menu_l" v-text="'Vulture Systems'"></Label>
-            <VultureSystemsDeco id="vulture_systems_deco"></VultureSystemsDeco>
+          <Label class="menu_l" v-text="'Vulture Systems'"></Label>
+          <VultureSystemsDeco id="vulture_systems_deco"></VultureSystemsDeco>
+        </div>
+        <div class="ln ln_h" id="menu_ln_0"></div>
+        <div @click="redirect('/')" id="cmd_btn" class="menu_btn">
+          <Label class="menu_l" v-text="'Command'"></Label>
+          <CommandDeco id="cmd_deco"></CommandDeco>
+        </div>
+        <div @click="redirect('/security')" id="security_btn" class="menu_btn">
+          <Label class="menu_l" v-text="'Security'"></Label>
+          <SecurityDeco id="security_deco"></SecurityDeco>
         </div>
       </div>
     </Transition>
@@ -62,11 +76,38 @@ export default {
   </div>
 </template>
 <style scoped>
-#vulture_systems_deco{
-    left: 58.064516129%;
+#security_deco {
+  left: 81.290322581%;
 }
-#vulture_systems_btn{
-    top: 41.765704584%;
+#security_btn {
+  top: 77.758913413%;
+}
+#cmd_btn {
+  top: 63.327674024%;
+}
+#cmd_deco {
+  left: 73.170967742%;
+}
+.ln {
+  position: absolute;
+  background-color: #2c2c2c;
+}
+.ln_v {
+  width: 0.11vh;
+}
+.ln_h {
+  height: 0.11vh;
+}
+#menu_ln_0 {
+  top: 57.045840407%;
+  width: 86.111111111%;
+  background-color: #0500ff;
+}
+#vulture_systems_deco {
+  left: 58.064516129%;
+}
+#vulture_systems_btn {
+  top: 41.765704584%;
 }
 .menu_btn {
   position: absolute;
@@ -87,7 +128,7 @@ export default {
 .square_menu_deco {
   top: 41.178571429%;
 }
-.menu_l{
+.menu_l {
   left: 3.225806452%;
   font-size: 4.6vw;
 }
@@ -111,8 +152,10 @@ export default {
 #vulture_status_btn_container {
   left: 54.166666667%;
 }
-.square_menu_btn:hover, .menu_btn:hover {
-  background-color: #000aff20;
+.square_menu_btn:hover,
+.menu_btn:hover {
+  transition: background-color linear 0.1s;
+  background-color: #000aff40;
 }
 
 .menu_fading_t-enter-active,
