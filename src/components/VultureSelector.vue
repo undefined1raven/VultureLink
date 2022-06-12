@@ -10,6 +10,7 @@ export default {
   props: {
     vulture_array_status: "",
     id: "",
+    isMobile: ""
   },
   data() {
     return {
@@ -78,7 +79,7 @@ export default {
       v-text="'Active'"
       color="#00FFF0"
     ></Label>
-    <div id="vulture_selector_ln_container">
+    <div v-if="!isMobile" id="vulture_selector_ln_container">
       <div id="vulture_selector_ln_0" class="ln ln_h"></div>
       <div id="vulture_selector_ln_1" class="ln ln_h"></div>
       <div id="vulture_selector_ln_2" class="ln ln_v"></div>
@@ -208,5 +209,45 @@ export default {
 #vulture_selector_list::-webkit-scrollbar-track {
   /* Background */
   background: #00008300;
+}
+@media only screen and (max-width: 800px) {
+  #vulture_selector_l {
+    top: 51.25%;
+    left: 5.833333333%;
+    font-size: 5.6vw;
+  }
+  #vulture_selector_list{
+    top: 56.71875%;
+    left: 2.5%;
+    width: 95%;
+    height: 30%;
+  }
+  .vulture_selector_legend_x{
+    top: calc(85.3125% + 3.3%);
+    font-size: 1.84375vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #vulture_selector_legend_unavailable{
+    left: 8.888888889%;
+    width: 20.277777778%;
+  }
+  #vulture_selector_legend_fault{
+    left: 31.388888889%;
+    width: 33.055555556%;
+  }
+  #vulture_selector_legend_ready{
+    left: 66.666666667%;
+    width: 11.111111111%;
+  }
+  #vulture_selector_legend_active{
+    left: 80%;
+    width: 10.833333333%;
+  }
+  #vulture_selector_list::-webkit-scrollbar {
+  width: 0.3vh; /* Mostly for vertical scrollbars */
+  height: 0.3vh; /* Mostly for horizontal scrollbars */
+  }
 }
 </style>

@@ -246,17 +246,29 @@ export default {
 @media only screen and (max-width: 800px) {
   #vulture_status_l {
     top: 2.03125%;
-    font-size: 5vw;
+    font-size: 5.6vw;
     left: 5.833333333%;
   }
-  #m_vulture_current_status_ln_0{
+  #m_vulture_current_status_ln_0 {
     top: 8.59375%;
     left: 5.277777778%;
     width: 89.444444444%;
-    background-color: #1400FF;
+    background-color: #1400ff;
   }
-  #vulture_selector_l{
-    font-size: 4.7vw;
+  .vulture_status_data_container{
+    top: 8.75%;
+    left: 5.277777778%;
+    width: 89.722222222%;
+    height: 40.78125%;
+  }
+  .bay_l, .payload_status{
+    font-size: 4.5vw;
+  }
+  .vulture_x_l, .vulture_x_actual, .payload_l{
+    font-size: 5vw;
+  }
+  #vulture_mounted_payloads_container{
+    border-bottom: solid 1px #1400FF;
   }
 }
 </style>

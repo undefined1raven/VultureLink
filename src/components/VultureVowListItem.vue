@@ -151,4 +151,13 @@ div{
   width: 0.4784689%;
   background-color: #515151;
 }
+@media only screen and (max-width: 800px){
+  .vulture_id_l{
+    font-size: 5vw;
+  }
+  .vulture_selected_indi{
+  width: 4vw;
+  height: 4vw;
+}
+}
 </style>

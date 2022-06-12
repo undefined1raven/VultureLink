@@ -154,6 +154,7 @@ export default {
     @new_target_vid_sig="new_target_vid_sig_handler"
     :id="'vulture_selector_list'"
     :vulture_array_status="docked_vultures_array"
+    :isMobile="isMobile"
     v-if="section_visibility_assessor(1)"
   ></VultureSelector>
   <DockSelector
@@ -176,7 +177,7 @@ export default {
     v-if="section_visibility_assessor(0)"
   >
   </DockStatus>
-  <div id="menu_container">
+  <div v-if="!isMobile" id="menu_container">
     <div id="menu_ln_container">
       <div id="menu_ln_0" class="ln ln_v"></div>
       <div id="menu_ln_1" class="ln ln_v"></div>
@@ -184,17 +185,11 @@ export default {
       <div id="menu_ln_3" class="ln ln_h"></div>
     </div>
 
-    <BaseMenuButton
-      v-if="!isMobile"
-      v-text="'Command'"
-      @click="redirect('/')"
-      id="cmd_btn"
-    />
+    <BaseMenuButton v-text="'Command'" @click="redirect('/')" id="cmd_btn" />
     <BaseMenuButton
       v-text="'Security'"
       @click="redirect('/security')"
       id="security_btn"
-      v-if="!isMobile"
     />
   </div>
 </template>
