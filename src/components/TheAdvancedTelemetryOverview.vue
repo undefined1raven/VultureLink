@@ -21,6 +21,8 @@ export default {
     current_user_acid: "",
     vulture_connection_status: "",
     vulture_hardware_status_obj: "",
+    m_active_section_id: "",
+    isMobile: "",
   },
   data() {
     return {
@@ -34,6 +36,18 @@ export default {
     };
   },
   methods: {
+    section_visibility_assessor(section_id) {
+      //0 == dock status | 1 == vulture status | 2 == vulture systems
+      if (this.isMobile) {
+        if (this.m_active_section_id == section_id) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    },
     redirect(path) {
       window.location.pathname = path;
     },
@@ -131,26 +145,35 @@ export default {
 </script>
 
 <template>
-  <SystemOverview :vulture_connection_status="vulture_connection_status" :vulture_hardware_status_obj="vulture_hardware_status_obj"></SystemOverview>
+  <SystemOverview
+    :vulture_connection_status="vulture_connection_status"
+    :vulture_hardware_status_obj="vulture_hardware_status_obj"
+    v-if="section_visibility_assessor(2)"
+  ></SystemOverview>
   <VultureSelector
     @new_target_vid_sig="new_target_vid_sig_handler"
     :id="'vulture_selector_list'"
     :vulture_array_status="docked_vultures_array"
+    v-if="section_visibility_assessor(1)"
   ></VultureSelector>
   <DockSelector
     :vulture_array_status="vulture_array_status"
     :dock_array="dock_array"
     @new_target_dock_id_sig="onDockSelected"
+    v-if="section_visibility_assessor(0)"
   ></DockSelector>
   <VultureStatus
     :vulture_connection_status="vulture_connection_status"
     :vulture_array_status="vulture_array_status"
     :selected_vulture_obj="selected_vulture_obj"
+    :isMobile="isMobile"
+    v-if="section_visibility_assessor(1)"
   ></VultureStatus>
   <DockStatus
     :selected_dock_obj="selected_dock_obj"
     :dock_connection_status="true"
     :relay_station_array="relay_station_array"
+    v-if="section_visibility_assessor(0)"
   >
   </DockStatus>
   <div id="menu_container">
@@ -160,11 +183,18 @@ export default {
       <div id="menu_ln_2" class="ln ln_h"></div>
       <div id="menu_ln_3" class="ln ln_h"></div>
     </div>
-    <BaseMenuButton v-text="'Command'" @click="redirect('/')" id="cmd_btn" />
+
+    <BaseMenuButton
+      v-if="!isMobile"
+      v-text="'Command'"
+      @click="redirect('/')"
+      id="cmd_btn"
+    />
     <BaseMenuButton
       v-text="'Security'"
       @click="redirect('/security')"
       id="security_btn"
+      v-if="!isMobile"
     />
   </div>
 </template>

@@ -17,8 +17,26 @@ export default {
     };
   },
   methods: {
+    dockStatusButtonOnClick() {
+      this.$emit("MenuButtonOnClick", 0);
+      setTimeout(() => {
+        this.menu_btn_onClick();
+      }, 150);
+    },
+    vultureStatusButtonOnClick() {
+      this.$emit("MenuButtonOnClick", 1);
+      setTimeout(() => {
+        this.menu_btn_onClick();
+      }, 150);
+    },
+    vultureSystemsButtonOnClick() {
+      this.$emit("MenuButtonOnClick", 2);
+      setTimeout(() => {
+        this.menu_btn_onClick();
+      }, 150);
+    },
     redirect(pathname) {
-        window.location.pathname = pathname;
+      window.location.pathname = pathname;
     },
     menu_btn_onClick() {
       this.isMenuVisible = !this.isMenuVisible;
@@ -37,7 +55,11 @@ export default {
   <div class="mobile_nav_container">
     <Transition name="menu_fading_t">
       <div v-if="isMenuVisible" id="menu_container">
-        <div id="dock_status_btn_container" class="square_menu_btn">
+        <div
+          @click="dockStatusButtonOnClick"
+          id="dock_status_btn_container"
+          class="square_menu_btn"
+        >
           <Label class="square_menu_l" v-text="'Dock Status'"></Label>
           <DockDeco
             id="dock_deco"
@@ -45,14 +67,22 @@ export default {
             color="#0500FF"
           ></DockDeco>
         </div>
-        <div id="vulture_status_btn_container" class="square_menu_btn">
+        <div
+          @click="vultureStatusButtonOnClick"
+          id="vulture_status_btn_container"
+          class="square_menu_btn"
+        >
           <Label class="square_menu_l" v-text="'Vulture Status'"></Label>
           <VultureDetailedDeco
             id="vulture_deco"
             class="square_menu_deco"
           ></VultureDetailedDeco>
         </div>
-        <div id="vulture_systems_btn" class="menu_btn">
+        <div
+          @click="vultureSystemsButtonOnClick"
+          id="vulture_systems_btn"
+          class="menu_btn"
+        >
           <Label class="menu_l" v-text="'Vulture Systems'"></Label>
           <VultureSystemsDeco id="vulture_systems_deco"></VultureSystemsDeco>
         </div>

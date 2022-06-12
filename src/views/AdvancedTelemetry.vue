@@ -41,7 +41,10 @@ export default {
       selected_vulture_vid: "",
       vulture_status_array: "",
       isMobile: false,
-      isMobileMenuVisible: false,
+      mobile: {
+        isMenuVisible: false,
+        overview_active_section_id: 1, //0 == dock status | 1 == vulture status | 2 == vulture systems
+      },
       vulture_connection: {
         status: "",
         last_unix: "",
@@ -52,8 +55,12 @@ export default {
     };
   },
   methods: {
+    MenuButtonOnClickHandler(btn_id){
+      console.log(btn_id)
+      this.mobile.overview_active_section_id = btn_id;
+    },
     m_menu_onVisibilityChange_handler(m_menu_visibility_status){
-      this.isMobileMenuVisible = m_menu_visibility_status;
+      this.mobile.isMenuVisible = m_menu_visibility_status;
     },
     update_isMobile() {
       // device detection
@@ -159,15 +166,18 @@ export default {
     @visibility_status_update="visibility_status_update_handler"
   ></LoginRequestOverlay>
   <Overview
-    v-if="!login_req_details_obj.isVisible && !isMobileMenuVisible"
+    v-if="!login_req_details_obj.isVisible && !mobile.isMenuVisible"
     :socket_ref="socket_ref"
     :current_user_acid="`${getCookie('acid')}`"
     :vulture_connection_status="vulture_connection.status"
     :vulture_hardware_status_obj="vulture_hardware_status_obj"
+    :m_active_section_id="mobile.overview_active_section_id"
+    :isMobile="isMobile"
     @new_selected_vulture_vid="new_selected_vulture_vid_handler"
   ></Overview>
   <MobileNav
     @m_menu_onVisibilityChange="m_menu_onVisibilityChange_handler"
+    @MenuButtonOnClick="MenuButtonOnClickHandler"
     v-if="isMobile"
   ></MobileNav>
 </template>

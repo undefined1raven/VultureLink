@@ -10,6 +10,7 @@ export default {
     selected_vulture_obj: "",
     vulture_array_status: "",
     vulture_connection_status: "",
+    isMobile: "",
   },
   methods: {
     vulture_obj_validator() {
@@ -76,7 +77,7 @@ export default {
           v-text="'Connection Status'"
           color="#FFF"
           class="vulture_x_l"
-        ></Label> 
+        ></Label>
         <Label
           id="vulture_connection_status_actual"
           v-text="vulture_connection_status_parser().text"
@@ -110,27 +111,44 @@ export default {
           <Label class="payload_l" color="#7A7A7A" v-text="'EMPTY'"></Label>
           <Label class="payload_status" color="#7A7A7A" v-text="'--'"></Label>
         </div>
-        <div id="vulture_payload_1" class="payload_port_container" style="background-color: #00FFF020">
+        <div
+          id="vulture_payload_1"
+          class="payload_port_container"
+          style="background-color: #00fff020"
+        >
           <Label class="bay_l" color="#7A7A7A" v-text="'Bay 2'"></Label>
-          <Label class="payload_l" color="#FFF" v-text="'LIDAR Scanner'"></Label>
-          <Label class="payload_status" color="#00FFF0" v-text="'Ready'"></Label>
+          <Label
+            class="payload_l"
+            color="#FFF"
+            v-text="'LIDAR Scanner'"
+          ></Label>
+          <Label
+            class="payload_status"
+            color="#00FFF0"
+            v-text="'Ready'"
+          ></Label>
         </div>
       </div>
     </div>
-    <div id="vulture_current_status_ln_container">
+    <div v-if="!isMobile" id="vulture_current_status_ln_container">
       <div id="vulture_current_status_ln_0" class="ln ln_h"></div>
       <div id="vulture_current_status_ln_1" class="ln ln_h"></div>
       <div id="vulture_current_status_ln_2" class="ln ln_v"></div>
     </div>
+    <div v-if="isMobile == true" id="m_vulture_current_status_ln_container">
+      <div id="m_vulture_current_status_ln_0" class="ln ln_h"></div>
+      <div id="m_vulture_current_status_ln_1" class="ln ln_h"></div>
+      <div id="m_vulture_current_status_ln_2" class="ln ln_v"></div>
+    </div>
   </div>
 </template>
 <style scoped>
-.bay_l{
+.bay_l {
   left: 0;
   top: -62%;
-  font-size: .8vw;
+  font-size: 0.8vw;
 }
-#vulture_payload_1{
+#vulture_payload_1 {
   left: 53.86996904%;
 }
 #vulture_payload_0 {
@@ -224,5 +242,21 @@ export default {
 }
 .ln_h {
   height: 0.11vh;
+}
+@media only screen and (max-width: 800px) {
+  #vulture_status_l {
+    top: 2.03125%;
+    font-size: 5vw;
+    left: 5.833333333%;
+  }
+  #m_vulture_current_status_ln_0{
+    top: 8.59375%;
+    left: 5.277777778%;
+    width: 89.444444444%;
+    background-color: #1400FF;
+  }
+  #vulture_selector_l{
+    font-size: 4.7vw;
+  }
 }
 </style>
