@@ -199,6 +199,10 @@ div {
   .dock_id_l {
     font-size: 5vw;
   }
+  .dock_selection_indi{
+    width: 6.9444444444444vw;
+    height: 6.9444444444444vw;
+  }
   .dock_list_item_container{
     height: 38.888888888889vw;
     width: 38.888888888889vw;

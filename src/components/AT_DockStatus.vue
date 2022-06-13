@@ -238,10 +238,10 @@ export default {
 }
 @media only screen and (max-width: 800px) {
   .dock_status_data_container {
-    top: 8.75%;
+    top: 2.75%;
     left: 5.277777778%;
     width: 89.722222222%;
-    height: 84.21875%;
+    height: 90.21875%;
   }
   .dock_x_l, .dock_x_actual{  
     font-size: 5vw;

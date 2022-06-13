@@ -176,5 +176,8 @@ div {
   .empty_l{
     font-size: 5vw;
   }
+  .vulture_vow_list_item_container{
+    height: 8.634538153%;
+  }
 }
 </style>

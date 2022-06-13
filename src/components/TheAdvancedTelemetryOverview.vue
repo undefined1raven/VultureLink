@@ -37,11 +37,16 @@ export default {
     };
   },
   methods: {
-    section_visibility_assessor(section_id) {
+    section_visibility_assessor(section_id, isPrimary) {
+      // dock status && vulture status == primary | dock selector && vulture selector == secondary
       //0 == dock status | 1 == vulture status | 2 == vulture systems
       if (this.isMobile) {
         if (this.m_active_section_id == section_id) {
-          return true;
+          if (isPrimary) {
+            return !this.m_isSecondarySectionVisible;//if section is primary return the opposite of the secondary section visibility status
+          } else {
+            return this.m_isSecondarySectionVisible;
+          }
         } else {
           return false;
         }
@@ -150,35 +155,36 @@ export default {
     <SystemOverview
       :vulture_connection_status="vulture_connection_status"
       :vulture_hardware_status_obj="vulture_hardware_status_obj"
-      v-show="section_visibility_assessor(2)"
+      v-show="section_visibility_assessor(2, true)"
     ></SystemOverview>
     <VultureSelector
       @new_target_vid_sig="new_target_vid_sig_handler"
       :id="'vulture_selector_list'"
       :vulture_array_status="docked_vultures_array"
       :isMobile="isMobile"
-      v-show="section_visibility_assessor(1) && m_isSecondarySectionVisible"
+      :selected_dock_obj="selected_dock_obj"
+      v-show="section_visibility_assessor(1, false)"
     ></VultureSelector>
     <DockSelector
       :vulture_array_status="vulture_array_status"
       :dock_array="dock_array"
       :isMobile="isMobile"
       @new_target_dock_id_sig="onDockSelected"
-      v-show="section_visibility_assessor(0) && m_isSecondarySectionVisible"
+      v-show="section_visibility_assessor(0, false)"
     ></DockSelector>
     <VultureStatus
       :vulture_connection_status="vulture_connection_status"
       :vulture_array_status="vulture_array_status"
       :selected_vulture_obj="selected_vulture_obj"
       :isMobile="isMobile"
-      v-show="section_visibility_assessor(1) && !m_isSecondarySectionVisible"
+      v-show="section_visibility_assessor(1, true)"
     ></VultureStatus>
     <DockStatus
       :selected_dock_obj="selected_dock_obj"
       :dock_connection_status="true"
       :relay_station_array="relay_station_array"
       :isMobile="isMobile"
-      v-show="section_visibility_assessor(0) && !m_isSecondarySectionVisible"
+      v-show="section_visibility_assessor(0, true)"
     >
     </DockStatus>
     <div v-if="!isMobile" id="menu_container">

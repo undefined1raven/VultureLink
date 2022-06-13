@@ -10,7 +10,8 @@ export default {
   props: {
     vulture_array_status: "",
     id: "",
-    isMobile: ""
+    isMobile: "",
+    selected_dock_obj: undefined,
   },
   data() {
     return {
@@ -21,6 +22,13 @@ export default {
     };
   },
   methods: {
+    dock_name_formatter() {
+      if (this.selected_dock_obj.dock_name == undefined) {
+        return "";
+      } else {
+        return `${this.selected_dock_obj.dock_name}\\\\`;
+      }
+    },
     color_from_status(vulture_status) {
       if (vulture_status == "active") {
         return "#00FFF0";
@@ -52,7 +60,7 @@ export default {
   <div id="vulture_selector_container">
     <Label
       id="vulture_selector_l"
-      v-text="'Vulture Selector'"
+      v-text="dock_name_formatter() + 'Vulture Selector'"
       color="#FFF"
     ></Label>
     <Label
@@ -212,42 +220,42 @@ export default {
 }
 @media only screen and (max-width: 800px) {
   #vulture_selector_l {
-    top: 51.25%;
+    top: 2.03125%;
     left: 5.833333333%;
     font-size: 5.6vw;
   }
-  #vulture_selector_list{
-    top: 56.71875%;
+  #vulture_selector_list {
+    top: 8.75%;
     left: 2.5%;
     width: 95%;
-    height: 30%;
+    height: 77.8125%;
   }
-  .vulture_selector_legend_x{
+  .vulture_selector_legend_x {
     top: calc(85.3125% + 3.3%);
     font-size: 1.84375vh;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  #vulture_selector_legend_unavailable{
+  #vulture_selector_legend_unavailable {
     left: 8.888888889%;
     width: 20.277777778%;
   }
-  #vulture_selector_legend_fault{
+  #vulture_selector_legend_fault {
     left: 31.388888889%;
     width: 33.055555556%;
   }
-  #vulture_selector_legend_ready{
+  #vulture_selector_legend_ready {
     left: 66.666666667%;
     width: 11.111111111%;
   }
-  #vulture_selector_legend_active{
+  #vulture_selector_legend_active {
     left: 80%;
     width: 10.833333333%;
   }
   #vulture_selector_list::-webkit-scrollbar {
-  width: 0.3vh; /* Mostly for vertical scrollbars */
-  height: 0.3vh; /* Mostly for horizontal scrollbars */
+    width: 0.3vh; /* Mostly for vertical scrollbars */
+    height: 0.3vh; /* Mostly for horizontal scrollbars */
   }
 }
 </style>

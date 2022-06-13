@@ -13,11 +13,11 @@ export default {
   data() {
     return {
       isMenuVisible: false,
-      isSecondarySectionVisible: false, //the vulture selector && the dock selector are secondary sections for the vulture status || dock status
+      isSecondarySectionVisible: false, //the vulture selector && the dock selector are secondary sections for the vulture status && dock status
       menu_btn_l: "Menu",
-      menu_btn_style: "width: 50%;",
+      menu_btn_style: "width: 49.9%;",
       secondary_menu_btn_l: "Vulture Selector",
-      visible_section_id: 1,
+      visible_section_id: 1,// 0 == dock status || 1 == vulture status || 2 == vulture systems
     };
   },
   methods: {
@@ -27,6 +27,8 @@ export default {
         "m_SecondaryMenuButtonOnClick",
         this.isSecondarySectionVisible
       );
+      
+      //-- Label management for the secondary (contextual) bottom nav button --//
       if (this.visible_section_id == 1) {
         if (this.isSecondarySectionVisible) {
           this.secondary_menu_btn_l = "Vulture Status";
@@ -47,7 +49,7 @@ export default {
       setTimeout(() => {
         this.visible_section_id = 0;
         this.secondary_menu_btn_l = "Dock Selector";
-        this.menu_btn_style = "width: 50%;";
+        this.menu_btn_style = "width: 49.9%;";
         this.isSecondarySectionVisible = false;
         this.$emit(
           "m_SecondaryMenuButtonOnClick",
@@ -61,7 +63,7 @@ export default {
       setTimeout(() => {
         this.visible_section_id = 1;
         this.secondary_menu_btn_l = "Vulture Selector";
-        this.menu_btn_style = "width: 50%;";
+        this.menu_btn_style = "width: 49.9%;";
         this.isSecondarySectionVisible = false;
         this.$emit(
           "m_SecondaryMenuButtonOnClick",
@@ -95,7 +97,7 @@ export default {
       } else {
         this.menu_btn_l = "Menu";
         if (this.visible_section_id == 0 || this.visible_section_id == 1) {
-          this.menu_btn_style = "width: 50%;";
+          this.menu_btn_style = "width: 49.9%;";
         }
       }
     },
@@ -274,8 +276,8 @@ export default {
 #main_menu_btn {
   top: 92.03125%;
   left: 0;
-  width: 50%;
-  height: 7.8125%;
+  width: 49.9%;
+  height: 7.6125%;
   background-color: #0500ff20;
   display: flex;
   align-items: center;
@@ -286,9 +288,9 @@ export default {
 }
 #secondary_menu_btn {
   top: 92.03125%;
-  left: 50%;
-  width: 49.8%;
-  height: 7.8125%;
+  left: 49.8%;
+  width: 49.9%;
+  height: 7.6125%;
   background-color: #0500ff20;
   display: flex;
   align-items: center;

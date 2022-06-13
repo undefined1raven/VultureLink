@@ -93,11 +93,19 @@ export default {
   flex-flow: row wrap;
 }
 @media only screen and (max-width: 800px) {
+  #dock_selector_l {
+    top: 2.03125%;
+    left: 5.833333333%;
+    font-size: 5.6vw;
+  }
   #dock_selector_list {
     top: 8.75%;
     left: 5.277777778%;
     width: 89.722222222%;
     height: 84.21875%;
+  }
+  #dock_selector_list {
+    gap: 12%;
   }
 }
 </style>
