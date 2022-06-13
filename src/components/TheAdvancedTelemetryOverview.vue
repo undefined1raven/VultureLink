@@ -22,6 +22,7 @@ export default {
     vulture_connection_status: "",
     vulture_hardware_status_obj: "",
     m_active_section_id: "",
+    m_isSecondarySectionVisible: "",
     isMobile: "",
   },
   data() {
@@ -156,28 +157,28 @@ export default {
       :id="'vulture_selector_list'"
       :vulture_array_status="docked_vultures_array"
       :isMobile="isMobile"
-      v-show="section_visibility_assessor(1)"
+      v-show="section_visibility_assessor(1) && m_isSecondarySectionVisible"
     ></VultureSelector>
     <DockSelector
       :vulture_array_status="vulture_array_status"
       :dock_array="dock_array"
       :isMobile="isMobile"
       @new_target_dock_id_sig="onDockSelected"
-      v-show="section_visibility_assessor(0)"
+      v-show="section_visibility_assessor(0) && m_isSecondarySectionVisible"
     ></DockSelector>
     <VultureStatus
       :vulture_connection_status="vulture_connection_status"
       :vulture_array_status="vulture_array_status"
       :selected_vulture_obj="selected_vulture_obj"
       :isMobile="isMobile"
-      v-show="section_visibility_assessor(1)"
+      v-show="section_visibility_assessor(1) && !m_isSecondarySectionVisible"
     ></VultureStatus>
     <DockStatus
       :selected_dock_obj="selected_dock_obj"
       :dock_connection_status="true"
       :relay_station_array="relay_station_array"
       :isMobile="isMobile"
-      v-show="section_visibility_assessor(0)"
+      v-show="section_visibility_assessor(0) && !m_isSecondarySectionVisible"
     >
     </DockStatus>
     <div v-if="!isMobile" id="menu_container">

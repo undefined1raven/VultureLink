@@ -44,6 +44,7 @@ export default {
       mobile: {
         isMenuVisible: false,
         overview_active_section_id: 1, //0 == dock status | 1 == vulture status | 2 == vulture systems
+        overview_isSecondarySectionVisible: false,
       },
       vulture_connection: {
         status: "",
@@ -55,6 +56,9 @@ export default {
     };
   },
   methods: {
+    m_SecondaryMenuButtonOnClick_handler(visibility_status){
+      this.mobile.overview_isSecondarySectionVisible = visibility_status;
+    },
     MenuButtonOnClickHandler(btn_id){
       this.mobile.overview_active_section_id = btn_id;
     },
@@ -171,11 +175,13 @@ export default {
     :vulture_connection_status="vulture_connection.status"
     :vulture_hardware_status_obj="vulture_hardware_status_obj"
     :m_active_section_id="mobile.overview_active_section_id"
+    :m_isSecondarySectionVisible="mobile.overview_isSecondarySectionVisible"
     :isMobile="isMobile"
     @new_selected_vulture_vid="new_selected_vulture_vid_handler"
   ></Overview>
   <MobileNav
     @m_menu_onVisibilityChange="m_menu_onVisibilityChange_handler"
+    @m_SecondaryMenuButtonOnClick="m_SecondaryMenuButtonOnClick_handler"
     @MenuButtonOnClick="MenuButtonOnClickHandler"
     v-if="isMobile"
   ></MobileNav>

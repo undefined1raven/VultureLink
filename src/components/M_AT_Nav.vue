@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       isMenuVisible: false,
+      isSecondarySectionVisible: false, //the vulture selector && the dock selector are secondary sections for the vulture status || dock status
       menu_btn_l: "Menu",
       menu_btn_style: "width: 50%;",
       secondary_menu_btn_l: "Vulture Selector",
@@ -20,29 +21,65 @@ export default {
     };
   },
   methods: {
+    secondary_menu_btn_onClick() {
+      this.isSecondarySectionVisible = !this.isSecondarySectionVisible;
+      this.$emit(
+        "m_SecondaryMenuButtonOnClick",
+        this.isSecondarySectionVisible
+      );
+      if (this.visible_section_id == 1) {
+        if (this.isSecondarySectionVisible) {
+          this.secondary_menu_btn_l = "Vulture Status";
+        } else {
+          this.secondary_menu_btn_l = "Vulture Selector";
+        }
+      }
+      if (this.visible_section_id == 0) {
+        if (this.isSecondarySectionVisible) {
+          this.secondary_menu_btn_l = "Dock Status";
+        } else {
+          this.secondary_menu_btn_l = "Dock Selector";
+        }
+      }
+    },
     dockStatusButtonOnClick() {
       this.$emit("MenuButtonOnClick", 0);
-      this.visible_section_id = 0;
-      this.secondary_menu_btn_l = "Dock Selector";
-      this.menu_btn_style = "width: 50%;";
       setTimeout(() => {
+        this.visible_section_id = 0;
+        this.secondary_menu_btn_l = "Dock Selector";
+        this.menu_btn_style = "width: 50%;";
+        this.isSecondarySectionVisible = false;
+        this.$emit(
+          "m_SecondaryMenuButtonOnClick",
+          this.isSecondarySectionVisible
+        );
         this.menu_btn_onClick();
       }, 150);
     },
     vultureStatusButtonOnClick() {
       this.$emit("MenuButtonOnClick", 1);
-      this.visible_section_id = 1;
-      this.secondary_menu_btn_l = "Vulture Selector";
-      this.menu_btn_style = "width: 50%;";
       setTimeout(() => {
+        this.visible_section_id = 1;
+        this.secondary_menu_btn_l = "Vulture Selector";
+        this.menu_btn_style = "width: 50%;";
+        this.isSecondarySectionVisible = false;
+        this.$emit(
+          "m_SecondaryMenuButtonOnClick",
+          this.isSecondarySectionVisible
+        );
         this.menu_btn_onClick();
       }, 150);
     },
     vultureSystemsButtonOnClick() {
       this.$emit("MenuButtonOnClick", 2);
-      this.visible_section_id = 2;
-      this.menu_btn_style = "width: 99.8%;";
       setTimeout(() => {
+        this.visible_section_id = 2;
+        this.menu_btn_style = "width: 99.8%;";
+        this.isSecondarySectionVisible = false;
+        this.$emit(
+          "m_SecondaryMenuButtonOnClick",
+          this.isSecondarySectionVisible
+        );
         this.menu_btn_onClick();
       }, 150);
     },
