@@ -36,6 +36,9 @@ export default {
       vulture_array_received: false,
     };
   },
+  computed: {
+    
+  },
   methods: {
     section_visibility_assessor(section_id, isPrimary) {
       // dock status && vulture status == primary | dock selector && vulture selector == secondary

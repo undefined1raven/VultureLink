@@ -84,6 +84,9 @@ export default {
       this.login_req_details_obj.isVisible = visibility_status_update;
     },
     new_selected_vulture_vid_handler(obj) {
+      if(this.selected_vulture_vid != ""){
+        this.$refs.MobileNavRef.secondary_menu_btn_onClick();//don't trigger secondary_menu_btn_onClick if this is the auto vulture selection on load 
+      }
       this.selected_vulture_vid = obj.vid;
       this.last_unix = 0;
       this.vulture_connection.status = null;
@@ -184,6 +187,7 @@ export default {
     @m_SecondaryMenuButtonOnClick="m_SecondaryMenuButtonOnClick_handler"
     @MenuButtonOnClick="MenuButtonOnClickHandler"
     v-if="isMobile"
+    ref="MobileNavRef"
   ></MobileNav>
 </template>
 

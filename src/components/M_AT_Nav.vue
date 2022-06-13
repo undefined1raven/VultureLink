@@ -10,6 +10,7 @@ import SecurityDeco from "@/components/SecurityDeco.vue";
 
 <script>
 export default {
+  expose: ['secondary_menu_btn_onClick'],
   data() {
     return {
       isMenuVisible: false,

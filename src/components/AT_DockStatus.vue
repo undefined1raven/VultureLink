@@ -85,8 +85,8 @@ export default {
         ></PayloadList>
       </div>
     </div>
+    <div id="dock_status_ln_0" class="ln ln_h"></div>
     <div v-if="!isMobile" class="dock_status_ln_container">
-      <div id="dock_status_ln_0" class="ln ln_h"></div>
       <div id="dock_status_ln_1" class="ln ln_h"></div>
       <div id="dock_status_ln_2" class="ln ln_v"></div>
       <div id="dock_status_ln_3" class="ln ln_h"></div>
@@ -243,11 +243,18 @@ export default {
     width: 89.722222222%;
     height: 90.21875%;
   }
-  .dock_x_l, .dock_x_actual{  
+  .dock_x_l,
+  .dock_x_actual {
     font-size: 5vw;
   }
-  #dock_status_l{
+  #dock_status_l {
     font-size: 5.6vw;
+  }
+  #dock_status_ln_0 {
+    top: 8.59375%;
+    left: 5.277777778%;
+    width: 89.444444444%;
+    background-color: #1400ff;
   }
 }
 </style>
