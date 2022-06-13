@@ -218,5 +218,6 @@ export default {
   justify-content: center;
   border-top: solid 1px #0500ff;
   font-size: 4.8vw;
+  transition: background-color linear 0.1s;
 }
 </style>

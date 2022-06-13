@@ -195,4 +195,17 @@ div {
 .dock_port_3_indi {
   left: 77.857142857%;
 }
+@media only screen and (max-width: 800px) {
+  .dock_id_l {
+    font-size: 5vw;
+  }
+  .dock_list_item_container{
+    height: 38.888888888889vw;
+    width: 38.888888888889vw;
+  }
+  .dock_port_x_indi {
+    width: 4.1666666666667vw;
+    height: 4.1666666666667vw;
+  }
+}
 </style>

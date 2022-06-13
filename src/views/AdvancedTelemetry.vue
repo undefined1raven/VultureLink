@@ -56,7 +56,6 @@ export default {
   },
   methods: {
     MenuButtonOnClickHandler(btn_id){
-      console.log(btn_id)
       this.mobile.overview_active_section_id = btn_id;
     },
     m_menu_onVisibilityChange_handler(m_menu_visibility_status){

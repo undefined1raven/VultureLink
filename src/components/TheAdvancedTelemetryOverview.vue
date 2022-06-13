@@ -161,6 +161,7 @@ export default {
     <DockSelector
       :vulture_array_status="vulture_array_status"
       :dock_array="dock_array"
+      :isMobile="isMobile"
       @new_target_dock_id_sig="onDockSelected"
       v-show="section_visibility_assessor(0)"
     ></DockSelector>
@@ -175,6 +176,7 @@ export default {
       :selected_dock_obj="selected_dock_obj"
       :dock_connection_status="true"
       :relay_station_array="relay_station_array"
+      :isMobile="isMobile"
       v-show="section_visibility_assessor(0)"
     >
     </DockStatus>

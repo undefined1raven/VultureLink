@@ -40,4 +40,9 @@ export default {
     justify-content: center;
     margin-bottom: 2.3%;
 }
+@media only screen and (max-width: 800px){
+    .relay_station_id{
+        font-size: 5vw;
+    }
+}
 </style>

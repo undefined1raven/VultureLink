@@ -66,4 +66,9 @@ export default {
   width: 99.8%;
   height: 81.938325991%;
 }
+@media only screen and (max-width: 800px){
+  #no_relay_stations_l{
+    font-size: 5vw;
+  }
+}
 </style>

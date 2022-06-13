@@ -51,4 +51,12 @@ export default {
   justify-content: center;
   margin-bottom: 2.3%;
 }
+@media only screen and (max-width: 800px){
+  .payload_type_l{
+    font-size: 5vw;
+  }
+  .payload_id{
+    font-size: 4.5vw;
+  }
+}
 </style>

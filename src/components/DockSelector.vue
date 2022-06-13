@@ -8,6 +8,7 @@ export default {
   props: {
     dock_array: "",
     vulture_array_status: "",
+    isMobile: "",
   },
   data() {
     return {
@@ -24,7 +25,7 @@ export default {
 </script>
 <template>
   <div id="dock_selector_container">
-    <div id="dock_selector_ln_container">
+    <div v-if="!isMobile" id="dock_selector_ln_container">
       <div id="dock_selector_ln_0" class="ln ln_v"></div>
       <div id="dock_selector_ln_1" class="ln ln_h"></div>
       <div id="dock_selector_ln_2" class="ln ln_v"></div>
@@ -90,5 +91,13 @@ export default {
   gap: 3%;
   display: flex;
   flex-flow: row wrap;
+}
+@media only screen and (max-width: 800px) {
+  #dock_selector_list {
+    top: 8.75%;
+    left: 5.277777778%;
+    width: 89.722222222%;
+    height: 84.21875%;
+  }
 }
 </style>

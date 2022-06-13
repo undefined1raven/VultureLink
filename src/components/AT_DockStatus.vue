@@ -11,6 +11,7 @@ export default {
     selected_dock_obj: "",
     dock_connection_status: "",
     relay_station_array: "",
+    isMobile: "",
   },
   methods: {
     dock_connection_status_parser() {
@@ -31,8 +32,12 @@ export default {
 <template>
   <div id="dock_status_container">
     <div v-if="selected_dock_obj == ''" class="no_dock_selected_container">
-        <Label id="no_dock_selected_l" color="#FFF" v-text="'Select a Dock to see its status'"></Label>
-        <DockDecoDetailed id="no_dock_selected_deco"></DockDecoDetailed>
+      <Label
+        id="no_dock_selected_l"
+        color="#FFF"
+        v-text="'Select a Dock to see its status'"
+      ></Label>
+      <DockDecoDetailed id="no_dock_selected_deco"></DockDecoDetailed>
     </div>
     <div class="dock_status_data_container">
       <Label id="dock_status_l" color="#FFF" v-text="'Dock Status'"></Label>
@@ -75,10 +80,12 @@ export default {
           class="dock_x_l"
           v-text="'Available Payloads'"
         ></Label>
-        <PayloadList :payload_array="selected_dock_obj.payload_array"></PayloadList>
+        <PayloadList
+          :payload_array="selected_dock_obj.payload_array"
+        ></PayloadList>
       </div>
     </div>
-    <div class="dock_status_ln_container">
+    <div v-if="!isMobile" class="dock_status_ln_container">
       <div id="dock_status_ln_0" class="ln ln_h"></div>
       <div id="dock_status_ln_1" class="ln ln_h"></div>
       <div id="dock_status_ln_2" class="ln ln_v"></div>
@@ -94,29 +101,29 @@ export default {
   </div>
 </template>
 <style scoped>
-#no_dock_selected_deco{
+#no_dock_selected_deco {
   top: 43.707482993%;
 }
-#no_dock_selected_l{
+#no_dock_selected_l {
   top: 34.523809524%;
   font-size: 1.05vw;
 }
-.no_dock_selected_container{
+.no_dock_selected_container {
   position: absolute;
   top: 42.5%;
   left: 24.791666667%;
   width: 21.979166667%;
   height: 54.444444444%;
   z-index: 10;
-  background-color: rgba(0, 0, 0, .95);
+  background-color: rgba(0, 0, 0, 0.95);
   display: flex;
   align-items: center;
   justify-content: center;
 }
-#dock_payload_list_l{
+#dock_payload_list_l {
   top: 4.035874439%;
 }
-#payload_list_container{
+#payload_list_container {
   top: 61.904761905%;
   height: 37.925170068%;
   border: none;
@@ -228,5 +235,19 @@ export default {
 }
 .ln_h {
   height: 0.11vh;
+}
+@media only screen and (max-width: 800px) {
+  .dock_status_data_container {
+    top: 8.75%;
+    left: 5.277777778%;
+    width: 89.722222222%;
+    height: 84.21875%;
+  }
+  .dock_x_l, .dock_x_actual{  
+    font-size: 5vw;
+  }
+  #dock_status_l{
+    font-size: 5.6vw;
+  }
 }
 </style>
