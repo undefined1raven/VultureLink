@@ -14,23 +14,34 @@ export default {
     return {
       isMenuVisible: false,
       menu_btn_l: "Menu",
+      menu_btn_style: "width: 50%;",
+      secondary_menu_btn_l: "Vulture Selector",
+      visible_section_id: 1,
     };
   },
   methods: {
     dockStatusButtonOnClick() {
       this.$emit("MenuButtonOnClick", 0);
+      this.visible_section_id = 0;
+      this.secondary_menu_btn_l = "Dock Selector";
+      this.menu_btn_style = "width: 50%;";
       setTimeout(() => {
         this.menu_btn_onClick();
       }, 150);
     },
     vultureStatusButtonOnClick() {
       this.$emit("MenuButtonOnClick", 1);
+      this.visible_section_id = 1;
+      this.secondary_menu_btn_l = "Vulture Selector";
+      this.menu_btn_style = "width: 50%;";
       setTimeout(() => {
         this.menu_btn_onClick();
       }, 150);
     },
     vultureSystemsButtonOnClick() {
       this.$emit("MenuButtonOnClick", 2);
+      this.visible_section_id = 2;
+      this.menu_btn_style = "width: 99.8%;";
       setTimeout(() => {
         this.menu_btn_onClick();
       }, 150);
@@ -43,8 +54,12 @@ export default {
       this.$emit("m_menu_onVisibilityChange", this.isMenuVisible);
       if (this.isMenuVisible) {
         this.menu_btn_l = "Back";
+        this.menu_btn_style = "width: 99.8%;";
       } else {
         this.menu_btn_l = "Menu";
+        if (this.visible_section_id == 0 || this.visible_section_id == 1) {
+          this.menu_btn_style = "width: 50%;";
+        }
       }
     },
   },
@@ -100,9 +115,21 @@ export default {
     <Label
       @click="menu_btn_onClick"
       id="main_menu_btn"
+      :style="menu_btn_style"
       v-text="menu_btn_l"
       color="#FFF"
     ></Label>
+    <Label
+      @click="secondary_menu_btn_onClick"
+      id="secondary_menu_btn"
+      v-text="secondary_menu_btn_l"
+      v-if="
+        (visible_section_id == 0 || visible_section_id == 1) &&
+        menu_btn_l != 'Back'
+      "
+      color="#FFF"
+    ></Label
+    ><!--contextual secondary button next to the 'menu' button-->
   </div>
 </template>
 <style scoped>
@@ -210,13 +237,27 @@ export default {
 #main_menu_btn {
   top: 92.03125%;
   left: 0;
-  width: 99.9%;
+  width: 50%;
   height: 7.8125%;
   background-color: #0500ff20;
   display: flex;
   align-items: center;
   justify-content: center;
   border-top: solid 1px #0500ff;
+  font-size: 4.8vw;
+  transition: background-color linear 0.1s;
+}
+#secondary_menu_btn {
+  top: 92.03125%;
+  left: 50%;
+  width: 49.8%;
+  height: 7.8125%;
+  background-color: #0500ff20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: solid 1px #0500ff;
+  border-left: solid 1px #0500ff;
   font-size: 4.8vw;
   transition: background-color linear 0.1s;
 }
