@@ -2,7 +2,6 @@
 <script setup>
 import VultureFlatDeco from "@/components/VultureFlatDeco.vue";
 import Label from "@/components/Label.vue";
-
 </script>
 
 <script>
@@ -18,26 +17,25 @@ export default {
   },
   methods: {
     vulture_main_mouse_cover_onMouseEnter() {
-      if(this.color == '#0500FF'){
+      if (this.color == "#0500FF") {
         this.backgroundColor = `${this.color}40`;
-      }
-      else{
+      } else {
         this.backgroundColor = `${this.color}20`;
       }
     },
     vulture_main_mouse_cover_onMouseLeave() {
       this.backgroundColor = "#00000000";
     },
-    vulture_main_mouse_cover_onClick(){
-      if(!this.isEmpty){
-        this.$emit('onVultureSelected', this.vid, this.vn);
+    vulture_main_mouse_cover_onClick() {
+      if (!this.isEmpty) {
+        this.$emit("onVultureSelected", this.vid, this.vn);
       }
-    }
+    },
   },
-  mounted(){
-    if(this.index == 0){
-      this.$emit('onVultureSelected', this.vid, this.vn);
-      this.$emit('hide_loading_deco_sig');
+  mounted() {
+    if (this.index == 0) {
+      this.$emit("onVultureSelected", this.vid, this.vn);
+      this.$emit("hide_loading_deco_sig");
     }
   },
   data() {
@@ -52,15 +50,31 @@ export default {
 
 <template>
   <div class="vulture_vow_list_item_container">
-    <div :style="`border-color: ${color}; background-color: ${backgroundColor};`" class="vulture_main_area"></div>
-    <div v-if="isEmpty == undefined" :style="`background-color: ${color}`" class="vulture_side_status_indi"></div>
-    <Label v-if="isEmpty" class="empty_l" color="#515151" v-text="'EMPTY'"></Label>
+    <div
+      :style="`border-color: ${color}; background-color: ${backgroundColor};`"
+      class="vulture_main_area"
+    ></div>
+    <div
+      v-if="isEmpty == undefined"
+      :style="`background-color: ${color}`"
+      class="vulture_side_status_indi"
+    ></div>
+    <Label
+      v-if="isEmpty"
+      class="empty_l"
+      color="#515151"
+      v-text="'EMPTY'"
+    ></Label>
     <div v-if="isEmpty == undefined" class="vulture_id_l">{{ vn }}</div>
     <Transition name="vulture_selector_t">
-      <div v-if="selected_vn == vn" :style="main_area_style" class="vulture_selected_indi"></div>
+      <div
+        v-if="selected_vn == vn"
+        :style="main_area_style"
+        class="vulture_selected_indi"
+      ></div>
     </Transition>
 
-    <VultureFlatDeco class="vulture_deco" :color="color"/>
+    <VultureFlatDeco class="vulture_deco" :color="color" />
     <div
       @mouseenter="vulture_main_mouse_cover_onMouseEnter"
       @mouseleave="vulture_main_mouse_cover_onMouseLeave"
@@ -71,7 +85,7 @@ export default {
 </template>
 
 <style scoped>
-.empty_l{
+.empty_l {
   font-size: 0.9vw;
 }
 .vulture_selector_t-enter-active,
@@ -82,7 +96,7 @@ export default {
 .vulture_selector_t-leave-to {
   opacity: 0;
 }
-div{
+div {
   user-select: none;
 }
 .vulture_vow_list_item_container {
@@ -95,7 +109,7 @@ div{
   justify-content: center;
   position: relative;
 }
-.vulture_selected_indi{
+.vulture_selected_indi {
   position: absolute;
   width: 0.8vw;
   height: 0.8vw;
@@ -112,7 +126,7 @@ div{
   height: 100%;
   z-index: 2;
 }
-.vulture_deco{
+.vulture_deco {
   position: absolute;
   left: 2.392344498%;
   width: 12.698564593%;
@@ -151,13 +165,16 @@ div{
   width: 0.4784689%;
   background-color: #515151;
 }
-@media only screen and (max-width: 800px){
-  .vulture_id_l{
+@media only screen and (max-width: 800px) {
+  .vulture_id_l {
     font-size: 5vw;
   }
-  .vulture_selected_indi{
-  width: 4vw;
-  height: 4vw;
-}
+  .vulture_selected_indi {
+    width: 4vw;
+    height: 4vw;
+  }
+  .empty_l{
+    font-size: 5vw;
+  }
 }
 </style>

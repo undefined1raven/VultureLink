@@ -151,9 +151,9 @@ export default {
 <template>
   <Background />
   <MobileBackground />
-  <VultureLogo id="vulture_logo" />
-  <UserDropdownMenu :username="current_user_un" />
-  <Label id="adv_tele_l" v-text="'\\\\Advanced Telemetry'" color="#FFF"></Label>
+  <VultureLogo v-if="!isMobile" id="vulture_logo" />
+  <UserDropdownMenu v-if="!isMobile" :username="current_user_un" />
+  <Label v-if="!isMobile" id="adv_tele_l" v-text="'\\\\Advanced Telemetry'" color="#FFF"></Label>
   <LoginRequestOverlay
     :isVisible="login_req_details_obj.isVisible"
     :timestamp="login_req_details_obj.timestamp"
@@ -166,7 +166,7 @@ export default {
     @visibility_status_update="visibility_status_update_handler"
   ></LoginRequestOverlay>
   <Overview
-    v-if="!login_req_details_obj.isVisible && !mobile.isMenuVisible"
+    v-show="!login_req_details_obj.isVisible && !mobile.isMenuVisible"
     :socket_ref="socket_ref"
     :current_user_acid="`${getCookie('acid')}`"
     :vulture_connection_status="vulture_connection.status"

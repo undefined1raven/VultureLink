@@ -26,52 +26,54 @@ export default {
 };
 </script>
 <template>
-  <div id="system_overview_ln_container">
-    <div id="system_menu_ln_0" class="ln ln_h"></div>
-    <div id="system_menu_ln_1" class="ln ln_h"></div>
-  </div>
-  <div id="system_overview_container">
-    <Label id="system_menu_l" v-text="'Vulture Systems'"></Label>
-    <OverviewButton
-      id="sonar_array_overview_btn"
-      system_label="SONAR ARRAY"
-      :stroke="system_color_parser('sonar_array')"
-    ></OverviewButton>
-    <OverviewButton
-      id="power_overview_btn"
-      system_label="POWER"
-      :stroke="'#0400D4'"
-    ></OverviewButton>
-    <OverviewButton
-      id="propulsion_overview_btn"
-      system_label="PROPULSION"
-      :stroke="'#0400D4'"
-    ></OverviewButton>
-    <OverviewButton
-      id="dynamics_overview_btn"
-      system_label="DYNAMICS"
-      :stroke="system_color_parser('dynamics')"
-    ></OverviewButton>
-    <OverviewButton
-      id="optical_array_overview_btn"
-      system_label="OPTICAL ARRAY"
-      :stroke="'#0400D4'"
-    ></OverviewButton>
-    <OverviewButton
-      id="autonomy_overview_btn"
-      system_label="AUTONOMY"
-      :stroke="'#0400D4'"
-    ></OverviewButton>
-    <OverviewButton
-      id="nav_overview_btn"
-      system_label="NAVIGATION"
-      :stroke="system_color_parser('navigation')"
-    ></OverviewButton>
-    <OverviewButton
-      id="network_overview_btn"
-      system_label="NETWORK"
-      :stroke="'#0400D4'"
-    ></OverviewButton>
+  <div class="vulture_systems_container">
+    <div id="system_overview_ln_container">
+      <div id="system_menu_ln_0" class="ln ln_h"></div>
+      <div id="system_menu_ln_1" class="ln ln_h"></div>
+    </div>
+    <div id="system_overview_container">
+      <Label id="system_menu_l" v-text="'Vulture Systems'"></Label>
+      <OverviewButton
+        id="sonar_array_overview_btn"
+        system_label="SONAR ARRAY"
+        :stroke="system_color_parser('sonar_array')"
+      ></OverviewButton>
+      <OverviewButton
+        id="power_overview_btn"
+        system_label="POWER"
+        :stroke="'#0400D4'"
+      ></OverviewButton>
+      <OverviewButton
+        id="propulsion_overview_btn"
+        system_label="PROPULSION"
+        :stroke="'#0400D4'"
+      ></OverviewButton>
+      <OverviewButton
+        id="dynamics_overview_btn"
+        system_label="DYNAMICS"
+        :stroke="system_color_parser('dynamics')"
+      ></OverviewButton>
+      <OverviewButton
+        id="optical_array_overview_btn"
+        system_label="OPTICAL ARRAY"
+        :stroke="'#0400D4'"
+      ></OverviewButton>
+      <OverviewButton
+        id="autonomy_overview_btn"
+        system_label="AUTONOMY"
+        :stroke="'#0400D4'"
+      ></OverviewButton>
+      <OverviewButton
+        id="nav_overview_btn"
+        system_label="NAVIGATION"
+        :stroke="system_color_parser('navigation')"
+      ></OverviewButton>
+      <OverviewButton
+        id="network_overview_btn"
+        system_label="NETWORK"
+        :stroke="'#0400D4'"
+      ></OverviewButton>
+    </div>
   </div>
 </template>
 <style scoped>
