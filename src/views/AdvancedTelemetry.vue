@@ -84,7 +84,7 @@ export default {
       this.login_req_details_obj.isVisible = visibility_status_update;
     },
     new_selected_vulture_vid_handler(obj) {
-      if(this.selected_vulture_vid != ""){
+      if(this.selected_vulture_vid != "" && this.isMobile){
         this.$refs.MobileNavRef.secondary_menu_btn_onClick();//don't trigger secondary_menu_btn_onClick if this is the auto vulture selection on load 
       }
       this.selected_vulture_vid = obj.vid;

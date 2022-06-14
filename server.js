@@ -3,7 +3,7 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 else {
-    // require('newrelic');
+    require('newrelic');
 }
 
 const secrets = JSON.parse(
@@ -779,7 +779,6 @@ function successful_auth_post(req, res, user, redirect) {
     var at_expiry_date = new Date();
     at_expiry_date.setHours(at_expiry_date.getHours() + 6);
 
-    console.log(req.body.user_identifier)
     if (process.env.NODE_ENV === 'production') {
         add_activity_log_tdb(req, ip, 'Advanced Telemetry login', req.body.user_identifier);
         // res.cookie('eor', req.body.user_identifier, { httpOnly: false, secure: true });
@@ -797,6 +796,7 @@ function successful_auth_post(req, res, user, redirect) {
         res.cookie('acid', user.acid, { secure: false });
     }
     res.clearCookie('redirect_id');
+    remove(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`));
     setTimeout(() => {
         if (redirect) {
             res.redirect('advanced_telemetry');
@@ -1043,6 +1043,7 @@ function MFA_conditional_renderer(req, res) {
         get_snapshot_from_path(`frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`).then(snapshot => {
             const data = snapshot.val();
             if (data != null) {
+                remove(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`));
                 res.sendFile(path.join(__dirname, 'dist/index.html'));
             }
         });
@@ -1328,6 +1329,7 @@ function successful_security_post(req, res, user, redirect) {
         res.cookie('sio_ath', tid);
         res.cookie('wid', 'security', { httpOnly: true, secure: false });
     }
+    remove(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`));
     res.clearCookie('redirect_id');
     if (redirect) {
         res.redirect('security');
@@ -1382,7 +1384,6 @@ function retrieve_vulture_array_status(user, vow_array) {
 
 function redirect_id_assessment_fn(req, res, user) {
     let vow_status = [];
-    retrieve_vulture_array_status(user, vow_status);
 
     if (req.cookies.redirect_id == 0) {
         res.clearCookie('redirect_id');
@@ -1397,7 +1398,7 @@ function redirect_id_assessment_fn(req, res, user) {
         res.clearCookie('redirect_id');
         res.clearCookie('frstp_aprvd_tid');
         successful_security_post(req, res, user, false);
-        res.json({ response: true, target_path: '/security', vulture_array_status: vow_status });
+        res.json({ response: true, target_path: '/security' });
 
     }
 }
