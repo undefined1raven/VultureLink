@@ -37,9 +37,7 @@ export default {
       vulture_array_received: false,
     };
   },
-  computed: {
-    
-  },
+  computed: {},
   methods: {
     section_visibility_assessor(section_id, isPrimary) {
       // dock status && vulture status == primary | dock selector && vulture selector == secondary
@@ -47,7 +45,7 @@ export default {
       if (this.isMobile) {
         if (this.m_active_section_id == section_id) {
           if (isPrimary) {
-            return !this.m_isSecondarySectionVisible;//if section is primary return the opposite of the secondary section visibility status
+            return !this.m_isSecondarySectionVisible; //if section is primary return the opposite of the secondary section visibility status
           } else {
             return this.m_isSecondarySectionVisible;
           }
@@ -183,7 +181,12 @@ export default {
       :isMobile="isMobile"
       v-show="section_visibility_assessor(1, true)"
     ></VultureStatus>
-    <VultureHardwareStatus :isMobile="isMobile" v-show="section_visibility_assessor(1, true)"></VultureHardwareStatus>
+    <VultureHardwareStatus
+      :vulture_hardware_status_obj="vulture_hardware_status_obj"
+      :isMobile="isMobile"
+      :vulture_connection_status="vulture_connection_status"
+      v-show="section_visibility_assessor(1, true)"
+    ></VultureHardwareStatus>
     <DockStatus
       :selected_dock_obj="selected_dock_obj"
       :dock_connection_status="true"

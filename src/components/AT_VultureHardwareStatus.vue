@@ -7,6 +7,47 @@ import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
 export default {
   props: {
     isMobile: "",
+    vulture_hardware_status_obj: "",
+    vulture_connection_status: { default: false },
+  },
+  data() {
+    return {};
+  },
+  mounted() {},
+  methods: {
+    primary_status_label_setter() {
+      let primary_status_label = "";
+      let primary_status_l_style = "";
+      let vulture_deco_color = "";
+      if (
+        this.vulture_connection_status &&
+        this.vulture_hardware_status_obj != ""
+      ) {
+        if (
+          !this.vulture_hardware_status_obj.sonar_array.overall_status ||
+          !this.vulture_hardware_status_obj.dynamics.overall_status ||
+          !this.vulture_hardware_status_obj.navigation.overall_status
+        ) {
+          primary_status_label = "Some issues have been detected";
+          primary_status_l_style =
+            "padding-left: 4%; left: 0%; border-left: solid 1px #FF006B; color: #FF006B;";
+          vulture_deco_color = "#FF006B";
+        } else {
+          primary_status_label = "Vulture Systems Nominal";
+          primary_status_l_style = "padding: none; left: auto; border: none; color: #00FFF0;";
+          vulture_deco_color = "#00FFF0";
+        }
+      } else {
+        primary_status_label = "Vulture Offline";
+        primary_status_l_style = "left: auto; color: #0400D4;";
+        vulture_deco_color = "#0400D4";
+      }
+      return {
+        label: primary_status_label,
+        style: primary_status_l_style,
+        color: vulture_deco_color,
+      };
+    },
   },
 };
 </script>
@@ -20,12 +61,13 @@ export default {
     ></Label>
     <Label
       id="primary_status_l"
-      v-text="'Vulture Offline'"
+      v-text="primary_status_label_setter().label"
+      :style="primary_status_label_setter().style"
       color="#0400D4"
     ></Label>
     <VultureDetailedDeco
       id="vulture_detailed_deco"
-      color="#0400D4"
+      :color="primary_status_label_setter().color"
     ></VultureDetailedDeco>
   </div>
 </template>
