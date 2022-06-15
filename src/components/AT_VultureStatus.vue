@@ -255,20 +255,20 @@ export default {
     width: 89.444444444%;
     background-color: #1400ff;
   }
-  .vulture_status_data_container{
+  .vulture_status_data_container {
     top: 8.75%;
     left: 5.277777778%;
     width: 89.722222222%;
     height: 40.78125%;
   }
-  .bay_l, .payload_status{
+  .bay_l,
+  .payload_status {
     font-size: 4.5vw;
   }
-  .vulture_x_l, .vulture_x_actual, .payload_l{
+  .vulture_x_l,
+  .vulture_x_actual,
+  .payload_l {
     font-size: 5vw;
-  }
-  #vulture_mounted_payloads_container{
-    border-bottom: solid 1px #1400FF;
   }
 }
 </style>

@@ -10,6 +10,7 @@ const secrets = JSON.parse(
     require('child_process').execSync('node doppler-secrets.js')
 );
 
+
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);

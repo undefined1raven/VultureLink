@@ -6,6 +6,7 @@ import Label from "@/components/Label.vue";
 import VultureStatus from "@/components/AT_VultureStatus.vue";
 import DockStatus from "@/components/AT_DockStatus.vue";
 import SystemOverview from "@/components/AT_SystemOverview.vue";
+import VultureHardwareStatus from "@/components/AT_VultureHardwareStatus.vue";
 </script>
 
 <script>
@@ -182,6 +183,7 @@ export default {
       :isMobile="isMobile"
       v-show="section_visibility_assessor(1, true)"
     ></VultureStatus>
+    <VultureHardwareStatus :isMobile="isMobile" v-show="section_visibility_assessor(1, true)"></VultureHardwareStatus>
     <DockStatus
       :selected_dock_obj="selected_dock_obj"
       :dock_connection_status="true"
