@@ -77,7 +77,7 @@ const msg = {
 
 
 var admin = require("firebase-admin");
-var serviceAccount = require("./vulture-uplink-firebase-adminsdk-msv8g-b7d3d0a243.json");
+var serviceAccount = require("./vulture-uplinkv-SN.json");
 
 
 app.use(cookie_parser());
