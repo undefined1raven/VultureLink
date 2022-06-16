@@ -1,6 +1,7 @@
 <script setup>
 import Label from "@/components/Label.vue";
 import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
+import VultureHardwareStatusIssuesList from "@/components/AT_VultureHardwareStatusIssuesList.vue";
 </script>
 
 <script>
@@ -13,33 +14,66 @@ export default {
   data() {
     return {};
   },
-  mounted() {},
+  mounted() {
+    setInterval(() => {
+      console.log(this.parse_issues_obj_arr()) 
+    }, 1000);
+  },
   methods: {
-    primary_status_label_setter() {
+    parse_issues_obj_arr() {
+      let issues_obj_arr = [];
+      if (this.isTelemetryValid()) {
+        for (let vulture_system in this.vulture_hardware_status_obj) {
+          for (let system_component in this.vulture_hardware_status_obj[vulture_system]) {
+            let system_component_object = this.vulture_hardware_status_obj[vulture_system][system_component];
+            if (!system_component_object.status) {
+            issues_obj_arr.push({
+              system_id: this.vulture_hardware_status_obj[vulture_system],
+              component_id: this.vulture_hardware_status_obj[vulture_system][system_component],
+              status_type: system_component_object.status_type,
+            });
+            }
+          }
+        }
+        return issues_obj_arr;
+      }
+    },
+    isTelemetryValid() {
+      if (this.vulture_hardware_status_obj != "") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    global_system_status_assessor() {
+      //true if all vulture systems are nominal false if otherwise
+      if (this.isTelemetryValid()) {
+        if (
+          this.vulture_hardware_status_obj.sonar_array.overall_status &&
+          this.vulture_hardware_status_obj.dynamics.overall_status &&
+          this.vulture_hardware_status_obj.navigation.overall_status
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    },
+    simple_hardware_status_UI_controller() {
       let primary_status_label = "";
       let primary_status_l_style = "";
       let vulture_deco_color = "";
-      if (
-        this.vulture_connection_status &&
-        this.vulture_hardware_status_obj != ""
-      ) {
-        if (
-          !this.vulture_hardware_status_obj.sonar_array.overall_status ||
-          !this.vulture_hardware_status_obj.dynamics.overall_status ||
-          !this.vulture_hardware_status_obj.navigation.overall_status
-        ) {
-          primary_status_label = "Some issues have been detected";
-          primary_status_l_style =
-            "padding-left: 4%; left: 0%; border-left: solid 1px #FF006B; color: #FF006B;";
-          vulture_deco_color = "#FF006B";
-        } else {
+      if (this.isTelemetryValid() && this.vulture_connection_status) {
+        if (this.global_system_status_assessor()) {
           primary_status_label = "Vulture Systems Nominal";
-          primary_status_l_style = "padding: none; left: auto; border: none; color: #00FFF0;";
+          primary_status_l_style = "border: none; color: #00FFF0;";
           vulture_deco_color = "#00FFF0";
         }
       } else {
         primary_status_label = "Vulture Offline";
-        primary_status_l_style = "left: auto; color: #0400D4;";
+        primary_status_l_style = "color: #0400D4;";
         vulture_deco_color = "#0400D4";
       }
       return {
@@ -59,19 +93,40 @@ export default {
       id="vulture_hardware_status_l"
       v-text="'Hardware Status'"
     ></Label>
-    <Label
-      id="primary_status_l"
-      v-text="primary_status_label_setter().label"
-      :style="primary_status_label_setter().style"
-      color="#0400D4"
-    ></Label>
-    <VultureDetailedDeco
-      id="vulture_detailed_deco"
-      :color="primary_status_label_setter().color"
-    ></VultureDetailedDeco>
+    <div
+      v-show="global_system_status_assessor() || !vulture_connection_status"
+      id="simple_hardware_status_container"
+    >
+      <Label
+        id="primary_status_l"
+        v-text="simple_hardware_status_UI_controller().label"
+        :style="simple_hardware_status_UI_controller().style"
+        color="#0400D4"
+      ></Label>
+      <VultureDetailedDeco
+        id="vulture_detailed_deco"
+        :color="simple_hardware_status_UI_controller().color"
+      ></VultureDetailedDeco>
+    </div>
+    <div
+      v-show="!global_system_status_assessor() && vulture_connection_status"
+      id="detailed_hardware_status_container"
+    >
+      <Label
+        id="detailed_hardware_status_l"
+        v-text="'Some issues have been detected'"
+        color="#FF006B"
+      ></Label>
+      <VultureHardwareStatusIssuesList></VultureHardwareStatusIssuesList>
+    </div>
   </div>
 </template>
 <style scoped>
+#simple_hardware_status_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 #vulture_detailed_deco {
   left: 33.149779736%;
   width: 13.876651982%;
@@ -96,6 +151,11 @@ export default {
     top: 3.731343284%;
     left: 0%;
     font-size: 5.6vw;
+  }
+  #detailed_hardware_status_l {
+    top: 14.552238806%;
+    left: 0%;
+    font-size: 5vw;
   }
   #vulture_detailed_deco {
     top: 41.044776119%;
