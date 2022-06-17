@@ -59,7 +59,7 @@ export default {
     background-color: #FF006B20;
   }
   .issue_x_l{
-    font-size: 5vw;
+    font-size: 4.5vw;
     height: 50.744186047%;
     display: flex;
     align-items: center; 
