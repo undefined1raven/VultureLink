@@ -9,26 +9,9 @@ import VultureHardwareStatusIssuesListItem from "@/components/AT_VultureHardware
 <script>
 export default {
   props: {
-    vulture_hardware_status_obj: "",
+    issues_array: "",
   },
   methods: {
-    parse_issues_obj_arr() {
-      let issues_obj_arr = [];
-      if (this.vulture_hardware_status_obj != "") {
-        for (vulture_system in this.vulture_hardware_status_obj) {
-          for (system_component in vulture_system) {
-            // if (!system_component.status) {
-              issues_obj_arr.push({
-                system_id: vulture_system,
-                component_id: system_component,
-                status_type: system_component.status_type,
-              });
-            // }
-          }
-        }
-        return issues_obj_arr;
-      }
-    },
   },
   mounted() {},
 };
@@ -55,10 +38,13 @@ export default {
       v-text="'Status'"
     ></Label>
     <HorizontalLine id="issues_list_ln" color="#FF006B" />
+    <div id="hardware_issues_list">
     <VultureHardwareStatusIssuesListItem
-      v-for="(issue, index) in parse_issues_obj_arr()"
+      v-for="(issue, index) in issues_array"
       :key="index"
-    />
+      :issue_obj="issue"
+    ></VultureHardwareStatusIssuesListItem>
+    </div>
   </div>
 </template>
 <style scoped>
@@ -67,11 +53,18 @@ export default {
 }
 
 @media only screen and (max-width: 800px) {
+  #hardware_issues_list{
+    position: absolute;
+    top: 11.734693878%;
+    left: 0%;
+    width: 100%;
+    height: 64.552238806%;
+  }
   #hardware_status_issues_list_container {
     top: 26.865671642%;
     left: 0%;
     width: 99.8%;
-    height: 73.134328358%;
+    height: 88.265306122%;
     display: flex;
   }
   .column_label {

@@ -14,24 +14,25 @@ export default {
   data() {
     return {};
   },
-  mounted() {
-    setInterval(() => {
-      console.log(this.parse_issues_obj_arr()) 
-    }, 1000);
-  },
+  mounted() {},
   methods: {
-    parse_issues_obj_arr() {
+    parse_issues() {
       let issues_obj_arr = [];
       if (this.isTelemetryValid()) {
         for (let vulture_system in this.vulture_hardware_status_obj) {
-          for (let system_component in this.vulture_hardware_status_obj[vulture_system]) {
-            let system_component_object = this.vulture_hardware_status_obj[vulture_system][system_component];
-            if (!system_component_object.status) {
-            issues_obj_arr.push({
-              system_id: this.vulture_hardware_status_obj[vulture_system],
-              component_id: this.vulture_hardware_status_obj[vulture_system][system_component],
-              status_type: system_component_object.status_type,
-            });
+          for (let system_component in this.vulture_hardware_status_obj[
+            vulture_system
+          ]) {
+            let system_component_object =
+              this.vulture_hardware_status_obj[vulture_system][
+                system_component
+              ];
+            if (system_component_object.status == false) {
+              issues_obj_arr.push({
+                system_id: vulture_system,
+                component_id: system_component,
+                status_type: system_component_object.status_type,
+              });
             }
           }
         }
@@ -117,7 +118,7 @@ export default {
         v-text="'Some issues have been detected'"
         color="#FF006B"
       ></Label>
-      <VultureHardwareStatusIssuesList></VultureHardwareStatusIssuesList>
+      <VultureHardwareStatusIssuesList :issues_array="parse_issues()"></VultureHardwareStatusIssuesList>
     </div>
   </div>
 </template>
