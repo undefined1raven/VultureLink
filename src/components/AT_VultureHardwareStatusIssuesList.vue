@@ -12,6 +12,9 @@ export default {
     issues_array: "",
   },
   methods: {
+    onIssueSelectedHandler(args){
+      this.$emit('onIssueSelected', args);
+    }
   },
   mounted() {},
 };
@@ -41,6 +44,7 @@ export default {
     <div id="hardware_issues_list">
     <VultureHardwareStatusIssuesListItem
       v-for="(issue, index) in issues_array"
+      @onIssueSelected="onIssueSelectedHandler"
       :key="index"
       :issue_obj="issue"
     ></VultureHardwareStatusIssuesListItem>
@@ -69,7 +73,7 @@ export default {
   }
   .column_label {
     top: 0%;
-    font-size: 4.8vw;
+    font-size: 4.5vw;
   }
   #issues_list_system_id_l {
     left: 0.92879257%;

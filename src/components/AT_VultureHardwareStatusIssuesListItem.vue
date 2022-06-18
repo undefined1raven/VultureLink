@@ -11,73 +11,99 @@ export default {
   props: {
     issue_obj: "",
   },
+  methods: {
+    issue_onClick() {
+      this.$emit("onIssueSelected", {
+        issue_obj: this.issue_obj,
+        system_id_dictionary: this.system_id_dictionary,
+        component_id_dictionary: this.component_id_dictionary,
+        status_type_dictionary: this.status_type_dictionary,
+      });
+    },
+  },
   data() {
-    return{
-      system_id_dictionary: {sonar_array: 'Sonar Array', dynamics: 'Dynamics', navigation: 'Navigation'},
+    return {
+      system_id_dictionary: {
+        sonar_array: "Sonar Array",
+        dynamics: "Dynamics",
+        navigation: "Navigation",
+      },
       component_id_dictionary: {
-        fwd_sonar: 'Forward Sonar',
-        bwd_sonar: 'Rear Sonar',
-        lft_sonar: 'Left-side Sonar',
-        rgt_sonar: 'Right-side Sonar',
-        gnd_sonar: 'Ground Sonar',
-        primary_imu: 'IMU',
-        primary_acc: 'Accelerometer',
-        gps: 'GPS',
-        magnetometer: 'Magnetometer',
-        barometer: 'Barometer'
+        fwd_sonar: "Forward Sonar",
+        bwd_sonar: "Rear Sonar",
+        lft_sonar: "Left-side Sonar",
+        rgt_sonar: "Right-side Sonar",
+        gnd_sonar: "Ground Sonar",
+        primary_imu: "IMU",
+        primary_acc: "Accelerometer",
+        gps: "GPS",
+        magnetometer: "Magnetometer",
+        barometer: "Barometer",
       },
       status_type_dictionary: {
-        0: 'Offline',
-        1: 'Faulty',
-        2: 'Unknown'
-      }
-    }
-  }
-}
+        0: "Offline",
+        1: "Faulty",
+        2: "Unknown",
+      },
+    };
+  },
+};
 </script>
 
 <template>
-  <div class="issue_list_item_container">
-    <Label id="issue_system_id_l" class="issue_x_l" v-text="system_id_dictionary[issue_obj.system_id]"></Label>
-    <Label id="issue_part_id_l" class="issue_x_l" v-text="component_id_dictionary[issue_obj.component_id]"></Label>
-    <Label id="issue_part_status_type_l" class="issue_x_l" v-text="status_type_dictionary[issue_obj.status_type]"></Label>
+  <div @click="issue_onClick" class="issue_list_item_container">
+    <Label
+      id="issue_system_id_l"
+      class="issue_x_l"
+      v-text="system_id_dictionary[issue_obj.system_id]"
+    ></Label>
+    <Label
+      id="issue_part_id_l"
+      class="issue_x_l"
+      v-text="component_id_dictionary[issue_obj.component_id]"
+    ></Label>
+    <Label
+      id="issue_part_status_type_l"
+      class="issue_x_l"
+      v-text="status_type_dictionary[issue_obj.status_type]"
+    ></Label>
   </div>
 </template>
 <style scoped>
 @media only screen and (max-width: 800px) {
-  .issue_list_item_container{
+  .issue_list_item_container {
     position: relative;
     left: 0%;
     width: 100%;
     height: 24.855491329%;
-    border-bottom: solid 1px #FF006B;
+    border-bottom: solid 1px #ff006b;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .issue_list_item_container:hover{
-    background-color: #FF006B20;
+  .issue_list_item_container:hover {
+    background-color: #ff006b20;
   }
-  .issue_x_l{
+  .issue_x_l {
     font-size: 4.5vw;
     height: 50.744186047%;
     display: flex;
-    align-items: center; 
+    align-items: center;
     justify-content: start;
-    border-right: solid 1px #FF006B;    
+    border-right: solid 1px #ff006b;
   }
-  #issue_system_id_l{
+  #issue_system_id_l {
     width: 31.269349845%;
     left: 0.92879257%;
   }
-  #issue_part_id_l{
+  #issue_part_id_l {
     width: 38.390092879%;
     left: 33.436532508%;
   }
-  #issue_part_status_type_l{
+  #issue_part_status_type_l {
     left: 73.06501548%;
     width: 26.93498452%;
-    border: none;    
+    border: none;
   }
 }
 </style>

@@ -15,7 +15,7 @@ export default {
   },
   mounted() {
     if (this.index == 0) {
-      this.$emit("new_target_dock_id_sig", this.dock_obj);
+      // this.$emit("new_target_dock_id_sig", this.dock_obj);
     }
   },
   data() {

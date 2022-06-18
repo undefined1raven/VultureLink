@@ -2,6 +2,7 @@
 import Label from "@/components/Label.vue";
 import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
 import VultureHardwareStatusIssuesList from "@/components/AT_VultureHardwareStatusIssuesList.vue";
+import VultureHardwareStatusIssueDiag from "@/components/AT_VultureHardwareStatusIssueDiag.vue";
 </script>
 
 <script>
@@ -12,10 +13,20 @@ export default {
     vulture_connection_status: { default: false },
   },
   data() {
-    return {};
+    return {
+      selected_issue_obj_and_dictionaries: "",
+      areIssueDiagsVisible: false,
+    };
   },
   mounted() {},
   methods: {
+    onIssueSelectedHandler(args) {
+      this.selected_issue_obj_and_dictionaries = args;
+      this.areIssueDiagsVisible = true;
+    },
+    issueDiags_onBackButtonClicked() {
+      this.areIssueDiagsVisible = !this.areIssueDiagsVisible;
+    },
     parse_issues() {
       let issues_obj_arr = [];
       if (this.isTelemetryValid()) {
@@ -110,7 +121,11 @@ export default {
       ></VultureDetailedDeco>
     </div>
     <div
-      v-show="!global_system_status_assessor() && vulture_connection_status"
+      v-show="
+        !global_system_status_assessor() &&
+        vulture_connection_status &&
+        !areIssueDiagsVisible
+      "
       id="detailed_hardware_status_container"
     >
       <Label
@@ -118,7 +133,21 @@ export default {
         v-text="'Some issues have been detected'"
         color="#FF006B"
       ></Label>
-      <VultureHardwareStatusIssuesList :issues_array="parse_issues()"></VultureHardwareStatusIssuesList>
+      <VultureHardwareStatusIssuesList
+        @onIssueSelected="onIssueSelectedHandler"
+        :issues_array="parse_issues()"
+      ></VultureHardwareStatusIssuesList>
+    </div>
+    <div id="issue_diags_container" v-if="areIssueDiagsVisible">
+      <Label
+        id="issue_diags_l"
+        color="#FFF"
+        v-text="'Additional Diagnostic Data'"
+      ></Label>
+      <VultureHardwareStatusIssueDiag
+        :issue_obj_pkg="selected_issue_obj_and_dictionaries"
+        @onBackButtonClicked="issueDiags_onBackButtonClicked"
+      ></VultureHardwareStatusIssueDiag>
     </div>
   </div>
 </template>
@@ -148,6 +177,11 @@ export default {
   justify-content: center;
 }
 @media only screen and (max-width: 800px) {
+  #issue_diags_l {
+    top: 14.552238806%;
+    left: 0%;
+    font-size: 5vw;
+  }
   #vulture_hardware_status_l {
     top: 3.731343284%;
     left: 0%;
