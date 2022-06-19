@@ -819,10 +819,10 @@ app.post('/auth_post', json_parser, (req, res) => {
                     else {
                         successful_auth_post(req, res, user, false);
 
-                        if(process.env.NODE_ENV === 'production'){
+                        if (process.env.NODE_ENV === 'production') {
                             res.cookie('eor', req.body.user_identifier, { httpOnly: false, secure: true });
                         }
-                        else{
+                        else {
                             res.cookie('eor', req.body.user_identifier, { httpOnly: false, secure: false });
                         }
 
@@ -989,6 +989,7 @@ app.get('/login', (req, res) => {
                             rvpx = true;
                         }
                         else {
+                            clear_all_session_cookies(res);
                             res.sendFile(path.join(__dirname, 'dist/index.html'));
                         }
                     }
@@ -1004,13 +1005,11 @@ app.get('/login', (req, res) => {
                 }
                 else {
                     clear_all_session_cookies(res);
-                    res.clearCookie('frstp_aprvd_tid');
                     res.sendFile(path.join(__dirname, 'dist/index.html'));
                 }
             });
         }
         else {
-            res.clearCookie('frstp_aprvd_tid');
             res.sendFile(path.join(__dirname, 'dist/index.html'));
         }
     }
@@ -1188,19 +1187,16 @@ function check_ua(req, res, red_d, red_m) {
                     }
                 }
                 else {
-                    clear_all_session_cookies(res);
                     res.redirect('login');
                 }
             });
         }
         else {
-            clear_all_session_cookies(res);
             res.redirect('login');
         }
     }
     catch
     {
-        clear_all_session_cookies(res);
         res.redirect('login');
     }
 }
@@ -2180,7 +2176,7 @@ io.on('connection', socket => {
     //     let user;
     //     UAC_v2.find({ email: email }).exec()
     // }
- 
+
     function req_vulture_array_status_exec(payload, snapshot) {
         if (socket_transport_authenticator(payload, snapshot)) {
             if (snapshot.val().acid == payload.acid) {
