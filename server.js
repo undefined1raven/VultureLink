@@ -1014,7 +1014,7 @@ app.get('/login', (req, res) => {
         }
     }
 });
- 
+
 const MFA_TOTP_rate_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 30, interval: 'hour' });
 app.get('/MFA_TOTP', (req, res) => {
     if (rate_limiter_checker(MFA_TOTP_rate_limiter, res)) {
@@ -1128,7 +1128,7 @@ function clear_all_session_cookies(res) {
 
 function check_ua(req, res, red_d, red_m) {
     try {
-        if (req.cookies.at != undefined && req.cookies.adv_tele_sio_ath != undefined) {
+        if (req.cookies.at != undefined || req.cookies.adv_tele_sio_ath != undefined) {
             let rvpx = false;
             get_snapshot_from_path(`adv_tele_aprvd_tids/${req.cookies.at.tid}`).then(snapshot => {
                 const data = snapshot.val();
@@ -1175,12 +1175,7 @@ function check_ua(req, res, red_d, red_m) {
                             res.cookie('adv_tele_sio_ath', ntid);
                             res.cookie('wid', 'advanced_telemetry', { httpOnly: true, secure: false });
                         }
-                        if (req.useragent.isDesktop) {
-                            res.sendFile(path.join(__dirname, 'dist/index.html'));
-                        }
-                        if (req.useragent.isMobile) {
-                            res.sendFile(path.join(__dirname, 'dist/index.html'));
-                        }
+                        res.sendFile(path.join(__dirname, 'dist/index.html'));
                     }
                     else {
                         // res.redirect('login');
@@ -1197,7 +1192,7 @@ function check_ua(req, res, red_d, red_m) {
     }
     catch
     {
-        res.redirect('login');
+        // res.redirect('login');
     }
 }
 
