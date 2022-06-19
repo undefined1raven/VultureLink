@@ -10,7 +10,7 @@ import SecurityDeco from "@/components/SecurityDeco.vue";
 
 <script>
 export default {
-  expose: ['secondary_menu_btn_onClick'],
+  expose: ["secondary_menu_btn_onClick"],
   data() {
     return {
       isMenuVisible: false,
@@ -18,7 +18,7 @@ export default {
       menu_btn_l: "Menu",
       menu_btn_style: "width: 49.9%;",
       secondary_menu_btn_l: "Vulture Selector",
-      visible_section_id: 1,// 0 == dock status || 1 == vulture status || 2 == vulture systems
+      visible_section_id: 1, // 0 == dock status || 1 == vulture status || 2 == vulture systems
     };
   },
   methods: {
@@ -28,7 +28,7 @@ export default {
         "m_SecondaryMenuButtonOnClick",
         this.isSecondarySectionVisible
       );
-      
+
       //-- Label management for the secondary (contextual) bottom nav button --//
       if (this.visible_section_id == 1) {
         if (this.isSecondarySectionVisible) {
@@ -47,44 +47,38 @@ export default {
     },
     dockStatusButtonOnClick() {
       this.$emit("MenuButtonOnClick", 0);
-      setTimeout(() => {
-        this.visible_section_id = 0;
-        this.secondary_menu_btn_l = "Dock Selector";
-        this.menu_btn_style = "width: 49.9%;";
-        this.isSecondarySectionVisible = false;
-        this.$emit(
-          "m_SecondaryMenuButtonOnClick",
-          this.isSecondarySectionVisible
-        );
-        this.menu_btn_onClick();
-      }, 150);
+      this.visible_section_id = 0;
+      this.secondary_menu_btn_l = "Dock Selector";
+      this.menu_btn_style = "width: 49.9%;";
+      this.isSecondarySectionVisible = false;
+      this.$emit(
+        "m_SecondaryMenuButtonOnClick",
+        this.isSecondarySectionVisible
+      );
+      this.menu_btn_onClick();
     },
     vultureStatusButtonOnClick() {
       this.$emit("MenuButtonOnClick", 1);
-      setTimeout(() => {
-        this.visible_section_id = 1;
-        this.secondary_menu_btn_l = "Vulture Selector";
-        this.menu_btn_style = "width: 49.9%;";
-        this.isSecondarySectionVisible = false;
-        this.$emit(
-          "m_SecondaryMenuButtonOnClick",
-          this.isSecondarySectionVisible
-        );
-        this.menu_btn_onClick();
-      }, 150);
+      this.visible_section_id = 1;
+      this.secondary_menu_btn_l = "Vulture Selector";
+      this.menu_btn_style = "width: 49.9%;";
+      this.isSecondarySectionVisible = false;
+      this.$emit(
+        "m_SecondaryMenuButtonOnClick",
+        this.isSecondarySectionVisible
+      );
+      this.menu_btn_onClick();
     },
     vultureSystemsButtonOnClick() {
       this.$emit("MenuButtonOnClick", 2);
-      setTimeout(() => {
-        this.visible_section_id = 2;
-        this.menu_btn_style = "width: 99.8%;";
-        this.isSecondarySectionVisible = false;
-        this.$emit(
-          "m_SecondaryMenuButtonOnClick",
-          this.isSecondarySectionVisible
-        );
-        this.menu_btn_onClick();
-      }, 150);
+      this.visible_section_id = 2;
+      this.menu_btn_style = "width: 99.8%;";
+      this.isSecondarySectionVisible = false;
+      this.$emit(
+        "m_SecondaryMenuButtonOnClick",
+        this.isSecondarySectionVisible
+      );
+      this.menu_btn_onClick();
     },
     redirect(pathname) {
       window.location.pathname = pathname;

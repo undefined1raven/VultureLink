@@ -1,7 +1,7 @@
 <script setup>
 import VultureSelector from "@/components/VultureSelector.vue";
 import DockSelector from "@/components/DockSelector.vue";
-import BaseMenuButton from "@/components/BaseMenuButton.vue";
+import BaseButton from "@/components/BaseButton.vue";
 import Label from "@/components/Label.vue";
 import VultureStatus from "@/components/AT_VultureStatus.vue";
 import DockStatus from "@/components/AT_DockStatus.vue";
@@ -203,8 +203,8 @@ export default {
         <div id="menu_ln_3" class="ln ln_h"></div>
       </div>
 
-      <BaseMenuButton v-text="'Command'" @click="redirect('/')" id="cmd_btn" />
-      <BaseMenuButton
+      <BaseButton v-text="'Command'" @click="redirect('/')" id="cmd_btn" />
+      <BaseButton
         v-text="'Security'"
         @click="redirect('/security')"
         id="security_btn"

@@ -26,13 +26,13 @@ export default {
       class="column_label"
       id="issues_list_system_id_l"
       color="#B7B7B7"
-      v-text="'System ID'"
+      v-text="'System'"
     ></Label>
     <Label
       class="column_label"
       id="issues_list_part_id_l"
       color="#B7B7B7"
-      v-text="'Part ID'"
+      v-text="'Component'"
     ></Label>
     <Label
       class="column_label"
