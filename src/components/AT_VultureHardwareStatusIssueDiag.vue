@@ -41,47 +41,58 @@ export default {
       color="#FFF"
       v-text="issue_diags_title"
     ></Label>
-    <Label class="issue_diags_x_l" id="issue_diags_error_l" color="#B6B6B6" v-text="'Error ID:'"></Label>
-    <Label id="issue_diags_error_actual" color="#FFF" v-text="'Component Signal Lost [TX.700]'"></Label>
-    <Label class="issue_diags_x_l" id="issue_diags_reason_l" color="#B6B6B6" v-text="'Likely Reason:'"></Label>
-    <Label id="issue_diags_reason_actual" color="#FFF" v-text="`                             Component physically disconnected from the flight computer.`"></Label>
-    <BaseButton class="issue_diags_option_btn" id="component_replacement_btn" v-text="'Look up replacement parts'"></BaseButton>
-    <VerticalLine id="issue_diags_ln_1" color="#0A0080"/>
-    <BaseButton class="issue_diags_option_btn" id="fix_steps_btn" v-text="'Show potential fix methods'"></BaseButton>
+    <Label
+      class="issue_diags_x_l"
+      id="issue_diags_error_l"
+      color="#B6B6B6"
+      v-text="'Error ID:'"
+    ></Label>
+    <Label
+      id="issue_diags_error_actual"
+      color="#FFF"
+      v-text="'Component Signal Lost [NO_SIG]'"
+    ></Label>
+    <Label
+      class="issue_diags_x_l"
+      id="issue_diags_reason_l"
+      color="#B6B6B6"
+      v-text="'Likely Reason:'"
+    ></Label>
+    <Label
+      id="issue_diags_reason_actual"
+      color="#FFF"
+      v-text="
+        `                             The component could be physically disconnected from the flight computer.`
+      "
+    ></Label>
+    <BaseButton
+      class="issue_diags_option_btn"
+      id="fix_steps_btn"
+      v-text="'Show Potential Fix Methods'"
+    ></BaseButton>
     <HorizontalLine id="issue_diags_ln_0" color="#0500FF" />
   </div>
 </template>
 <style scoped>
 @media only screen and (max-width: 800px) {
-  #issue_diags_ln_1{
-    top: 70.769230769%;
-    left: 48.606811146%;
-    height: 25.641025641%;
-  }
-  .issue_diags_option_btn{
-    top: 70.769230769%;
-    width: 40.247678019%;
-    height: 25.641025641%;
+  .issue_diags_option_btn {
+    top: 76.41025641%;
+    width: 68.421052632%;
+    height: 20.512820513%;
     font-size: 4.5vw;
     text-align: center;
   }
-  #component_replacement_btn{
-    left: 3.715170279%;
-  }
-  #fix_steps_btn{
-    left: 54.489164087%;
-  }
-  .issue_diags_x_l{
+  .issue_diags_x_l {
     font-size: 4.5vw;
     left: 1.547987616%;
   }
-  #issue_diags_error_actual{
+  #issue_diags_error_actual {
     top: 22.564102564%;
     left: 20.814241486%;
     width: 79.256965944%;
     font-size: 4.5vw;
   }
-  #issue_diags_reason_actual{
+  #issue_diags_reason_actual {
     top: 35.384615385%;
     left: 1.547987616%;
     width: 95%;
@@ -89,10 +100,10 @@ export default {
     height: 33.333333333%;
     white-space: break-spaces;
   }
-  #issue_diags_reason_l{
+  #issue_diags_reason_l {
     top: 35.384615385%;
   }
-  #issue_diags_error_l{
+  #issue_diags_error_l {
     top: 22.564102564%;
   }
   #issue_diags_ln_0 {
@@ -118,6 +129,9 @@ export default {
     left: 0;
     width: 100%;
     height: 72.76119403%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   #issue_diags_back_btn_container {
     position: absolute;

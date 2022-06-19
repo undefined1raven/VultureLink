@@ -138,7 +138,7 @@ export default {
         :issues_array="parse_issues()"
       ></VultureHardwareStatusIssuesList>
     </div>
-    <div id="issue_diags_container" v-if="areIssueDiagsVisible">
+    <div id="issue_diags_container" v-if="areIssueDiagsVisible && vulture_connection_status">
       <Label
         id="issue_diags_l"
         color="#FFF"
