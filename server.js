@@ -2180,7 +2180,7 @@ io.on('connection', socket => {
     //     let user;
     //     UAC_v2.find({ email: email }).exec()
     // }
-
+ 
     function req_vulture_array_status_exec(payload, snapshot) {
         if (socket_transport_authenticator(payload, snapshot)) {
             if (snapshot.val().acid == payload.acid) {
