@@ -31,7 +31,7 @@ export default {
 
 <template>
   <div id="dock_status_container">
-    <div v-if="selected_dock_obj == ''" class="no_dock_selected_container">
+    <div id="no_dock_selected_container" v-if="selected_dock_obj == ''">
       <Label
         id="no_dock_selected_l"
         color="#FFF"
@@ -108,7 +108,7 @@ export default {
   top: 34.523809524%;
   font-size: 1.05vw;
 }
-.no_dock_selected_container {
+#no_dock_selected_container {
   position: absolute;
   top: 42.5%;
   left: 24.791666667%;
@@ -255,6 +255,15 @@ export default {
     left: 5.277777778%;
     width: 89.444444444%;
     background-color: #1400ff;
+  }
+  #no_dock_selected_l{
+    font-size: 5vw;
+  }
+  #no_dock_selected_container {
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 92.3875%;
   }
 }
 </style>
