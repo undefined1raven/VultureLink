@@ -97,6 +97,7 @@ export default {
   align-items: center;
   justify-content: center;
   border-right: solid 1px #ff006b;
+  border-left: solid 1px #ff006b;
   transition: background-color linear 0.1s;
 }
 .issue_list_item_container:hover {

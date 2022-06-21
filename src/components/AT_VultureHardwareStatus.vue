@@ -82,8 +82,7 @@ export default {
           primary_status_label = "Vulture Systems Nominal";
           primary_status_l_style = "border: none; color: #00FFF0;";
           vulture_deco_color = "#00FFF0";
-        }
-        else{
+        } else {
           vulture_deco_color = "#FF006B";
         }
       } else {
@@ -103,7 +102,9 @@ export default {
 
 <template>
   <div
-    :style="`border-top: solid 1px ${simple_hardware_status_UI_controller().color};`"
+    :style="`border-top: solid 1px ${
+      simple_hardware_status_UI_controller().color
+    };`"
     id="vulture_hardware_status_container"
   >
     <Label
@@ -139,6 +140,11 @@ export default {
         v-text="'Some issues have been detected'"
         color="#FF006B"
       ></Label>
+      <VultureDetailedDeco
+        id="detailed_hardware_status_vulture_deco"
+        color="#ff006b"
+        v-if="!isMobile"
+      ></VultureDetailedDeco>
       <VultureHardwareStatusIssuesList
         @onIssueSelected="onIssueSelectedHandler"
         :issues_array="parse_issues()"
@@ -162,6 +168,13 @@ export default {
   </div>
 </template>
 <style scoped>
+#detailed_hardware_status_vulture_deco {
+  position: absolute;
+  top: 30.260674157%;
+  left: 1.431718062%;
+  width: 8%;
+  height: 60%;
+}
 #simple_hardware_status_container {
   display: flex;
   align-items: center;
