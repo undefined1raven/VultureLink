@@ -83,6 +83,9 @@ export default {
           primary_status_l_style = "border: none; color: #00FFF0;";
           vulture_deco_color = "#00FFF0";
         }
+        else{
+          vulture_deco_color = "#FF006B";
+        }
       } else {
         primary_status_label = "Vulture Offline";
         primary_status_l_style = "color: #0400D4;";
@@ -99,7 +102,10 @@ export default {
 </script>
 
 <template>
-  <div id="vulture_hardware_status_container">
+  <div
+    :style="`border-top: solid 1px ${simple_hardware_status_UI_controller().color};`"
+    id="vulture_hardware_status_container"
+  >
     <Label
       v-if="isMobile"
       id="vulture_hardware_status_l"
@@ -136,9 +142,13 @@ export default {
       <VultureHardwareStatusIssuesList
         @onIssueSelected="onIssueSelectedHandler"
         :issues_array="parse_issues()"
+        :isMobile="isMobile"
       ></VultureHardwareStatusIssuesList>
     </div>
-    <div id="issue_diags_container" v-if="areIssueDiagsVisible && vulture_connection_status">
+    <div
+      id="issue_diags_container"
+      v-if="areIssueDiagsVisible && vulture_connection_status"
+    >
       <Label
         id="issue_diags_l"
         color="#FFF"
@@ -175,6 +185,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+#detailed_hardware_status_l {
+  top: 1.123595506%;
+  left: 1.431718062%;
+  font-size: 1vw;
 }
 @media only screen and (max-width: 800px) {
   #issue_diags_l {

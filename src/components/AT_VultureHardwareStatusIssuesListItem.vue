@@ -10,6 +10,7 @@ import VerticalLine from "@/components/VerticalLine.vue";
 export default {
   props: {
     issue_obj: "",
+    isMobile: ""
   },
   methods: {
     issue_onClick() {
@@ -52,6 +53,11 @@ export default {
 
 <template>
   <div @click="issue_onClick" class="issue_list_item_container">
+    <div id="issue_label_types_container" v-if="!isMobile">
+      <Label id="issue_system_id_type_l" color="#B7B7B7" class="issue_x_type_l" v-text="'System:'"></Label>
+      <Label id="issue_part_id_type_l" color="#B7B7B7" class="issue_x_type_l" v-text="'Component:'"></Label>
+      <Label id="issue_status_type_l" color="#B7B7B7" class="issue_x_type_l" v-text="'Status:'"></Label>
+    </div>
     <Label
       id="issue_system_id_l"
       class="issue_x_l"
@@ -70,19 +76,47 @@ export default {
   </div>
 </template>
 <style scoped>
+.issue_x_l {
+  position: absolute;
+  font-size: 0.93vw;
+  left: calc(59.589041096% - 25%);
+  width: 60%;
+  text-align: end;
+}
+.issue_x_type_l{
+  position: absolute;
+  font-size: 0.93vw;
+  left: 3.698630137%;
+  text-align: start;
+}
+.issue_list_item_container {
+  position: relative;
+  width: 29.871794872%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: solid 1px #ff006b;
+  transition: background-color linear 0.1s;
+}
+.issue_list_item_container:hover {
+  background-color: #ff006b20;
+}
+#issue_system_id_l, #issue_system_id_type_l {
+  top: 10.95890411%;
+}
+#issue_part_id_l, #issue_part_id_type_l {
+  top: 32.191780822%;
+}
+#issue_part_status_type_l, #issue_status_type_l {
+  top: 53.424657534%;
+}
 @media only screen and (max-width: 800px) {
   .issue_list_item_container {
-    position: relative;
     left: 0%;
     width: 100%;
     height: 24.855491329%;
     border-bottom: solid 1px #ff006b;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .issue_list_item_container:hover {
-    background-color: #ff006b20;
   }
   .issue_x_l {
     font-size: 4.5vw;

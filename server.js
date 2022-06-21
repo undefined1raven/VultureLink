@@ -797,7 +797,9 @@ function successful_auth_post(req, res, user, redirect) {
         res.cookie('acid', user.acid, { secure: false });
     }
     res.clearCookie('redirect_id');
-    remove(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`));
+    if (req.cookies.frstp_aprvd_tid != undefined) {
+        remove(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`));
+    }
     setTimeout(() => {
         if (redirect) {
             res.redirect('advanced_telemetry');
@@ -1125,7 +1127,8 @@ function clear_all_session_cookies(res) {
     res.clearCookie('wid');
     res.clearCookie('eor');
 }
- 
+
+
 function check_ua(req, res, red_d, red_m) {
     try {
         if (req.cookies.at != undefined || req.cookies.adv_tele_sio_ath != undefined) {

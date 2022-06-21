@@ -10,11 +10,12 @@ import VultureHardwareStatusIssuesListItem from "@/components/AT_VultureHardware
 export default {
   props: {
     issues_array: "",
+    isMobile: "",
   },
   methods: {
-    onIssueSelectedHandler(args){
-      this.$emit('onIssueSelected', args);
-    }
+    onIssueSelectedHandler(args) {
+      this.$emit("onIssueSelected", args);
+    },
   },
   mounted() {},
 };
@@ -22,42 +23,53 @@ export default {
 
 <template>
   <div id="hardware_status_issues_list_container">
-    <Label
-      class="column_label"
-      id="issues_list_system_id_l"
-      color="#B7B7B7"
-      v-text="'System'"
-    ></Label>
-    <Label
-      class="column_label"
-      id="issues_list_part_id_l"
-      color="#B7B7B7"
-      v-text="'Component'"
-    ></Label>
-    <Label
-      class="column_label"
-      id="issues_list_status_l"
-      color="#B7B7B7"
-      v-text="'Status'"
-    ></Label>
+    <div id="column_type_container" v-if="isMobile">
+      <Label
+        class="column_label"
+        id="issues_list_system_id_l"
+        color="#B7B7B7"
+        v-text="'System'"
+      ></Label>
+      <Label
+        class="column_label"
+        id="issues_list_part_id_l"
+        color="#B7B7B7"
+        v-text="'Component'"
+      ></Label>
+      <Label
+        class="column_label"
+        id="issues_list_status_l"
+        color="#B7B7B7"
+        v-text="'Status'"
+      ></Label>
+    </div>
     <HorizontalLine id="issues_list_ln" color="#FF006B" />
     <div id="hardware_issues_list">
-    <VultureHardwareStatusIssuesListItem
-      v-for="(issue, index) in issues_array"
-      @onIssueSelected="onIssueSelectedHandler"
-      :key="index"
-      :issue_obj="issue"
-    ></VultureHardwareStatusIssuesListItem>
+      <VultureHardwareStatusIssuesListItem
+        v-for="(issue, index) in issues_array"
+        @onIssueSelected="onIssueSelectedHandler"
+        :key="index"
+        :issue_obj="issue"
+        :isMobile="isMobile"
+      ></VultureHardwareStatusIssuesListItem>
     </div>
   </div>
 </template>
 <style scoped>
 #hardware_status_issues_list_container {
   position: absolute;
+  top: calc(17.97752809% + 3.837216234%);
+  left: 14.0969163%;
+  width: 85.9030837%;
+  height: 77.528089888%;
 }
-
+#hardware_issues_list {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
 @media only screen and (max-width: 800px) {
-  #hardware_issues_list{
+  #hardware_issues_list {
     position: absolute;
     top: 11.734693878%;
     left: 0%;
