@@ -118,7 +118,7 @@ export default {
   },
 };
 </script>
-
+ 
 <template>
   <main>
     <Background></Background>
