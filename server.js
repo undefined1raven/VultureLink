@@ -1046,7 +1046,6 @@ function MFA_conditional_renderer(req, res) {
             const data = snapshot.val();
             console.log(`${data} || ${req.cookies.frstp_aprvd_tid.tid}`);
             if (data != null) {
-                remove(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`));
                 res.sendFile(path.join(__dirname, 'dist/index.html'));
             }
             else {
@@ -1055,7 +1054,8 @@ function MFA_conditional_renderer(req, res) {
         });
     }
     else {
-        if (req.cookies.wid != undefined) {l
+        if (req.cookies.wid != undefined) {
+            l
             res.redirect(`/${req.cookies.wid}`);
         }
         else {
