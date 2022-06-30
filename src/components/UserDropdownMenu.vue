@@ -5,9 +5,15 @@ import Label from "@/components/Label.vue";
 <script>
 import Vue from "vue";
 export default {
+  expose: ['submit_logout_form'],
   props: {
     username: "",
   },
+  methods: {
+    submit_logout_form(){
+      this.$refs.logout_form.submit();
+    }
+  }
 };
 </script>
 
@@ -19,7 +25,7 @@ export default {
       v-text="'Signed in as'"
     ></Label>
     <Label class="username_l" color="#FFF" v-text="username"></Label>
-    <form action="/logout" method="POST" id="logout_form">
+    <form ref="logout_form" action="/logout" method="POST" id="logout_form">
       <button id="logout_btn" type="submit">Log Out</button>
     </form>
   </div>

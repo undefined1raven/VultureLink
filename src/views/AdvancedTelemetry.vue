@@ -4,7 +4,7 @@ import MobileBackground from "@/components/MobileBaseBackgroundImg.vue";
 import Label from "@/components/Label.vue";
 import DistanceIndicator from "@/components/AT_BaseDistanceIndi.vue";
 import LoginRequestOverlay from "@/components/LoginRequestOverlay.vue";
-import * as socket_l from "socket.io-client";
+import { io } from "socket.io-client";
 import Overview from "@/components/TheAdvancedTelemetryOverview.vue";
 import VultureLogo from "@/components/VultureLogo.vue";
 import UserDropdownMenu from "@/components/UserDropdownMenu.vue";
@@ -16,7 +16,9 @@ window.onpageshow = () => {
   sessionStorage.setItem("wid", "/advanced_telemetry");
 };
 
-let socket = socket_l.connect("/");
+let socket = io({
+  query: { socket_auth_token: getCookie("adv_tele_sio_ath"), acid: getCookie('acid') },
+});
 let login_req_tid;
 
 function getCookie(name) {
@@ -47,7 +49,7 @@ export default {
         overview_isSecondarySectionVisible: false,
       },
       vulture_connection: {
-        status: "",
+        status: false,
         last_unix: "",
         signal_emit_last_unix: "",
         latency: "",
@@ -56,13 +58,13 @@ export default {
     };
   },
   methods: {
-    m_SecondaryMenuButtonOnClick_handler(visibility_status){
+    m_SecondaryMenuButtonOnClick_handler(visibility_status) {
       this.mobile.overview_isSecondarySectionVisible = visibility_status;
     },
-    MenuButtonOnClickHandler(btn_id){
+    MenuButtonOnClickHandler(btn_id) {
       this.mobile.overview_active_section_id = btn_id;
     },
-    m_menu_onVisibilityChange_handler(m_menu_visibility_status){
+    m_menu_onVisibilityChange_handler(m_menu_visibility_status) {
       this.mobile.isMenuVisible = m_menu_visibility_status;
     },
     update_isMobile() {
@@ -84,8 +86,8 @@ export default {
       this.login_req_details_obj.isVisible = visibility_status_update;
     },
     new_selected_vulture_vid_handler(obj) {
-      if(this.selected_vulture_vid != "" && this.isMobile){
-        this.$refs.MobileNavRef.secondary_menu_btn_onClick();//don't trigger secondary_menu_btn_onClick if this is the auto vulture selection on load 
+      if (this.selected_vulture_vid != "" && this.isMobile) {
+        this.$refs.MobileNavRef.secondary_menu_btn_onClick(); //don't trigger secondary_menu_btn_onClick if this is the auto vulture selection on load
       }
       this.selected_vulture_vid = obj.vid;
       this.last_unix = 0;
@@ -149,6 +151,13 @@ export default {
         }
       });
       //[][][][][]
+
+      ///-- Socket Auth Failure Signal Handler --///
+      socket.on("sio_transport_auth_failed_sig", () => {
+        this.$refs.UserDropdownMenuRef.submit_logout_form();
+      });
+    } else {
+      this.$refs.UserDropdownMenuRef.submit_logout_form();
     }
   },
 };
@@ -158,8 +167,17 @@ export default {
   <Background />
   <MobileBackground />
   <VultureLogo v-if="!isMobile" id="vulture_logo" />
-  <UserDropdownMenu v-if="!isMobile" :username="current_user_un" />
-  <Label v-if="!isMobile" id="adv_tele_l" v-text="'\\\\Advanced Telemetry'" color="#FFF"></Label>
+  <UserDropdownMenu
+    ref="UserDropdownMenuRef"
+    v-if="!isMobile"
+    :username="current_user_un"
+  />
+  <Label
+    v-if="!isMobile"
+    id="adv_tele_l"
+    v-text="'\\\\Advanced Telemetry'"
+    color="#FFF"
+  ></Label>
   <LoginRequestOverlay
     :isVisible="login_req_details_obj.isVisible"
     :timestamp="login_req_details_obj.timestamp"

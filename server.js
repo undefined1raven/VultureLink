@@ -664,6 +664,7 @@ app.post('/logout', (req, res) => {
             remove(ref(db, `adv_tele_aprvd_tids/${req.cookies.at.tid}`));
         }
     });
+    res.clearCookie('acid');
     res.clearCookie('at');
     res.clearCookie('sat');
     res.clearCookie('adv_tele_sio_ath');
@@ -1565,256 +1566,268 @@ let sec_aprvd_kx_arr = [];
 
 //----Global Relay ⇄ F/E link----//
 io.on('connection', socket => {
-    console.log(`Relay Online | ${Date.now()}`);
-    // if (process.env.DEMO != undefined){
-    //    console.log(`it worked | ${process.env.DEMO} | ${Date.now()}`)
-    // }
 
-    socket.on('adv_tele_uleave', id_payload => {
-        // UAC_v2.find({ email: id_payload.un }).exec().then(rud => socket.to(`${rud[0].vid}`).emit('lgo_signal'));
-    });
-
-    console.log(`Connection detected | SIDx [${socket.id}]`);
-    ////--Data flow routing demo [In-progress]--////
-
-
-    ///-- Vulture Ping --///
-    socket.on('req_vulture_connection_vitals', req_vulture_connection_vitals_payload => {
-        get_snapshot_from_path(`adv_tele_aprvd_tids/${req_vulture_connection_vitals_payload.ath}`).then(snapshot => {
-            if (snapshot.val() != null) {
-                io.to(`${req_vulture_connection_vitals_payload.vid}`).emit('req_vulture_connection_vitals');
-            }
-        });
-    });
-
-    var mx_acid;
-    ///-TLP-///
-    var tlp_req_relay_unx = 0;
-    socket.on('tlp_request_gen', (tlp_req_payload) => {
-        console.log(`Trusted Launch Platform Demo | GENSID: ${socket.id} | Time: ${tlp_req_payload.time} UNX`);
-        for (var x = 0; x < acid_sid_link_ary.length; x++) {
-            if (acid_sid_link_ary[x].sid_arr == socket.id) {
-                mx_acid = acid_sid_link_ary[x].acid;
-                console.log(`${mx_acid} mx`)
-                // console.log(`M@IX: ${x} | M@SIDX: ${acid_sid_link_ary[x].acid}`);
-            }
-        }
-        for (var x = 0; x < acid_sid_link_ary.length; x++) {
-            if (acid_sid_link_ary[x].acid == mx_acid) {
-                console.log(`Trusted Launch Platform Notify SID: [${acid_sid_link_ary[x].sid_arr}]`)
-
-                // socket.to(`${acid_sid_link_ary[x].sid_arr}`).emit('tlp_notify_signal');
-                // socket.to(socket.id).emit('tlp_notify_signal');
-
-                // console.log(`M@IX: ${x} | M@SIDX: ${acid_sid_link_ary[x].acid}`);
-            }
-        }
-        io.emit('tlp_notify_signal', tlp_req_payload);
-        tlp_req_relay_unx = Date.now();
-    });
-
-    setInterval(() => {
-        if (tlp_req_relay_unx != 0) {
-            if (Math.abs(tlp_req_relay_unx - Date.now()) > 5000) {
-                console.log('TLP Timeout | Takeoff rejected');
-                io.emit('tlp_status_update', -1);
-                tlp_req_relay_unx = 0;
-            }
-        }
-    }, 200);
-
-
-    socket.on('new_target_vid', new_target_vid_payload => {
-        get_snapshot_from_path(`adv_tele_aprvd_tids/${new_target_vid_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(new_target_vid_payload, snapshot)) {
-                socket.leave(`${new_target_vid_payload.pvid}`);
-                socket.join(`${new_target_vid_payload.vid}`);
-            }
-        });
-    });
-
-    //--TLP--// tlp
-    socket.on('tlp_user_response', (ur) => {
-        if (ur != undefined) {
-            if (ur) {
-                io.emit('tlp_status_update', 1);
-                console.log('Take off approved by [' + `${socket.id}` + ']')
-            }
-            else {
-                io.emit('tlp_status_update', 0);
-                console.log('Take off denied by [' + `${socket.id}` + ']')
-            }
-        }
-        else {
-            console.log('TLP Timeout | Takeoff rejected');
-            io.emit('tlp_status_update', -1);
-        }
-    });
-
-    socket.on('add_socket_to_acid_room', id_payload => {
-        UAC_v2.find({ acid: id_payload.acid }).exec().then(function (rud) {
-            try {
-                data_transit_vulture_req_arr.push(rud[0].vid);
-                socket.join(`${rud[0].vow[0].vid}`);
-                socket.join(rud[0].acid);
-            } catch (e) { console.log(`[${e.message}] [LOGIN CATCH]`) }
-        })
-
-        UAC_v2.find({ acid: id_payload.acid }).exec().then((rud) => { try { io.to(socket.id).emit('un', { un: rud[0].username, vow: rud[0].vow }) } catch (e) { console.log(`[${e.message}] [LOGIN CATCH]`) } })//
-    });
-
-    socket.on('disconnect', () => {
-        // const ixrl = sec_aprvd_sid_arr.indexOf(socket.id);
-        // sec_aprvd_sid_arr.splice(ixrl, 1);
-        // sec_aprvd_un_arr.splice(ixrl, 1);
-        // sec_aprvd_kx_arr.splice(ixrl, 1);
-        rem_ebv(sec_aprvd_sid_arr, data_transit_sid_arr, data_transit_vulture_req_arr, data_transit_un_arr, socket.id);
-    });
-
-    // setInterval(() => {
-    //    acnt_link_ary.find((acntq, ix) => {
-    //       if(acntq == acnt_id){
-    //          socket.to(srw_sid_ary[ix]).emit('trgt_data_pkg', `${acnt_link_ary[0]} | ${Date.now()}`);
-    //          //console.log(`mathc ${acnt_id}`);
-    //       }
-    //    });
-    // }, 1000);
-
-    socket.on('srv_hsc', (skt_id_) => {
-        srw_sid_ary.push(skt_id_[0]);
-        acnt_link_ary.push(skt_id_[1]);
-    });
-
-    var sid = socket.client.id;
-    socket.emit('onenter', { sid, command_sid_arr });
-    socket.on('disconnect', () => {
-        for (let y = 0; y < adv_tele_sid_arr.length; y++) {
-            if (adv_tele_sid_arr[y] == socket.client.id) {
-                adv_tele_sid_arr.splice(y, 1);
-            }
-        }
-        for (let k = 0; k < command_sid_arr.length; k++) {
-            if (command_sid_arr[k] == socket.client.id) {
-                command_sid_arr.splice(k, 1);
-            }
-        }
-        //   console.log(command_sid_arr);  
-        io.emit('users_connected_arr', command_sid_arr);
-    });
-
-    socket.on('uj_adv_tele', uid => {
-        if (adv_tele_uid_arr.includes(uid) == false) {
-            adv_tele_uid_arr.push(uid, socket.client.id);
-        }
-        if (adv_tele_sid_arr.includes(socket.client.id) == false) {
-            adv_tele_sid_arr.push(socket.client.id);
-        }
-        //   console.log(adv_tele_sid_arr);
-    });
-
-    socket.on('uj_command', () => {
-        if (command_sid_arr.includes(socket.client.id) == false) {
-            command_sid_arr.push(socket.client.id);
-        }
-        // console.log(`${command_sid_arr} cmd`);
-        io.emit('users_connected_arr', command_sid_arr);
-    });
-
-
-    /// Password reset ///
-
-    socket.on('reset_pass_req', reset_pass_req_payload => {
-        UAC_v2.find({ email: reset_pass_req_payload.email }).exec().then(r => {
-            if (r.length > 0) {
-                const user = r[0];
-                const vc = getCryptoRandomInt(100000, 999999);
-                const add_vc_to_rtdb = ref(db, `password_reset/${vc}/`);
-                set(add_vc_to_rtdb, { vc: vc, tx: Date.now(), email: reset_pass_req_payload.email });
-                const msg = {
-                    to: reset_pass_req_payload.email,
-                    from: 'raven@vulture-uplink.com',
-                    subject: '[AURORA] Password Reset',
-                    text: `Use the code ${vc} to continue the reset password process`,
-                }
-                try {
-                    sendgrid.send(msg).then().catch(e => console.log(e));
-                }
-                catch (e) { }
-            }
-        });
-    });
-
-    socket.on('reset_pass_code_verification_req', reset_pass_code_verification_req_payload => {
-        get_snapshot_from_path(`password_reset/${reset_pass_code_verification_req_payload.vc}`).then(snapshot => {
-            const data = snapshot.val();
-            if (data != null) {
-                if (data.email == reset_pass_code_verification_req_payload.email) {
-                    remove(ref(db, `password_reset/${reset_pass_code_verification_req_payload.vc}`));
-                    const pass_reset_token = `${uuid.v4()}${uuid.v4()}`;
-                    const add_pass_reset_token_to_rtdb = ref(db, `password_reset_tokens/${pass_reset_token}`);
-                    set(add_pass_reset_token_to_rtdb, {
-                        tx: Date.now()
-                    });
-                    io.to(socket.id).emit('reset_pass_code_verification_res', { res: true, prt: pass_reset_token });
-                }
-                else {
-                    io.to(socket.id).emit('reset_pass_code_verification_res', { res: false });
-                }
-            }
-            else {
-                io.to(socket.id).emit('reset_pass_code_verification_res', { res: false });
-            }
-        });
-    });
-
-    socket.on('login_res', login_res_payload => {
-        if (login_res_payload.tid != undefined) {
-            get_snapshot_from_path(`frstp_aprvd_tids/${login_res_payload.tid}`).then(snapshot => {
-                const data = snapshot.val();
-                if (data != null) {
-                    if (login_res_payload.user_response) {
-                        set(ref(db, `frstp_aprvd_tids/${login_res_payload.tid}`), { tid: login_res_payload.tid, acid: login_res_payload.acid, state: true });
-                    }
-                    else {
-                        set(ref(db, `frstp_aprvd_tids/${login_res_payload.tid}`), { tid: login_res_payload.tid, acid: login_res_payload.acid, state: false });
-                    }
-                }
-            });
-        }
-    });
-
-    socket.on('reset_pass', reset_pass_payload => {
-        try {
-            get_snapshot_from_path(`password_reset_tokens/${reset_pass_payload.reset_pass_token}`).then(snapshot => {
-                const data = snapshot.val();
-                if (data != null) {
-                    if (Math.abs(Date.now() - data.tx) < 600000) {
-                        remove(ref(db, `password_reset_tokens/${reset_pass_payload.reset_pass_token}`));
-                        UAC_v2.find({ email: reset_pass_payload.email }).exec().then(r => {
-                            if (r.length > 0) {
-                                bcrypt.hash(reset_pass_payload.ax, 10).then(hash => {
-                                    UAC_v2.findOneAndUpdate({ email: reset_pass_payload.email }, { password: hash }, { upsert: true }, (err, doc) => {
-                                        if (err == null) {
-                                            io.to(socket.id).emit('reset_pass_res', true);
-                                        }
-                                    });
-
-                                });
+    socket.on('req_vulture_array_status', req_vulture_array_status_payload => {
+        get_snapshot_from_path(`adv_tele_aprvd_tids/${req_vulture_array_status_payload.ath}`).then(snapshot => {
+            if(snapshot.val() != null && socket.handshake.query.acid == snapshot.val().acid){
+                UAC_v2.findOne({ acid: req_vulture_array_status_payload.acid }).exec().then(user => {
+                    let vulture_array = user.vow;
+                    let vulture_array_status = [];
+                    for (let ix = 0; ix < vulture_array.length; ix++) {
+                        get_snapshot_from_path(`active_vultures/${vulture_array[ix].vid}`).then(snapshot => {
+                            const data = snapshot.val();
+                            if (data != null) {
+                                vulture_array_status.push({ vid: vulture_array[ix].vid, vn: vulture_array[ix].vn, status: 'active' });
+                            }
+                            else {
+                                vulture_array_status.push({ vid: vulture_array[ix].vid, vn: vulture_array[ix].vn, status: 'ready' });
+                            }
+                            if(vulture_array_status.length == vulture_array.length){
+                                io.to(socket.id).emit('vulture_array_status_res', { vulture_array_status: vulture_array_status });
                             }
                         });
                     }
-                }
-            });
-        } catch (e) {
-            io.to(socket.id).emit('reset_pass_res', false);
-        }
+                });
+            }
+        });
     });
 
-    ////--Security Auth--////[sec]
+    get_snapshot_from_path(`adv_tele_aprvd_tids/${socket.handshake.query.socket_auth_token}`).then(snapshot => {//Global Socket Auth
+        if (snapshot.val() != null && snapshot.val().acid == socket.handshake.query.acid) {
+            console.log(`Relay Online | ${Date.now()}`);
 
-    socket.on('req_default_MFA_method_change', req_default_MFA_method_change_payload => {
-        get_snapshot_from_path(`aprvd_tids/${req_default_MFA_method_change_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(req_default_MFA_method_change_payload, snapshot)) {
+
+            console.log(`Connection detected | SIDx [${socket.id}]`);
+            ////--Data flow routing demo [In-progress]--////
+
+
+            ///-- Vulture Ping --///
+            socket.on('req_vulture_connection_vitals', req_vulture_connection_vitals_payload => {
+                io.to(`${req_vulture_connection_vitals_payload.vid}`).emit('req_vulture_connection_vitals');
+            });
+
+            var mx_acid;
+            ///-TLP-///
+            var tlp_req_relay_unx = 0;
+            socket.on('tlp_request_gen', (tlp_req_payload) => {
+                console.log(`Trusted Launch Platform Demo | GENSID: ${socket.id} | Time: ${tlp_req_payload.time} UNX`);
+                for (var x = 0; x < acid_sid_link_ary.length; x++) {
+                    if (acid_sid_link_ary[x].sid_arr == socket.id) {
+                        mx_acid = acid_sid_link_ary[x].acid;
+                        console.log(`${mx_acid} mx`)
+                        // console.log(`M@IX: ${x} | M@SIDX: ${acid_sid_link_ary[x].acid}`);
+                    }
+                }
+                for (var x = 0; x < acid_sid_link_ary.length; x++) {
+                    if (acid_sid_link_ary[x].acid == mx_acid) {
+                        console.log(`Trusted Launch Platform Notify SID: [${acid_sid_link_ary[x].sid_arr}]`)
+
+                        // socket.to(`${acid_sid_link_ary[x].sid_arr}`).emit('tlp_notify_signal');
+                        // socket.to(socket.id).emit('tlp_notify_signal');
+
+                        // console.log(`M@IX: ${x} | M@SIDX: ${acid_sid_link_ary[x].acid}`);
+                    }
+                }
+                io.emit('tlp_notify_signal', tlp_req_payload);
+                tlp_req_relay_unx = Date.now();
+            });
+
+            setInterval(() => {
+                if (tlp_req_relay_unx != 0) {
+                    if (Math.abs(tlp_req_relay_unx - Date.now()) > 5000) {
+                        console.log('TLP Timeout | Takeoff rejected');
+                        io.emit('tlp_status_update', -1);
+                        tlp_req_relay_unx = 0;
+                    }
+                }
+            }, 200);
+
+
+            socket.on('new_target_vid', new_target_vid_payload => {
+                socket.leave(`${new_target_vid_payload.pvid}`);
+                socket.join(`${new_target_vid_payload.vid}`);
+            });
+
+            //--TLP--// tlp
+            socket.on('tlp_user_response', (ur) => {
+                if (ur != undefined) {
+                    if (ur) {
+                        io.emit('tlp_status_update', 1);
+                        console.log('Take off approved by [' + `${socket.id}` + ']')
+                    }
+                    else {
+                        io.emit('tlp_status_update', 0);
+                        console.log('Take off denied by [' + `${socket.id}` + ']')
+                    }
+                }
+                else {
+                    console.log('TLP Timeout | Takeoff rejected');
+                    io.emit('tlp_status_update', -1);
+                }
+            });
+
+            socket.on('add_socket_to_acid_room', id_payload => {
+                UAC_v2.find({ acid: id_payload.acid }).exec().then(function (rud) {
+                    try {
+                        data_transit_vulture_req_arr.push(rud[0].vid);
+                        socket.join(`${rud[0].vow[0].vid}`);
+                        socket.join(rud[0].acid);
+                    } catch (e) { console.log(`[${e.message}] [LOGIN CATCH]`) }
+                })
+
+                UAC_v2.find({ acid: id_payload.acid }).exec().then((rud) => { try { io.to(socket.id).emit('un', { un: rud[0].username, vow: rud[0].vow }) } catch (e) { console.log(`[${e.message}] [LOGIN CATCH]`) } })//
+            });
+
+            socket.on('disconnect', () => {
+                // const ixrl = sec_aprvd_sid_arr.indexOf(socket.id);
+                // sec_aprvd_sid_arr.splice(ixrl, 1);
+                // sec_aprvd_un_arr.splice(ixrl, 1);
+                // sec_aprvd_kx_arr.splice(ixrl, 1);
+                rem_ebv(sec_aprvd_sid_arr, data_transit_sid_arr, data_transit_vulture_req_arr, data_transit_un_arr, socket.id);
+            });
+
+            // setInterval(() => {
+            //    acnt_link_ary.find((acntq, ix) => {
+            //       if(acntq == acnt_id){
+            //          socket.to(srw_sid_ary[ix]).emit('trgt_data_pkg', `${acnt_link_ary[0]} | ${Date.now()}`);
+            //          //console.log(`mathc ${acnt_id}`);
+            //       }
+            //    });
+            // }, 1000);
+
+            socket.on('srv_hsc', (skt_id_) => {
+                srw_sid_ary.push(skt_id_[0]);
+                acnt_link_ary.push(skt_id_[1]);
+            });
+
+            var sid = socket.client.id;
+            socket.emit('onenter', { sid, command_sid_arr });
+            socket.on('disconnect', () => {
+                for (let y = 0; y < adv_tele_sid_arr.length; y++) {
+                    if (adv_tele_sid_arr[y] == socket.client.id) {
+                        adv_tele_sid_arr.splice(y, 1);
+                    }
+                }
+                for (let k = 0; k < command_sid_arr.length; k++) {
+                    if (command_sid_arr[k] == socket.client.id) {
+                        command_sid_arr.splice(k, 1);
+                    }
+                }
+                //   console.log(command_sid_arr);  
+                io.emit('users_connected_arr', command_sid_arr);
+            });
+
+            socket.on('uj_adv_tele', uid => {
+                if (adv_tele_uid_arr.includes(uid) == false) {
+                    adv_tele_uid_arr.push(uid, socket.client.id);
+                }
+                if (adv_tele_sid_arr.includes(socket.client.id) == false) {
+                    adv_tele_sid_arr.push(socket.client.id);
+                }
+                //   console.log(adv_tele_sid_arr);
+            });
+
+            socket.on('uj_command', () => {
+                if (command_sid_arr.includes(socket.client.id) == false) {
+                    command_sid_arr.push(socket.client.id);
+                }
+                // console.log(`${command_sid_arr} cmd`);
+                io.emit('users_connected_arr', command_sid_arr);
+            });
+
+
+            /// Password reset ///
+
+            socket.on('reset_pass_req', reset_pass_req_payload => {
+                UAC_v2.find({ email: reset_pass_req_payload.email }).exec().then(r => {
+                    if (r.length > 0) {
+                        const user = r[0];
+                        const vc = getCryptoRandomInt(100000, 999999);
+                        const add_vc_to_rtdb = ref(db, `password_reset/${vc}/`);
+                        set(add_vc_to_rtdb, { vc: vc, tx: Date.now(), email: reset_pass_req_payload.email });
+                        const msg = {
+                            to: reset_pass_req_payload.email,
+                            from: 'raven@vulture-uplink.com',
+                            subject: '[AURORA] Password Reset',
+                            text: `Use the code ${vc} to continue the reset password process`,
+                        }
+                        try {
+                            sendgrid.send(msg).then().catch(e => console.log(e));
+                        }
+                        catch (e) { }
+                    }
+                });
+            });
+
+            socket.on('reset_pass_code_verification_req', reset_pass_code_verification_req_payload => {
+                get_snapshot_from_path(`password_reset/${reset_pass_code_verification_req_payload.vc}`).then(snapshot => {
+                    const data = snapshot.val();
+                    if (data != null) {
+                        if (data.email == reset_pass_code_verification_req_payload.email) {
+                            remove(ref(db, `password_reset/${reset_pass_code_verification_req_payload.vc}`));
+                            const pass_reset_token = `${uuid.v4()}${uuid.v4()}`;
+                            const add_pass_reset_token_to_rtdb = ref(db, `password_reset_tokens/${pass_reset_token}`);
+                            set(add_pass_reset_token_to_rtdb, {
+                                tx: Date.now()
+                            });
+                            io.to(socket.id).emit('reset_pass_code_verification_res', { res: true, prt: pass_reset_token });
+                        }
+                        else {
+                            io.to(socket.id).emit('reset_pass_code_verification_res', { res: false });
+                        }
+                    }
+                    else {
+                        io.to(socket.id).emit('reset_pass_code_verification_res', { res: false });
+                    }
+                });
+            });
+
+            socket.on('login_res', login_res_payload => {
+                if (login_res_payload.tid != undefined) {
+                    get_snapshot_from_path(`frstp_aprvd_tids/${login_res_payload.tid}`).then(snapshot => {
+                        const data = snapshot.val();
+                        if (data != null) {
+                            if (login_res_payload.user_response) {
+                                set(ref(db, `frstp_aprvd_tids/${login_res_payload.tid}`), { tid: login_res_payload.tid, acid: login_res_payload.acid, state: true });
+                            }
+                            else {
+                                set(ref(db, `frstp_aprvd_tids/${login_res_payload.tid}`), { tid: login_res_payload.tid, acid: login_res_payload.acid, state: false });
+                            }
+                        }
+                    });
+                }
+            });
+
+            socket.on('reset_pass', reset_pass_payload => {
+                try {
+                    get_snapshot_from_path(`password_reset_tokens/${reset_pass_payload.reset_pass_token}`).then(snapshot => {
+                        const data = snapshot.val();
+                        if (data != null) {
+                            if (Math.abs(Date.now() - data.tx) < 600000) {
+                                remove(ref(db, `password_reset_tokens/${reset_pass_payload.reset_pass_token}`));
+                                UAC_v2.find({ email: reset_pass_payload.email }).exec().then(r => {
+                                    if (r.length > 0) {
+                                        bcrypt.hash(reset_pass_payload.ax, 10).then(hash => {
+                                            UAC_v2.findOneAndUpdate({ email: reset_pass_payload.email }, { password: hash }, { upsert: true }, (err, doc) => {
+                                                if (err == null) {
+                                                    io.to(socket.id).emit('reset_pass_res', true);
+                                                }
+                                            });
+
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    });
+                } catch (e) {
+                    io.to(socket.id).emit('reset_pass_res', false);
+                }
+            });
+
+            ////--Security Auth--////[sec]
+
+            socket.on('req_default_MFA_method_change', req_default_MFA_method_change_payload => {
                 UAC_v2.find({ acid: req_default_MFA_method_change_payload.acid }).exec().then(r => {
                     if (r.length > 0) {
                         const user = r[0];
@@ -1831,16 +1844,9 @@ io.on('connection', socket => {
                         }
                     }
                 });
-            }
-            else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
-            }
-        });
-    });
+            });
 
-    socket.on('req_opsec_account_pass_comp', req_opsec_account_pass_comp_payload => {
-        get_snapshot_from_path(`adv_tele_aprvd_tids/${req_opsec_account_pass_comp_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(req_opsec_account_pass_comp_payload, snapshot)) {
+            socket.on('req_opsec_account_pass_comp', req_opsec_account_pass_comp_payload => {
                 UAC_v2.find({ email: req_opsec_account_pass_comp_payload.email }).exec().then(r => {
                     if (r.length > 0) {
                         const user = r[0];
@@ -1852,28 +1858,20 @@ io.on('connection', socket => {
                         }
                     }
                 });
-            }
-        });
-    });
+            });
 
-    socket.on('req_am_rcvry_methods_status', req_am_rcvry_methods_status_payload => {
-        get_snapshot_from_path(`aprvd_tids/${req_am_rcvry_methods_status_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(req_am_rcvry_methods_status_payload, snapshot)) {
+            socket.on('req_am_rcvry_methods_status', req_am_rcvry_methods_status_payload => {
                 UAC_v2.find({ email: req_am_rcvry_methods_status_payload.email }).exec().then(r => {
                     if (r.length > 0) {
                         const user = r[0];
                         console.log(user.sec_rcvry_methods_arr);
                     }
                 });
-            }
-        });
-    });
+            });
 
-    // access & permissions //
+            // access & permissions //
 
-    socket.on('v_access_flip', v_access_flip_payload => {
-        get_snapshot_from_path(`aprvd_tids/${v_access_flip_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(v_access_flip_payload, snapshot)) {
+            socket.on('v_access_flip', v_access_flip_payload => {
                 VULTURE_SCH.find({ vid: v_access_flip_payload.vid }).exec().then(_vulture_obj => {
                     if (_vulture_obj.length > 0) {
                         let vulture_obj = _vulture_obj[0];
@@ -1890,13 +1888,9 @@ io.on('connection', socket => {
                         });
                     }
                 });
-            }
-        });
-    });
+            });
 
-    socket.on('v_permissions_adv_tele_flip', v_permissions_adv_tele_flip_payload => {
-        get_snapshot_from_path(`aprvd_tids/${v_permissions_adv_tele_flip_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(v_permissions_adv_tele_flip_payload, snapshot)) {
+            socket.on('v_permissions_adv_tele_flip', v_permissions_adv_tele_flip_payload => {
                 VULTURE_SCH.find({ vid: v_permissions_adv_tele_flip_payload.vid }).exec().then(_vulture_obj => {
                     if (_vulture_obj.length > 0) {
                         let vulture_obj = _vulture_obj[0];
@@ -1913,15 +1907,11 @@ io.on('connection', socket => {
                         });
                     }
                 });
-            }
-        });
-    });
+            });
 
 
 
-    socket.on('v_permissions_security_flip', v_permissions_security_flip_payload => {
-        get_snapshot_from_path(`aprvd_tids/${v_permissions_security_flip_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(v_permissions_security_flip_payload, snapshot)) {
+            socket.on('v_permissions_security_flip', v_permissions_security_flip_payload => {
                 VULTURE_SCH.find({ vid: v_permissions_security_flip_payload.vid }).exec().then(_vulture_obj => {
                     if (_vulture_obj.length > 0) {
                         vulture_obj = _vulture_obj[0];
@@ -1938,16 +1928,9 @@ io.on('connection', socket => {
                         });
                     }
                 });
-            }
-            else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
-            }
-        });
-    });
+            });
 
-    socket.on('v_permissions_cmd_flip', v_permissions_cmd_flip_payload => {
-        get_snapshot_from_path(`aprvd_tids/${v_permissions_cmd_flip_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(v_permissions_cmd_flip_payload, snapshot)) {
+            socket.on('v_permissions_cmd_flip', v_permissions_cmd_flip_payload => {
                 VULTURE_SCH.find({ vid: v_permissions_cmd_flip_payload.vid }).exec().then(_vulture_obj => {
                     if (_vulture_obj.length > 0) {
                         vulture_obj = _vulture_obj[0];
@@ -1964,16 +1947,9 @@ io.on('connection', socket => {
                         });
                     }
                 });
-            }
-            else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
-            }
-        });
-    });
+            });
 
-    socket.on('vulture_access_invite_res', vulture_access_invite_res_payload => {
-        get_snapshot_from_path(`aprvd_tids/${vulture_access_invite_res_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(vulture_access_invite_res_payload, snapshot)) {
+            socket.on('vulture_access_invite_res', vulture_access_invite_res_payload => {
                 get_snapshot_from_path(`vulture_access_invites/${vulture_access_invite_res_payload.acid}`).then(snapshot => {
                     const invites = snapshot.val();
                     if (!vulture_access_invite_res_payload.res) {
@@ -2003,39 +1979,27 @@ io.on('connection', socket => {
                         });
                     }
                 });
-            } else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
-            }
-        });
-    });
+            });
 
-    socket.on('fetch_vulture_access_invites', fetch_vulture_access_invites_paylaod => {
-        get_snapshot_from_path(`aprvd_tids/${fetch_vulture_access_invites_paylaod.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(fetch_vulture_access_invites_paylaod, snapshot)) {
+            socket.on('fetch_vulture_access_invites', fetch_vulture_access_invites_paylaod => {
                 get_snapshot_from_path(`vulture_access_invites/${fetch_vulture_access_invites_paylaod.acid}`).then(snapshot => {
                     const vulture_invites = snapshot.val();
                     if (vulture_invites != null) {
                         io.to(socket.id).emit('fetched_vulture_access_invites', vulture_invites);
                     }
                 });
-            } else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
+            });
+
+            function add_vulture_access_invite_tortdb(user_obj, vulture_obj, recipient_acid) {
+                const vulture_access_invites_path = ref(db, `vulture_access_invites/${recipient_acid}/${vulture_obj.vid}`);
+                set(vulture_access_invites_path, {
+                    sender_obj: user_obj,
+                    target_vulture_obj: vulture_obj,
+                    tx: Date.now()
+                });
             }
-        });
-    });
 
-    function add_vulture_access_invite_tortdb(user_obj, vulture_obj, recipient_acid) {
-        const vulture_access_invites_path = ref(db, `vulture_access_invites/${recipient_acid}/${vulture_obj.vid}`);
-        set(vulture_access_invites_path, {
-            sender_obj: user_obj,
-            target_vulture_obj: vulture_obj,
-            tx: Date.now()
-        });
-    }
-
-    socket.on('send_vulture_access_invite', send_vulture_access_invite_payload => {
-        get_snapshot_from_path(`aprvd_tids/${send_vulture_access_invite_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(send_vulture_access_invite_payload, snapshot)) {
+            socket.on('send_vulture_access_invite', send_vulture_access_invite_payload => {
                 UAC_v2.find({ email: send_vulture_access_invite_payload.req_params }).exec().then(r => {
                     if (r.length > 0) {
                         add_vulture_access_invite_tortdb(send_vulture_access_invite_payload.user_data, send_vulture_access_invite_payload.vulture_data, r[0].acid);
@@ -2048,15 +2012,9 @@ io.on('connection', socket => {
                         });
                     };
                 });
-            } else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
-            }
-        });
-    });
+            });
 
-    socket.on('req_vulture_config', req_vulture_config_payload => {
-        get_snapshot_from_path(`aprvd_tids/${req_vulture_config_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(req_vulture_config_payload, snapshot)) {
+            socket.on('req_vulture_config', req_vulture_config_payload => {
                 VULTURE_SCH.find({ vid: req_vulture_config_payload.vid }).exec().then(r => {
                     if (r.length > 0) {
                         const vulture_obj = r[0];
@@ -2067,42 +2025,27 @@ io.on('connection', socket => {
                         }
                     }
                 });
-            }
-        });
-    });
-    socket.on('acid_to_eun', acid_to_eun_payload => {
-        get_snapshot_from_path(`aprvd_tids/${acid_to_eun_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(acid_to_eun_payload, snapshot)) {
+            });
+            socket.on('acid_to_eun', acid_to_eun_payload => {
                 UAC_v2.find({ acid: acid_to_eun_payload.acid }).exec().then(r => {
                     if (r.length > 0) {
                         const user = r[0];
                         io.to(socket.id).emit('acid_to_eun_res', { acid: acid_to_eun_payload.acid, un: user.username, email: user.email, role: acid_to_eun_payload.role });
                     }
                 });
-            }
-            else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
-            }
-        });
-    });
+            });
 
-    //Email verification logic
-    socket.on('req_vfid_email_arr', req_vfid_email_arr_payload => {
-        get_snapshot_from_path(`aprvd_tids/${req_vfid_email_arr_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(req_vfid_email_arr_payload, snapshot)) {
+            //Email verification logic
+            socket.on('req_vfid_email_arr', req_vfid_email_arr_payload => {
                 UAC_v2.find({ email: req_vfid_email_arr_payload.email }).exec().then(r => {
                     if (r.length > 0) {
                         const user = r[0];
                         io.to(socket.id).emit('vfid_email_arr_res', user.contact_emails_arr);
                     }
                 });
-            }
-        });
-    });
+            });
 
-    socket.on('verify_email_code', verify_email_code_payload => {
-        get_snapshot_from_path(`aprvd_tids/${verify_email_code_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(verify_email_code_payload, snapshot)) {
+            socket.on('verify_email_code', verify_email_code_payload => {
                 get_snapshot_from_path(`email_conf/${verify_email_code_payload.vc}`).then(snapshot => {
                     const vc_data = snapshot.val();
                     if (vc_data != null) {
@@ -2124,13 +2067,9 @@ io.on('connection', socket => {
                         io.to(socket.id).emit('verify_email_code_res', false);
                     }
                 });
-            }
-        });
-    });
+            });
 
-    socket.on('rm_email_rcvry_method', rm_email_rcvry_method_payload => {
-        get_snapshot_from_path(`aprvd_tids/${rm_email_rcvry_method_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(rm_email_rcvry_method_payload, snapshot)) {
+            socket.on('rm_email_rcvry_method', rm_email_rcvry_method_payload => {
                 UAC_v2.find({ email: rm_email_rcvry_method_payload.email }).exec().then(r => {
                     if (r.length > 0) {
                         const user = r[0];
@@ -2143,13 +2082,9 @@ io.on('connection', socket => {
                         }
                     }
                 });
-            }
-        });
-    });
+            });
 
-    socket.on('send_email_vc', send_email_vc_payload => {
-        get_snapshot_from_path(`aprvd_tids/${send_email_vc_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(send_email_vc_payload, snapshot)) {
+            socket.on('send_email_vc', send_email_vc_payload => {
                 const vc = getCryptoRandomInt(100000, 999999);
                 const add_vc_to_te = ref(db, `email_conf/${vc}/`);
                 set(add_vc_to_te, { email: send_email_vc_payload.ax, tx: Date.now() });
@@ -2167,69 +2102,9 @@ io.on('connection', socket => {
                     io.to(socket.id).emit('verify_email_code_res', false);
                 }
 
-            }
-        });
-    });
-
-    // async function get_rtdb_snapshot(path){
-    //     return await get(ref(db, `${path}/`));
-    // }
-    // async function get_user_obj_bemail(email){
-    //     let user;
-    //     UAC_v2.find({ email: email }).exec()
-    // }
-
-    function req_vulture_array_status_exec(payload, snapshot) {
-        if (socket_transport_authenticator(payload, snapshot)) {
-            if (snapshot.val().acid == payload.acid) {
-                get(ref(db, 'active_vultures/')).then(active_vultures_snapshot => {
-                    UAC_v2.find({ acid: payload.acid }).exec().then(r => {
-                        if (r.length > 0) {
-                            let vow = r[0].vow;
-                            let vow_status = [];
-                            const data = active_vultures_snapshot.val();
-                            if (data != null) {
-                                for (let ix = 0; ix < vow.length; ix++) {
-                                    if (data[vow[ix].vid] == undefined) {
-                                        vow_status.push({ vid: vow[ix].vid, vn: vow[ix].vn, status: 'ready' });
-                                    }
-                                    else {
-                                        vow_status.push({ vid: vow[ix].vid, vn: vow[ix].vn, status: 'active' });
-                                    }
-                                }
-                                io.to(socket.id).emit('vulture_array_status_res', { vulture_array_status: vow_status });
-                            }
-                            else {
-                                for (let ix = 0; ix < vow.length; ix++) {
-                                    vow_status[ix] = { vid: vow[ix].vid, vn: vow[ix].vn, status: 'ready' };
-                                }
-                                io.to(socket.id).emit('vulture_array_status_res', { vulture_array_status: vow_status });
-                            }
-                        }
-                    });
-                });
-            } else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
-            }
-        }
-    }
-
-    socket.on('req_vulture_array_status', req_vulture_array_status_payload => {
-        if (req_vulture_array_status_payload.origin == undefined || req_vulture_array_status_payload.origin == 'security') {
-            get_snapshot_from_path(`aprvd_tids/${req_vulture_array_status_payload.ath}`).then(snapshot => {
-                req_vulture_array_status_exec(req_vulture_array_status_payload, snapshot);
             });
-        }
-        if (req_vulture_array_status_payload.origin == 'adv_tele') {
-            get_snapshot_from_path(`adv_tele_aprvd_tids/${req_vulture_array_status_payload.ath}`).then(adv_tele_snapshot => {
-                req_vulture_array_status_exec(req_vulture_array_status_payload, adv_tele_snapshot);
-            });
-        }
-    });
 
-    socket.on('req_relay_station_array', req_relay_station_array_payload => {
-        get_snapshot_from_path(`aprvd_tids/${req_relay_station_array_payload.ath}`).then(snapshot => {
-            if (snapshot != null) {
+            socket.on('req_relay_station_array', req_relay_station_array_payload => {
                 let relay_station_array = [];
                 for (let ix = 0; ix < req_relay_station_array_payload.dock_array.length; ix++) {
                     for (let rs_array_ix = 0; rs_array_ix < req_relay_station_array_payload.dock_array[ix].relay_station_array.length; rs_array_ix++) {
@@ -2243,13 +2118,9 @@ io.on('connection', socket => {
                         });
                     }
                 }
-            }
-        });
-    });
+            });
 
-    socket.on('req_dock_array', req_dock_array_payload => {
-        get_snapshot_from_path(`aprvd_tids/${req_dock_array_payload.ath}`).then(snapshot => {
-            if (snapshot != null) {
+            socket.on('req_dock_array', req_dock_array_payload => {
                 UAC_v2.findOne({ acid: req_dock_array_payload.acid }).exec().then(user => {
                     if (user != null) {
                         let dock_array = [];
@@ -2267,51 +2138,26 @@ io.on('connection', socket => {
                         }
                     }
                 });
-            } else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
-            }
-        });
-    });
+            });
 
-    function req_vow_exec(payload, snapshot) {
-        if (socket_transport_authenticator(payload, snapshot)) {
-            UAC_v2.find({ acid: payload.acid }).exec().then(r => {
-                if (r.length > 0) {
-                    const user = r[0];
-                    io.to(socket.id).emit('vow_res', { vow: user.vow });
+            socket.on('req_vow', req_vow_payload => {
+                UAC_v2.find({ acid: req_vow_payload.acid }).exec().then(r => {
+                    if (r.length > 0) {
+                        const user = r[0];
+                        io.to(socket.id).emit('vow_res', { vow: user.vow });
+                    }
+                });
+            });
+
+            socket.on('sid_update', un => {
+                const qry = (element) => element == un;
+                const ixl = sec_aprvd_un_arr.findIndex(qry);
+                if (ixl >= 0) {
+                    sec_aprvd_sid_arr[ixl] = socket.id;
                 }
             });
-        }
-        else {
-            io.to(socket.id).emit('sio_transport_auth_failed_sig');
-        }
-    }
 
-    socket.on('req_vow', req_vow_payload => {
-        if (req_vow_payload.origin == 'security') {
-            get_snapshot_from_path(`aprvd_tids/${req_vow_payload.ath}`).then(snapshot => {
-                req_vow_exec(req_vow_payload, snapshot);
-            });
-        }
-        if (req_vow_payload.origin == 'adv_tele') {
-            get_snapshot_from_path(`adv_tele_aprvd_tids/${req_vow_payload.ath}`).then(adv_tele_snapshot => {
-                req_vow_exec(req_vow_payload, adv_tele_snapshot);
-            });
-        }
-    });
-
-    socket.on('sid_update', un => {
-
-        const qry = (element) => element == un;
-        const ixl = sec_aprvd_un_arr.findIndex(qry);
-        if (ixl >= 0) {
-            sec_aprvd_sid_arr[ixl] = socket.id;
-        }
-    });
-
-    socket.on('add_vulture_tvow', avtvw_payload => {//rr
-        get_snapshot_from_path(`aprvd_tids/${avtvw_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(avtvw_payload, snapshot)) {
+            socket.on('add_vulture_tvow', avtvw_payload => {//rr
                 let nvid = uuid.v4();
                 add_vulture_to_vow(avtvw_payload.email, avtvw_payload.vn, nvid);
 
@@ -2327,34 +2173,20 @@ io.on('connection', socket => {
                 });
 
                 vulture_sch.save().then(r => { })
-            }
-            else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
-            }
-        });
-    });
+            });
 
-    ////--Security Access Managment--////[sam]
+            ////--Security Access Managment--////[sam]
 
-    socket.on('req_activity_logs', req_activity_logs_payload => {
-        get_snapshot_from_path(`aprvd_tids/${req_activity_logs_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(req_activity_logs_payload, snapshot)) {
+            socket.on('req_activity_logs', req_activity_logs_payload => {
                 UAC_v2.find({ email: req_activity_logs_payload.email }).exec().then(r => {
                     if (r.length > 0) {
                         const user = r[0];
                         io.to(socket.id).emit('activity_logs_res', user.activity_log_arr);
                     }
                 });
-            }
-            else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
-            }
-        });
-    });
+            });
 
-    socket.on('req_backup_codes_regen', req_backup_codes_regen_payload => {
-        get_snapshot_from_path(`aprvd_tids/${req_backup_codes_regen_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(req_backup_codes_regen_payload, snapshot)) {
+            socket.on('req_backup_codes_regen', req_backup_codes_regen_payload => {
                 UAC_v2.find({ email: req_backup_codes_regen_payload.email }).exec().then(r => {
                     if (r.length > 0) {
                         const user = r[0];
@@ -2362,16 +2194,9 @@ io.on('connection', socket => {
                         UAC_v2.findOneAndUpdate({ email: req_backup_codes_regen_payload.email }, { rcvry_codes_arr: new_2fa_bkp_codes }, { upsert: true }, (err, doc) => { });
                     }
                 });
-            }
-            else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
-            }
-        });
-    });
+            });
 
-    socket.on('req_sec_pass_change', req_sec_pass_change_payload => {
-        get_snapshot_from_path(`aprvd_tids/${req_sec_pass_change_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(req_sec_pass_change_payload, snapshot)) {
+            socket.on('req_sec_pass_change', req_sec_pass_change_payload => {
                 UAC_v2.find({ email: req_sec_pass_change_payload.email }).exec().then(r => {
                     if (r.length > 0) {
                         const user = r[0];
@@ -2388,16 +2213,9 @@ io.on('connection', socket => {
                         });
                     }
                 });
-            }
-            else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
-            }
-        });
-    });
+            });
 
-    socket.on('req_auth_prefs', req_auth_prefs_payload => {
-        get_snapshot_from_path(`aprvd_tids/${req_auth_prefs_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(req_auth_prefs_payload, snapshot)) {
+            socket.on('req_auth_prefs', req_auth_prefs_payload => {
                 UAC_v2.find({ email: req_auth_prefs_payload.email }).exec().then(r => {
                     const user = r[0];
                     if (user != undefined) {
@@ -2407,16 +2225,9 @@ io.on('connection', socket => {
                         io.to(socket.id).emit('sio_transport_auth_failed_sig');
                     }
                 });
-            }
-            else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
-            }
-        });
-    });
+            });
 
-    socket.on('req_user_mfa_qrc', req_user_mfa_qrc_payload => {
-        get_snapshot_from_path(`aprvd_tids/${req_user_mfa_qrc_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(req_user_mfa_qrc_payload, snapshot)) {
+            socket.on('req_user_mfa_qrc', req_user_mfa_qrc_payload => {
                 UAC_v2.find({ email: req_user_mfa_qrc_payload.email }).exec().then(r => {
                     if (r.length > 0) {
                         const user = r[0];
@@ -2425,42 +2236,17 @@ io.on('connection', socket => {
                         });
                     }
                 });
-            }
-            else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
-            }
-        });
-    });
+            });
 
-    function req_un_exec(payload, snapshot) {
-        if (socket_transport_authenticator(payload, snapshot)) {
-            UAC_v2.find({ $or: [{ email: payload.uid }, { username: payload.uid }] }).exec().then(r => {
-                if (r.length > 0) {
-                    const user = r[0];
-                    io.to(socket.id).emit('un_res', { username: user.username, acid: user.acid });
-                }
+            socket.on('req_un', req_un_payload => {
+                UAC_v2.find({ $or: [{ email: req_un_payload.uid }, { username: req_un_payload.uid }] }).exec().then(r => {
+                    if (r.length > 0) {
+                        const user = r[0];
+                        io.to(socket.id).emit('un_res', { username: user.username, acid: user.acid });
+                    }
+                });
             });
-        }
-        else {
-            io.to(socket.id).emit('sio_transport_auth_failed_sig');
-        }
-    }
-
-    socket.on('req_un', req_un_payload => {
-        if (req_un_payload.origin == undefined) {
-            get_snapshot_from_path(`aprvd_tids/${req_un_payload.ath}`).then(snapshot => {
-                req_un_exec(req_un_payload, snapshot);
-            });
-        }
-        if (req_un_payload.origin == 'adv_tele') {
-            get_snapshot_from_path(`adv_tele_aprvd_tids/${req_un_payload.ath}`).then(adv_tele_tids_snapshot => {
-                req_un_exec(req_un_payload, adv_tele_tids_snapshot);
-            });
-        }
-    });
-    socket.on('check_mfa_token', check_mfa_token_payload => {
-        get_snapshot_from_path(`aprvd_tids/${check_mfa_token_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(check_mfa_token_payload, snapshot)) {
+            socket.on('check_mfa_token', check_mfa_token_payload => {
                 UAC_v2.find({ acid: check_mfa_token_payload.acid }).exec().then(r => {
                     if (r.length > 0) {
                         const user = r[0];
@@ -2476,172 +2262,163 @@ io.on('connection', socket => {
                         io.to(socket.id).emit('check_mfa_token_res', verified);
                     }
                 });
-            }
-            else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
-            }
-        });
-    });
+            });
 
-    ////--MFA--////
+            ////--MFA--////
 
-    socket.on('req_backup_codes', req_backup_codes_payload => {
-        get_snapshot_from_path(`aprvd_tids/${req_backup_codes_payload.ath}`).then(snapshot => {
-            if (socket_transport_authenticator(req_backup_codes_payload, snapshot)) {
+            socket.on('req_backup_codes', req_backup_codes_payload => {
                 UAC_v2.find({ email: req_backup_codes_payload.email }).exec().then(r => {
                     if (r.length > 0) {
                         const user = r[0];
                         io.emit('backup_codes_res', user.rcvry_codes_arr);
                     }
                 });
-            }
-            else {
-                io.to(socket.id).emit('sio_transport_auth_failed_sig');
-            }
-        });
+            });
+
+            ////--Ping Emitters--////
+            setInterval(() => {
+                socket.emit('ping');
+                ini_ping_time = Date.now();
+            }, 2000);//this ⇄ Advanced_Telemetry F/E 
+
+            socket.on('local_server_ping_emitter', payload => {
+                local_server_unix = payload.tx;
+                io.to(`${payload.vid}`).emit('local_server_ping_emitter_rebound', payload.tx);
+            });//this ⇄ Vulture
+
+            socket.on('ping_back', t => {
+                var latency = Math.round((((Date.now() - ini_ping_time) / 2) * 100) / 100)
+                socket.emit('ping_paint', latency);
+            });//this ⇄ Advanced_Telemetry F/E  | Computed Latency Emitter
+
+            // setInterval(() => {
+            //     socket.emit('command_ping_trigger', Date.now());
+            //     cmd_ping_trigger_unix = Date.now();
+            // }, 2000);//this ⇄ F/E Command
+
+            socket.on('command_ping_echo', () => {
+                var latency = Math.round((((Date.now() - cmd_ping_trigger_unix) / 2) * 100) / 100);
+                io.emit('cmd_ping_paint', latency);
+            });//this ⇄ F/E Advanced Telemetry | Computed Latency Emitter
+
+
+            ////--Connection Status--////
+
+            ///this ⇄ Vulture
+            setInterval(() => {
+                if (Math.abs(local_server_unix - Date.now()) > 3500) {
+                    local_server_cs = false;
+                }
+                else {
+                    local_server_cs = true;
+                }
+                socket.emit('vulture_connection_status', local_server_cs);
+            }, 250);//Checks connection between: this ⇄ Vulture | Emits results to: Advanced_Telemetry F/E 
+
+
+            ///this ⇄ fwd_cam_broadcaster
+            socket.on('fwd_video_broadcaster_status_sig', (_last_fwd_video_broadcaster_uni) => {
+                last_fwd_video_broadcaster_unix = _last_fwd_video_broadcaster_uni;
+            });//Sets last unix for the fwd video broadcaster
+
+            setInterval(() => {
+                if (Math.abs(last_fwd_video_broadcaster_unix - Date.now()) > 1900) {
+                    fwd_video_broadcaster_cs = false;
+                }
+                else {
+                    fwd_video_broadcaster_cs = true;
+                }
+                // io.emit('fwd_video_broadcaster_s_relay', fwd_video_broadcaster_cs);
+            }, 250);//Checks connection between: this ⇄ fwd_cam_broadcaster | Emits results to: Advanced_Telemetry F/E
+
+
+            ///this ⇄ gnd_cam_broadcaster
+            socket.on('gnd_video_broadcaster_status_sig', (_last_gnd_video_broadcaster_uni) => {
+                last_gnd_video_broadcaster_unix = _last_gnd_video_broadcaster_uni;
+            });//Sets last unix for the gnd video broadcaster
+            setInterval(() => {
+                if (Math.abs(last_gnd_video_broadcaster_unix - Date.now()) > 1900) {
+                    gnd_video_broadcaster_cs = false;
+                }
+                else {
+                    gnd_video_broadcaster_cs = true;
+                }
+                // io.emit('gnd_video_broadcaster_s_relay', gnd_video_broadcaster_cs);
+            }, 250);//Checks connection between: this ⇄ gnd_cam_broadcaster | Emits results to: Advanced_Telemetry F/E
+
+
+            ///this ⇄ Command
+            socket.on('command_active_status', _last_unix => {
+                last_cic_unix = _last_unix;
+            });// Command ⇄ this | Sets last unix for Command to display in case it goes offline | Auto emitted by Command 250ms
+
+            socket.on('cmd_unix', cmd_unix => {
+                io.emit('cmd_unix_rebound', cmd_unix);
+            });// Command ⇄ this | Emits last Command unix to: Advanced_Telemetry F/E | Auto emitted by Command 10ms
+
+            setInterval(() => {
+                if (Math.abs(last_cic_unix - Date.now()) > 1900) {
+                    cic_active_status = false;
+                }
+                else {
+                    cic_active_status = true;
+                }
+                // socket.emit('cic_active_status_s_relay', cic_active_status);
+            }, 250);//Checks connection between: this ⇄ Command | Emits results to: Advanced_Telemetry F/E
+
+
+            ///this ⇄ Vulture [Omega Hardware Interface Board]
+            setInterval(() => {
+                if (Math.abs(omega_board_last_unix - Date.now()) > 1000) {
+                    // socket.emit('omega_board_hs', false);
+                }
+                else {
+                    // socket.emit('omega_board_hs', true);
+                }
+            }, 100);//Emits Omega Board Hardware Status to: Advanced_Telemetry F/E
+
+
+            ////--Web RTC--////
+            socket.on('vsb_fwd_ready', (strd_cnt) => {
+                io.emit('fwd_video_feed_connection_ini', strd_cnt);
+            });//fwd_cam_broadcaster ⇄ this | Initial peer signaling | Relayed to: Advanced_Telemetry F/E
+
+            socket.on('vsb_gnd_ready', (strd_cnt) => {
+                io.emit('gnd_video_feed_connection_ini', strd_cnt);
+            });//gnd_cam_broadcaster ⇄ this | Initial peer signaling | Relayed to: Advanced_Telemetry F/E
+
+            socket.on('fwd_video_feed_connection_ilr', data => {
+                io.emit('fwd_video_feed_connection_ilr_x', data);
+            });//Advanced_Telemetry F/E ⇄ this | Advanced_Telemetry F/E initial peer signaling | Relayed to: fwd_cam_broadcaster    
+
+            socket.on('gnd_video_feed_connection_ilr', data => {
+                io.emit('gnd_video_feed_connection_ilr_x', data);
+            });//Advanced_Telemetry F/E ⇄ this | Advanced_Telemetry F/E initial peer signaling | Relayed to: gnd_cam_broadcaster  
+
+            socket.on('adv_tele_refresh_trigger', () => {
+                io.emit('video_link_reini_signal');
+            });//Triggered on Advanced_Telemetry F/E refresh | Refreshes signal to restart video uplink | Relayed to: gnd_cam_broadcaster, fwd_cam_broadcaster
+
+
+            ////--CLI [Vulture ⇄ Advanced_Telemetry F/E]--////
+            socket.on('rth_status_rqst_payload', (RTH) => {
+                io.emit('rth_status_rqst_payload_relay', RTH)
+            });
+
+            ////--User input ops [In-progress]--////
+
+            socket.on('input_pkg_local_rebound', input_pkg_bounceback => {
+                io.emit('input_pkg_local_s_rebound', input_pkg_bounceback);
+            });
+
+            socket.on('joystick_input_pkg', j_in_pkg => {
+                g_joystick_input_pkg = j_in_pkg;
+                socket.emit('input_pkg_server_relay', j_in_pkg);
+            });
+        } else {
+            io.to(socket.id).emit('sio_transport_auth_failed_sig');
+        }
     });
-
-    ////--Ping Emitters--////
-    setInterval(() => {
-        socket.emit('ping');
-        ini_ping_time = Date.now();
-    }, 2000);//this ⇄ Advanced_Telemetry F/E 
-
-    socket.on('local_server_ping_emitter', payload => {
-        local_server_unix = payload.tx;
-        io.to(`${payload.vid}`).emit('local_server_ping_emitter_rebound', payload.tx);
-    });//this ⇄ Vulture
-
-    socket.on('ping_back', t => {
-        var latency = Math.round((((Date.now() - ini_ping_time) / 2) * 100) / 100)
-        socket.emit('ping_paint', latency);
-    });//this ⇄ Advanced_Telemetry F/E  | Computed Latency Emitter
-
-    // setInterval(() => {
-    //     socket.emit('command_ping_trigger', Date.now());
-    //     cmd_ping_trigger_unix = Date.now();
-    // }, 2000);//this ⇄ F/E Command
-
-    socket.on('command_ping_echo', () => {
-        var latency = Math.round((((Date.now() - cmd_ping_trigger_unix) / 2) * 100) / 100);
-        io.emit('cmd_ping_paint', latency);
-    });//this ⇄ F/E Advanced Telemetry | Computed Latency Emitter
-
-
-    ////--Connection Status--////
-
-    ///this ⇄ Vulture
-    setInterval(() => {
-        if (Math.abs(local_server_unix - Date.now()) > 3500) {
-            local_server_cs = false;
-        }
-        else {
-            local_server_cs = true;
-        }
-        socket.emit('vulture_connection_status', local_server_cs);
-    }, 250);//Checks connection between: this ⇄ Vulture | Emits results to: Advanced_Telemetry F/E 
-
-
-    ///this ⇄ fwd_cam_broadcaster
-    socket.on('fwd_video_broadcaster_status_sig', (_last_fwd_video_broadcaster_uni) => {
-        last_fwd_video_broadcaster_unix = _last_fwd_video_broadcaster_uni;
-    });//Sets last unix for the fwd video broadcaster
-
-    setInterval(() => {
-        if (Math.abs(last_fwd_video_broadcaster_unix - Date.now()) > 1900) {
-            fwd_video_broadcaster_cs = false;
-        }
-        else {
-            fwd_video_broadcaster_cs = true;
-        }
-        // io.emit('fwd_video_broadcaster_s_relay', fwd_video_broadcaster_cs);
-    }, 250);//Checks connection between: this ⇄ fwd_cam_broadcaster | Emits results to: Advanced_Telemetry F/E
-
-
-    ///this ⇄ gnd_cam_broadcaster
-    socket.on('gnd_video_broadcaster_status_sig', (_last_gnd_video_broadcaster_uni) => {
-        last_gnd_video_broadcaster_unix = _last_gnd_video_broadcaster_uni;
-    });//Sets last unix for the gnd video broadcaster
-    setInterval(() => {
-        if (Math.abs(last_gnd_video_broadcaster_unix - Date.now()) > 1900) {
-            gnd_video_broadcaster_cs = false;
-        }
-        else {
-            gnd_video_broadcaster_cs = true;
-        }
-        // io.emit('gnd_video_broadcaster_s_relay', gnd_video_broadcaster_cs);
-    }, 250);//Checks connection between: this ⇄ gnd_cam_broadcaster | Emits results to: Advanced_Telemetry F/E
-
-
-    ///this ⇄ Command
-    socket.on('command_active_status', _last_unix => {
-        last_cic_unix = _last_unix;
-    });// Command ⇄ this | Sets last unix for Command to display in case it goes offline | Auto emitted by Command 250ms
-
-    socket.on('cmd_unix', cmd_unix => {
-        io.emit('cmd_unix_rebound', cmd_unix);
-    });// Command ⇄ this | Emits last Command unix to: Advanced_Telemetry F/E | Auto emitted by Command 10ms
-
-    setInterval(() => {
-        if (Math.abs(last_cic_unix - Date.now()) > 1900) {
-            cic_active_status = false;
-        }
-        else {
-            cic_active_status = true;
-        }
-        // socket.emit('cic_active_status_s_relay', cic_active_status);
-    }, 250);//Checks connection between: this ⇄ Command | Emits results to: Advanced_Telemetry F/E
-
-
-    ///this ⇄ Vulture [Omega Hardware Interface Board]
-    setInterval(() => {
-        if (Math.abs(omega_board_last_unix - Date.now()) > 1000) {
-            // socket.emit('omega_board_hs', false);
-        }
-        else {
-            // socket.emit('omega_board_hs', true);
-        }
-    }, 100);//Emits Omega Board Hardware Status to: Advanced_Telemetry F/E
-
-
-    ////--Web RTC--////
-    socket.on('vsb_fwd_ready', (strd_cnt) => {
-        io.emit('fwd_video_feed_connection_ini', strd_cnt);
-    });//fwd_cam_broadcaster ⇄ this | Initial peer signaling | Relayed to: Advanced_Telemetry F/E
-
-    socket.on('vsb_gnd_ready', (strd_cnt) => {
-        io.emit('gnd_video_feed_connection_ini', strd_cnt);
-    });//gnd_cam_broadcaster ⇄ this | Initial peer signaling | Relayed to: Advanced_Telemetry F/E
-
-    socket.on('fwd_video_feed_connection_ilr', data => {
-        io.emit('fwd_video_feed_connection_ilr_x', data);
-    });//Advanced_Telemetry F/E ⇄ this | Advanced_Telemetry F/E initial peer signaling | Relayed to: fwd_cam_broadcaster    
-
-    socket.on('gnd_video_feed_connection_ilr', data => {
-        io.emit('gnd_video_feed_connection_ilr_x', data);
-    });//Advanced_Telemetry F/E ⇄ this | Advanced_Telemetry F/E initial peer signaling | Relayed to: gnd_cam_broadcaster  
-
-    socket.on('adv_tele_refresh_trigger', () => {
-        io.emit('video_link_reini_signal');
-    });//Triggered on Advanced_Telemetry F/E refresh | Refreshes signal to restart video uplink | Relayed to: gnd_cam_broadcaster, fwd_cam_broadcaster
-
-
-    ////--CLI [Vulture ⇄ Advanced_Telemetry F/E]--////
-    socket.on('rth_status_rqst_payload', (RTH) => {
-        io.emit('rth_status_rqst_payload_relay', RTH)
-    });
-
-    ////--User input ops [In-progress]--////
-
-    socket.on('input_pkg_local_rebound', input_pkg_bounceback => {
-        io.emit('input_pkg_local_s_rebound', input_pkg_bounceback);
-    });
-
-    socket.on('joystick_input_pkg', j_in_pkg => {
-        g_joystick_input_pkg = j_in_pkg;
-        socket.emit('input_pkg_server_relay', j_in_pkg);
-    });
-
 });
 //----Global Relay ⇄ F/E link----//
 

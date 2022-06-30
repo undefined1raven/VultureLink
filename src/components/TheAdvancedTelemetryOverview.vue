@@ -108,14 +108,14 @@ export default {
     this.socket_ref.emit("req_vulture_array_status", {
       origin: "adv_tele",
       ath: getCookie("adv_tele_sio_ath"),
-      acid: this.current_user_acid,
+      acid: getCookie("acid"),
     });
 
     this.socket_ref.on("refresh_vulture_array_status_sig", () => {
       this.socket_ref.emit("req_vulture_array_status", {
         origin: "adv_tele",
         ath: getCookie("adv_tele_sio_ath"),
-        acid: this.current_user_acid,
+        acid: getCookie("acid"),
       });
     });
 
