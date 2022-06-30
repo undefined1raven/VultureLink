@@ -15,7 +15,7 @@ const express = require('express');
 const app = express();
 const server = require('http').Server(app);
 const socketio = require('socket.io');
-const io = socketio(server);
+const io = socketio(server, {path: "/real-time/"});
 const path = require('path');
 const { env, disconnect, eventNames } = require('process');
 const bcrypt = require('bcrypt');
@@ -1566,10 +1566,9 @@ let sec_aprvd_kx_arr = [];
 
 //----Global Relay ⇄ F/E link----//
 io.on('connection', socket => {
-
     socket.on('req_vulture_array_status', req_vulture_array_status_payload => {
         get_snapshot_from_path(`adv_tele_aprvd_tids/${req_vulture_array_status_payload.ath}`).then(snapshot => {
-            if(snapshot.val() != null && socket.handshake.query.acid == snapshot.val().acid){
+            if(snapshot.val() != null && socket.handshake.auth.acid == snapshot.val().acid){
                 UAC_v2.findOne({ acid: req_vulture_array_status_payload.acid }).exec().then(user => {
                     let vulture_array = user.vow;
                     let vulture_array_status = [];
@@ -1592,8 +1591,8 @@ io.on('connection', socket => {
         });
     });
 
-    get_snapshot_from_path(`adv_tele_aprvd_tids/${socket.handshake.query.socket_auth_token}`).then(snapshot => {//Global Socket Auth
-        if (snapshot.val() != null && snapshot.val().acid == socket.handshake.query.acid) {
+    get_snapshot_from_path(`adv_tele_aprvd_tids/${socket.handshake.auth.socket_auth_token}`).then(snapshot => {//Global Socket Auth
+        if (snapshot.val() != null && snapshot.val().acid == socket.handshake.auth.acid) {
             console.log(`Relay Online | ${Date.now()}`);
 
 

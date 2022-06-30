@@ -100,54 +100,59 @@ export default {
     },
   },
   mounted() {
-    this.socket_ref.on("sonar_telemetry_pkg_rebound", (sonar_telemetry_pkg) => {
-      // console.log(sonar_telemetry_pkg);
-    });
+    setTimeout(() => {
+      this.socket_ref.on(
+        "sonar_telemetry_pkg_rebound",
+        (sonar_telemetry_pkg) => {
+          // console.log(sonar_telemetry_pkg);
+        }
+      );
 
-    ///-- vulture array status management --///
-    this.socket_ref.emit("req_vulture_array_status", {
-      origin: "adv_tele",
-      ath: getCookie("adv_tele_sio_ath"),
-      acid: getCookie("acid"),
-    });
-
-    this.socket_ref.on("refresh_vulture_array_status_sig", () => {
+      ///-- vulture array status management --///
       this.socket_ref.emit("req_vulture_array_status", {
         origin: "adv_tele",
         ath: getCookie("adv_tele_sio_ath"),
         acid: getCookie("acid"),
       });
-    });
 
-    this.socket_ref.on("vulture_array_status_res", (res) => {
-      this.vulture_array_received = true;
-      this.vulture_array_status = res.vulture_array_status;
-      this.dynamic_vulture_selector_array_gen();
-    });
-    //[][][][][]
+      this.socket_ref.on("refresh_vulture_array_status_sig", () => {
+        this.socket_ref.emit("req_vulture_array_status", {
+          origin: "adv_tele",
+          ath: getCookie("adv_tele_sio_ath"),
+          acid: getCookie("acid"),
+        });
+      });
 
-    ///-- dock array event management --///
-    this.socket_ref.emit("req_dock_array", {
-      ath: getCookie("adv_tele_sio_ath"),
-      origin: "adv_tele",
-      acid: this.current_user_acid,
-    });
-    this.socket_ref.on("dock_array_res", (res) => {
-      this.dock_array = res.dock_array;
+      this.socket_ref.on("vulture_array_status_res", (res) => {
+        this.vulture_array_received = true;
+        this.vulture_array_status = res.vulture_array_status;
+        this.dynamic_vulture_selector_array_gen();
+      });
+      //[][][][][]
 
-      ///-- relay station array management --///
-      this.socket_ref.emit("req_relay_station_array", {
-        origin: "adv_tele",
+      ///-- dock array event management --///
+      this.socket_ref.emit("req_dock_array", {
         ath: getCookie("adv_tele_sio_ath"),
+        origin: "adv_tele",
         acid: this.current_user_acid,
-        dock_array: res.dock_array,
       });
+      this.socket_ref.on("dock_array_res", (res) => {
+        this.dock_array = res.dock_array;
 
-      this.socket_ref.on("relay_station_array_res", (res) => {
-        this.relay_station_array = res.relay_station_array;
+        ///-- relay station array management --///
+        this.socket_ref.emit("req_relay_station_array", {
+          origin: "adv_tele",
+          ath: getCookie("adv_tele_sio_ath"),
+          acid: this.current_user_acid,
+          dock_array: res.dock_array,
+        });
+
+        this.socket_ref.on("relay_station_array_res", (res) => {
+          this.relay_station_array = res.relay_station_array;
+        });
       });
-    });
-    //[][][][][]
+      //[][][][][]
+    }, 100);
   },
 };
 </script>

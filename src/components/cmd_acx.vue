@@ -1,7 +1,5 @@
 <script>
 import App from '../App.vue'
-import * as socket_ref from 'socket.io-client';
-let socket = socket_ref.connect('/');
 
 export default{
   data(){
@@ -12,9 +10,7 @@ export default{
   },
   methods:{
     gen_float(){
-      socket.on('ct', payload => {
-        this.tx = payload;
-      });
+      
     },
   }
 }

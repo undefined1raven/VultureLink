@@ -17,9 +17,9 @@ window.onpageshow = () => {
 };
 
 let socket = io({
-  query: { socket_auth_token: getCookie("adv_tele_sio_ath"), acid: getCookie('acid') },
+  auth: { socket_auth_token: getCookie("adv_tele_sio_ath"), acid: getCookie('acid') },
+  path: "/real-time/",
 });
-let login_req_tid;
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
