@@ -101,22 +101,39 @@ export default {
         v-if="isDecoVisible"
         id="vulture_array_loading_deco"
       />
-      <VultureVowListItem
-        v-for="(vulture, index) in vulture_array_status"
-        :key="vulture.vid"
-        :vn="vulture.vn"
-        :vid="vulture.vid"
-        :isEmpty="vulture.empty"
-        :selected_vn="selected_vn"
-        :index="index"
-        :color="color_from_status(vulture.status)"
-        @onVultureSelected="onVultureSelected"
-        @hide_loading_deco_sig="hide_loading_deco_sig_handler"
-      />
+      <TransitionGroup name="fade">
+        <VultureVowListItem
+          v-for="(vulture, index) in vulture_array_status"
+          :key="vulture.vid"
+          :vn="vulture.vn"
+          :vid="vulture.vid"
+          :isEmpty="vulture.empty"
+          :selected_vn="selected_vn"
+          :index="index"
+          :color="color_from_status(vulture.status)"
+          @onVultureSelected="onVultureSelected"
+          @hide_loading_deco_sig="hide_loading_deco_sig_handler"
+        />
+      </TransitionGroup>
     </div>
   </div>
 </template>
 <style scoped>
+.fade-move,
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.25s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translate(0, -30px);
+}
+
+.fade-leave-active {
+  position: absolute;
+}
 .ln {
   position: absolute;
   background-color: #2c2c2c;

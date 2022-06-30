@@ -20,14 +20,28 @@ export default {
       color="#515151"
       v-text="'No Payloads detected in storage'"
     ></Label>
-    <PayloadListItem
-      v-for="(payload_obj, index) in payload_array"
-      :key="index"
-      :payload_obj="payload_obj"
-    ></PayloadListItem>
+    <TransitionGroup name="payloadFade">
+      <PayloadListItem
+        v-for="(payload_obj, index) in payload_array"
+        :key="index"
+        :payload_obj="payload_obj"
+      ></PayloadListItem>
+    </TransitionGroup>
   </div>
 </template>
 <style scoped>
+.payloadFade-enter-active {
+  transition: all 0.15s cubic-bezier(0.55, 0, 0.1, 1);
+}
+.payloadFade-leave-active {
+  transition: none;
+}
+.payloadFade-enter-from,
+.payloadFade-leave-to {
+  transform: translate(0, -15px);
+  opacity: 0;
+}
+
 #no_payloads_l {
   top: 40%;
   left: 50%;

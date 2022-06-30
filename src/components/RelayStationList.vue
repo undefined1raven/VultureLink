@@ -35,15 +35,28 @@ export default {
       color="#515151"
       v-text="`No Relay Stations connected to this dock`"
     ></Label>
-    <RelayStationListItem
-      v-for="(relay_station, index) in parse_relay_station_array()"
-      :key="index"
-      :relay_station_obj="relay_station"
-      color="#00FFF0"
-    ></RelayStationListItem>
+    <TransitionGroup name="relayStationItemFade">
+      <RelayStationListItem
+        v-for="(relay_station, index) in parse_relay_station_array()"
+        :key="index"
+        :relay_station_obj="relay_station"
+        color="#00FFF0"
+      ></RelayStationListItem>
+    </TransitionGroup>
   </div>
 </template>
 <style scoped>
+.relayStationItemFade-enter-active {
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1);
+}
+.relayStationItemFade-leave-active {
+  transition: none;
+}
+.relayStationItemFade-enter-from,
+.relayStationItemFade-leave-to {
+  transform: translate(0, -15px);
+  opacity: 0;
+}
 #no_relay_stations_l {
   top: 45%;
   left: 50%;
@@ -66,8 +79,8 @@ export default {
   width: 99.8%;
   height: 81.938325991%;
 }
-@media only screen and (max-width: 800px){
-  #no_relay_stations_l{
+@media only screen and (max-width: 800px) {
+  #no_relay_stations_l {
     font-size: 5vw;
   }
 }
