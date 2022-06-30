@@ -1044,6 +1044,7 @@ function MFA_conditional_renderer(req, res) {
     if (req.cookies.frstp_aprvd_tid != undefined) {
         get_snapshot_from_path(`frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`).then(snapshot => {
             const data = snapshot.val();
+            console.log(data)
             if (data != null) {
                 remove(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`));
                 res.sendFile(path.join(__dirname, 'dist/index.html'));
