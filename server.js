@@ -1051,7 +1051,7 @@ function MFA_conditional_renderer(req, res) {
         });
     }
     else {
-        if (req.cookies.wid != undefined) {
+        if (req.cookies.wid != undefined) {l
             res.redirect(`/${req.cookies.wid}`);
         }
         else {

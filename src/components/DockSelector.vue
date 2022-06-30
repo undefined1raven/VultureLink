@@ -40,6 +40,7 @@ export default {
         :vulture_array_status="vulture_array_status"
         :key="index"
         :index="index"
+        :isMobile="isMobile"
         color="#0500ff"
         :selected_dock_id="selected_dock_id"
         @new_target_dock_id_sig="onDockSelected"

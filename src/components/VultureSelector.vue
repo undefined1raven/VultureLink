@@ -96,7 +96,7 @@ export default {
       <div id="vulture_selector_ln_5" class="ln ln_h"></div>
       <div id="vulture_selector_ln_6" class="ln ln_h"></div>
     </div>
-    <div :id="id">
+    <div id="vulture_selector_list">
       <VultureArrayLoadingDeco
         v-if="isDecoVisible"
         id="vulture_array_loading_deco"

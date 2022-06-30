@@ -28,7 +28,7 @@ export default {
   },
   data() {
     return {
-      vulture_array_status: "",
+      vulture_array_status: [],
       dock_array: [],
       relay_station_array: "",
       selected_dock_obj: false,
@@ -161,7 +161,6 @@ export default {
     ></SystemOverview>
     <VultureSelector
       @new_target_vid_sig="new_target_vid_sig_handler"
-      :id="'vulture_selector_list'"
       :vulture_array_status="docked_vultures_array"
       :isMobile="isMobile"
       :selected_dock_obj="selected_dock_obj"
