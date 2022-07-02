@@ -4,11 +4,11 @@ import MobileBackground from "@/components/MobileBaseBackgroundImg.vue";
 import Label from "@/components/Label.vue";
 import DistanceIndicator from "@/components/AT_BaseDistanceIndi.vue";
 import LoginRequestOverlay from "@/components/LoginRequestOverlay.vue";
-import { io } from "socket.io-client";
 import Overview from "@/components/TheAdvancedTelemetryOverview.vue";
 import VultureLogo from "@/components/VultureLogo.vue";
 import UserDropdownMenu from "@/components/UserDropdownMenu.vue";
 import MobileNav from "@/components/M_AT_Nav.vue";
+import { io } from "socket.io-client";
 </script>
 
 <script>
@@ -16,16 +16,20 @@ window.onpageshow = () => {
   sessionStorage.setItem("wid", "/advanced_telemetry");
 };
 
-let socket = io({
-  auth: { socket_auth_token: getCookie("adv_tele_sio_ath"), acid: getCookie('acid') },
-  path: "/real-time/",
-});
-
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop().split(";").shift();
 }
+
+var socket = io({
+  auth: {
+    socket_auth_token: getCookie("adv_tele_sio_ath"),
+    acid: getCookie("acid"),
+  },
+  path: "/real-time/",
+});
+
 
 export default {
   data() {

@@ -57,7 +57,7 @@ const gen_pilot_u_access_array = (acid, role) => user_profile_gen_functions.gen_
 const gen_data_analyst_u_access_array = (acid, role) => user_profile_gen_functions.gen_data_analyst_u_access_array(acid, role);
 
 let json_parser = bodyParser.json();
-let vulture_ping_unix;
+let vulture_ping_unix = 0;
 const sendgrid = require('@sendgrid/mail')
 sendgrid.setApiKey(secrets.SEND_GRID);
 const msg = {
@@ -470,6 +470,9 @@ io.on('connection', function (socket_l) {
         io.to(`${payload.vid}`).emit('sensor_array_es_rebound', payload.telemetry);
     });//Origin Vulture | Dev purposes only | Relayed to: Advanced_Telemetry F/E
 
+    // socket_l.on('relayed_fwd_cam_rts_res', data => {
+    //     console.log(data)
+    // })
 
     ////--Advanced_Telemetry F/E ⇄ this ⇄ Vulture | Special Controls--////
 
@@ -605,10 +608,6 @@ io.on('connection', function (socket_l) {
         io.to(`${vulture_connection_vitals_res_payload.vid}`).emit('vulture_connection_vitals_res', vulture_connection_vitals_res_payload);
     });
 
-    setInterval(function () {
-        socket_l.emit('vulture_ping');
-        vulture_ping_unix = Date.now();
-    }, 2000);//this ⇄ Vulture 
 
 
     ////--this ⇄ Vulture | User Input Relay to Vulture [demo]--////
@@ -2378,9 +2377,9 @@ io.on('connection', socket => {
 
 
             ////--Web RTC--////
-            socket.on('vsb_fwd_ready', (strd_cnt) => {
-                io.emit('fwd_video_feed_connection_ini', strd_cnt);
-            });//fwd_cam_broadcaster ⇄ this | Initial peer signaling | Relayed to: Advanced_Telemetry F/E
+            socket.on('fwd_cam_rtc_req', data => {
+                io.emit('relayed_fwd_cam_rtc_req', data)
+            });
 
             socket.on('vsb_gnd_ready', (strd_cnt) => {
                 io.emit('gnd_video_feed_connection_ini', strd_cnt);
