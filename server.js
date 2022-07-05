@@ -702,11 +702,13 @@ app.post('/MFA_mobile_poll', (req, res) => {
                                     set(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`), { notification_sent: true, state: data.state, tx: data.tx, acid: data.acid });
                                 } catch (e) { }
                                 io.to(`${data.acid}`).emit('login_req', { iso_code: location.country.iso_code, state: location.state.name, city: location.city.name, os: os, os_version: os_version, tx: Date.now(), tid: req.cookies.frstp_aprvd_tid.tid });
+                                console.log('nfw: 0')
                             }).catch(e => {
                                 try {
                                     set(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`), { notification_sent: true, state: data.state, tx: data.tx, acid: data.acid });
                                 } catch (e) { }
                                 io.to(`${data.acid}`).emit('login_req', { iso_code: false, state: false, city: false, os: os, os_version: os_version, tx: Date.now(), tid: req.cookies.frstp_aprvd_tid.tid });
+                                console.log('nfw: 1')
                             });
                         }
 

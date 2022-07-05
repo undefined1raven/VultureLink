@@ -143,12 +143,12 @@ div {
 #security_key_option_btn,
 #backup_code_option_btn {
   top: 71.851851852%;
-  left: calc(39.0625% + 5.35%);
+  left: 39.0625%;
 }
 #TOTP_option_btn,
 #recover_account_option_btn {
   top: 71.851851852%;
-  left: calc(50.260416667% + 5.3%);
+  left: 50.260416667%;
   text-align: center;
 }
 #backup_code_option_btn,

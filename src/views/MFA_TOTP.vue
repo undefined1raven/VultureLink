@@ -262,12 +262,12 @@ export default {
 #security_key_option_btn,
 #backup_code_option_btn {
   top: 71.851851852%;
-  left: calc(39.0625% + 5.35%);
+  left: 39.0625%;
 }
 #vulture_app_option_btn,
 #recover_account_option_btn {
   top: 71.851851852%;
-  left: calc(50.260416667% + 5.3%);
+  left: 50.260416667%;
   text-align: center;
 }
 #backup_code_option_btn,
@@ -312,12 +312,12 @@ export default {
   #security_key_option_btn,
   #backup_code_option_btn {
     top: calc(81.851851852% + 1.9%);
-    left: calc(10% + 14.9%);
+    left: 2.5%;
   }
   #vulture_app_option_btn,
   #recover_account_option_btn {
     top: calc(81.851851852% + 1.9%);
-    left: calc(60% + 14.9%);
+    left: 52.5%;
     text-align: center;
   }
   #backup_code_option_btn,
