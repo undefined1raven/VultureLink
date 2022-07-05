@@ -111,6 +111,7 @@ export default {
       v-if="isMobile"
       id="vulture_hardware_status_l"
       v-text="'Hardware Status'"
+      color="#FFF"
     ></Label>
     <div
       v-show="global_system_status_assessor() || !vulture_connection_status"

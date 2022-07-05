@@ -75,6 +75,7 @@ export default {
     left: 0%;
     width: 100%;
     height: 64.552238806%;
+    flex-direction: column;
   }
   #hardware_status_issues_list_container {
     top: 26.865671642%;

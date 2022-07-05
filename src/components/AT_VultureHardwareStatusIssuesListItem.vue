@@ -62,16 +62,19 @@ export default {
       id="issue_system_id_l"
       class="issue_x_l"
       v-text="system_id_dictionary[issue_obj.system_id]"
+      color="#FFF"
     ></Label>
     <Label
       id="issue_part_id_l"
       class="issue_x_l"
       v-text="component_id_dictionary[issue_obj.component_id]"
+      color="#FFF"
     ></Label>
     <Label
       id="issue_part_status_type_l"
       class="issue_x_l"
       v-text="status_type_dictionary[issue_obj.status_type]"
+      color="#FFF"
     ></Label>
   </div>
 </template>
@@ -113,13 +116,18 @@ export default {
   top: 53.424657534%;
 }
 @media only screen and (max-width: 800px) {
+  #issue_system_id_l, #issue_system_id_type_l, #issue_part_id_l, #issue_part_id_type_l, #issue_part_status_type_l, #issue_status_type_l{/* for mobile let display flex auto set top */
+    top: auto;
+  } 
   .issue_list_item_container {
     left: 0%;
     width: 100%;
     height: 24.855491329%;
+    border: none;
     border-bottom: solid 1px #ff006b;
   }
   .issue_x_l {
+    top: auto;
     font-size: 4.5vw;
     height: 50.744186047%;
     display: flex;
