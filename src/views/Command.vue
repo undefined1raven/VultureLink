@@ -22,16 +22,39 @@ var socket = io({
 });
 
 export default {
+  data() {
+    return {
+      hasStream: false,
+    };
+  },
   mounted() {
     setTimeout(() => {
-      const fwd_rcvng_peer = new SimplePeer({ initiator: true, trickle: false });
-      fwd_rcvng_peer.on("signal", (d) => {
-        console.log(d);
-        socket.emit('fwd_cam_rtc_req', d)
-      });      
-      fwd_rcvng_peer.on('connect', () => {
-        console.log('connected')
-      })
+      const fwd_rcvng_peer = new SimplePeer({
+        initiator: false,
+        trickle: false,
+      });
+
+      socket.on("relayed_fwd_cam_rtc_req", (offer) => {
+        fwd_rcvng_peer.signal(offer);
+      });
+
+      fwd_rcvng_peer.on("stream", (stream) => {
+        this.hasStream = true;
+        let video = this.$refs.vid_container;
+        video.srcObject = stream;
+        video.muted = true;
+        video.addEventListener("loadedmetadata", () => {
+          video.play();
+        });
+        video.play();
+      });
+
+      fwd_rcvng_peer.on("signal", (answer) => {
+        socket.emit("fwd_cam_rtc_res", answer);
+      });
+      fwd_rcvng_peer.on("connect", () => {
+        console.log("connected");
+      });
     }, 50);
   },
 };
@@ -40,7 +63,7 @@ export default {
 <template>
   <Background />
   <MobileBackground />
-  <main>
+  <main v-if="!hasStream">
     <VultureDetailedDeco id="vulture_logo" />
     <div id="ini_container">
       <Label
@@ -51,8 +74,18 @@ export default {
       <Label id="connection_deco" v-text="'/|/'" color="#1400FF" />
     </div>
   </main>
+  <Video v-show="hasStream" id="vid_container" ref="vid_container"></Video>
 </template>
 <style scoped>
+#vid_container {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  background-color: #0500ff20;
+}
 @keyframes can {
   0% {
     background-color: #0500ff20;

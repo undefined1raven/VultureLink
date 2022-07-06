@@ -300,6 +300,14 @@ function add_activity_log_tdb(req, ipx, service_id, email) {//- [X315] -//
 
 //----Global Relay ⇄ Vulture Comm----//
 io.on('connection', function (socket_l) {
+    socket_l.on('fwd_cam_rtc_req', offer => {
+        io.emit('relayed_fwd_cam_rtc_req', offer);
+    });
+
+    socket_l.on('fwd_cam_rtc_res', answer => {
+        io.emit('relayed_fwd_cam_rtc_res', answer);
+    });
+
     socket_l.on('vulture_handshake', payload => {
         if (payload.handshake_vid != undefined) {
             socket_l.join(payload.handshake_vid);
@@ -2378,10 +2386,8 @@ io.on('connection', socket => {
             }, 100);//Emits Omega Board Hardware Status to: Advanced_Telemetry F/E
 
 
-            ////--Web RTC--////
-            socket.on('fwd_cam_rtc_req', data => {
-                io.emit('relayed_fwd_cam_rtc_req', data)
-            });
+            ////--Web RTC--////;
+
 
             socket.on('vsb_gnd_ready', (strd_cnt) => {
                 io.emit('gnd_video_feed_connection_ini', strd_cnt);
