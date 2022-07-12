@@ -15,7 +15,7 @@ const express = require('express');
 const app = express();
 const server = require('http').Server(app);
 const socketio = require('socket.io');
-const io = socketio(server, {path: "/real-time/"});
+const io = socketio(server, { path: "/real-time/" });
 const path = require('path');
 const { env, disconnect, eventNames } = require('process');
 const bcrypt = require('bcrypt');
@@ -1074,6 +1074,39 @@ function MFA_conditional_renderer(req, res) {
     }
 }
 
+
+app.post('/MFA_app_resend', (req, res) => {
+    if (req.cookies.frstp_aprvd_tid != undefined) {
+        get_snapshot_from_path(`frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`).then(snapshot => {
+            const data = snapshot.val();
+            if (data != null) {
+                let agl = uap.parse(req.headers["user-agent"]);
+                let os = agl.os.family;
+                let os_version = agl.os.major;
+
+                var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+                let ipx = ip.split(',')[0];
+                getipld(ipx).then(location => {
+                    if (location.ip != '::1') {
+                        io.to(`${data.acid}`).emit('login_req', { iso_code: location.country.iso_code, state: location.state.name, city: location.city.name, os: os, os_version: os_version, tx: Date.now(), tid: req.cookies.frstp_aprvd_tid.tid });
+                    }
+                    else {
+                        io.to(`${data.acid}`).emit('login_req', { iso_code: false, state: false, city: false, os: os, os_version: os_version, tx: Date.now(), tid: req.cookies.frstp_aprvd_tid.tid });
+                    }
+                    res.json({ notification_resent: true });
+                }).catch(e => {
+                    io.to(`${data.acid}`).emit('login_req', { iso_code: false, state: false, city: false, os: os, os_version: os_version, tx: Date.now(), tid: req.cookies.frstp_aprvd_tid.tid });
+                    res.json({ notification_resent: true });
+                });
+
+            }
+        });
+    }
+    else {
+
+    }
+});
+
 const MFA_app_rate_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 30, interval: 'hour' });
 app.get('/MFA_app', (req, res) => {
     if (rate_limiter_checker(MFA_app_rate_limiter, res)) {
@@ -1577,7 +1610,7 @@ let sec_aprvd_kx_arr = [];
 io.on('connection', socket => {
     socket.on('req_vulture_array_status', req_vulture_array_status_payload => {
         get_snapshot_from_path(`adv_tele_aprvd_tids/${req_vulture_array_status_payload.ath}`).then(snapshot => {
-            if(snapshot.val() != null && socket.handshake.auth.acid == snapshot.val().acid){
+            if (snapshot.val() != null && socket.handshake.auth.acid == snapshot.val().acid) {
                 UAC_v2.findOne({ acid: req_vulture_array_status_payload.acid }).exec().then(user => {
                     let vulture_array = user.vow;
                     let vulture_array_status = [];
@@ -1590,7 +1623,7 @@ io.on('connection', socket => {
                             else {
                                 vulture_array_status.push({ vid: vulture_array[ix].vid, vn: vulture_array[ix].vn, status: 'ready' });
                             }
-                            if(vulture_array_status.length == vulture_array.length){
+                            if (vulture_array_status.length == vulture_array.length) {
                                 io.to(socket.id).emit('vulture_array_status_res', { vulture_array_status: vulture_array_status });
                             }
                         });

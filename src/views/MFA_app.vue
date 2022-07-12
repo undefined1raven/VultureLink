@@ -19,7 +19,7 @@ setInterval(() => {
         .json()
         .then((msg) => {
           if (msg.result == true) {
-            this.action_status_color = '00FFF0';
+            this.action_status_color = "00FFF0";
             setTimeout(() => {
               if (msg.redirect_id == 0) {
                 window.location.pathname = "/advanced_telemetry";
@@ -30,7 +30,7 @@ setInterval(() => {
             }, 700);
           }
           if (msg.result == false) {
-            this.action_status_color = 'FF006B';
+            this.action_status_color = "FF006B";
             setTimeout(() => {
               window.location.pathname = "/advanced_telemetry";
             }, 700);
@@ -46,9 +46,30 @@ export default {
     return {
       action_status_color: "0500F0",
       options_visible: false,
+      LastNotificationSentUnix: Date.now(),
+      ResendButtonClass: 'disabled_btn',
+      resendNotificationTimeout: 12000,
     };
   },
+  mounted() {
+    setTimeout(() => {
+      this.ResendButtonClass = '';
+    }, this.resendNotificationTimeout);
+  },
   methods: {
+    ResendNotificationButtonHandler() {
+      if (Math.abs(Date.now() - this.LastNotificationSentUnix) > this.resendNotificationTimeout) {
+        fetch("/MFA_app_resend", { method: "POST" }).then((res) => {
+          res.json().then(rcvd_json => {
+            this.ResendButtonClass = 'disabled_btn';
+            setTimeout(() => {
+            this.ResendButtonClass = '';
+            }, this.resendNotificationTimeout);
+            console.log(rcvd_json);
+          });
+        });
+      }
+    },
     switch_options_visibility() {
       this.options_visible = !this.options_visible;
     },
@@ -63,11 +84,7 @@ export default {
 
 <template>
   <Background />
-  <Label
-    id="primary_label"
-    color="#FFF"
-    text="Multi Factor Auth"
-  ></Label>
+  <Label id="primary_label" color="#FFF" text="Multi Factor Auth"></Label>
   <Label
     id="description_l"
     color="#FFF"
@@ -82,8 +99,10 @@ export default {
   ></ActionStatus>
 
   <OptionsButton
+    @click="ResendNotificationButtonHandler"
     id="resend_notification_btn"
     label="Resend notification"
+    :class="ResendButtonClass"
   ></OptionsButton>
 
   <div v-if="options_visible">
@@ -127,6 +146,11 @@ export default {
 div {
   user-select: none;
 }
+.disabled_btn {
+  color: #555 !important;
+  background-color: #00126e00 !important;
+  border: solid 1px #555 !important;
+}
 #options_container_switch_btn {
   top: 72.314814815%;
   left: 50%;
@@ -160,6 +184,7 @@ div {
   left: 50%;
   transform: translate(-50%);
   width: 15%;
+  transition: border linear 0.1s, color linear 0.1s, background-color linear 0.1s;
 }
 #MFA_app_success_indi {
   top: 54.537037037%;
