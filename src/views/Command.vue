@@ -37,7 +37,7 @@ export default {
       socket.on("relayed_fwd_cam_rtc_req", (offer) => {
         fwd_rcvng_peer.signal(offer);
       });
-
+      
       fwd_rcvng_peer.on("stream", (stream) => {
         this.hasStream = true;
         let video = this.$refs.vid_container;

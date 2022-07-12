@@ -32,6 +32,7 @@ export default {
 </template>
 <style scoped>
 #logout_btn {
+  user-select: none;
   position: absolute;
   outline: none;
   border: none;

@@ -214,6 +214,7 @@ export default {
 </template>
 
 <style scoped>
+
 #vulture_logo {
   top: 3.888888889%;
   left: 0.885416667%;

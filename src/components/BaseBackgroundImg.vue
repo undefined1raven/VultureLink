@@ -4,6 +4,7 @@ export default {};
 
 <template>
   <img
+  draggable="false"
     src="../assets/visual_assets/a_t_desktop_bkg.png"
     id="desktop_background"
     alt="bkg"

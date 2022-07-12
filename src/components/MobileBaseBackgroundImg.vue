@@ -4,6 +4,7 @@
   <div id="m_bkg_img_container">
     <img
       id="mobile_bkg"
+      draggable="false"
       src="../assets/visual_assets/mobile_bkg_v1.2.png"
       alt="bkg"
     />

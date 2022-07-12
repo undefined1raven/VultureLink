@@ -59,19 +59,12 @@ export default {
     },
     global_system_status_assessor() {
       //true if all vulture systems are nominal false if otherwise
-      if (this.isTelemetryValid()) {
-        if (
-          this.vulture_hardware_status_obj.sonar_array.overall_status &&
-          this.vulture_hardware_status_obj.dynamics.overall_status &&
-          this.vulture_hardware_status_obj.navigation.overall_status
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
+      return (
+        this.isTelemetryValid() &&
+        this.vulture_hardware_status_obj.sonar_array.overall_status &&
+        this.vulture_hardware_status_obj.dynamics.overall_status &&
+        this.vulture_hardware_status_obj.navigation.overall_status
+      );
     },
     simple_hardware_status_UI_controller() {
       let primary_status_label = "";

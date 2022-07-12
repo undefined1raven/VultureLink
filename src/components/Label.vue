@@ -17,6 +17,7 @@ export default {
 <style scoped>
 .l {
   user-select: none;
+  pointer-events: none;
   position: absolute;
   font-family: "Titillium Web", sans-serif;
   font-size: 1.1vw;
