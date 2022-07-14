@@ -162,6 +162,8 @@ export default {
     <SystemOverview
       :vulture_connection_status="vulture_connection_status"
       :vulture_hardware_status_obj="vulture_hardware_status_obj"
+      :isMobile="isMobile"
+      :selected_vulture_obj="selected_vulture_obj"
       v-show="section_visibility_assessor(2, true)"
     ></SystemOverview>
     <VultureSelector

@@ -1,0 +1,22 @@
+
+
+<script lang="ts">
+export default {
+    props: {
+        color: {default: "#0D009D"}
+    }
+};
+</script>
+
+<template>
+<svg class="m_dynamics_deco" width="80" height="29" viewBox="0 0 80 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="33.2674" y="16.728" width="11" height="11" transform="rotate(-64.1936 33.2674 16.728)" :stroke="color"/>
+    <rect y="27.6937" width="84" height="1" transform="rotate(-19.2497 0 27.6937)" :fill="color"/>
+</svg>
+</template>
+<style scoped>
+.m_dynamics_deco{
+    position: absolute;
+    transition: color linear 0.1s, stroke linear 0.1s;
+}
+</style>
