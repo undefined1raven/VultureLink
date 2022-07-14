@@ -2,7 +2,14 @@
 <script setup>
 import OverviewButton from "@/components/AT_OverviewButton.vue";
 import MobileOverviewSonarArrayDeco from "@/components/MobileOverviewSonarArrayDeco.vue";
+import MobileOverviewOpticalArrayDeco from "@/components/MobileOverviewOpticalArrayDeco.vue";
 import MobileOverviewDynamicsDeco from "@/components/MobileOverviewDynamicsDeco.vue";
+import MobileOverviewNetworkDeco from "@/components/MobileOverviewNetworkDeco.vue";
+import MobileOverviewPropulsionDeco from "@/components/MobileOverviewPropulsionDeco.vue";
+import MobileOverviewNavDeco from "@/components/MobileOverviewNavDeco.vue";
+import MobileOverviewAutonomyDeco from "@/components/MobileOverviewAutonomyDeco.vue";
+import MobileOverviewPowerDeco from "@/components/MobileOverviewPowerDeco.vue";
+import MobileOverviewButton from "@/components/M_AT_OverviewButton.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
 import Label from "@/components/Label.vue";
 </script>
@@ -16,6 +23,13 @@ export default {
     isMobile: "",
   },
   methods: {
+    network_status_style_parser() {
+      if (this.vulture_connection_status) {
+        return { label: "Nominal", color: "#00FFF0" };
+      } else {
+        return { label: "Vulture Offline", color: "#FF006B" };
+      }
+    },
     system_status_label_parser(sys_id) {
       if (!this.vulture_connection_status) {
         return "Awaiting Connection";
@@ -97,47 +111,99 @@ export default {
         v-text="`${selected_vulture_obj.vn}\\\\Systems`"
         id="vulture_id_l"
       ></Label>
-      <HorizontalLine id="m_vulture_systems_overview_ln_0" color="#1400FF"/>
-      <div
-        id="m_overview_sonar_array_btn_container"
-        class="m_overview_x_btn_container"
-        :style="`border: solid 1px ${system_color_parser('sonar_array')}`"
-      >
-        <Label class="system_id_l" v-text="'Sonar Array'"></Label>
-        <Label
-          class="system_status_l"
-          v-text="system_status_label_parser('sonar_array')"
-          :color="system_color_parser('sonar_array')"
-        ></Label>
+      <HorizontalLine id="m_vulture_systems_overview_ln_0" color="#1400FF" />
+      <MobileOverviewButton
+        id="m_overview_sonar_array_btn"
+        friendlySystemLabel="Sonar Array"
+        :systemStatusLabel="system_status_label_parser('sonar_array')"
+        :systemStatusColor="system_color_parser('sonar_array')"
+        sys_id="'sonar_array'"
+      ></MobileOverviewButton>
+      <MobileOverviewButton
+        id="m_overview_dynamics_btn"
+        friendlySystemLabel="Dynamics"
+        :systemStatusLabel="system_status_label_parser('dynamics')"
+        :systemStatusColor="system_color_parser('dynamics')"
+      ></MobileOverviewButton>
+      <MobileOverviewButton
+        id="m_overview_network_btn"
+        friendlySystemLabel="Network"
+        :systemStatusLabel="network_status_style_parser().label"
+        :systemStatusColor="network_status_style_parser().color"
+      ></MobileOverviewButton>
+      <MobileOverviewButton
+        id="m_overview_propulsion_btn"
+        friendlySystemLabel="Propulsion"
+        :systemStatusLabel="'Awaiting Connection'"
+        :systemStatusColor="'#0400d4'"
+      ></MobileOverviewButton>
+      <MobileOverviewButton
+        id="m_overview_nav_btn"
+        friendlySystemLabel="Navigation"
+        :systemStatusLabel="system_status_label_parser('navigation')"
+        :systemStatusColor="system_color_parser('navigation')"
+      ></MobileOverviewButton>
+      <MobileOverviewButton
+        id="m_overview_autonomy_btn"
+        friendlySystemLabel="Autonomy"
+        :systemStatusLabel="'Awaiting Connection'"
+        :systemStatusColor="'#0400d4'"
+      ></MobileOverviewButton>
+      <MobileOverviewButton
+        id="m_overview_optical_array_btn"
+        friendlySystemLabel="Optical Array"
+        :systemStatusLabel="'Awaiting Connection'"
+        :systemStatusColor="'#0400d4'"
+      ></MobileOverviewButton>
+      <MobileOverviewButton
+        id="m_overview_power_btn"
+        friendlySystemLabel="Power"
+        :systemStatusLabel="'Awaiting Connection'"
+        :systemStatusColor="'#0400d4'"
+      ></MobileOverviewButton>
+
+      <div id="overview_deco_container">
         <MobileOverviewSonarArrayDeco
           class="system_deco"
           id="m_overview_sonar_array_deco"
           :color="system_color_parser('sonar_array')"
-        />
-      </div>
-
-      <div
-        id="m_overview_dynamics_btn_container"
-        class="m_overview_x_btn_container"
-        :style="`border: solid 1px ${system_color_parser('dynamics')}`"
-      >
-        <Label class="system_id_l" v-text="'Dynamics'"></Label>
-        <Label
-          class="system_status_l"
-          v-text="system_status_label_parser('dynamics')"
-          :color="system_color_parser('dynamics')"
-        ></Label>
+        ></MobileOverviewSonarArrayDeco>
         <MobileOverviewDynamicsDeco
           class="system_deco"
           id="m_overview_dynamics_deco"
           :color="system_color_parser('dynamics')"
-        />
+        ></MobileOverviewDynamicsDeco>
+        <MobileOverviewNetworkDeco
+          class="system_deco"
+          id="m_overview_network_deco"
+          :color="network_status_style_parser().color"
+        ></MobileOverviewNetworkDeco>
+        <MobileOverviewPropulsionDeco
+          id="m_overview_propulsion_deco"
+          :color="'#0400d4'"
+        ></MobileOverviewPropulsionDeco>
+        <MobileOverviewNavDeco
+          id="m_overview_nav_deco"
+          :color="system_color_parser('navigation')"
+        ></MobileOverviewNavDeco>
+        <MobileOverviewAutonomyDeco
+          id="m_overview_autonomy_deco"
+          :color="'#0400d4'"
+        ></MobileOverviewAutonomyDeco>
+        <MobileOverviewOpticalArrayDeco
+          id="m_overview_optical_array_deco"
+          :color="'#0400d4'"
+        ></MobileOverviewOpticalArrayDeco>
+        <MobileOverviewPowerDeco
+          id="m_overview_power_deco"
+          :color="'#0400d4'"
+        ></MobileOverviewPowerDeco>
       </div>
     </div>
   </div>
 </template>
 <style scoped>
-#m_vulture_systems_overview_ln_0{
+#m_vulture_systems_overview_ln_0 {
   top: 7.1875%;
   left: 3.333333333%;
   width: 93.333333333%;
@@ -147,34 +213,56 @@ export default {
   left: 3.333333333%;
   font-size: 5.6vw;
 }
+#m_overview_propulsion_deco {
+  top: 41.40625%;
+  left: 68.611111111%;
+  width: 11.111111111%;
+  height: 6.25%;
+}
+#m_overview_power_deco{
+  top: 81.09375%;
+  left: 66.388888889%;
+  width: 16.944444444%;
+  height: 6.25%;
+}
+#m_overview_optical_array_deco {
+  top: 82.96875%;
+  left: 17.5%;
+  width: 16.944444444%;
+  height: 4.375%;
+}
+#m_overview_nav_deco {
+  top: 59.53125%;
+  left: 18.611111111%;
+  width: 14.336111111%;
+  height: 8.0640625%;
+}
+#m_overview_autonomy_deco {
+  top: 62.1875%;
+  left: 69.444444444%;
+  width: 9.444444444%;
+  height: 5.3125%;
+}
 #m_overview_dynamics_deco {
-  top: 68.695652174%;
+  top: 23.125%;
+  left: 63.055555556%;
+  width: 22.119444444%;
+  height: 4.475%;
 }
-.system_id_l {
-  top: 2.608695652%;
-  font-size: 4.6vw;
-}
-.system_status_l {
-  top: 26.086956522%;
-  font-size: 4.6vw;
+#m_overview_network_deco {
+  top: 40.625%;
+  left: 12.777777778%;
+  width: 26.388888889%;
+  height: 7.03125%;
 }
 .system_deco {
   position: absolute;
 }
 #m_overview_sonar_array_deco {
-  top: 54.782608696%;
-  width: 28.345679012%;
-  height: 40.408695652%;
-}
-
-.m_overview_x_btn_container {
-  position: absolute;
-  width: 45%;
-  height: 17.96875%;
-  border: solid 1px #0d009d;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: 20.625%;
+  left: 19.444444444%;
+  width: 12.755555556%;
+  height: 7.2609375%;
 }
 #system_menu_ln_0 {
   top: 12.685185185%;
@@ -233,12 +321,36 @@ export default {
 #autonomy_overview_btn {
   top: calc(14.502242152% + (17.040358745% * 3));
 }
-#m_overview_sonar_array_btn_container {
+#m_overview_sonar_array_btn {
   top: 10.78125%;
   left: 3.333333333%;
 }
-#m_overview_dynamics_btn_container {
+#m_overview_dynamics_btn {
   top: 10.78125%;
+  left: 51.666666667%;
+}
+#m_overview_network_btn {
+  top: 30.625%;
+  left: 3.333333333%;
+}
+#m_overview_propulsion_btn {
+  top: 30.625%;
+  left: 51.666666667%;
+}
+#m_overview_nav_btn {
+  top: 50.46875%;
+  left: 3.333333333%;
+}
+#m_overview_autonomy_btn {
+  top: 50.46875%;
+  left: 51.666666667%;
+}
+#m_overview_optical_array_btn {
+  top: 70.3125%;
+  left: 3.333333333%;
+}
+#m_overview_power_btn {
+  top: 70.3125%;
   left: 51.666666667%;
 }
 </style>
