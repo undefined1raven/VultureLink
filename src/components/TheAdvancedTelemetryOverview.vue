@@ -39,6 +39,9 @@ export default {
   },
   computed: {},
   methods: {
+    system_selected_emitter(args) {
+      this.$emit("onVultureSystemSelected", { sys_id: args.sys_id });
+    },
     section_visibility_assessor(section_id, isPrimary) {
       // dock status && vulture status == primary | dock selector && vulture selector == secondary
       //0 == dock status | 1 == vulture status | 2 == vulture systems
@@ -165,6 +168,7 @@ export default {
       :isMobile="isMobile"
       :selected_vulture_obj="selected_vulture_obj"
       v-show="section_visibility_assessor(2, true)"
+      @onVultureSystemSelected="system_selected_emitter"
     ></SystemOverview>
     <VultureSelector
       @new_target_vid_sig="new_target_vid_sig_handler"

@@ -16,6 +16,7 @@ export default {
 </template>
 <style scoped>
 .l {
+  user-select: none;
   color: #FFF;
   position: absolute;
   font-family: "Titillium Web", sans-serif;

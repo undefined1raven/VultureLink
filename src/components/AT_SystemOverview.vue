@@ -1,14 +1,14 @@
 
 <script setup>
 import OverviewButton from "@/components/AT_OverviewButton.vue";
-import MobileOverviewSonarArrayDeco from "@/components/MobileOverviewSonarArrayDeco.vue";
-import MobileOverviewOpticalArrayDeco from "@/components/MobileOverviewOpticalArrayDeco.vue";
-import MobileOverviewDynamicsDeco from "@/components/MobileOverviewDynamicsDeco.vue";
-import MobileOverviewNetworkDeco from "@/components/MobileOverviewNetworkDeco.vue";
-import MobileOverviewPropulsionDeco from "@/components/MobileOverviewPropulsionDeco.vue";
-import MobileOverviewNavDeco from "@/components/MobileOverviewNavDeco.vue";
-import MobileOverviewAutonomyDeco from "@/components/MobileOverviewAutonomyDeco.vue";
-import MobileOverviewPowerDeco from "@/components/MobileOverviewPowerDeco.vue";
+import MobileOverviewSonarArrayDeco from "@/components/BaseSonarArrayDeco.vue";
+import MobileOverviewOpticalArrayDeco from "@/components/BaseOpticalArrayDeco.vue";
+import MobileOverviewDynamicsDeco from "@/components/BaseDynamicsDeco.vue";
+import MobileOverviewNetworkDeco from "@/components/BaseNetworkDeco.vue";
+import MobileOverviewPropulsionDeco from "@/components/BasePropulsionDeco.vue";
+import MobileOverviewNavDeco from "@/components/BaseNavDeco.vue";
+import MobileOverviewAutonomyDeco from "@/components/BaseAutonomyDeco.vue";
+import MobileOverviewPowerDeco from "@/components/BasePowerDeco.vue";
 import MobileOverviewButton from "@/components/M_AT_OverviewButton.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
 import Label from "@/components/Label.vue";
@@ -23,6 +23,9 @@ export default {
     isMobile: "",
   },
   methods: {
+    system_selected_emitter(sys_id){
+      this.$emit('onVultureSystemSelected', {sys_id: sys_id});
+    },
     network_status_style_parser() {
       if (this.vulture_connection_status) {
         return { label: "Nominal", color: "#00FFF0" };
@@ -83,6 +86,7 @@ export default {
           id="dynamics_overview_btn"
           system_label="DYNAMICS"
           :stroke="system_color_parser('dynamics')"
+          @click="system_selected_emitter('dynamics')"
         ></OverviewButton>
         <OverviewButton
           id="optical_array_overview_btn"

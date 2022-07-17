@@ -7,7 +7,9 @@ import LoginRequestOverlay from "@/components/LoginRequestOverlay.vue";
 import Overview from "@/components/TheAdvancedTelemetryOverview.vue";
 import VultureLogo from "@/components/VultureLogo.vue";
 import UserDropdownMenu from "@/components/UserDropdownMenu.vue";
+import MinimizedMenu from "@/components/AT_MinimizedMenu.vue";
 import MobileNav from "@/components/M_AT_Nav.vue";
+import Dynamics from "@/components/AT_Dynamics.vue";
 import { io } from "socket.io-client";
 </script>
 
@@ -30,7 +32,6 @@ var socket = io({
   path: "/real-time/",
 });
 
-
 export default {
   data() {
     return {
@@ -47,6 +48,9 @@ export default {
       selected_vulture_vid: "",
       vulture_status_array: "",
       isMobile: false,
+      window_manager: {
+        visible_window_id: "overview",
+      },
       mobile: {
         isMenuVisible: false,
         overview_active_section_id: 1, //0 == dock status | 1 == vulture status | 2 == vulture systems
@@ -62,6 +66,12 @@ export default {
     };
   },
   methods: {
+    MinimizedMenuButtonOnClickHandler(args){
+      this.window_manager.visible_window_id = args.btn_id;
+    },
+    vulture_system_selected_handler(args) {
+      this.window_manager.visible_window_id = args.sys_id;
+    },
     m_SecondaryMenuButtonOnClick_handler(visibility_status) {
       this.mobile.overview_isSecondarySectionVisible = visibility_status;
     },
@@ -170,18 +180,39 @@ export default {
 <template>
   <Background />
   <MobileBackground />
-  <VultureLogo v-if="!isMobile" id="vulture_logo" />
-  <UserDropdownMenu
-    ref="UserDropdownMenuRef"
-    v-if="!isMobile"
-    :username="current_user_un"
-  />
-  <Label
-    v-if="!isMobile"
-    id="adv_tele_l"
-    v-text="'\\\\Advanced Telemetry'"
-    color="#FFF"
-  ></Label>
+
+  <div
+    id="overview_container"
+    v-show="window_manager.visible_window_id == 'overview'"
+  >
+    <VultureLogo v-if="!isMobile" id="vulture_logo" />
+    <Label
+      v-if="!isMobile"
+      id="adv_tele_l"
+      v-text="'\\\\Advanced Telemetry'"
+      color="#FFF"
+    ></Label>
+    <Overview
+      v-show="!login_req_details_obj.isVisible && !mobile.isMenuVisible"
+      :socket_ref="socket_ref"
+      :current_user_acid="`${getCookie('acid')}`"
+      :vulture_connection_status="vulture_connection.status"
+      :vulture_hardware_status_obj="vulture_hardware_status_obj"
+      :m_active_section_id="mobile.overview_active_section_id"
+      :m_isSecondarySectionVisible="mobile.overview_isSecondarySectionVisible"
+      :isMobile="isMobile"
+      @new_selected_vulture_vid="new_selected_vulture_vid_handler"
+      @onVultureSystemSelected="vulture_system_selected_handler"
+    ></Overview>
+    <UserDropdownMenu
+      ref="UserDropdownMenuRef"
+      v-if="!isMobile"
+      :username="current_user_un"
+      top="4.259259259%"
+      left="85.104166667%"
+    />
+  </div>
+
   <LoginRequestOverlay
     :isVisible="login_req_details_obj.isVisible"
     :timestamp="login_req_details_obj.timestamp"
@@ -193,17 +224,18 @@ export default {
     :login_request_visible="login_req_details_obj.login_request_visible"
     @visibility_status_update="visibility_status_update_handler"
   ></LoginRequestOverlay>
-  <Overview
-    v-show="!login_req_details_obj.isVisible && !mobile.isMenuVisible"
-    :socket_ref="socket_ref"
-    :current_user_acid="`${getCookie('acid')}`"
-    :vulture_connection_status="vulture_connection.status"
-    :vulture_hardware_status_obj="vulture_hardware_status_obj"
-    :m_active_section_id="mobile.overview_active_section_id"
-    :m_isSecondarySectionVisible="mobile.overview_isSecondarySectionVisible"
-    :isMobile="isMobile"
-    @new_selected_vulture_vid="new_selected_vulture_vid_handler"
-  ></Overview>
+  <div v-if="window_manager.visible_window_id != 'overview'" id="vulture_system_container">
+    <Dynamics
+      v-if="
+        !login_req_details_obj.isVisible &&
+        !mobile.isMenuVisible &&
+        window_manager.visible_window_id == 'dynamics'
+      "
+      :current_user_un="current_user_un"
+    ></Dynamics>
+    <MinimizedMenu :vulture_connection_status="vulture_connection.status" :vulture_hardware_status_obj="vulture_hardware_status_obj" @MinimizedMenuButtonOnClick="MinimizedMenuButtonOnClickHandler" />
+  </div>
+
   <MobileNav
     @m_menu_onVisibilityChange="m_menu_onVisibilityChange_handler"
     @m_SecondaryMenuButtonOnClick="m_SecondaryMenuButtonOnClick_handler"
@@ -214,7 +246,6 @@ export default {
 </template>
 
 <style scoped>
-
 #vulture_logo {
   top: 3.888888889%;
   left: 0.885416667%;
@@ -230,5 +261,21 @@ export default {
   align-items: center;
   padding-left: 0.7%;
   font-size: 1vw;
+}
+</style>
+
+<style>
+.d-flex-standard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.p-abs {
+  position: absolute;
+}
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 </style>

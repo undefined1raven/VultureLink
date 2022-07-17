@@ -1,0 +1,20 @@
+
+<script lang="ts">
+export default {
+    props: {
+        color: {default: "#0500FF"},
+    }   
+}
+</script>
+<template>
+<svg class="mini_dynamics_deco" width="46" height="17" viewBox="0 0 46 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect shape-rednering="crispEdges" x="15.976" y="10.7741" width="11" height="11" transform="rotate(-64.1936 15.976 10.7741)" :stroke="color"/>
+    <rect shape-rednering="crispEdges" y="15.7016" width="47.6258" height="1" transform="rotate(-19.2497 0 15.7016)" :fill="color"/>
+</svg>
+</template>
+<style scoped>
+.mini_dynamics_deco{
+    width: 90.58%;
+    height: 31.41509434%;
+}
+</style>

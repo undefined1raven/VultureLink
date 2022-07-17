@@ -8,6 +8,8 @@ export default {
   expose: ['submit_logout_form'],
   props: {
     username: "",
+    top: "",
+    left: "",
   },
   methods: {
     submit_logout_form(){
@@ -18,7 +20,7 @@ export default {
 </script>
 
 <template>
-  <div class="user_dropdown_menu_container">
+  <div class="user_dropdown_menu_container" :style="`top: ${top}; left: ${left};`">
     <Label
       class="signed_in_as_l"
       color="#4D4D4D"
