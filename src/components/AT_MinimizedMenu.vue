@@ -14,12 +14,19 @@ import Label from "@/components/Label.vue";
 export default {
   props: {
     vulture_hardware_status_obj: {},
-    vulture_connection_status: {default: false},
+    vulture_connection_status: { default: false },
   },
   methods: {
-    system_color_parser(sys_id : string) {
+    MinimizedMenuButtonOnMouseEnter(e: Event, sys_id: string) {
+      console.log(e);
+      e.target.style.backgroundColor = `${this.system_color_parser(sys_id)}40`;
+    },
+    MinimizedMenuButtonOnMouseLeave(e: Event, sys_id: string) {
+      e.target.style.backgroundColor = `${this.system_color_parser(sys_id)}20`;
+    },
+    system_color_parser(sys_id: string) {
       if (!this.vulture_connection_status) {
-        return "#0400D4";
+        return "#0500FF";
       } else {
         if (this.vulture_hardware_status_obj[sys_id].overall_status) {
           return "#00FFF0";
@@ -53,6 +60,8 @@ export default {
       id="minimized_menu_sonar_array_btn"
       class="minimized-menu-item"
       :style="`background-color: ${system_color_parser('sonar_array')}20;`"
+      @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'sonar_array')"
+      @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'sonar_array')"
     >
       <SonarArrayDeco
         class="p-abs"
@@ -65,6 +74,8 @@ export default {
       id="minimized_menu_dynamics_btn"
       class="minimized-menu-item"
       :style="`background-color: ${system_color_parser('dynamics')}20;`"
+      @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'dynamics')"
+      @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'dynamics')"
     >
       <DynamicsDeco
         class="p-abs"
@@ -91,6 +102,8 @@ export default {
       id="minimized_menu_nav_btn"
       class="minimized-menu-item"
       :style="`background-color: ${system_color_parser('navigation')}20;`"
+      @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'navigation')"
+      @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'navigation')"
     >
       <NavDeco
         class="p-abs"
@@ -119,9 +132,33 @@ export default {
     >
       <PowerDeco class="p-abs" id="power_deco" color="#0500FF" />
     </div>
+    <div
+      title="Expand Menu"
+      id="minimized_expend_menu_btn"
+      class="minimized-menu-item"
+    >
+      <div id="minimized_expend_menu_btn_deco"></div>
+    </div>
   </ul>
 </template>
 <style scoped>
+#minimized_expend_menu_btn{
+  background-color: #0500FF20;
+  border-top: solid 1px #0500FF;
+  margin-top: 3px;
+}
+#minimized_expend_menu_btn:hover{
+  background-color: #0500FF40;
+}
+#minimized_expend_menu_btn_deco{
+  position: relative;
+  left: -8%;
+  border-top: solid 1px #0500FF;
+  border-right: solid 1px #0500FF;
+  transform: rotate(45deg);
+  width: .8vw;
+  height: .8vw;
+}
 @keyframes mini_menu_in {
   0% {
     transform: translateX(-15%);
@@ -134,14 +171,15 @@ export default {
   position: relative;
   width: 100%;
   height: 9.558823529%;
-  background-color: #0500ff40;
+  background-color: #0500ff20;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 2px;
+  transition: background-color linear .01s;
 }
 .minimized-menu-item:hover {
-  background-color: #0500ff60;
+  background-color: #0500ff40;
 }
 #sonar_array_deco {
   width: 70%;
@@ -163,6 +201,10 @@ export default {
 #propulsion_deco {
   width: 70%;
   height: 67.307692308%;
+}
+#autonomy_deco {
+  width: 68%;
+  height: 65.384615385%;
 }
 #nav_deco {
   position: relative;
