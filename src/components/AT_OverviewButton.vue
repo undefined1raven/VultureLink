@@ -16,13 +16,13 @@ export default {
     overview_btn_onMouseEnter(e) {
       this.overview_btn_backgroundColor = `${this.stroke}20`;
       this.cursor_on_label = false;
-      e.target.style.transform = "scaleY(1.1)";
+      e.target.style.transform = "scaleY(1.05) perspective(1px)";
     },
     overview_btn_onMouseLeave(e) {
       setTimeout(() => {
         if (!this.cursor_on_label) {
           this.overview_btn_backgroundColor = `${this.stroke}00`;
-          e.target.style.transform = "scaleY(1)";
+          e.target.style.transform = "scaleY(1) perspective(1px)";
         }
       }, 50);
     },
