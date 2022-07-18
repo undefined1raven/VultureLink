@@ -7,18 +7,38 @@ import NavDeco from "@/components/BaseNavDeco.vue";
 import AutonomyDeco from "@/components/BaseAutonomyDeco.vue";
 import OpticalArrayDeco from "@/components/BaseOpticalArrayDeco.vue";
 import PowerDeco from "@/components/BasePowerDeco.vue";
+import HorizontalLine from "@/components/HorizontalLine.vue";
+import CommandDeco from "@/components/AT_MinimizedMenuCommandDeco.vue";
 import Label from "@/components/Label.vue";
+import SecurityDeco from "@/components/SecurityDeco.vue";
 </script>
 
 <script lang="ts">
 export default {
+  data() {
+    return {
+      menu_cmd_btn_deco_color: "#0500FF",
+      menu_security_btn_deco_color: "#0500FF",
+    };
+  },
   props: {
     vulture_hardware_status_obj: {},
     vulture_connection_status: { default: false },
   },
   methods: {
+    MenuCommandButtonOnMouseEnter() {
+      this.menu_cmd_btn_deco_color = "#FFF";
+    },
+    MenuCommandButtonOnMouseLeave() {
+      this.menu_cmd_btn_deco_color = "#0500FF";
+    },
+    MenuSecurityButtonOnMouseEnter() {
+      this.menu_security_btn_deco_color = "#FFF";
+    },
+    MenuSecurityButtonOnMouseLeave() {
+      this.menu_security_btn_deco_color = "#0500FF";
+    },
     MinimizedMenuButtonOnMouseEnter(e: Event, sys_id: string) {
-      console.log(e);
       e.target.style.backgroundColor = `${this.system_color_parser(sys_id)}40`;
     },
     MinimizedMenuButtonOnMouseLeave(e: Event, sys_id: string) {
@@ -132,6 +152,33 @@ export default {
     >
       <PowerDeco class="p-abs" id="power_deco" color="#0500FF" />
     </div>
+    <HorizontalLine id="menu_separator_ln_0" color="#0500FF" />
+    <div
+      title="Go To Command"
+      id="minimized_menu_cmd_btn"
+      class="minimized-menu-item"
+      @mouseenter="MenuCommandButtonOnMouseEnter"
+      @mouseleave="MenuCommandButtonOnMouseLeave"
+    >
+      <CommandDeco
+        class="p-abs"
+        id="cmd_deco"
+        :color="menu_cmd_btn_deco_color"
+      />
+    </div>
+    <div
+      title="Go To Security"
+      id="minimized_menu_security_btn"
+      class="minimized-menu-item"
+      @mouseenter="MenuSecurityButtonOnMouseEnter"
+      @mouseleave="MenuSecurityButtonOnMouseLeave"
+    >
+      <SecurityDeco
+        class="p-abs"
+        id="security_deco"
+        :color="menu_security_btn_deco_color"
+      />
+    </div>
     <div
       title="Expand Menu"
       id="minimized_expend_menu_btn"
@@ -142,22 +189,41 @@ export default {
   </ul>
 </template>
 <style scoped>
-#minimized_expend_menu_btn{
-  background-color: #0500FF20;
-  border-top: solid 1px #0500FF;
+#minimized_menu_cmd_btn,
+#minimized_menu_security_btn {
+  background-color: #0500ff00;
+  border: solid 1px #1900ff;
+  width: 96%;
+  margin-bottom: 2px;
+}
+#minimized_menu_cmd_btn:hover,
+#minimized_menu_security_btn:hover {
+  background-color: #1900ff20;
+}
+#menu_separator_ln_0 {
+  position: absolute;
+  top: 73.344578313%;
+  width: 100%;
+}
+#minimized_menu_power_btn {
+  margin-bottom: 10px;
+}
+#minimized_expend_menu_btn {
+  background-color: #0500ff20;
+  border-top: solid 1px #0500ff;
   margin-top: 3px;
 }
-#minimized_expend_menu_btn:hover{
-  background-color: #0500FF40;
+#minimized_expend_menu_btn:hover {
+  background-color: #0500ff40;
 }
-#minimized_expend_menu_btn_deco{
+#minimized_expend_menu_btn_deco {
   position: relative;
   left: -8%;
-  border-top: solid 1px #0500FF;
-  border-right: solid 1px #0500FF;
+  border-top: solid 1px #0500ff;
+  border-right: solid 1px #0500ff;
   transform: rotate(45deg);
-  width: .8vw;
-  height: .8vw;
+  width: 0.8vw;
+  height: 0.8vw;
 }
 @keyframes mini_menu_in {
   0% {
@@ -170,13 +236,13 @@ export default {
 .minimized-menu-item {
   position: relative;
   width: 100%;
-  height: 9.558823529%;
+  height: 7.831325301%;
   background-color: #0500ff20;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 2px;
-  transition: background-color linear .01s;
+  transition: background-color linear 0.01s;
 }
 .minimized-menu-item:hover {
   background-color: #0500ff40;
@@ -198,7 +264,9 @@ export default {
   width: 92%;
   height: auto;
 }
-#propulsion_deco {
+#propulsion_deco,
+#cmd_deco,
+#security_deco {
   width: 70%;
   height: 67.307692308%;
 }
@@ -217,7 +285,7 @@ export default {
   top: 7.87037037%;
   left: 0.416666667%;
   width: 2.604166667%;
-  height: 50.37037037%;
+  height: 61.481481481%;
   animation: mini_menu_in ease-in-out 0.2s;
   display: flex;
   flex-flow: column;
