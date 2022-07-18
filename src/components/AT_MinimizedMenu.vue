@@ -26,6 +26,9 @@ export default {
     vulture_connection_status: { default: false },
   },
   methods: {
+    redirect(path : string){
+      window.location.pathname = path;
+    },
     MenuCommandButtonOnMouseEnter() {
       this.menu_cmd_btn_deco_color = "#FFF";
     },
@@ -159,6 +162,7 @@ export default {
       class="minimized-menu-item"
       @mouseenter="MenuCommandButtonOnMouseEnter"
       @mouseleave="MenuCommandButtonOnMouseLeave"
+      @click="redirect('/')"
     >
       <CommandDeco
         class="p-abs"
@@ -172,6 +176,7 @@ export default {
       class="minimized-menu-item"
       @mouseenter="MenuSecurityButtonOnMouseEnter"
       @mouseleave="MenuSecurityButtonOnMouseLeave"
+      @click="redirect('/security')"
     >
       <SecurityDeco
         class="p-abs"
