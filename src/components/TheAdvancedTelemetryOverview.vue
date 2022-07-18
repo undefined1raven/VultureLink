@@ -171,6 +171,7 @@ export default {
       @onVultureSystemSelected="system_selected_emitter"
     ></SystemOverview>
     <VultureSelector
+      id="vulture_selector"
       @new_target_vid_sig="new_target_vid_sig_handler"
       :vulture_array_status="docked_vultures_array"
       :isMobile="isMobile"
@@ -178,6 +179,7 @@ export default {
       v-show="section_visibility_assessor(1, false)"
     ></VultureSelector>
     <DockSelector
+      id="dock_selector"
       :vulture_array_status="vulture_array_status"
       :dock_array="dock_array"
       :isMobile="isMobile"
@@ -223,6 +225,7 @@ export default {
   </div>
 </template>
 <style scoped>
+
 #menu_ln_3 {
   top: 96.944444444%;
   left: 1.041666667%;

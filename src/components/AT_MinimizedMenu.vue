@@ -12,9 +12,6 @@ import Label from "@/components/Label.vue";
 
 <script lang="ts">
 export default {
-  mounted() {
-    console.log(this.vulture_hardware_status_obj)
-  },
   props: {
     vulture_hardware_status_obj: {},
     vulture_connection_status: {default: false},

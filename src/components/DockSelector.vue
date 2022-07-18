@@ -42,6 +42,7 @@ export default {
         :index="index"
         :isMobile="isMobile"
         color="#0500ff"
+        class="animation_group_0"
         :selected_dock_id="selected_dock_id"
         @new_target_dock_id_sig="onDockSelected"
       ></DockListItem>
@@ -49,6 +50,19 @@ export default {
   </div>
 </template>
 <style scoped>
+@keyframes ui_section_transition_in {
+  0% {
+    /* transform: translateX(-4%); */
+    opacity: 0;
+  }
+  100% {
+    /* transform: translateX(0); */
+    opacity: 1;
+  }
+}
+.animation_group_0{
+  animation: ui_section_transition_in ease-in-out .2s;
+}
 .ln {
   position: absolute;
   background-color: #2c2c2c;

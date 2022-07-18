@@ -1209,20 +1209,20 @@ function check_ua(req, res, red_d, red_m) {
                         });
 
                         const add_tid_to_rtdb = ref(db, `adv_tele_aprvd_tids/${ntid}`);
-                        set(add_tid_to_rtdb, {
-                            tx: data.tx,
-                            acid: decoded_jwt.acid,
-                            mobile: req.useragent.isMobile
-                        });
-                        remove(ref(db, `adv_tele_aprvd_tids/${req.cookies.at.tid}`));
+                        // set(add_tid_to_rtdb, {
+                        //     tx: data.tx,
+                        //     acid: decoded_jwt.acid,
+                        //     mobile: req.useragent.isMobile
+                        // });
+                        // remove(ref(db, `adv_tele_aprvd_tids/${req.cookies.at.tid}`));
 
                         if (process.env.NODE_ENV === 'production') {
-                            res.cookie('at', { tac: new_token, tid: ntid, exp: req.cookies.at.exp }, { httpOnly: true, secure: true });
-                            res.cookie('adv_tele_sio_ath', ntid, { secure: true });
+                            // res.cookie('at', { tac: new_token, tid: ntid, exp: req.cookies.at.exp }, { httpOnly: true, secure: true });
+                            // res.cookie('adv_tele_sio_ath', ntid, { secure: true });
                             res.cookie('wid', 'advanced_telemetry', { httpOnly: true, secure: true });
                         } else {
-                            res.cookie('at', { tac: new_token, tid: ntid, exp: req.cookies.at.exp }, { httpOnly: true });
-                            res.cookie('adv_tele_sio_ath', ntid);
+                            // res.cookie('at', { tac: new_token, tid: ntid, exp: req.cookies.at.exp }, { httpOnly: true });
+                            // res.cookie('adv_tele_sio_ath', ntid);
                             res.cookie('wid', 'advanced_telemetry', { httpOnly: true, secure: false });
                         }
                         res.sendFile(path.join(__dirname, 'dist/index.html'));

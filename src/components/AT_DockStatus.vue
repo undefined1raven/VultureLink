@@ -30,7 +30,7 @@ export default {
 </script>
 
 <template>
-  <div id="dock_status_container">
+  <div id="dock_status_container" class="animation_group_1">
     <div id="no_dock_selected_container" v-if="selected_dock_obj == ''">
       <Label
         id="no_dock_selected_l"
@@ -101,6 +101,17 @@ export default {
   </div>
 </template>
 <style scoped>
+@keyframes ui_section_transition_in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.animation_group_1{
+  animation: ui_section_transition_in ease-in-out .1s;
+}
 #no_dock_selected_deco {
   top: 43.707482993%;
 }

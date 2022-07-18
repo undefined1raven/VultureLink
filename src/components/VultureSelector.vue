@@ -100,6 +100,7 @@ export default {
       <VultureArrayLoadingDeco
         v-if="isDecoVisible"
         id="vulture_array_loading_deco"
+        class="animation_group_0"
       />
       <TransitionGroup name="fade">
         <VultureVowListItem
@@ -111,6 +112,7 @@ export default {
           :selected_vn="selected_vn"
           :index="index"
           :color="color_from_status(vulture.status)"
+          class="animation_group_0"
           @onVultureSelected="onVultureSelected"
           @hide_loading_deco_sig="hide_loading_deco_sig_handler"
         />
@@ -119,16 +121,39 @@ export default {
   </div>
 </template>
 <style scoped>
+@keyframes vulture_selector_item_in {
+  0% {
+    transform: translateX(-4%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@keyframes ui_section_fade_in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.vulture_selector_item{
+  animation: vulture_selector_item_in ease-in-out .1s;
+}
+.animation_group_0{
+  animation: ui_section_fade_in ease-in-out .1s;
+}
 .fade-move,
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.25s cubic-bezier(0.55, 0, 0.1, 1);
+  transition: all 0.2s cubic-bezier(0.55, 0, 0.1, 1);
+  transform: translateX(0);
 }
 
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-  transform: scaleY(0.01) translate(0, -30px);
+  transform: translateX(-50%);
 }
 
 .fade-leave-active {

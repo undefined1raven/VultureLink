@@ -99,6 +99,7 @@ export default {
       simple_hardware_status_UI_controller().color
     };`"
     id="vulture_hardware_status_container"
+    class="animation_group_2"
   >
     <Label
       v-if="isMobile"
@@ -162,6 +163,17 @@ export default {
   </div>
 </template>
 <style scoped>
+@keyframes ui_section_transition_in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.animation_group_2{
+  animation: ui_section_transition_in ease-in-out .1s;
+}
 #detailed_hardware_status_vulture_deco {
   position: absolute;
   top: 30.260674157%;

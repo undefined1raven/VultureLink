@@ -13,14 +13,16 @@ export default {
     };
   },
   methods: {
-    overview_btn_onMouseEnter() {
+    overview_btn_onMouseEnter(e) {
       this.overview_btn_backgroundColor = `${this.stroke}20`;
       this.cursor_on_label = false;
+      e.target.style.transform = "scaleY(1.1)";
     },
     overview_btn_onMouseLeave(e) {
       setTimeout(() => {
         if (!this.cursor_on_label) {
           this.overview_btn_backgroundColor = `${this.stroke}00`;
+          e.target.style.transform = "scaleY(1)";
         }
       }, 50);
     },
@@ -51,10 +53,7 @@ export default {
         :stroke="stroke"
       />
     </svg>
-    <div
-      @mouseenter="label_onMouseEnter"
-      class="system_label"
-    >
+    <div @mouseenter="label_onMouseEnter" class="system_label">
       {{ this.system_label }}
     </div>
   </div>
@@ -63,6 +62,7 @@ export default {
 .overview_btn {
   width: 100%;
   height: 100%;
+  transition: transform ease-in 0.1s;
 }
 .overview_button_container {
   position: absolute;

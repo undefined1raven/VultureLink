@@ -54,7 +54,7 @@ export default {
 </script>
 
 <template>
-  <div id="vulture_status_container">
+  <div id="vulture_status_container" class="animation_group_1">
     <Label id="vulture_status_l" color="#FFF" v-text="'Vulture Status'"></Label>
     <div class="vulture_status_data_container">
       <div id="vulture_id_container" class="data_container">
@@ -143,6 +143,17 @@ export default {
   </div>
 </template>
 <style scoped>
+@keyframes ui_section_transition_in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.animation_group_1{
+  animation: ui_section_transition_in ease-in-out .1s;
+}
 .bay_l {
   left: 0;
   top: -62%;

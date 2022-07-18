@@ -65,7 +65,7 @@ export default {
         <div id="system_menu_ln_0" class="ln ln_h"></div>
         <div id="system_menu_ln_1" class="ln ln_h"></div>
       </div>
-      <div id="system_overview_container">
+      <div id="system_overview_container" class="animation_group_2">
         <Label id="system_menu_l" v-text="'Vulture Systems'"></Label>
         <OverviewButton
           id="sonar_array_overview_btn"
@@ -110,7 +110,7 @@ export default {
         ></OverviewButton>
       </div>
     </div>
-    <div v-if="isMobile" id="vulture_systems_mobile_container">
+    <div v-if="isMobile" id="vulture_systems_mobile_container" class="animation_group_2">
       <Label
         v-text="`${selected_vulture_obj.vn}\\\\Systems`"
         id="vulture_id_l"
@@ -207,6 +207,17 @@ export default {
   </div>
 </template>
 <style scoped>
+@keyframes ui_section_transition_in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.animation_group_2{
+  animation: ui_section_transition_in ease-in-out .1s;
+}
 #m_vulture_systems_overview_ln_0 {
   top: 7.1875%;
   left: 3.333333333%;
