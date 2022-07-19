@@ -19,6 +19,12 @@ export default {
     return {
       menu_cmd_btn_deco_color: "#0500FF",
       menu_security_btn_deco_color: "#0500FF",
+      menu_left: "-11.041666667%",
+      isMenuExtended: false,
+      expand_menu_toggle_btn:{
+        deco_rotation: "rotate(45deg)",
+        left: "80.37037037%",
+      },
     };
   },
   props: {
@@ -26,7 +32,19 @@ export default {
     vulture_connection_status: { default: false },
   },
   methods: {
-    redirect(path : string){
+    MenuExpendToggleOnClick() {
+      this.isMenuExtended = !this.isMenuExtended;
+      if (this.isMenuExtended) {
+        this.menu_left = "0.416666667%";
+        this.expand_menu_toggle_btn.deco_rotation = "rotate(-135deg)";
+        this.expand_menu_toggle_btn.left = "0%";
+      } else {
+        this.menu_left = "-11.041666667%";
+        this.expand_menu_toggle_btn.deco_rotation = "rotate(45deg)";
+        this.expand_menu_toggle_btn.left = "80.37037037%";
+      }
+    },
+    redirect(path: string) {
       window.location.pathname = path;
     },
     MenuCommandButtonOnMouseEnter() {
@@ -65,7 +83,12 @@ export default {
 };
 </script>
 <template>
-  <ul class="p-abs" id="minimized_menu_container">
+  <div id="minimized_menu_obfuscator"></div>
+  <ul
+    class="p-abs"
+    id="minimized_menu_container"
+    :style="`left: ${menu_left};`"
+  >
     <div
       title="Back to overview"
       @click="MinimizedMenuButtonOnClick('overview')"
@@ -86,6 +109,7 @@ export default {
       @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'sonar_array')"
       @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'sonar_array')"
     >
+      <Label class="extended_btn_l" color="#FFF" v-text="'Sonar Array'"></Label>
       <SonarArrayDeco
         class="p-abs"
         id="sonar_array_deco"
@@ -100,6 +124,7 @@ export default {
       @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'dynamics')"
       @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'dynamics')"
     >
+      <Label class="extended_btn_l" color="#FFF" v-text="'Dynamics'"></Label>
       <DynamicsDeco
         class="p-abs"
         id="dynamics_deco"
@@ -111,6 +136,7 @@ export default {
       id="minimized_menu_network_btn"
       class="minimized-menu-item"
     >
+      <Label class="extended_btn_l" color="#FFF" v-text="'Network'"></Label>
       <NetworkDeco class="p-abs" id="network_deco" color="#0500FF" />
     </div>
     <div
@@ -118,6 +144,7 @@ export default {
       id="minimized_menu_propulsion_btn"
       class="minimized-menu-item"
     >
+      <Label class="extended_btn_l" color="#FFF" v-text="'Propulsion'"></Label>
       <PropulsionDeco class="p-abs" id="propulsion_deco" color="#0500FF" />
     </div>
     <div
@@ -128,6 +155,7 @@ export default {
       @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'navigation')"
       @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'navigation')"
     >
+      <Label class="extended_btn_l" color="#FFF" v-text="'Navigation'"></Label>
       <NavDeco
         class="p-abs"
         id="nav_deco"
@@ -139,6 +167,7 @@ export default {
       id="minimized_menu_autonomy_btn"
       class="minimized-menu-item"
     >
+      <Label class="extended_btn_l" color="#FFF" v-text="'Autonomy'"></Label>
       <AutonomyDeco class="p-abs" id="autonomy_deco" color="#0500FF" />
     </div>
     <div
@@ -146,6 +175,7 @@ export default {
       id="minimized_menu_optical_array_btn"
       class="minimized-menu-item"
     >
+      <Label class="extended_btn_l" color="#FFF" v-text="'Optical Array'"></Label>
       <OpticalArrayDeco class="p-abs" id="optical_array_deco" color="#0500FF" />
     </div>
     <div
@@ -153,6 +183,7 @@ export default {
       id="minimized_menu_power_btn"
       class="minimized-menu-item"
     >
+      <Label class="extended_btn_l" color="#FFF" v-text="'Power'"></Label>
       <PowerDeco class="p-abs" id="power_deco" color="#0500FF" />
     </div>
     <HorizontalLine id="menu_separator_ln_0" color="#0500FF" />
@@ -164,6 +195,7 @@ export default {
       @mouseleave="MenuCommandButtonOnMouseLeave"
       @click="redirect('/')"
     >
+      <Label class="extended_btn_l" color="#FFF" v-text="'Command'"></Label>
       <CommandDeco
         class="p-abs"
         id="cmd_deco"
@@ -178,6 +210,7 @@ export default {
       @mouseleave="MenuSecurityButtonOnMouseLeave"
       @click="redirect('/security')"
     >
+      <Label class="extended_btn_l" color="#FFF" v-text="'Security'"></Label>
       <SecurityDeco
         class="p-abs"
         id="security_deco"
@@ -188,17 +221,24 @@ export default {
       title="Expand Menu"
       id="minimized_expend_menu_btn"
       class="minimized-menu-item"
+      @click="MenuExpendToggleOnClick"
+      :style="`left: ${expand_menu_toggle_btn.left};`"
     >
-      <div id="minimized_expend_menu_btn_deco"></div>
+      <div id="minimized_expend_menu_btn_deco" :style="`transform: ${expand_menu_toggle_btn.deco_rotation}`"></div>
     </div>
   </ul>
 </template>
 <style scoped>
+.extended_btn_l {
+  position: absolute;
+  left: 3.064066852%;
+  font-size: 0.9vw;
+}
 #minimized_menu_cmd_btn,
 #minimized_menu_security_btn {
   background-color: #0500ff00;
   border: solid 1px #1900ff;
-  width: 96%;
+  width: 99.57%;
   margin-bottom: 2px;
 }
 #minimized_menu_cmd_btn:hover,
@@ -214,9 +254,14 @@ export default {
   margin-bottom: 10px;
 }
 #minimized_expend_menu_btn {
+  position: relative;
   background-color: #0500ff20;
   border-top: solid 1px #0500ff;
   margin-top: 3px;
+  width: 19.259259259%;
+  left: 80.37037037%;
+  display: flex;
+  transition: left ease-in-out 0.1s;
 }
 #minimized_expend_menu_btn:hover {
   background-color: #0500ff40;
@@ -238,9 +283,23 @@ export default {
     transform: translateX(0);
   }
 }
+.x_extended_btn_bkg {
+  position: relative;
+  left: 0%;
+  width: 85.619866707%;
+  height: 7.831325301%;
+  background-color: #0500ff20;
+  display: flex;
+  justify-content: start;
+  padding-left: 10px;
+  align-items: center;
+  margin-bottom: 2px;
+  transition: background-color linear 0.01s;
+}
 .minimized-menu-item {
   position: relative;
-  width: 100%;
+  left: 0%; /*84.621553607 */
+  width: 100%; /*14.380133293 */
   height: 7.831325301%;
   background-color: #0500ff20;
   display: flex;
@@ -253,49 +312,63 @@ export default {
   background-color: #0500ff40;
 }
 #sonar_array_deco {
-  width: 70%;
+  position: absolute;
+  left: 83.569139063%;
+  width: 12.838854041%;
   height: 70%;
 }
 #dynamics_deco {
-  width: 80%;
+  position: absolute;
+  left: 81.935017057%;
+  width: 16.613477128%;
   height: 80%;
 }
 #network_deco {
-  width: 60.38%;
+  position: absolute;
+  left: 84.669612267%;
+  width: 11.074428671%;
   height: 52.288461538%;
 }
 #optical_array_deco,
 #power_deco {
-  width: 92%;
+  position: absolute;
+  left: 81.435017057%;
+  width: 16.873922453%;
   height: auto;
 }
 #propulsion_deco,
 #cmd_deco,
 #security_deco {
-  width: 70%;
+  position: absolute;
+  left: 83.569139063%;
+  width: 12.838854041%;
   height: 67.307692308%;
 }
 #autonomy_deco {
-  width: 68%;
+  position: absolute;
+  left: 83.569139063%;
+  width: 12.471983889%;
   height: 65.384615385%;
 }
 #nav_deco {
-  position: relative;
+  position: absolute;
   top: -8%;
-  left: 4%;
-  width: 103.22%;
+  left: 81.368192656%;
+  width: 18.931807344%;
   height: 99.25%;
 }
 #minimized_menu_container {
   top: 7.87037037%;
-  left: 0.416666667%;
-  width: 2.604166667%;
+  left: -11.041666667%; /*0.416666667 */
+  width: 14.1984375%; /*2.604166667*/
   height: 61.481481481%;
   animation: mini_menu_in ease-in-out 0.2s;
   display: flex;
   flex-flow: column;
   padding: 0;
   margin: 0;
+  overflow: hidden;
+  transition: left ease-in-out 0.1s;
 }
 #minimized_menu_overview_l {
   font-size: 0.9vw;
@@ -306,5 +379,14 @@ export default {
 }
 #minimized_menu_overview_btn:hover {
   background-color: #90909040;
+}
+#minimized_menu_obfuscator {
+  position: absolute;
+  top: 7.87037037%;
+  left: 0;
+  width: 0.430416667%;
+  height: 61.481481481%;
+  background-color: #000;
+  z-index: 5;
 }
 </style>

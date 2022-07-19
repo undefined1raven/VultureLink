@@ -7,7 +7,7 @@ import LoginRequestOverlay from "@/components/LoginRequestOverlay.vue";
 import Overview from "@/components/TheAdvancedTelemetryOverview.vue";
 import VultureLogo from "@/components/VultureLogo.vue";
 import UserDropdownMenu from "@/components/UserDropdownMenu.vue";
-import MinimizedMenu from "@/components/AT_MinimizedMenu.vue";
+import Menu from "@/components/AT_Menu.vue";
 import MobileNav from "@/components/M_AT_Nav.vue";
 import Dynamics from "@/components/AT_Dynamics.vue";
 import { io } from "socket.io-client";
@@ -66,7 +66,7 @@ export default {
     };
   },
   methods: {
-    MinimizedMenuButtonOnClickHandler(args){
+    MinimizedMenuButtonOnClickHandler(args) {
       this.window_manager.visible_window_id = args.btn_id;
     },
     vulture_system_selected_handler(args) {
@@ -224,7 +224,10 @@ export default {
     :login_request_visible="login_req_details_obj.login_request_visible"
     @visibility_status_update="visibility_status_update_handler"
   ></LoginRequestOverlay>
-  <div v-if="window_manager.visible_window_id != 'overview'" id="vulture_system_container">
+  <div
+    v-if="window_manager.visible_window_id != 'overview'"
+    id="vulture_system_container"
+  >
     <Dynamics
       v-if="
         !login_req_details_obj.isVisible &&
@@ -233,7 +236,11 @@ export default {
       "
       :current_user_un="current_user_un"
     ></Dynamics>
-    <MinimizedMenu :vulture_connection_status="vulture_connection.status" :vulture_hardware_status_obj="vulture_hardware_status_obj" @MinimizedMenuButtonOnClick="MinimizedMenuButtonOnClickHandler" />
+    <Menu
+      :vulture_connection_status="vulture_connection.status"
+      :vulture_hardware_status_obj="vulture_hardware_status_obj"
+      @MinimizedMenuButtonOnClick="MinimizedMenuButtonOnClickHandler"
+    />
   </div>
 
   <MobileNav
