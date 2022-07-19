@@ -259,6 +259,7 @@ export default {
   position: absolute;
   height: 100%;
   left: 80.740740741%;
+  z-index: 5;
 }
 .extended_btn_l {
   position: absolute;
@@ -269,7 +270,7 @@ export default {
 #minimized_menu_security_btn {
   background-color: #0500ff00;
   border: solid 1px #1900ff;
-  width: 99.37%;
+  width: 99.17%;
   margin-bottom: 2px;
 }
 #minimized_menu_cmd_btn:hover,
@@ -280,6 +281,10 @@ export default {
   position: absolute;
   top: 73.344578313%;
   width: 100%;
+}@media only screen and (max-width: 1390px) {
+  #menu_separator_ln_0{
+    top: 72.744578313%;
+  }
 }
 #minimized_menu_power_btn {
   margin-bottom: 10px;

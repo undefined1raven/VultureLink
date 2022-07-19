@@ -45,7 +45,7 @@ export default {
       socket_ref: socket,
       current_user_acid: "",
       current_user_un: "",
-      selected_vulture_vid: "",
+      selected_vulture_obj: "",
       vulture_status_array: "",
       isMobile: false,
       window_manager: {
@@ -99,11 +99,11 @@ export default {
     visibility_status_update_handler(visibility_status_update) {
       this.login_req_details_obj.isVisible = visibility_status_update;
     },
-    new_selected_vulture_vid_handler(obj) {
-      if (this.selected_vulture_vid != "" && this.isMobile) {
+    new_selected_vulture_obj_handler(obj) {
+      if (this.selected_vulture_obj.vid != "" && this.isMobile) {
         this.$refs.MobileNavRef.secondary_menu_btn_onClick(); //don't trigger secondary_menu_btn_onClick if this is the auto vulture selection on load
       }
-      this.selected_vulture_vid = obj.vid;
+      this.selected_vulture_obj = obj;
       this.last_unix = 0;
       this.vulture_connection.status = null;
     },
@@ -144,7 +144,7 @@ export default {
       setInterval(() => {
         socket.emit("req_vulture_connection_vitals", {
           ath: getCookie("adv_tele_sio_ath"),
-          vid: this.selected_vulture_vid,
+          vid: this.selected_vulture_obj.vid,
         });
         this.signal_emit_last_unix = Date.now();
       }, 200);
@@ -156,7 +156,7 @@ export default {
       }, 500);
 
       socket.on("vulture_connection_vitals_res", (connection_vitals) => {
-        if (connection_vitals.vid == this.selected_vulture_vid) {
+        if (connection_vitals.vid == this.selected_vulture_obj.vid) {
           this.vulture_connection.status = true;
           this.vulture_connection.last_unix = connection_vitals.tx;
         } else {
@@ -201,7 +201,7 @@ export default {
       :m_active_section_id="mobile.overview_active_section_id"
       :m_isSecondarySectionVisible="mobile.overview_isSecondarySectionVisible"
       :isMobile="isMobile"
-      @new_selected_vulture_vid="new_selected_vulture_vid_handler"
+      @new_selected_vulture_obj="new_selected_vulture_obj_handler"
       @onVultureSystemSelected="vulture_system_selected_handler"
     ></Overview>
     <UserDropdownMenu
@@ -235,6 +235,7 @@ export default {
         window_manager.visible_window_id == 'dynamics'
       "
       :current_user_un="current_user_un"
+      :selected_vulture_obj="selected_vulture_obj"
     ></Dynamics>
     <Menu
       :vulture_connection_status="vulture_connection.status"

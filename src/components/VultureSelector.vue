@@ -47,7 +47,7 @@ export default {
       this.selected_vn = vn;
       this.pvid = this.target_vid;
       this.target_vid = vid;
-      this.$emit("new_target_vid_sig", this.pvid, vid);
+      this.$emit("new_target_vid_sig", this.pvid, vid, vn);
     },
     hide_loading_deco_sig_handler() {
       this.isDecoVisible = false;

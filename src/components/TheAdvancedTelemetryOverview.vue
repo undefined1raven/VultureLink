@@ -62,12 +62,12 @@ export default {
     redirect(path) {
       window.location.pathname = path;
     },
-    new_target_vid_sig_handler(pvid, _vid) {
+    new_target_vid_sig_handler(pvid, _vid, vn) {
       if (this.vulture_array_received) {
         this.selected_vulture_obj = this.vulture_array_status.find(
           ({ vid }) => vid == _vid
         );
-        this.$emit("new_selected_vulture_vid", { vid: _vid });
+        this.$emit("new_selected_vulture_obj", { vid: _vid, vn: vn });
         this.socket_ref.emit("new_target_vid", {
           ath: getCookie("adv_tele_sio_ath"),
           pvid: pvid,
@@ -225,7 +225,6 @@ export default {
   </div>
 </template>
 <style scoped>
-
 #menu_ln_3 {
   top: 96.944444444%;
   left: 1.041666667%;

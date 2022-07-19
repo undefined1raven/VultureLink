@@ -4,12 +4,14 @@ import VultureLogoMin from "@/components/VultureLogoMin.vue";
 import VerticalLine from "@/components/VerticalLine.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
 import UserDropdownMenu from "@/components/UserDropdownMenu.vue";
+import Label from "@/components/Label.vue";
 </script>
 
 <script lang="ts">
 export default {
   props: {
     current_user_un: {default: "---"},
+    selected_vulture_obj: {default: {vid: "", vn: ""}},
   },
 };
 </script>
@@ -26,9 +28,15 @@ export default {
       left="85.104166667%"
     />
     <HorizontalLine color="#1900FF" id="top_bar_ln"></HorizontalLine>
+    <Label color="#FFF" id="system_l" v-text="`${selected_vulture_obj.vn} Systems \\\\ Dynamics`"></Label>
   </div>
 </template>
 <style scoped>
+#system_l{
+  top: 1.934814815%;
+  left: 4.583333333%;
+  font-size: 1vw;
+}
 #top_bar_ln{
     top: 7.592592593%;
     left: 0.416666667%;
