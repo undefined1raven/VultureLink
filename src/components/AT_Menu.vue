@@ -8,6 +8,7 @@ import AutonomyDeco from "@/components/BaseAutonomyDeco.vue";
 import OpticalArrayDeco from "@/components/BaseOpticalArrayDeco.vue";
 import PowerDeco from "@/components/BasePowerDeco.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
+import VerticalLine from "@/components/VerticalLine.vue";
 import CommandDeco from "@/components/AT_MinimizedMenuCommandDeco.vue";
 import Label from "@/components/Label.vue";
 import SecurityDeco from "@/components/SecurityDeco.vue";
@@ -21,8 +22,10 @@ export default {
       menu_security_btn_deco_color: "#0500FF",
       menu_left: "-11.041666667%",
       isMenuExtended: false,
-      expand_menu_toggle_btn:{
+      back_l_left: "83.333333333%",
+      expand_menu_toggle_btn: {
         deco_rotation: "rotate(45deg)",
+        deco_left: "-8%",
         left: "80.37037037%",
       },
     };
@@ -37,11 +40,15 @@ export default {
       if (this.isMenuExtended) {
         this.menu_left = "0.416666667%";
         this.expand_menu_toggle_btn.deco_rotation = "rotate(-135deg)";
+        this.expand_menu_toggle_btn.deco_left = "8%";
         this.expand_menu_toggle_btn.left = "0%";
+        this.back_l_left = "3.064066852%";
       } else {
         this.menu_left = "-11.041666667%";
         this.expand_menu_toggle_btn.deco_rotation = "rotate(45deg)";
+        this.expand_menu_toggle_btn.deco_left = "-8%";
         this.expand_menu_toggle_btn.left = "80.37037037%";
+        this.back_l_left = "83.333333333%";
       }
     },
     redirect(path: string) {
@@ -99,6 +106,7 @@ export default {
         id="minimized_menu_overview_l"
         v-text="'Back'"
         color="#FFF"
+        :style="`left: ${back_l_left};`"
       ></Label>
     </div>
     <div
@@ -175,7 +183,11 @@ export default {
       id="minimized_menu_optical_array_btn"
       class="minimized-menu-item"
     >
-      <Label class="extended_btn_l" color="#FFF" v-text="'Optical Array'"></Label>
+      <Label
+        class="extended_btn_l"
+        color="#FFF"
+        v-text="'Optical Array'"
+      ></Label>
       <OpticalArrayDeco class="p-abs" id="optical_array_deco" color="#0500FF" />
     </div>
     <div
@@ -195,6 +207,11 @@ export default {
       @mouseleave="MenuCommandButtonOnMouseLeave"
       @click="redirect('/')"
     >
+      <VerticalLine
+        v-if="!isMenuExtended"
+        id="cmd_btn_left_border_emulator"
+        color="#0500FF"
+      ></VerticalLine>
       <Label class="extended_btn_l" color="#FFF" v-text="'Command'"></Label>
       <CommandDeco
         class="p-abs"
@@ -210,6 +227,11 @@ export default {
       @mouseleave="MenuSecurityButtonOnMouseLeave"
       @click="redirect('/security')"
     >
+      <VerticalLine
+        v-if="!isMenuExtended"
+        id="security_btn_left_border_emulator"
+        color="#0500FF"
+      ></VerticalLine>
       <Label class="extended_btn_l" color="#FFF" v-text="'Security'"></Label>
       <SecurityDeco
         class="p-abs"
@@ -224,11 +246,20 @@ export default {
       @click="MenuExpendToggleOnClick"
       :style="`left: ${expand_menu_toggle_btn.left};`"
     >
-      <div id="minimized_expend_menu_btn_deco" :style="`transform: ${expand_menu_toggle_btn.deco_rotation}`"></div>
+      <div
+        id="minimized_expend_menu_btn_deco"
+        :style="`left: ${expand_menu_toggle_btn.deco_left};transform: ${expand_menu_toggle_btn.deco_rotation}`"
+      ></div>
     </div>
   </ul>
 </template>
 <style scoped>
+#security_btn_left_border_emulator,
+#cmd_btn_left_border_emulator {
+  position: absolute;
+  height: 100%;
+  left: 80.740740741%;
+}
 .extended_btn_l {
   position: absolute;
   left: 3.064066852%;
@@ -238,7 +269,7 @@ export default {
 #minimized_menu_security_btn {
   background-color: #0500ff00;
   border: solid 1px #1900ff;
-  width: 99.57%;
+  width: 99.37%;
   margin-bottom: 2px;
 }
 #minimized_menu_cmd_btn:hover,
@@ -372,6 +403,7 @@ export default {
 }
 #minimized_menu_overview_l {
   font-size: 0.9vw;
+  transition: left ease-in-out 0.15s;
 }
 #minimized_menu_overview_btn {
   margin-top: 2px;
