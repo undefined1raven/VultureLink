@@ -49,7 +49,7 @@ export default {
         v-for="(issue, index) in issues_array"
         @onIssueSelected="onIssueSelectedHandler"
         :key="index"
-        :issue_obj="issue"
+        :issue_obj="issue" 
         :isMobile="isMobile"
       ></VultureHardwareStatusIssuesListItem>
     </div>
@@ -65,8 +65,23 @@ export default {
 }
 #hardware_issues_list {
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: row;
+  /* overflow-x: scroll; */
+}
+#hardware_issues_list::-webkit-scrollbar {
+  width: 0.9vh; /* Mostly for vertical scrollbars */
+  height: 0.9vh; /* Mostly for horizontal scrollbars */
+}
+
+#hardware_issues_list::-webkit-scrollbar-thumb {
+  /* Foreground */
+  background: #000083;
+}
+#hardware_issues_list::-webkit-scrollbar-track {
+  /* Background */
+  background: #FFF;
 }
 @media only screen and (max-width: 800px) {
   #hardware_issues_list {

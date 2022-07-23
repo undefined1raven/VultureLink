@@ -9,6 +9,7 @@ import Label from "@/components/Label.vue";
 
 <script lang="ts">
 export default {
+  
   props: {
     current_user_un: {default: "---"},
     selected_vulture_obj: {default: {vid: "", vn: ""}},

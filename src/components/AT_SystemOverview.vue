@@ -12,6 +12,8 @@ import MobileOverviewPowerDeco from "@/components/BasePowerDeco.vue";
 import MobileOverviewButton from "@/components/M_AT_OverviewButton.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
 import Label from "@/components/Label.vue";
+
+import useColorFromVultureSystemStatus from '@/composables/ColorFromVultureSystemStatus.js';
 </script>
 
 <script>
@@ -70,7 +72,7 @@ export default {
         <OverviewButton
           id="sonar_array_overview_btn"
           system_label="SONAR ARRAY"
-          :stroke="system_color_parser('sonar_array')"
+          :stroke="useColorFromVultureSystemStatus({vulture_connection_status: vulture_connection_status, vulture_hardware_status_obj: vulture_hardware_status_obj, sys_id: 'sonar_array'})"
         ></OverviewButton>
         <OverviewButton
           id="power_overview_btn"
