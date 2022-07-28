@@ -1,19 +1,22 @@
 {
   "name": "vulture-uplinkv",
   "version": "0.0.0",
+  "description": "This template should help get you started developing with Vue 3 in Vite.",
+  "author": "raven",
   "scripts": {
-    "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview --port 5050",
     "test:unit": "vitest --environment jsdom",
     "test:e2e": "start-server-and-test preview http://127.0.0.1:5050/ 'cypress open'",
-    "test:e2e:ci": "start-server-and-test preview http://127.0.0.1:5050/ 'cypress run'",
-    "typecheck": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "build-storybook": "build-storybook",
+    "dev": "vite",
+    "preview": "vite preview --port 5050",
     "start": "node server.js",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "test:e2e:ci": "start-server-and-test preview http://127.0.0.1:5050/ 'cypress run'",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false"
   },
+  "main": "server.js",
   "dependencies": {
     "@pm2/pm2-version-check": "^1.0.4",
     "@sendgrid/mail": "^7.6.2",
@@ -50,6 +53,7 @@
     "postcss": "^8.4.12",
     "postcss-cli": "^9.1.0",
     "qrcode": "^1.5.0",
+    "register-service-worker": "^1.7.2",
     "simple-encryptor": "^4.0.0",
     "simple-peer": "^9.11.1",
     "socket.io": "^4.5.1",
@@ -78,6 +82,7 @@
     "@types/node": "^16.11.27",
     "@vitejs/plugin-vue": "^2.3.1",
     "@vitejs/plugin-vue-jsx": "^1.3.10",
+    "@vue/cli-plugin-pwa": "~5.0.0",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^10.0.0",
     "@vue/test-utils": "^2.0.0-rc.20",
@@ -97,8 +102,5 @@
     "vue-loader": "^16.8.3",
     "vue-tsc": "^0.34.7"
   },
-  "description": "This template should help get you started developing with Vue 3 in Vite.",
-  "main": "server.js",
-  "author": "raven",
   "license": "ISC"
 }

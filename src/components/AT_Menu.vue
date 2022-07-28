@@ -343,6 +343,7 @@ export default {
   justify-content: center;
   margin-bottom: 2px;
   transition: background-color linear 0.01s;
+  backdrop-filter: blur(3px);
 }
 .minimized-menu-item:hover {
   background-color: #0500ff40;
