@@ -87,6 +87,16 @@ export default {
       this.$emit("MinimizedMenuButtonOnClick", { btn_id: btn_id });
     },
   },
+  mounted() {
+    window.addEventListener('keyup', e => {
+      if(e.key == 'Escape'){
+        this.MinimizedMenuButtonOnClick('overview');
+      }
+    });
+  },
+  unmounted(){
+    window.removeEventListener('keyup', e => {});
+  }
 };
 </script>
 <template>
@@ -258,8 +268,14 @@ export default {
 #cmd_btn_left_border_emulator {
   position: absolute;
   height: 100%;
-  left: 80.740740741%;
   z-index: 5;
+  left: 80.840740741%;
+}
+@media only screen and (max-width: 1770px) {
+  #security_btn_left_border_emulator,
+  #cmd_btn_left_border_emulator {
+    left: 80.740740741%;
+  }
 }
 .extended_btn_l {
   position: absolute;
@@ -281,8 +297,9 @@ export default {
   position: absolute;
   top: 73.344578313%;
   width: 100%;
-}@media only screen and (max-width: 1390px) {
-  #menu_separator_ln_0{
+}
+@media only screen and (max-width: 1390px) {
+  #menu_separator_ln_0 {
     top: 72.744578313%;
   }
 }

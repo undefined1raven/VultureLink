@@ -46,6 +46,7 @@ export default {
   </div>
 </template>
 <style scoped>
+
 .relayStationItemFade-enter-active {
   transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1);
 }

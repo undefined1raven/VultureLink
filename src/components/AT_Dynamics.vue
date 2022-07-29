@@ -5,6 +5,7 @@ import VerticalLine from "@/components/VerticalLine.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
 import UserDropdownMenu from "@/components/UserDropdownMenu.vue";
 import DynamicsTelemetry from "@/components/AT_DynamicsTelemetry.vue";
+import DynamicsHardwareStatus from "@/components/AT_DynamicsHardwareStatus.vue";
 import Label from "@/components/Label.vue";
 </script>
 
@@ -33,6 +34,7 @@ export default {
     <Label color="#FFF" id="system_l" v-text="`${selected_vulture_obj.vn} Systems \\\\ Dynamics`"></Label>
   </div>
   <DynamicsTelemetry></DynamicsTelemetry>
+  <DynamicsHardwareStatus></DynamicsHardwareStatus>
 </template>
 <style scoped>
 #system_l{
