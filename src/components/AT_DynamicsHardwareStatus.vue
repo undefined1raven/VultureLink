@@ -16,7 +16,7 @@ export default {
         },
         {
           name: "IMU Beta",
-          telemetry: { latency: true, data: true },
+          telemetry: { latency: false, data: true },
           hardware_connection: false,
         },
       ],
