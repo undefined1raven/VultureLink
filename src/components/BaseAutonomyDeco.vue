@@ -9,7 +9,7 @@ export default {
 
 <template>
 <svg class="m_autonomy_deco" width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="0.5" y="0.5" width="33" height="33" :fill="color" fill-opacity="0.2" :stroke="color"/>
+<rect x="0.5" y="0.5" width="33" height="33" :fill="color" fill-opacity="0" :stroke="color"/>
 <rect x="8" y="1" width="1" height="8" :fill="color"/>
 <rect x="10" y="1" width="1" height="8" :fill="color"/>
 <rect x="1" y="25" width="6" height="1" :fill="color"/>
