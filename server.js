@@ -254,7 +254,7 @@ const task = new Task('rm_expired_tokens_frltb', () => {//Remove auth tokens fro
 
     rm_data_from_rtdb('aprvd_tids', 7200000);//2h ttl
 
-    rm_data_from_rtdb('adv_tele_aprvd_tids', 21600000);//6h ttl 
+    rm_data_from_rtdb('adv_tele_aprvd_tids', 7200000);//2h ttl 
 
     rm_data_from_rtdb('email_conf', 600000);//10min ttl
 

@@ -5,6 +5,15 @@ import BaseHardwareStatusItem from "@/components/AT_BaseHardwareStatusItem.vue";
 
 <script lang="ts">
 export default {
+  methods: {
+    overflowController() {
+      if (this.hardware_status_arr.length > 2) {
+        return "overflow-y: scroll;";
+      } else {
+        return "overflow-y: hidden;";
+      }
+    },
+  },
   props: {},
   data() {
     return {
@@ -28,7 +37,7 @@ export default {
 <template>
   <div id="dynamics_hardware_status_container">
     <Label id="dynamics_hardware_status_l" v-text="'Hardware Status'"></Label>
-    <ul id="dynamics_hardware_status_list">
+    <ul id="dynamics_hardware_status_list" :style="overflowController()">
       <BaseHardwareStatusItem
         v-for="(status_obj, index) in hardware_status_arr"
         :key="index"
@@ -47,6 +56,20 @@ export default {
   height: 89.929742389%;
   padding: 0;
   margin: 0;
+  overflow-y: scroll;
+}
+#dynamics_hardware_status_list::-webkit-scrollbar {
+  width: 0.7vh;
+  height: 0.9vh;
+}
+
+#dynamics_hardware_status_list::-webkit-scrollbar-thumb {
+  /* Foreground */
+  background: #000083aa;
+}
+#dynamics_hardware_status_list::-webkit-scrollbar-track {
+  /* Background */
+  background: #00008325;
 }
 @keyframes ini_ani {
   0% {

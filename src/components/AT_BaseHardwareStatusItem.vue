@@ -1,14 +1,52 @@
 <script setup lang="ts">
 import Label from "@/components/Label.vue";
-import { stat } from "fs/promises";
 </script>
 
 <script lang="ts">
 export default {
-  mounted() {
-    console.log(this.isLast);
-  },
   methods: {
+    nameBannerOnClick() {
+      if (this.isMinifiable) {
+        this.isMinified = !this.isMinified;
+      }
+    },
+    ItemHeightController() {
+      if (this.isMinified && this.isMinifiable) {
+        return "10.9375%";
+      } else {
+        return "48.4375%";
+      }
+    },
+    nameBannerStyleController() {
+      let backgroundColor = `background-color: ${this.colorController(
+        this.componentGlobalStatus
+      )}${this.nameBannerTransparency}`;
+
+      let borderLeft = `border-left: solid 1px ${this.colorController(
+        this.componentGlobalStatus
+      )};`;
+
+      let height;
+      let paddingBottom;
+      if (this.isMinified && this.isMinifiable) {
+        height = "height: 100%;";
+        paddingBottom = "padding-bottom: 0%"
+      } else {
+        height = "height: 22.580645161%;";
+        paddingBottom = "padding-bottom: 0"
+      }
+      return backgroundColor + borderLeft + height + paddingBottom;
+    },
+    nameBannerOnMouseEnter(e: Event) {
+      if (this.isMinifiable) {
+        this.nameBannerTransparency = "40";
+      }
+    },
+    nameBannerOnMouseLeave(e: Event) {
+      if (this.isMinifiable) {
+        this.nameBannerTransparency = "20";
+      }
+    },
     labelController(status: boolean, offnominal_label: string) {
       if (status) {
         return "Nominal";
@@ -31,8 +69,19 @@ export default {
       }
     },
   },
+  data() {
+    return {
+      isMinified: false,
+      nameBannerTransparency: "20",
+      componentGlobalStatus:
+        this.component_status_obj.hardware_connection &&
+        this.component_status_obj.telemetry.data &&
+        this.component_status_obj.telemetry.latency,
+    };
+  },
   props: {
     isLast: { default: false },
+    isMinifiable: { default: true },
     component_status_obj: {
       default: {
         name: { default: "--" },
@@ -47,68 +96,84 @@ export default {
 <template>
   <div
     class="base_hardware_status_item"
-    :style="`border-bottom: ${lastItemBorderVisibilityParser(isLast)}`"
+    :style="`border-bottom: ${lastItemBorderVisibilityParser(
+      isLast
+    )}; height: ${ItemHeightController()}`"
   >
     <Label
       class="base_hardware_status_component_name_banner"
       v-text="component_status_obj.name"
-      :style="`border-left: solid 1px ${colorController(
-        component_status_obj.hardware_connection &&
-          component_status_obj.telemetry.data &&
-          component_status_obj.telemetry.latency
-      )}; background-color: ${colorController(
-        component_status_obj.hardware_connection &&
-          component_status_obj.telemetry.data &&
-          component_status_obj.telemetry.latency
-      )}20;`"
+      @mouseenter="nameBannerOnMouseEnter"
+      @mouseleave="nameBannerOnMouseLeave"
+      @click="nameBannerOnClick"
+      :style="nameBannerStyleController()"
     ></Label>
-    <Label
-      class="base_hardware_connection_status_l"
-      v-text="'Hardware Connection'"
-    ></Label>
-    <Label
-      class="base_hardware_connection_status_acx"
-      :style="`background-color: ${colorController(
-        component_status_obj.hardware_connection
-      )}20; color: ${colorController(
-        component_status_obj.hardware_connection
-      )}`"
-      v-text="
-        labelController(component_status_obj.hardware_connection, 'Failed')
-      "
-    ></Label>
+    <div
+      id="base_hardware_status_component_details_container"
+      v-show="!isMinified"
+    >
+      <Label
+        class="base_hardware_connection_status_l"
+        v-text="'Hardware Connection'"
+      ></Label>
+      <Label
+        class="base_hardware_connection_status_acx"
+        :style="`background-color: ${colorController(
+          component_status_obj.hardware_connection
+        )}20; color: ${colorController(
+          component_status_obj.hardware_connection
+        )}`"
+        v-text="
+          labelController(component_status_obj.hardware_connection, 'Failed')
+        "
+      ></Label>
 
-    <Label
-      class="base_hardware_telemetry_latency_l"
-      v-text="'Telemetry Latency'"
-    ></Label>
-    <Label
-      class="base_hardware_telemetry_latency_acx"
-      :style="`background-color: ${colorController(
-        component_status_obj.telemetry.latency
-      )}20; color: ${colorController(component_status_obj.telemetry.latency)}`"
-      v-text="
-        labelController(component_status_obj.telemetry.latency, 'Out of range')
-      "
-    ></Label>
+      <Label
+        class="base_hardware_telemetry_latency_l"
+        v-text="'Telemetry Latency'"
+      ></Label>
+      <Label
+        class="base_hardware_telemetry_latency_acx"
+        :style="`background-color: ${colorController(
+          component_status_obj.telemetry.latency
+        )}20; color: ${colorController(
+          component_status_obj.telemetry.latency
+        )}`"
+        v-text="
+          labelController(
+            component_status_obj.telemetry.latency,
+            'Out of range'
+          )
+        "
+      ></Label>
 
-    <Label
-      class="base_hardware_telemetry_data_l"
-      v-text="'Telemetry Data'"
-    ></Label>
-    <Label
-      class="base_hardware_telemetry_data_acx"
-      :style="`background-color: ${colorController(
-        component_status_obj.telemetry.data
-      )}20; color: ${colorController(component_status_obj.telemetry.data)}`"
-      v-text="
-        labelController(component_status_obj.telemetry.data, 'Out of range')
-      "
-    ></Label>
+      <Label
+        class="base_hardware_telemetry_data_l"
+        v-text="'Telemetry Data'"
+      ></Label>
+      <Label
+        class="base_hardware_telemetry_data_acx"
+        :style="`background-color: ${colorController(
+          component_status_obj.telemetry.data
+        )}20; color: ${colorController(component_status_obj.telemetry.data)}`"
+        v-text="
+          labelController(component_status_obj.telemetry.data, 'Out of range')
+        "
+      ></Label>
+    </div>
   </div>
 </template>
 
 <style scoped>
+@keyframes component_status_detail_ani {
+  0% {
+    transform: translateY(-75%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
 .base_hardware_connection_status_acx,
 .base_hardware_telemetry_latency_acx,
 .base_hardware_telemetry_data_acx {
@@ -120,6 +185,8 @@ export default {
   align-items: center;
   font-size: 1vw;
   justify-content: center;
+  animation: component_status_detail_ani cubic-bezier(0.59, 0.23, 0.49, 1.07)
+    0.15s;
 }
 .base_hardware_connection_status_l,
 .base_hardware_telemetry_latency_l,
@@ -127,6 +194,8 @@ export default {
   top: 31.182795699%;
   left: 0%;
   font-size: 1vw;
+  animation: component_status_detail_ani cubic-bezier(0.59, 0.23, 0.49, 1.07)
+    0.15s;
 }
 .base_hardware_telemetry_latency_l,
 .base_hardware_telemetry_latency_acx {
