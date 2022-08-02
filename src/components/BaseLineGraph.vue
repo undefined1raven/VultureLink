@@ -5,13 +5,43 @@ export default {
   props: {
     width: { default: "97.680412371%" },
     height: { default: "0.660066007%" },
-    min: { default: 1 },
-    max: { default: 100 },
-    input: { default: 5 },
+    min: { default: -90 },
+    max: { default: 90 },
+    input: { default: 60 },
   },
   methods: {
     input_parser() {
-      return {negative_slider_left: 0, negative_slider_width: 0, positive_slider_width: 0}
+      let midpoint = (this.min + this.max) / 2;
+
+      let positive_slider_width = "0%";
+      let negative_slider_width = "0%";
+      let negative_slider_left = "0%";
+
+      if (this.input >= this.min && this.input <= this.max) {
+        if (this.input > midpoint) {
+          negative_slider_width = "0%";
+          negative_slider_left = "0%";
+          positive_slider_width = `${
+            (((this.input) * 100) / this.max) / 2
+          }%`;
+        } else {
+          positive_slider_width = "0%";
+          negative_slider_width = `${
+            Math.abs(((this.input - midpoint) * 100) / this.min / 2)
+          }%`;
+          negative_slider_left = `${50 - Math.abs(((this.input - midpoint) * 100) / this.min / 2)}%`;
+        }
+      }
+
+      // console.log(
+      //   `midpoint: ${midpoint} | input: ${this.input} | pw: ${positive_slider_width} | nw: ${negative_slider_width} | min: ${this.min} | max: ${this.max}`
+      // );
+
+      return {
+        negative_slider_left: negative_slider_left,
+        negative_slider_width: negative_slider_width,
+        positive_slider_width: positive_slider_width,
+      };
     },
   },
 };

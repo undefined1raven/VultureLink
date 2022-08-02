@@ -14,6 +14,7 @@ export default {
   
   props: {
     current_user_un: {default: "---"},
+    telemetry: {default: {}},
     selected_vulture_obj: {default: {vid: "", vn: ""}},
   },
 };
@@ -33,7 +34,7 @@ export default {
     <HorizontalLine color="#1900FF" id="top_bar_ln"></HorizontalLine>
     <Label color="#FFF" id="system_l" v-text="`${selected_vulture_obj.vn} Systems \\\\ Dynamics`"></Label>
   </div>
-  <DynamicsTelemetry></DynamicsTelemetry>
+  <DynamicsTelemetry :telemetry="telemetry"></DynamicsTelemetry>
   <DynamicsHardwareStatus></DynamicsHardwareStatus>
 </template>
 <style scoped>

@@ -51,6 +51,9 @@ export default {
       window_manager: {
         visible_window_id: "overview",
       },
+      vulture_telemetry: {
+        dynamics: { imu_alpha: {}}, 
+      },
       mobile: {
         isMenuVisible: false,
         overview_active_section_id: 1, //0 == dock status | 1 == vulture status | 2 == vulture systems
@@ -133,6 +136,12 @@ export default {
 
       socket.on("sonar_telemetry_pkg_rebound", (payload) => {
         this.sonar_telemetry_obj = payload;
+      });
+
+
+      ///-- Vulture Dynamics Telemetry RX--///
+      socket.on('imu_alpha_data_pkg_server_relay', (imu_alpha_data_obj) => {
+        this.vulture_telemetry.dynamics.imu_alpha = imu_alpha_data_obj;
       });
 
       ///-- Vulture Hardware Status Management --///
@@ -234,6 +243,7 @@ export default {
         !mobile.isMenuVisible &&
         window_manager.visible_window_id == 'dynamics'
       "
+      :telemetry="vulture_telemetry.dynamics"
       :current_user_un="current_user_un"
       :selected_vulture_obj="selected_vulture_obj"
     ></Dynamics>

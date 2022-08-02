@@ -7,27 +7,53 @@ import VerticalLine from "@/components/VerticalLine.vue";
 
 <script lang="ts">
 export default {
-  props: {},
+  mounted() {
+    setInterval(() => {
+      console.log(this.telemetry);
+    }, 500);
+  },
+  props: {
+    telemetry: { default: { imu_alpha: { gyro: { pitch: 0 } } } },
+  },
 };
 </script>
 
 <template>
   <div id="dynamics_telemetry_container">
     <VerticalLine id="dynamics_telemetry_line" color="#373737"></VerticalLine>
-    <Label id="dynamics_telemetry_l" class="animation_group_0" v-text="'Telemetry'"></Label>
+    <Label
+      id="dynamics_telemetry_l"
+      class="animation_group_0"
+      v-text="'Telemetry'"
+    ></Label>
     <DynamicsTelemetryOneAxis
       id="x_axis_telemetry_container"
       axis_id="X Axis"
+      :imu_alpha_axis_telemetry="telemetry.imu_alpha.gyro.pitch"
+      :imu_beta_axis_telemetry="{
+        angle: Math.round(telemetry.imu_alpha.accelerometer.pitch * -1),
+        rate: 0,
+      }"
       class="animation_group_0"
     />
     <DynamicsTelemetryOneAxis
       id="y_axis_telemetry_container"
       axis_id="Y Axis"
+      :imu_alpha_axis_telemetry="telemetry.imu_alpha.gyro.roll"
+      :imu_beta_axis_telemetry="{
+        angle: Math.round(telemetry.imu_alpha.accelerometer.roll * -1),
+        rate: 0,
+      }"
       class="animation_group_0"
     />
     <DynamicsTelemetryOneAxis
       id="z_axis_telemetry_container"
       axis_id="Z Axis"
+      :imu_alpha_axis_telemetry="telemetry.imu_alpha.gyro.yaw"
+      :imu_beta_axis_telemetry="{
+        angle: 0,
+        rate: 0,
+      }"
       class="animation_group_0"
     />
   </div>
