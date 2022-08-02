@@ -43,6 +43,8 @@ export default {
         :key="index"
         :component_status_obj="status_obj"
         :isLast="index == hardware_status_arr.length - 1"
+        :isMinifiable="false"
+        :isMinifiedByDefault="false"
       ></BaseHardwareStatusItem>
     </ul>
   </div>

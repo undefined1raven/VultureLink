@@ -12,7 +12,7 @@ export default {
     },
     ItemHeightController() {
       if (this.isMinified && this.isMinifiable) {
-        return "10.9375%";
+        return "13.802083333%";
       } else {
         return "48.4375%";
       }
@@ -20,22 +20,20 @@ export default {
     nameBannerStyleController() {
       let backgroundColor = `background-color: ${this.colorController(
         this.componentGlobalStatus
-      )}${this.nameBannerTransparency}`;
+      )}${this.nameBannerTransparency};`;
+
 
       let borderLeft = `border-left: solid 1px ${this.colorController(
         this.componentGlobalStatus
       )};`;
 
       let height;
-      let paddingBottom;
       if (this.isMinified && this.isMinifiable) {
-        height = "height: 100%;";
-        paddingBottom = "padding-bottom: 0%"
+        height = "height: 79.245283019%;";
       } else {
         height = "height: 22.580645161%;";
-        paddingBottom = "padding-bottom: 0"
       }
-      return backgroundColor + borderLeft + height + paddingBottom;
+      return backgroundColor + borderLeft + height;
     },
     nameBannerOnMouseEnter(e: Event) {
       if (this.isMinifiable) {
@@ -71,7 +69,7 @@ export default {
   },
   data() {
     return {
-      isMinified: false,
+      isMinified: this.isMinifiedByDefault && this.isMinifiable,
       nameBannerTransparency: "20",
       componentGlobalStatus:
         this.component_status_obj.hardware_connection &&
@@ -82,6 +80,7 @@ export default {
   props: {
     isLast: { default: false },
     isMinifiable: { default: true },
+    isMinifiedByDefault: {default: false},
     component_status_obj: {
       default: {
         name: { default: "--" },
@@ -222,6 +221,6 @@ export default {
   width: 100%;
   height: 48.4375%;
   border-bottom: solid 1px #0500ff;
-  margin-bottom: 3.913978495%;
+  margin-bottom: 2.513978495%;
 }
 </style>
