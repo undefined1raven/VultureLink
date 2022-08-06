@@ -33,10 +33,6 @@ export default {
         }
       }
 
-      // console.log(
-      //   `midpoint: ${midpoint} | input: ${this.input} | pw: ${positive_slider_width} | nw: ${negative_slider_width} | min: ${this.min} | max: ${this.max}`
-      // );
-
       return {
         negative_slider_left: negative_slider_left,
         negative_slider_width: negative_slider_width,

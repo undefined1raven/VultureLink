@@ -7,13 +7,40 @@ import VerticalLine from "@/components/VerticalLine.vue";
 
 <script lang="ts">
 export default {
-  mounted() {
-    setInterval(() => {
-      console.log(this.telemetry);
-    }, 500);
+  methods: {
+    telemetry_validation() {
+      if (this.telemetry.imu_alpha.gyro == undefined) {
+        return {
+          imu_alpha: {
+            gyro: {
+              pitch: { angle: 0, rate: 0 },
+              roll: { angle: 0, rate: 0 },
+              yaw: { angle: 0, rate: 0 },
+            },
+            accelerometer: { pitch: 0, roll: 0 },
+          },
+        };
+      } else {
+        return this.telemetry;
+      }
+    },
   },
   props: {
-    telemetry: { default: { imu_alpha: { gyro: { pitch: 0 } } } },
+    telemetry: {
+      type: Object,
+      default(rawProps: Object) {
+        return {
+          imu_alpha: {
+            gyro: {
+              pitch: { angle: 0, rate: 0 },
+              roll: { angle: 0, rate: 0 },
+              yaw: { angle: 0, rate: 0 },
+            },
+            accelerometer: { pitch: 0, roll: 0 },
+          },
+        };
+      },
+    },
   },
 };
 </script>
@@ -29,9 +56,11 @@ export default {
     <DynamicsTelemetryOneAxis
       id="x_axis_telemetry_container"
       axis_id="X Axis"
-      :imu_alpha_axis_telemetry="telemetry.imu_alpha.gyro.pitch"
+      :imu_alpha_axis_telemetry="telemetry_validation().imu_alpha.gyro.pitch"
       :imu_beta_axis_telemetry="{
-        angle: Math.round(telemetry.imu_alpha.accelerometer.pitch * -1),
+        angle: Math.round(
+          telemetry_validation().imu_alpha.accelerometer.pitch * -1
+        ),
         rate: 0,
       }"
       class="animation_group_0"
@@ -39,9 +68,11 @@ export default {
     <DynamicsTelemetryOneAxis
       id="y_axis_telemetry_container"
       axis_id="Y Axis"
-      :imu_alpha_axis_telemetry="telemetry.imu_alpha.gyro.roll"
+      :imu_alpha_axis_telemetry="telemetry_validation().imu_alpha.gyro.roll"
       :imu_beta_axis_telemetry="{
-        angle: Math.round(telemetry.imu_alpha.accelerometer.roll * -1),
+        angle: Math.round(
+          telemetry_validation().imu_alpha.accelerometer.roll * -1
+        ),
         rate: 0,
       }"
       class="animation_group_0"
@@ -49,7 +80,7 @@ export default {
     <DynamicsTelemetryOneAxis
       id="z_axis_telemetry_container"
       axis_id="Z Axis"
-      :imu_alpha_axis_telemetry="telemetry.imu_alpha.gyro.yaw"
+      :imu_alpha_axis_telemetry="telemetry_validation().imu_alpha.gyro.yaw"
       :imu_beta_axis_telemetry="{
         angle: 0,
         rate: 0,

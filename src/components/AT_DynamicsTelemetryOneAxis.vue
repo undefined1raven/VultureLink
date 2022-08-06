@@ -15,8 +15,8 @@ export default {
     },
   },
   props: {
-    imu_alpha_axis_telemetry: { default: { } },
-    imu_beta_axis_telemetry: { default: { } },
+    imu_alpha_axis_telemetry: { default: { angle: 0, rate: 0 } },
+    imu_beta_axis_telemetry: { default: { angle: 0, rate: 0 } },
     axis_id: { default: "--" },
   },
 };
