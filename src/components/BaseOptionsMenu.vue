@@ -3,6 +3,7 @@
 import Label from "@/components/Label.vue";
 import BaseDotsDeco from "@/components/BaseDotsDeco.vue";
 import BaseXDeco from "@/components/BaseXDeco.vue";
+import BaseOptionsMenuListItem from "@/components/BaseOptionsMenuListItem.vue";
 </script>
 
 <script lang="ts">
@@ -21,7 +22,7 @@ export default {
   props: {
     height: { default: "31.155778894%" },
     width: { default: "30.028735632%" },
-    menuItems: { default: {} },
+    menuItems: { default: [] },
   },
   data() {
     return {
@@ -51,10 +52,45 @@ export default {
         <BaseXDeco id="x_deco" v-if="isExpanded"></BaseXDeco>
       </Transition>
     </div>
+    <div v-if="isExpanded" class="options_menu_list_container">
+      <TransitionGroup name="menu_list_transition">
+        <BaseOptionsMenuListItem
+          v-for="(ListItem, index) in menuItems"
+          :key="index"
+          :menuItem="ListItem"
+          :isFirst="index == 0"
+        ></BaseOptionsMenuListItem>
+      </TransitionGroup>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.menu_list_transition-move, /* apply transition to moving elements */
+.menu_list_transitionlist-enter-active,
+.menu_list_transition-leave-active {
+  transition: all 0.5s ease;
+}
+
+.menu_list_transition-enter-from,
+.menu_list_transition-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.menu_list_transition-leave-active {
+  position: absolute;
+}
+.options_menu_list_container {
+  top: 0%;
+  left: 0%;
+  width: 83.253588517%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
 .base_dots_deco_transition-enter-active,
 .base_x_deco_transition-enter-active {
   transition: all 0.11s cubic-bezier(0.55, 0, 0.1, 1);
@@ -74,6 +110,8 @@ export default {
 }
 .options_menu_btn {
   position: absolute;
+  top: 0%;
+  left: calc(83.253588517% + 3px);
   width: 1.8229166666667vw;
   height: 1.8229166666667vw;
   border: solid 1px #0500ff;

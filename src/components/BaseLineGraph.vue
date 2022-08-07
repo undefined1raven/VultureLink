@@ -30,6 +30,7 @@ export default {
             Math.abs(((this.input - midpoint) * 100) / this.min / 2)
           }%`;
           negative_slider_left = `${50 - Math.abs(((this.input - midpoint) * 100) / this.min / 2)}%`;
+          console.log(this.input)
         }
       }
 
