@@ -27,13 +27,27 @@ export default {
   <DynamicsControlPanel
     id="dynamics_rate_controls_container"
     ControlPanelLabel="Rate Controls"
+    class="animation_group_0"
     :DynamicsControlsObject="dynamics_controls"
   ></DynamicsControlPanel>
 </template>
+
+
 <style scoped>
+@keyframes ini_ani {
+  0% {
+    transform: translateY(25%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+.animation_group_0 {
+  animation: ini_ani cubic-bezier(0.59, 0.23, 0.49, 1.07) 0.15s;
+}
 #dynamics_rate_controls_container {
   top: 57.12962963%;
-  left: 4.010416667%;
+  left: 5.052083333%;
 }
 #dynaimcs_controls_l {
   top: 52.222222222%;

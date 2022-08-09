@@ -63,11 +63,11 @@ export default {
 </template> 
 <style scoped>
 .base_line_graph_center_indi {
-  width: 0.2vw;
+  width: 0.104vw;
   height: 100%;
   left: 50%;
   translate: transform(-50%);
-  background-color: #fff;
+  background-color: #0500FF;
   z-index: 5;
 }
 .base_line_graph_negative_slider {

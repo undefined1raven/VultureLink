@@ -335,6 +335,7 @@ export default {
   width: 0.8vw;
   height: 0.8vw;
   z-index: -1;
+  pointer-events: none;
 }
 @keyframes mini_menu_in {
   0% {
