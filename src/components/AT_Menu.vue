@@ -88,6 +88,11 @@ export default {
     },
   },
   mounted() {
+    window.addEventListener('click', (e) => {
+      if(e.target != this.$refs.menu_toggle_btn && this.isMenuExtended){
+        this.MenuExpendToggleOnClick();
+      }
+    });
     window.addEventListener('keyup', e => {
       if(e.key == 'Escape'){
         this.MinimizedMenuButtonOnClick('overview');
@@ -251,6 +256,7 @@ export default {
     </div>
     <div
       title="Expand Menu"
+      ref="menu_toggle_btn"
       id="minimized_expend_menu_btn"
       class="minimized-menu-item"
       @click="MenuExpendToggleOnClick"
@@ -315,6 +321,7 @@ export default {
   left: 80.37037037%;
   display: flex;
   transition: left ease-in-out 0.1s;
+  z-index: 10;
 }
 #minimized_expend_menu_btn:hover {
   background-color: #0500ff40;
@@ -327,6 +334,7 @@ export default {
   transform: rotate(45deg);
   width: 0.8vw;
   height: 0.8vw;
+  z-index: -1;
 }
 @keyframes mini_menu_in {
   0% {

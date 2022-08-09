@@ -2,7 +2,7 @@
 <script lang="ts">
 export default {
   props: {
-    menuItem: { default: { label: "--", eventNameOnClick: "" } },
+    menuItem: { default: { label: "--", btn_id: "" } },
     isFirst: {default: false},
   },
   methods: {
@@ -15,7 +15,7 @@ export default {
         }
     },
     baseOptionsMenuListItemOnClick() {
-      this.$emit(this.menuItem.eventNameOnClick);
+      this.$emit('update', {btn_id: this.menuItem.btn_id});
     },
   },
 };

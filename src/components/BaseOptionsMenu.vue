@@ -8,7 +8,20 @@ import BaseOptionsMenuListItem from "@/components/BaseOptionsMenuListItem.vue";
 
 <script lang="ts">
 export default {
+  mounted() {
+    document.addEventListener("click", (e) => {
+        if (e.target != this.$refs.options_menu_btn) {
+          this.isExpanded = false;
+        }
+    });
+  },
+  unmounted() {
+    document.removeEventListener("click", () => {});
+  },
   methods: {
+    OptionsMenuOnUpdate(args: Object) {
+      this.$emit("update", args);
+    },
     OptionsMenuButtonOnClick() {
       this.isExpanded = !this.isExpanded;
     },
@@ -39,6 +52,7 @@ export default {
     :style="`width: ${width}; height: ${height};`"
   >
     <div
+      ref="options_menu_btn"
       class="options_menu_btn"
       :style="optionsMenuButtonBackgroundColor"
       @click="OptionsMenuButtonOnClick"
@@ -46,7 +60,10 @@ export default {
       @mouseleave="OptionsMenuButtonOnMouseLeave"
     >
       <Transition name="base_dots_deco_transition">
-        <BaseDotsDeco id="dots_deco" v-if="!isExpanded"></BaseDotsDeco>
+        <BaseDotsDeco
+          id="dots_deco"
+          v-if="!isExpanded"
+        ></BaseDotsDeco>
       </Transition>
       <Transition name="base_x_deco_transition">
         <BaseXDeco id="x_deco" v-if="isExpanded"></BaseXDeco>
@@ -59,6 +76,7 @@ export default {
           :key="index"
           :menuItem="ListItem"
           :isFirst="index == 0"
+          @update="OptionsMenuOnUpdate"
         ></BaseOptionsMenuListItem>
       </TransitionGroup>
     </div>
@@ -66,6 +84,9 @@ export default {
 </template>
 
 <style scoped>
+#dots_deco{
+  z-index: -1;
+}
 .menu_list_transition-move, /* apply transition to moving elements */
 .menu_list_transitionlist-enter-active,
 .menu_list_transition-leave-active {

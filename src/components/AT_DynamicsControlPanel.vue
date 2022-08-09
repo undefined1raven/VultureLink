@@ -8,6 +8,16 @@ import BaseLineGraph from "@/components/BaseLineGraph.vue";
 <script lang="ts">
 export default {
   methods: {
+    DynamicsRateControlsOptionsMenuOnUpdate(args:Object){
+      switch (args.btn_id) {
+        case 'restore_defaults':
+            this.rf = 5;
+          break;
+      
+        default:
+          break;
+      }
+    },
     getRandomInt(min: number, max: number) {
       min = Math.ceil(min);
       max = Math.floor(max);
@@ -26,9 +36,9 @@ export default {
   data() {
     return {
       dynamics_rate_controls_options_menu_items: [
-        { label: "Restore Defaults", eventNameOnClick: "" },
-        { label: "Select Presets", eventNameOnClick: "" },
-        { label: "Help", eventNameOnClick: "" },
+        { label: "Restore Defaults", btn_id: "restore_defaults" },
+        { label: "Select Preset", btn_id: "select_preset" },
+        { label: "Help", btn_id: "help" },
       ],
       rf: 0,
     };
@@ -42,6 +52,7 @@ export default {
     <BaseOptionsMenu
       class="x_controls_options_menu"
       :menuItems="dynamics_rate_controls_options_menu_items"
+      @update="DynamicsRateControlsOptionsMenuOnUpdate"
     ></BaseOptionsMenu>
     <BaseLineGraph
       class="x_generic_controls_graph"
