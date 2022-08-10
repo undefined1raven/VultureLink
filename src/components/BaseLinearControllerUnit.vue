@@ -45,7 +45,19 @@ export default {
       }
     },
     LinearControllerUnitInputParser(e: Event) {
-      this.BaseLineGraphInput = parseFloat(e.target.value);
+      if (e.target.value <= 7.5) {
+        this.BaseLineGraphInput = parseFloat(e.target.value);
+      } else {
+        this.BaseLineGraphInput = 7.5;
+        e.target.value = 7.5;
+      }
+      
+      if (e.target.value >= 2.5) {
+        this.BaseLineGraphInput = parseFloat(e.target.value);
+      } else {
+        this.BaseLineGraphInput = 2.5;
+        e.target.value = 2.5;
+      }
     },
     ControlsOptionsMenuOnUpdate(args: Object) {
       this.$emit("update", args);
@@ -141,7 +153,8 @@ export default {
 .base_linear_controller_negative_step_btn {
   left: calc(89.006024096% + 3.301204989%);
 }
-.base_linear_controller_positive_step_btn:hover, .base_linear_controller_negative_step_btn:hover {
+.base_linear_controller_positive_step_btn:hover,
+.base_linear_controller_negative_step_btn:hover {
   background-color: #0500ff20;
 }
 .base_linear_controller_input {
