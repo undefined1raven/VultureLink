@@ -10,6 +10,11 @@ export default {
     input: { default: 60 },
   },
   methods: {
+    scale(num:number, in_min:number, in_max:number, out_min:number, out_max:number) {
+      return (
+        ((num - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min
+      );
+    },
     input_parser() {
       let midpoint = (this.min + this.max) / 2;
 
@@ -21,15 +26,15 @@ export default {
         if (this.input > midpoint) {
           negative_slider_width = "0%";
           negative_slider_left = "0%";
-          positive_slider_width = `${
-            (((this.input) * 100) / this.max) / 2
-          }%`;
+          positive_slider_width = `${this.scale(this.input, 5, 7.5, 0, 50)}%`;
         } else {
           positive_slider_width = "0%";
-          negative_slider_width = `${
-            Math.abs(((this.input - midpoint) * 100) / this.min / 2)
+          negative_slider_width = `${Math.abs(
+            ((this.input - midpoint) * 100) / this.min / 2
+          )}%`;
+          negative_slider_left = `${
+            50 - Math.abs(((this.input - midpoint) * 100) / this.min / 2)
           }%`;
-          negative_slider_left = `${50 - Math.abs(((this.input - midpoint) * 100) / this.min / 2)}%`;
         }
       }
 
@@ -67,7 +72,7 @@ export default {
   height: 100%;
   left: 50%;
   translate: transform(-50%);
-  background-color: #0500FF;
+  background-color: #0500ff;
   z-index: 5;
 }
 .base_line_graph_negative_slider {

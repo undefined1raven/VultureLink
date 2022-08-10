@@ -52,13 +52,13 @@ export default {
     <Label class="x_controls_l" v-text="'Rate Controls'"></Label>
     <BaseLinearControllerUnit
     class="x_linear_controller_unit_0"
-      ControlPanelLabel="Max Pitch Rate"
+      ControlPanelLabel="Max Rate (all axis)"
       @update="DynamicsRateControlsOptionsMenuOnUpdate"
       :BaseLineGraphMax="7.5"
       :BaseLineGraphMin="2.5"
-      :BaseLineGraphInput="rf"
       BaseLineGraphWidth="52.409638554%"
       OptionsMenuHeight=""
+      MeasurmentUnit="°/s"
     ></BaseLinearControllerUnit>
     <BaseOptionsMenu
       class="x_controls_options_menu"

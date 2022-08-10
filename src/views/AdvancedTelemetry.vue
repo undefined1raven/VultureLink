@@ -52,7 +52,7 @@ export default {
         visible_window_id: "overview",
       },
       vulture_telemetry: {
-        dynamics: { imu_alpha: {}}, 
+        dynamics: { imu_alpha: {} },
       },
       mobile: {
         isMenuVisible: false,
@@ -138,9 +138,8 @@ export default {
         this.sonar_telemetry_obj = payload;
       });
 
-
       ///-- Vulture Dynamics Telemetry RX--///
-      socket.on('imu_alpha_data_pkg_server_relay', (imu_alpha_data_obj) => {
+      socket.on("imu_alpha_data_pkg_server_relay", (imu_alpha_data_obj) => {
         this.vulture_telemetry.dynamics.imu_alpha = imu_alpha_data_obj;
       });
 
@@ -296,5 +295,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+  opacity: 0;
+  display: none;
 }
 </style>
