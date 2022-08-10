@@ -51,6 +51,6 @@ export default {
   transition: all linear 0.1s;
 }
 .base_options_menu_list_item:hover{
-    background-color: #0500ff20;
+    background-color: #020074aa;
 }
 </style>

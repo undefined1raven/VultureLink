@@ -12,7 +12,7 @@ export default {
     DynamicsRateControlsOptionsMenuOnUpdate(args: Object) {
       switch (args.btn_id) {
         case "restore_defaults":
-          this.rf = 5;
+          this.$refs.x_controls_linear_controller_unit.ResetToDefault();
           break;
 
         default:
@@ -51,13 +51,15 @@ export default {
   <div class="x_controls_container">
     <Label class="x_controls_l" v-text="'Rate Controls'"></Label>
     <BaseLinearControllerUnit
-    class="x_linear_controller_unit_0"
+      ref="x_controls_linear_controller_unit"
+      class="x_linear_controller_unit_0"
       ControlPanelLabel="Max Rate (all axis)"
       @update="DynamicsRateControlsOptionsMenuOnUpdate"
       :BaseLineGraphMax="7.5"
       :BaseLineGraphMin="2.5"
       BaseLineGraphWidth="52.409638554%"
       OptionsMenuHeight=""
+      :DefaultValue="5"
       MeasurmentUnit="°/s"
     ></BaseLinearControllerUnit>
     <BaseOptionsMenu
@@ -69,17 +71,17 @@ export default {
 </template>
 
 <style scoped>
-.x_linear_controller_unit_0{
+.x_linear_controller_unit_0 {
   top: 7.471264368%;
   left: 0%;
 }
-.x_controls_l{
+.x_controls_l {
   position: relative;
   top: 0%;
   left: 0%;
   font-size: 1vw;
-  background-color: #0500FF20;
-  border-left: solid 1px #0500FF;
+  background-color: #0500ff20;
+  border-left: solid 1px #0500ff;
   width: 20.833333333%;
   height: 9.296482412%;
   display: flex;

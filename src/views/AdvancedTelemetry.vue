@@ -305,4 +305,9 @@ input[type="number"]::-webkit-outer-spin-button {
   opacity: 0;
   display: none;
 }
+@media only screen and (max-width: 1370px) and (max-height: 770px) {
+  .dynamic-font-weight {
+    font-weight: 200;
+  }
+}
 </style>

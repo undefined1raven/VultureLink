@@ -14,18 +14,24 @@ export default {
     BaseLineGraphMin: { default: 2.5 },
     BaseLineGraphWidth: { default: "50%" },
     BaseLineGraphHeight: { default: "0.091vw" },
+    DefaultValue: { default: 5 },
     MeasurmentUnit: { default: "°/s" },
     ContainerStyle: {
       default:
         "width: 95.402298851%; height: 27.386934673%; border-left: solid 1px #0500FF",
     },
   },
+  expose: ['ResetToDefault'],
   data() {
     return {
       BaseLineGraphInput: 5,
     };
   },
   methods: {
+    ResetToDefault() {
+      this.BaseLineGraphInput = this.DefaultValue;
+      this.$refs.NumericalInputRef.value = this.DefaultValue;
+    },
     LinearControllerUnitNegativeStepOnClick() {
       if (this.BaseLineGraphInput > 3) {
         this.$refs.NumericalInputRef.value = this.BaseLineGraphInput - 0.5;
@@ -116,17 +122,17 @@ export default {
       max="7.5"
       min="2.5"
       type="number"
-      class="base_linear_controller_input"
+      class="base_linear_controller_input dynamic-font-weight"
     />
     <div
       @click="LinearControllerUnitPositiveStepOnClick"
-      class="base_linear_controller_positive_step_btn"
+      class="base_linear_controller_positive_step_btn dynamic-font-weight"
     >
       +
     </div>
     <div
       @click="LinearControllerUnitNegativeStepOnClick"
-      class="base_linear_controller_negative_step_btn"
+      class="base_linear_controller_negative_step_btn dynamic-font-weight"
     >
       -
     </div>
