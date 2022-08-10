@@ -51,7 +51,7 @@ export default {
         this.BaseLineGraphInput = 7.5;
         e.target.value = 7.5;
       }
-      
+
       if (e.target.value >= 2.5) {
         this.BaseLineGraphInput = parseFloat(e.target.value);
       } else {
@@ -150,7 +150,7 @@ export default {
   font-family: "Titillium Web", sans-serif;
   user-select: none;
 }
-.base_linear_controller_negative_step_btn {
+.base_linear_controller_positive_step_btn {
   left: calc(89.006024096% + 3.301204989%);
 }
 .base_linear_controller_positive_step_btn:hover,
