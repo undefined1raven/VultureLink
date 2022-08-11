@@ -8,6 +8,9 @@ import BaseLineGraph from "@/components/BaseLineGraph.vue";
 
 <script lang="ts">
 export default {
+  mounted() {
+    this.$refs.NumericalInputRef.value = this.DefaultValue;
+  },
   props: {
     ControlPanelLabel: { default: "" },
     BaseLineGraphMax: { default: 7.5 },
@@ -16,38 +19,47 @@ export default {
     BaseLineGraphHeight: { default: "0.091vw" },
     DefaultValue: { default: 5 },
     MeasurmentUnit: { default: "°/s" },
+    isGlobal: {
+      default: false,
+    } /*indicates whether or not the input from this LCU has to be propagaded to other more specific LCUs */,
     ContainerStyle: {
       default:
         "width: 95.402298851%; height: 27.386934673%; border-left: solid 1px #0500FF",
     },
   },
-  expose: ['ResetToDefault'],
+  expose: ["ResetToDefault", "SetInputValue", "GetCurrentValue"],
   data() {
     return {
       BaseLineGraphInput: 5,
     };
   },
   methods: {
+    GetCurrentValue(){
+      return this.BaseLineGraphInput;
+    },
+    SetInputValue(value: number) {
+      if (this.isGlobal) {
+        this.$emit("GlobalValueOnChange", { newValue: value });
+      }
+      this.BaseLineGraphInput = value;
+      this.$refs.NumericalInputRef.value = value;
+    },
     ResetToDefault() {
       this.BaseLineGraphInput = this.DefaultValue;
       this.$refs.NumericalInputRef.value = this.DefaultValue;
     },
     LinearControllerUnitNegativeStepOnClick() {
       if (this.BaseLineGraphInput > 3) {
-        this.$refs.NumericalInputRef.value = this.BaseLineGraphInput - 0.5;
-        this.BaseLineGraphInput -= 0.5;
+        this.SetInputValue(this.BaseLineGraphInput - 0.5);
       } else {
-        this.$refs.NumericalInputRef.value = 2.5;
-        this.BaseLineGraphInput = 2.5;
+        this.SetInputValue(2.5);
       }
     },
     LinearControllerUnitPositiveStepOnClick() {
       if (this.BaseLineGraphInput < 7) {
-        this.$refs.NumericalInputRef.value = this.BaseLineGraphInput + 0.5;
-        this.BaseLineGraphInput += 0.5;
+        this.SetInputValue(this.BaseLineGraphInput + 0.5);
       } else {
-        this.$refs.NumericalInputRef.value = 7.5;
-        this.BaseLineGraphInput = 7.5;
+        this.SetInputValue(7.5);
       }
     },
     LinearControllerUnitInputParser(e: Event) {
@@ -69,7 +81,8 @@ export default {
       this.$emit("update", args);
     },
   },
-};
+};import { throwStatement } from "@babel/types";
+
 </script>
 
 <template>

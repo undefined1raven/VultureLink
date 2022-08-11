@@ -12,6 +12,7 @@ export default {
     document.addEventListener("click", (e) => {
         if (e.target != this.$refs.options_menu_btn) {
           this.isExpanded = false;
+          this.ContainerzIndex = 0;
         }
     });
   },
@@ -24,6 +25,9 @@ export default {
     },
     OptionsMenuButtonOnClick() {
       this.isExpanded = !this.isExpanded;
+      if(this.isExpanded){
+        this.ContainerzIndex = 5;
+      }
     },
     OptionsMenuButtonOnMouseEnter() {
       this.optionsMenuButtonBackgroundColor = "background-color: #0500FF40;";
@@ -40,6 +44,7 @@ export default {
   data() {
     return {
       isExpanded: false,
+      ContainerzIndex: 0,
       optionsMenuButtonBackgroundColor: "background-color: #0500FF00;",
     };
   },
@@ -49,7 +54,7 @@ export default {
 <template>
   <div
     class="options_menu_container"
-    :style="`width: ${width}; height: ${height};`"
+    :style="`width: ${width}; height: ${height}; z-index: ${ContainerzIndex}`"
   >
     <div
       ref="options_menu_btn"

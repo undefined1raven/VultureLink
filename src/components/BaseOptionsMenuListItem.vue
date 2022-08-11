@@ -1,6 +1,9 @@
 
 <script lang="ts">
 export default {
+  mounted(){
+    console.log(this.menuItem.label)
+  },
   props: {
     menuItem: { default: { label: "--", btn_id: "" } },
     isFirst: {default: false},

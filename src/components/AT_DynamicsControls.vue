@@ -14,7 +14,7 @@ export default {
     return {
       dynamics_controls: {
         rate_controls: { max_pitch_rate: 5, max_roll_rate: 5, max_yaw_rate: 5 },
-        rotation_controls: {max_pitch: 30, max_roll: 30},
+        rotation_controls: { max_pitch: 30, max_roll: 30 },
       },
     };
   },
@@ -27,6 +27,12 @@ export default {
   <DynamicsControlPanel
     id="dynamics_rate_controls_container"
     ControlPanelLabel="Rate Controls"
+    class="animation_group_0"
+    :DynamicsControlsObject="dynamics_controls"
+  ></DynamicsControlPanel>
+  <DynamicsControlPanel
+    id="dynamics_rotation_controls_container"
+    ControlPanelLabel="Rotation Controls"
     class="animation_group_0"
     :DynamicsControlsObject="dynamics_controls"
   ></DynamicsControlPanel>
@@ -48,6 +54,10 @@ export default {
 #dynamics_rate_controls_container {
   top: 57.12962963%;
   left: 5.052083333%;
+}
+#dynamics_rotation_controls_container {
+  top: 57.12962963%;
+  left: 43.020833333%;
 }
 #dynaimcs_controls_l {
   top: 52.222222222%;
