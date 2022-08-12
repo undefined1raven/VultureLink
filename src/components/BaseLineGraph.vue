@@ -26,14 +26,12 @@ export default {
         if (this.input > midpoint) {
           negative_slider_width = "0%";
           negative_slider_left = "0%";
-          positive_slider_width = `${this.scale(this.input, 5, 7.5, 0, 50)}%`;
+          positive_slider_width = `${this.scale(this.input, midpoint, this.max, 0, 50)}%`;
         } else {
           positive_slider_width = "0%";
-          negative_slider_width = `${Math.abs(
-            ((this.input - midpoint) * 100) / this.min / 2
-          )}%`;
+          negative_slider_width = `${this.scale(this.input, midpoint, this.min, 0, 50)}%`;
           negative_slider_left = `${
-            50 - Math.abs(((this.input - midpoint) * 100) / this.min / 2)
+            50 - this.scale(this.input, midpoint, this.min, 0, 50)
           }%`;
         }
       }

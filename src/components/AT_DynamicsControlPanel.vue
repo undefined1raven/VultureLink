@@ -40,11 +40,19 @@ export default {
   },
   props: {
     ControlPanelLabel: { default: "" },
+    GlobalLinearControllerUnitLabel: {default: ""},
+    GlobalLinearControllerUnitConstraints: {default: {max: 7.5, min: 2.5, default: 5, measurement_unit: "°/s"}},
+    LinearControllerUnitConstraints_0: {default: {max: 7.5, min: 2.5, default: 5, measurement_unit: "°/s"}},
+    LinearControllerUnitConstraints_1: {default: {max: 7.5, min: 2.5, default: 5, measurement_unit: "°/s"}},
+    LinearControllerUnitConstraints_2: {default: {max: 7.5, min: 2.5, default: 5, measurement_unit: "°/s"}},
+    LinearControllerUnitLabel_0: {default: ""},
+    LinearControllerUnitLabel_1: {default: ""},
+    LinearControllerUnitLabel_2: {default: ""},
+    isThirdLinearControllerUsed: {default: true},
     DynamicsControlsObject: { default: {} },
   },
   data() {
     return {
-      CustomizeButtonLabel: "Customize",
       dynamics_rate_controls_options_menu_items: [
         { label: "Restore Defaults", btn_id: "restore_defaults" },
         { label: "Select Preset", btn_id: "select_preset" },
@@ -65,58 +73,58 @@ export default {
       v-show="!isExpanded"
       ref="x_controls_linear_controller_unit_global"
       class="x_linear_controller_unit_global"
-      ControlPanelLabel="Max Rate (all axis)"
+      :ControlPanelLabel="GlobalLinearControllerUnitLabel"
       @update="DynamicsRateControlsOptionsMenuOnUpdate"
       @GlobalValueOnChange="GlobalValueOnChange"
-      :BaseLineGraphMax="7.5"
-      :BaseLineGraphMin="2.5"
+      :BaseLineGraphMax="GlobalLinearControllerUnitConstraints.max"
+      :BaseLineGraphMin="GlobalLinearControllerUnitConstraints.min"
       BaseLineGraphWidth="52.409638554%"
       OptionsMenuHeight="0.091vw"
-      :DefaultValue="5"
-      MeasurmentUnit="°/s"
+      :DefaultValue="GlobalLinearControllerUnitConstraints.default"
+      :MeasurmentUnit="GlobalLinearControllerUnitConstraints.measurement_unit"
       :isGlobal="true"
     ></BaseLinearControllerUnit>
     <BaseLinearControllerUnit
       v-show="isExpanded"
       ref="x_controls_linear_controller_unit"
       class="x_linear_controller_unit_0"
-      ControlPanelLabel="Max Pitch Rate"
+      :ControlPanelLabel="LinearControllerUnitLabel_0"
       @update="DynamicsRateControlsOptionsMenuOnUpdate"
-      :BaseLineGraphMax="7.5"
-      :BaseLineGraphMin="2.5"
+      :BaseLineGraphMax="LinearControllerUnitConstraints_0.max"
+      :BaseLineGraphMin="LinearControllerUnitConstraints_0.min"
       BaseLineGraphWidth="52.409638554%"
       OptionsMenuHeight="0.091vw"
-      :DefaultValue="5"
+      :DefaultValue="LinearControllerUnitConstraints_0.default"
       :isGlobal="false"
-      MeasurmentUnit="°/s"
+      :MeasurmentUnit="LinearControllerUnitConstraints_0.measurement_unit"
     ></BaseLinearControllerUnit>
     <BaseLinearControllerUnit
       v-show="isExpanded"
       ref="x_controls_linear_controller_unit_1"
       class="x_linear_controller_unit_1"
-      ControlPanelLabel="Max Roll Rate"
+      :ControlPanelLabel="LinearControllerUnitLabel_1"
       @update="DynamicsRateControlsOptionsMenuOnUpdate"
-      :BaseLineGraphMax="7.5"
-      :BaseLineGraphMin="2.5"
+      :BaseLineGraphMax="LinearControllerUnitConstraints_1.max"
+      :BaseLineGraphMin="LinearControllerUnitConstraints_1.min"
       BaseLineGraphWidth="52.409638554%"
       OptionsMenuHeight="0.091vw"
-      :DefaultValue="5"
+      :DefaultValue="LinearControllerUnitConstraints_1.default"
       :isGlobal="false"
-      MeasurmentUnit="°/s"
+      :MeasurmentUnit="LinearControllerUnitConstraints_1.measurement_unit"
     ></BaseLinearControllerUnit>
     <BaseLinearControllerUnit
-      v-show="isExpanded"
+      v-show="isExpanded && isThirdLinearControllerUsed"
       ref="x_controls_linear_controller_unit_2"
       class="x_linear_controller_unit_2"
-      ControlPanelLabel="Max Yaw Rate"
+      :ControlPanelLabel="LinearControllerUnitLabel_2"
       @update="DynamicsRateControlsOptionsMenuOnUpdate"
-      :BaseLineGraphMax="7.5"
-      :BaseLineGraphMin="2.5"
+      :BaseLineGraphMax="LinearControllerUnitConstraints_2.max"
+      :BaseLineGraphMin="LinearControllerUnitConstraints_2.min"
       BaseLineGraphWidth="52.409638554%"
       OptionsMenuHeight="0.091vw"
-      :DefaultValue="5"
+      :DefaultValue="LinearControllerUnitConstraints_2.default"
       :isGlobal="false"
-      MeasurmentUnit="°/s"
+      :MeasurmentUnit="LinearControllerUnitConstraints_2.measurement_unit"
     ></BaseLinearControllerUnit>
     <BaseOptionsMenu
       class="x_controls_options_menu"

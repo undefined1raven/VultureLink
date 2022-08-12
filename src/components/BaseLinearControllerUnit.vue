@@ -49,39 +49,39 @@ export default {
       this.$refs.NumericalInputRef.value = this.DefaultValue;
     },
     LinearControllerUnitNegativeStepOnClick() {
-      if (this.BaseLineGraphInput > 3) {
+      if (this.BaseLineGraphInput > this.BaseLineGraphMin + 0.5) {
         this.SetInputValue(this.BaseLineGraphInput - 0.5);
       } else {
-        this.SetInputValue(2.5);
+        this.SetInputValue(this.BaseLineGraphMin);
       }
     },
     LinearControllerUnitPositiveStepOnClick() {
-      if (this.BaseLineGraphInput < 7) {
+      if (this.BaseLineGraphInput < this.BaseLineGraphMax - 0.5) {
         this.SetInputValue(this.BaseLineGraphInput + 0.5);
       } else {
-        this.SetInputValue(7.5);
+        this.SetInputValue(this.BaseLineGraphMax);
       }
     },
     LinearControllerUnitInputParser(e: Event) {
-      if (e.target.value <= 7.5) {
+      if (e.target.value <= this.BaseLineGraphMax) {
         this.BaseLineGraphInput = parseFloat(e.target.value);
       } else {
-        this.BaseLineGraphInput = 7.5;
-        e.target.value = 7.5;
+        this.BaseLineGraphInput = this.BaseLineGraphMax;
+        e.target.value = this.BaseLineGraphMax;
       }
 
-      if (e.target.value >= 2.5) {
+      if (e.target.value >= this.BaseLineGraphMin) {
         this.BaseLineGraphInput = parseFloat(e.target.value);
       } else {
-        this.BaseLineGraphInput = 2.5;
-        e.target.value = 2.5;
+        this.BaseLineGraphInput = this.BaseLineGraphMin;
+        e.target.value = this.BaseLineGraphMin;
       }
     },
     ControlsOptionsMenuOnUpdate(args: Object) {
       this.$emit("update", args);
     },
   },
-};import { throwStatement } from "@babel/types";
+}
 
 </script>
 
@@ -132,8 +132,8 @@ export default {
       @change="LinearControllerUnitInputParser"
       step="0.01"
       placeholder="5"
-      max="7.5"
-      min="2.5"
+      :max="BaseLineGraphMax"
+      :min="BaseLineGraphMin"
       type="number"
       class="base_linear_controller_input dynamic-font-weight"
     />

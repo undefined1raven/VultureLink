@@ -27,12 +27,63 @@ export default {
   <DynamicsControlPanel
     id="dynamics_rate_controls_container"
     ControlPanelLabel="Rate Controls"
+    GlobalLinearControllerUnitLabel="Max Rate (all axis)"
+    LinearControllerUnitLabel_0="Max Pitch Rate"
+    LinearControllerUnitLabel_1="Max Roll Rate"
+    LinearControllerUnitLabel_2="Max Yaw Rate"
+    :GlobalLinearControllerUnitConstraints="{
+      max: 7.5,
+      min: 2.5,
+      default: 5,
+      measurement_unit: '°/s',
+    }"
+    :LinearControllerUnitConstraints_0="{
+      max: 7.5,
+      min: 2.5,
+      default: 5,
+      measurement_unit: '°/s',
+    }"
+    :LinearControllerUnitConstraints_1="{
+      max: 7.5,
+      min: 2.5,
+      default: 5,
+      measurement_unit: '°/s',
+    }"
+    :LinearControllerUnitConstraints_2="{
+      max: 7.5,
+      min: 2.5,
+      default: 5,
+      measurement_unit: '°/s',
+    }"
+    :isThirdLinearControllerUsed="true"
     class="animation_group_0"
     :DynamicsControlsObject="dynamics_controls"
   ></DynamicsControlPanel>
   <DynamicsControlPanel
     id="dynamics_rotation_controls_container"
     ControlPanelLabel="Rotation Controls"
+    GlobalLinearControllerUnitLabel="Max Rotation (all axis)"
+    LinearControllerUnitLabel_0="Max Pitch"
+    LinearControllerUnitLabel_1="Max Roll"
+    :isThirdLinearControllerUsed="false"
+    :GlobalLinearControllerUnitConstraints="{
+      max: 40,
+      min: 20,
+      default: 30,
+      measurement_unit: '°',
+    }"
+    :LinearControllerUnitConstraints_0="{
+      max: 45,
+      min: 15,
+      default: 30,
+      measurement_unit: '°',
+    }"
+    :LinearControllerUnitConstraints_1="{
+      max: 40,
+      min: 20,
+      default: 30,
+      measurement_unit: '°',
+    }"
     class="animation_group_0"
     :DynamicsControlsObject="dynamics_controls"
   ></DynamicsControlPanel>
