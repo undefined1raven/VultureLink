@@ -30,17 +30,18 @@ export default {
   expose: ["ResetToDefault", "SetInputValue", "GetCurrentValue"],
   data() {
     return {
-      BaseLineGraphInput: 5,
+      BaseLineGraphInput: this.DefaultValue,
     };
   },
   methods: {
-    GetCurrentValue(){
+    GetCurrentValue() {
       return this.BaseLineGraphInput;
     },
     SetInputValue(value: number) {
       if (this.isGlobal) {
         this.$emit("GlobalValueOnChange", { newValue: value });
       }
+      this.$emit("InputValueOnChange", { newValue: value });
       this.BaseLineGraphInput = value;
       this.$refs.NumericalInputRef.value = value;
     },
@@ -64,25 +65,22 @@ export default {
     },
     LinearControllerUnitInputParser(e: Event) {
       if (e.target.value <= this.BaseLineGraphMax) {
-        this.BaseLineGraphInput = parseFloat(e.target.value);
+        this.SetInputValue(parseFloat(e.target.value));
       } else {
-        this.BaseLineGraphInput = this.BaseLineGraphMax;
-        e.target.value = this.BaseLineGraphMax;
+        this.SetInputValue(this.BaseLineGraphMax);
       }
 
       if (e.target.value >= this.BaseLineGraphMin) {
-        this.BaseLineGraphInput = parseFloat(e.target.value);
+        this.SetInputValue(parseFloat(e.target.value));
       } else {
-        this.BaseLineGraphInput = this.BaseLineGraphMin;
-        e.target.value = this.BaseLineGraphMin;
+        this.SetInputValue(this.BaseLineGraphMin);
       }
     },
     ControlsOptionsMenuOnUpdate(args: Object) {
       this.$emit("update", args);
     },
   },
-}
-
+};
 </script>
 
 <template>

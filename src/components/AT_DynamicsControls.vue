@@ -6,10 +6,30 @@ import VerticalLine from "@/components/VerticalLine.vue";
 import BaseOptionsMenu from "@/components/BaseOptionsMenu.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
 import DynamicsControlPanel from "@/components/AT_DynamicsControlPanel.vue";
+import { assertLogicalExpression } from "@babel/types";
 </script>
 
 <script lang="ts">
 export default {
+  methods: {
+    InputValueOnChange(args: object, ControlPanelID: string) {
+      if (ControlPanelID == "rate") {
+        let object_mapper_array = ["max_pitcmax_pitch_rateh", "max_roll_rate", "max_yaw_rate"];
+        this.dynamics_controls.rate_controls[
+          object_mapper_array[args.LCU_id]
+        ] = args.newValue;
+      }
+      if (ControlPanelID == "rotation") {
+        if (args.LCU_id < 2) {
+          let object_mapper_array = ["max_pitch", "max_roll"];
+          this.dynamics_controls.rotation_controls[
+            object_mapper_array[args.LCU_id]
+          ] = args.newValue;
+        }
+      }
+      // console.log(`${JSON.stringify(this.dynamics_controls)}`);
+    },
+  },
   data() {
     return {
       dynamics_controls: {
@@ -31,6 +51,7 @@ export default {
     LinearControllerUnitLabel_0="Max Pitch Rate"
     LinearControllerUnitLabel_1="Max Roll Rate"
     LinearControllerUnitLabel_2="Max Yaw Rate"
+    @InputValueOnChange="InputValueOnChange($event, 'rate')"
     :GlobalLinearControllerUnitConstraints="{
       max: 7.5,
       min: 2.5,
@@ -66,6 +87,7 @@ export default {
     LinearControllerUnitLabel_0="Max Pitch"
     LinearControllerUnitLabel_1="Max Roll"
     :isThirdLinearControllerUsed="false"
+    @InputValueOnChange="InputValueOnChange($event, 'rotation')"
     :GlobalLinearControllerUnitConstraints="{
       max: 40,
       min: 20,

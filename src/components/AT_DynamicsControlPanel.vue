@@ -14,6 +14,9 @@ export default {
       this.$refs.x_controls_linear_controller_unit_1.SetInputValue(args.newValue);
       this.$refs.x_controls_linear_controller_unit_2.SetInputValue(args.newValue);
     },
+    InputValueOnChange(args:Object, LCU_id:number){
+      this.$emit('InputValueOnChange', {newValue: args.newValue, LCU_id: LCU_id});
+    },
     DynamicsRateControlsOptionsMenuOnUpdate(args: Object) {
       switch (args.btn_id) {
         case "restore_defaults":
@@ -90,6 +93,7 @@ export default {
       class="x_linear_controller_unit_0"
       :ControlPanelLabel="LinearControllerUnitLabel_0"
       @update="DynamicsRateControlsOptionsMenuOnUpdate"
+      @InputValueOnChange="InputValueOnChange($event, 0)"
       :BaseLineGraphMax="LinearControllerUnitConstraints_0.max"
       :BaseLineGraphMin="LinearControllerUnitConstraints_0.min"
       BaseLineGraphWidth="52.409638554%"
@@ -104,6 +108,7 @@ export default {
       class="x_linear_controller_unit_1"
       :ControlPanelLabel="LinearControllerUnitLabel_1"
       @update="DynamicsRateControlsOptionsMenuOnUpdate"
+      @InputValueOnChange="InputValueOnChange($event, 1)"
       :BaseLineGraphMax="LinearControllerUnitConstraints_1.max"
       :BaseLineGraphMin="LinearControllerUnitConstraints_1.min"
       BaseLineGraphWidth="52.409638554%"
@@ -118,6 +123,7 @@ export default {
       class="x_linear_controller_unit_2"
       :ControlPanelLabel="LinearControllerUnitLabel_2"
       @update="DynamicsRateControlsOptionsMenuOnUpdate"
+      @InputValueOnChange="InputValueOnChange($event, 2)"
       :BaseLineGraphMax="LinearControllerUnitConstraints_2.max"
       :BaseLineGraphMin="LinearControllerUnitConstraints_2.min"
       BaseLineGraphWidth="52.409638554%"
