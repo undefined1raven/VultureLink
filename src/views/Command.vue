@@ -2,7 +2,7 @@
 import Background from "@/components/BaseBackgroundImg.vue";
 import MobileBackground from "@/components/MobileBaseBackgroundImg.vue";
 import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import { io } from "socket.io-client";
 </script>
 
@@ -66,12 +66,12 @@ export default {
   <main v-if="!hasStream">
     <VultureDetailedDeco id="vulture_logo" />
     <div id="ini_container">
-      <Label
+      <BaseLabel
         id="current_status"
         v-text="'Establishing Connection'"
         color="#FFF"
       />
-      <Label id="connection_deco" v-text="'/|/'" color="#1400FF" />
+      <BaseLabel id="connection_deco" v-text="'/|/'" color="#1400FF" />
     </div>
   </main>
   <Video v-show="hasStream" id="vid_container" ref="vid_container"></Video>

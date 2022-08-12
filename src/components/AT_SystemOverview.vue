@@ -11,7 +11,7 @@ import MobileOverviewAutonomyDeco from "@/components/BaseAutonomyDeco.vue";
 import MobileOverviewPowerDeco from "@/components/BasePowerDeco.vue";
 import MobileOverviewButton from "@/components/M_AT_OverviewButton.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 
 import useColorFromVultureSystemStatus from '@/composables/ColorFromVultureSystemStatus.js';
 </script>
@@ -68,7 +68,7 @@ export default {
         <div id="system_menu_ln_1" class="ln ln_h"></div>
       </div>
       <div id="system_overview_container" class="animation_group_2">
-        <Label id="system_menu_l" v-text="'Vulture Systems'"></Label>
+        <BaseLabel id="system_menu_l" v-text="'Vulture Systems'"></BaseLabel>
         <OverviewButton
           id="sonar_array_overview_btn"
           system_label="SONAR ARRAY"
@@ -113,10 +113,10 @@ export default {
       </div>
     </div>
     <div v-if="isMobile" id="vulture_systems_mobile_container" class="animation_group_2">
-      <Label
+      <BaseLabel
         v-text="`${selected_vulture_obj.vn}\\\\Systems`"
         id="vulture_id_l"
-      ></Label>
+      ></BaseLabel>
       <HorizontalLine id="m_vulture_systems_overview_ln_0" color="#1400FF" />
       <MobileOverviewButton
         id="m_overview_sonar_array_btn"

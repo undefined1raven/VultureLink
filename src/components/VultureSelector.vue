@@ -1,6 +1,6 @@
 
 <script setup>
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import VultureVowListItem from "@/components/VultureVowListItem.vue";
 import VultureArrayLoadingDeco from "@/components/VultureArrayLoadingDeco.vue";
 </script>
@@ -58,35 +58,35 @@ export default {
 
 <template>
   <div id="vulture_selector_container">
-    <Label
+    <BaseLabel
       id="vulture_selector_l"
       v-text="dock_name_formatter() + 'Vulture Selector'"
       color="#FFF"
-    ></Label>
-    <Label
+    ></BaseLabel>
+    <BaseLabel
       id="vulture_selector_legend_unavailable"
       class="vulture_selector_legend_x"
       v-text="'Unavailable'"
       color="#585858"
-    ></Label>
-    <Label
+    ></BaseLabel>
+    <BaseLabel
       id="vulture_selector_legend_fault"
       class="vulture_selector_legend_x"
       v-text="'Requires Attention'"
       color="#FF006B"
-    ></Label>
-    <Label
+    ></BaseLabel>
+    <BaseLabel
       id="vulture_selector_legend_ready"
       class="vulture_selector_legend_x"
       v-text="'Ready'"
       color="#0500FF"
-    ></Label>
-    <Label
+    ></BaseLabel>
+    <BaseLabel
       id="vulture_selector_legend_active"
       class="vulture_selector_legend_x"
       v-text="'Active'"
       color="#00FFF0"
-    ></Label>
+    ></BaseLabel>
     <div v-if="!isMobile" id="vulture_selector_ln_container">
       <div id="vulture_selector_ln_0" class="ln ln_h"></div>
       <div id="vulture_selector_ln_1" class="ln ln_h"></div>

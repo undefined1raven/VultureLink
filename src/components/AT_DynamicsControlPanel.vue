@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import BaseOptionsMenu from "@/components/BaseOptionsMenu.vue";
 import BaseLineGraph from "@/components/BaseLineGraph.vue";
 import BaseLinearControllerUnit from "@/components/BaseLinearControllerUnit.vue";
@@ -60,7 +60,7 @@ export default {
 
 <template>
   <div class="x_controls_container">
-    <Label class="x_controls_l" v-text="ControlPanelLabel"></Label>
+    <BaseLabel class="x_controls_l" v-text="ControlPanelLabel"></BaseLabel>
     <BaseLinearControllerUnit
       v-show="!isExpanded"
       ref="x_controls_linear_controller_unit_global"
@@ -153,7 +153,7 @@ export default {
   font-size: 1vw;
   background-color: #0500ff20;
   border-left: solid 1px #0500ff;
-  width: 20.833333333%;
+  width: 27.298850575%;
   height: 9.296482412%;
   display: flex;
   justify-content: start;

@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import DynamicsTelemetryOneAxis from "@/components/AT_DynamicsTelemetryOneAxis.vue";
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import VerticalLine from "@/components/VerticalLine.vue";
 </script>
 
@@ -48,11 +48,11 @@ export default {
 <template>
   <div id="dynamics_telemetry_container">
     <VerticalLine id="dynamics_telemetry_line" color="#373737"></VerticalLine>
-    <Label
+    <BaseLabel
       id="dynamics_telemetry_l"
       class="animation_group_0"
       v-text="'Telemetry'"
-    ></Label>
+    ></BaseLabel>
     <DynamicsTelemetryOneAxis
       id="x_axis_telemetry_container"
       axis_id="X Axis"

@@ -1,6 +1,6 @@
 
 <script setup>
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 </script>
 <script>
 import Vue from "vue";
@@ -21,12 +21,12 @@ export default {
 
 <template>
   <div class="user_dropdown_menu_container" :style="`top: ${top}; left: ${left};`">
-    <Label
+    <BaseLabel
       class="signed_in_as_l"
       color="#4D4D4D"
       v-text="'Signed in as'"
-    ></Label>
-    <Label class="username_l" color="#FFF" v-text="username"></Label>
+    ></BaseLabel>
+    <BaseLabel class="username_l" color="#FFF" v-text="username"></BaseLabel>
     <form ref="logout_form" action="/logout" method="POST" id="logout_form">
       <button id="logout_btn" type="submit">Log Out</button>
     </form>

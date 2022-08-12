@@ -7,7 +7,7 @@ import InputFieldLabel from "@/components/LoginInputFieldLabel.vue";
 import VultureConnectivityDecoDesktop from "@/components/TheVultureConnectivityDeco.vue";
 import MobileVultureConnectivityDecoDesktop from "@/components/MobileTheVultureConnectivityDeco.vue";
 import AuroraLogo from "@/components/AuroraLogo.vue";
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import NewPasswordReqIndi from "@/components/GenesisNewPasswordReq.vue";
 
 document.title = "New Account";
@@ -207,20 +207,20 @@ export default {
   <MobileBackground />
   <AuroraLogo v-if="!virtual_keyboard_visible" id="logo" />
   <Transition name="fade_in">
-    <Label
+    <BaseLabel
       v-if="!error_label_visible && !virtual_keyboard_visible"
       id="primary_l"
       color="#888"
       v-text="'Create New Account'"
       :style="'height: ' + dynamic_error_label_height"
-    ></Label>
-    <Label
+    ></BaseLabel>
+    <BaseLabel
       v-if="error_label_visible"
       id="error_l"
       color="#FF0040"
       v-text="error_label_text"
       :style="'height: ' + dynamic_error_label_height"
-    ></Label>
+    ></BaseLabel>
   </Transition>
   <NewPasswordReqIndi
     id="length_req_indi"

@@ -1,7 +1,7 @@
 
 <script setup>
 import RelayStationListItem from "@/components/RelayStationListItem.vue";
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 </script>
 
 <script>
@@ -29,12 +29,12 @@ export default {
 </script>
 <template>
   <div class="relay_stations_list_container">
-    <Label
+    <BaseLabel
       v-if="parse_relay_station_array().length == 0"
       id="no_relay_stations_l"
       color="#515151"
       v-text="`No Relay Stations connected to this dock`"
-    ></Label>
+    ></BaseLabel>
     <TransitionGroup name="relayStationItemFade">
       <RelayStationListItem
         v-for="(relay_station, index) in parse_relay_station_array()"

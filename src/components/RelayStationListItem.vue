@@ -1,6 +1,6 @@
 
 <script setup>
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import RelayStationDeco from "@/components/RelayStationDeco.vue";
 </script>
 
@@ -20,7 +20,7 @@ export default {
 
 <template>
     <div :style="background_color_style_from_color(color)" class="relay_station_item_container">
-        <Label class="relay_station_id" v-text="relay_station_obj.relay_station_name" color="#FFF"></Label>
+        <BaseLabel class="relay_station_id" v-text="relay_station_obj.relay_station_name" color="#FFF"></BaseLabel>
         <RelayStationDeco id="relay_station_deco" :color="color"></RelayStationDeco>
     </div>
 </template>

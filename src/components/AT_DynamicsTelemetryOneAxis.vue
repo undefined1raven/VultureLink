@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import BaseLineGraph from "@/components/BaseLineGraph.vue";
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import VerticalLine from "@/components/VerticalLine.vue";
 </script>
 
@@ -24,38 +24,38 @@ export default {
 
 <template>
   <div class="dynamics_telemetry_one_axis_container p-abs">
-    <Label id="x_axis_l" class="axis_l" v-text="axis_id"></Label>
+    <BaseLabel id="x_axis_l" class="axis_l" v-text="axis_id"></BaseLabel>
     <div id="imu_alpha_telemetry_container">
-      <Label id="imu_alpha_l" class="imu_x_l" v-text="'IMU Alpha'"></Label>
-      <Label
+      <BaseLabel id="imu_alpha_l" class="imu_x_l" v-text="'IMU Alpha'"></BaseLabel>
+      <BaseLabel
         id="imu_alpha_angle_l"
         class="imu_x_y_l"
         v-text="'Angle'"
         color="#7C7C7C"
-      ></Label>
-      <Label
+      ></BaseLabel>
+      <BaseLabel
         id="imu_alpha_angle_acx"
         class="imu_x_y_acx"
         v-text="`${imu_alpha_axis_telemetry.angle}°`"
         color="#FFF"
-      ></Label>
+      ></BaseLabel>
       <BaseLineGraph
         :input="imu_alpha_axis_telemetry.angle"
         class="imu_x_y"
         id="imu_alpha_angle"
       />
-      <Label
+      <BaseLabel
         id="imu_alpha_acceleration_l"
         class="imu_x_y_l"
         v-text="'Acceleration'"
         color="#7C7C7C"
-      ></Label>
-      <Label
+      ></BaseLabel>
+      <BaseLabel
         id="imu_alpha_acceleration_acx"
         class="imu_x_y_acx"
         v-text="`${imu_alpha_axis_telemetry.rate}°/s`"
         color="#FFF"
-      ></Label>
+      ></BaseLabel>
       <BaseLineGraph
         :input="imu_alpha_axis_telemetry.rate"
         :max="250"
@@ -70,36 +70,36 @@ export default {
       ></VerticalLine>
     </div>
     <div id="imu_beta_telemetry_container">
-      <Label id="imu_beta_l" class="imu_x_l" v-text="'IMU Beta'"></Label>
-      <Label
+      <BaseLabel id="imu_beta_l" class="imu_x_l" v-text="'IMU Beta'"></BaseLabel>
+      <BaseLabel
         id="imu_beta_angle_l"
         class="imu_x_y_l"
         v-text="'Angle'"
         color="#7C7C7C"
-      ></Label>
-      <Label
+      ></BaseLabel>
+      <BaseLabel
         id="imu_beta_angle_acx"
         class="imu_x_y_acx"
         v-text="`${imu_beta_axis_telemetry.angle}°`"
         color="#FFF"
-      ></Label>
+      ></BaseLabel>
       <BaseLineGraph
         :input="imu_beta_axis_telemetry.angle"
         class="imu_x_y"
         id="imu_beta_angle"
       />
-      <Label
+      <BaseLabel
         id="imu_beta_acceleration_l"
         class="imu_x_y_l"
         v-text="'Acceleration'"
         color="#7C7C7C"
-      ></Label>
-      <Label
+      ></BaseLabel>
+      <BaseLabel
         id="imu_beta_acceleration_acx"
         class="imu_x_y_acx"
         v-text="`${imu_beta_axis_telemetry.rate}°/s`"
         color="#FFF"
-      ></Label>
+      ></BaseLabel>
       <BaseLineGraph
         :input="imu_beta_axis_telemetry.rate"
         :max="250"

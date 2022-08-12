@@ -1,7 +1,7 @@
 <script setup>
 import Background from "@/components/BaseBackgroundImg.vue";
 import MobileBackground from "@/components/MobileBaseBackgroundImg.vue";
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import DistanceIndicator from "@/components/AT_BaseDistanceIndi.vue";
 import LoginRequestOverlay from "@/components/LoginRequestOverlay.vue";
 import Overview from "@/components/TheAdvancedTelemetryOverview.vue";
@@ -194,12 +194,12 @@ export default {
     v-show="window_manager.visible_window_id == 'overview'"
   >
     <VultureLogo v-if="!isMobile" id="vulture_logo" />
-    <Label
+    <BaseLabel
       v-if="!isMobile"
       id="adv_tele_l"
       v-text="'\\\\Advanced Telemetry'"
       color="#FFF"
-    ></Label>
+    ></BaseLabel>
     <Overview
       v-show="!login_req_details_obj.isVisible && !mobile.isMenuVisible"
       :socket_ref="socket_ref"

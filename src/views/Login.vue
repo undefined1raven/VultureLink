@@ -5,7 +5,7 @@ import BasePrimaryLabel from "@/components/BasePrimaryLabel.vue";
 import InputField from "@/components/LoginInputField.vue";
 import InputFieldLabel from "@/components/LoginInputFieldLabel.vue";
 import LoginButton from "@/components/LoginButton.vue";
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import MobileBackground from "@/components/MobileBaseBackgroundImg.vue";
 
 document.title = "Vulture//Login";
@@ -124,19 +124,19 @@ export default {
     <Background></Background>
     <MobileBackground></MobileBackground>
     <Transition name="fade_in">
-      <Label
+      <BaseLabel
         v-if="!auth_error_label_visible"
         id="primary_label"
         color="#888"
         text="Log in"
-      ></Label>
-      <Label
+      ></BaseLabel>
+      <BaseLabel
         v-if="auth_error_label_visible"
         id="auth_error_label"
         color="#FF0040"
         :text="'Auth Failed [' + auth_error_actual + ']'"
         :style="'height: ' + dynamic_error_label_height"
-      ></Label>
+      ></BaseLabel>
     </Transition>
     <AuroraLogo id="logo" v-if="non_fields_visibile" />
     <form @submit="onSubmit" action="/auth_post" method="post">

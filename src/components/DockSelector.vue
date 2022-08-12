@@ -1,7 +1,7 @@
 
 <script setup>
 import DockListItem from "@/components/DockListItem.vue";
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 </script>
 <script>
 export default {
@@ -31,7 +31,7 @@ export default {
       <div id="dock_selector_ln_2" class="ln ln_v"></div>
       <div id="dock_selector_ln_3" class="ln ln_h"></div>
     </div>
-    <Label id="dock_selector_l" color="#FFF" v-text="'Dock Selector'"></Label>
+    <BaseLabel id="dock_selector_l" color="#FFF" v-text="'Dock Selector'"></BaseLabel>
     <div id="dock_selector_list">
       <DockListItem
         v-for="(dock, index) in dock_array"

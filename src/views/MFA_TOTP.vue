@@ -1,7 +1,7 @@
 <script setup>
 import Background from "@/components/BaseBackgroundImg.vue";
 import AuroraLogo from "@/components/AuroraLogo.vue";
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import OptionsButton from "@/components/MfaOptionsButton.vue";
 import ActionStatus from "@/components/ActionStatusIndicator.vue";
 import MfaTotpInput from "@/components/TheMfaTotpInput.vue";
@@ -132,26 +132,26 @@ export default {
   <div v-if="non_fields_visibile" id="logo_bkg">
     <AuroraLogo id="logo" />
   </div>
-  <Label
+  <BaseLabel
     v-if="non_fields_visibile"
     id="primary_label"
     color="#FFF"
     text="Multi Factor Auth"
-  ></Label>
-  <Label
+  ></BaseLabel>
+  <BaseLabel
     class="fs_1vw"
     id="description_l"
     color="#FFF"
     :text="'Check your authenticator app for the 6-digit code'"
     v-if="!backup_code_mode && non_fields_visibile"
-  ></Label>
-  <Label
+  ></BaseLabel>
+  <BaseLabel
     id="description_l0"
     color="#FFF"
     class="fs_1vw"
     text="Enter one of the recovery codes provided when you enabled MFA to your account"
     v-if="backup_code_mode && non_fields_visibile"
-  ></Label>
+  ></BaseLabel>
 
   <div id="option_btns_container" v-if="options_visible && non_fields_visibile">
     <OptionsButton

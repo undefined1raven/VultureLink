@@ -10,7 +10,7 @@ import PowerDeco from "@/components/BasePowerDeco.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
 import VerticalLine from "@/components/VerticalLine.vue";
 import CommandDeco from "@/components/AT_MinimizedMenuCommandDeco.vue";
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import SecurityDeco from "@/components/SecurityDeco.vue";
 </script>
 
@@ -117,12 +117,12 @@ export default {
       id="minimized_menu_overview_btn"
       class="minimized-menu-item"
     >
-      <Label
+      <BaseLabel
         id="minimized_menu_overview_l"
         v-text="'Back'"
         color="#FFF"
         :style="`left: ${back_l_left};`"
-      ></Label>
+      ></BaseLabel>
     </div>
     <div
       title="Sonar Array"
@@ -132,7 +132,7 @@ export default {
       @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'sonar_array')"
       @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'sonar_array')"
     >
-      <Label class="extended_btn_l" color="#FFF" v-text="'Sonar Array'"></Label>
+      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Sonar Array'"></BaseLabel>
       <SonarArrayDeco
         class="p-abs"
         id="sonar_array_deco"
@@ -147,7 +147,7 @@ export default {
       @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'dynamics')"
       @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'dynamics')"
     >
-      <Label class="extended_btn_l" color="#FFF" v-text="'Dynamics'"></Label>
+      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Dynamics'"></BaseLabel>
       <DynamicsDeco
         class="p-abs"
         id="dynamics_deco"
@@ -159,7 +159,7 @@ export default {
       id="minimized_menu_network_btn"
       class="minimized-menu-item"
     >
-      <Label class="extended_btn_l" color="#FFF" v-text="'Network'"></Label>
+      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Network'"></BaseLabel>
       <NetworkDeco class="p-abs" id="network_deco" color="#0500FF" />
     </div>
     <div
@@ -167,7 +167,7 @@ export default {
       id="minimized_menu_propulsion_btn"
       class="minimized-menu-item"
     >
-      <Label class="extended_btn_l" color="#FFF" v-text="'Propulsion'"></Label>
+      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Propulsion'"></BaseLabel>
       <PropulsionDeco class="p-abs" id="propulsion_deco" color="#0500FF" />
     </div>
     <div
@@ -178,7 +178,7 @@ export default {
       @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'navigation')"
       @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'navigation')"
     >
-      <Label class="extended_btn_l" color="#FFF" v-text="'Navigation'"></Label>
+      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Navigation'"></BaseLabel>
       <NavDeco
         class="p-abs"
         id="nav_deco"
@@ -190,7 +190,7 @@ export default {
       id="minimized_menu_autonomy_btn"
       class="minimized-menu-item"
     >
-      <Label class="extended_btn_l" color="#FFF" v-text="'Autonomy'"></Label>
+      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Autonomy'"></BaseLabel>
       <AutonomyDeco class="p-abs" id="autonomy_deco" color="#0500FF" />
     </div>
     <div
@@ -198,11 +198,11 @@ export default {
       id="minimized_menu_optical_array_btn"
       class="minimized-menu-item"
     >
-      <Label
+      <BaseLabel
         class="extended_btn_l"
         color="#FFF"
         v-text="'Optical Array'"
-      ></Label>
+      ></BaseLabel>
       <OpticalArrayDeco class="p-abs" id="optical_array_deco" color="#0500FF" />
     </div>
     <div
@@ -210,7 +210,7 @@ export default {
       id="minimized_menu_power_btn"
       class="minimized-menu-item"
     >
-      <Label class="extended_btn_l" color="#FFF" v-text="'Power'"></Label>
+      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Power'"></BaseLabel>
       <PowerDeco class="p-abs" id="power_deco" color="#0500FF" />
     </div>
     <HorizontalLine id="menu_separator_ln_0" color="#0500FF" />
@@ -227,7 +227,7 @@ export default {
         id="cmd_btn_left_border_emulator"
         color="#0500FF"
       ></VerticalLine>
-      <Label class="extended_btn_l" color="#FFF" v-text="'Command'"></Label>
+      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Command'"></BaseLabel>
       <CommandDeco
         class="p-abs"
         id="cmd_deco"
@@ -247,7 +247,7 @@ export default {
         id="security_btn_left_border_emulator"
         color="#0500FF"
       ></VerticalLine>
-      <Label class="extended_btn_l" color="#FFF" v-text="'Security'"></Label>
+      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Security'"></BaseLabel>
       <SecurityDeco
         class="p-abs"
         id="security_deco"

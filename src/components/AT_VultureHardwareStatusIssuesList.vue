@@ -1,6 +1,6 @@
 
 <script setup>
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
 import VerticalLine from "@/components/VerticalLine.vue";
 import VultureHardwareStatusIssuesListItem from "@/components/AT_VultureHardwareStatusIssuesListItem.vue";
@@ -24,24 +24,24 @@ export default {
 <template>
   <div id="hardware_status_issues_list_container">
     <div id="column_type_container" v-if="isMobile">
-      <Label
+      <BaseLabel
         class="column_label"
         id="issues_list_system_id_l"
         color="#B7B7B7"
         v-text="'System'"
-      ></Label>
-      <Label
+      ></BaseLabel>
+      <BaseLabel
         class="column_label"
         id="issues_list_part_id_l"
         color="#B7B7B7"
         v-text="'Component'"
-      ></Label>
-      <Label
+      ></BaseLabel>
+      <BaseLabel
         class="column_label"
         id="issues_list_status_l"
         color="#B7B7B7"
         v-text="'Status'"
-      ></Label>
+      ></BaseLabel>
     </div>
     <HorizontalLine id="issues_list_ln" color="#FF006B" />
     <div id="hardware_issues_list">

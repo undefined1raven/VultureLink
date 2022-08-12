@@ -2,7 +2,7 @@
 
 <script setup>
 import Background from "@/components/BaseBackgroundImg.vue";
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import OptionsButton from "@/components/MfaOptionsButton.vue";
 import ActionStatus from "@/components/ActionStatusIndicator.vue";
 </script>
@@ -84,13 +84,13 @@ export default {
 
 <template>
   <Background />
-  <Label id="primary_label" color="#FFF" text="Multi Factor Auth"></Label>
-  <Label
+  <BaseLabel id="primary_label" color="#FFF" text="Multi Factor Auth"></BaseLabel>
+  <BaseLabel
     id="description_l"
     color="#FFF"
     :text="'Check your Vulture App for the Login Request notification, and then tap ‘Approve’'"
     v-if="!backup_code_mode"
-  ></Label>
+  ></BaseLabel>
   <ActionStatus
     id="MFA_app_success_indi"
     class="action_status_indi"

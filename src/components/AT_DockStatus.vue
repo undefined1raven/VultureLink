@@ -1,5 +1,5 @@
 <script setup>
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import RelayStationList from "@/components/RelayStationList.vue";
 import PayloadList from "@/components/PayloadList.vue";
 import DockDecoDetailed from "@/components/DockDecoDetailed.vue";
@@ -32,54 +32,54 @@ export default {
 <template>
   <div id="dock_status_container" class="animation_group_1">
     <div id="no_dock_selected_container" v-if="selected_dock_obj == ''">
-      <Label
+      <BaseLabel
         id="no_dock_selected_l"
         color="#FFF"
         v-text="'Select a Dock to see its status'"
-      ></Label>
+      ></BaseLabel>
       <DockDecoDetailed id="no_dock_selected_deco"></DockDecoDetailed>
     </div>
     <div class="dock_status_data_container">
-      <Label id="dock_status_l" color="#FFF" v-text="'Dock Status'"></Label>
+      <BaseLabel id="dock_status_l" color="#FFF" v-text="'Dock Status'"></BaseLabel>
       <div id="dock_id_container" class="data_container">
-        <Label color="#FFF" class="dock_x_l" v-text="'Dock ID:'"></Label>
-        <Label
+        <BaseLabel color="#FFF" class="dock_x_l" v-text="'Dock ID:'"></BaseLabel>
+        <BaseLabel
           color="#FFF"
           class="dock_x_actual"
           v-text="selected_dock_obj.dock_name"
-        ></Label>
+        ></BaseLabel>
       </div>
       <div id="dock_connection_status_container" class="data_container">
-        <Label
+        <BaseLabel
           color="#FFF"
           class="dock_x_l"
           v-text="'Connection Status:'"
-        ></Label>
-        <Label
+        ></BaseLabel>
+        <BaseLabel
           :color="dock_connection_status_parser().color"
           class="dock_x_actual"
           v-text="dock_connection_status_parser().text"
-        ></Label>
+        ></BaseLabel>
       </div>
       <div id="dock_relay_station_list_container" class="data_container">
-        <Label
+        <BaseLabel
           id="dock_relay_station_list_l"
           class="dock_x_l"
           v-text="'Relay Stations Connected To'"
           color="#FFF"
-        ></Label>
+        ></BaseLabel>
         <RelayStationList
           :relay_station_array="relay_station_array"
           :selected_dock_obj="selected_dock_obj"
         ></RelayStationList>
       </div>
       <div id="payload_list_container" class="data_container">
-        <Label
+        <BaseLabel
           id="dock_payload_list_l"
           color="#FFF"
           class="dock_x_l"
           v-text="'Available Payloads'"
-        ></Label>
+        ></BaseLabel>
         <PayloadList
           :payload_array="selected_dock_obj.payload_array"
         ></PayloadList>

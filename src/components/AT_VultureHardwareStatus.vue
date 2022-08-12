@@ -1,5 +1,5 @@
 <script setup>
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
 import VultureHardwareStatusIssuesList from "@/components/AT_VultureHardwareStatusIssuesList.vue";
 import VultureHardwareStatusIssueDiag from "@/components/AT_VultureHardwareStatusIssueDiag.vue";
@@ -101,22 +101,22 @@ export default {
     id="vulture_hardware_status_container"
     class="animation_group_2"
   >
-    <Label
+    <BaseLabel
       v-if="isMobile"
       id="vulture_hardware_status_l"
       v-text="'Hardware Status'"
       color="#FFF"
-    ></Label>
+    ></BaseLabel>
     <div
       v-show="global_system_status_assessor() || !vulture_connection_status"
       id="simple_hardware_status_container"
     >
-      <Label
+      <BaseLabel
         id="primary_status_l"
         v-text="simple_hardware_status_UI_controller().label"
         :style="simple_hardware_status_UI_controller().style"
         color="#0400D4"
-      ></Label>
+      ></BaseLabel>
       <VultureDetailedDeco
         id="vulture_detailed_deco"
         :color="simple_hardware_status_UI_controller().color"
@@ -130,11 +130,11 @@ export default {
       "
       id="detailed_hardware_status_container"
     >
-      <Label
+      <BaseLabel
         id="detailed_hardware_status_l"
         v-text="'Some issues have been detected'"
         color="#FF006B"
-      ></Label>
+      ></BaseLabel>
       <VultureDetailedDeco
         id="detailed_hardware_status_vulture_deco"
         color="#ff006b"
@@ -150,11 +150,11 @@ export default {
       id="issue_diags_container"
       v-if="areIssueDiagsVisible && vulture_connection_status"
     >
-      <Label
+      <BaseLabel
         id="issue_diags_l"
         color="#FFF"
         v-text="'Additional Diagnostic Data'"
-      ></Label>
+      ></BaseLabel>
       <VultureHardwareStatusIssueDiag
         :issue_obj_pkg="selected_issue_obj_and_dictionaries"
         @onBackButtonClicked="issueDiags_onBackButtonClicked"

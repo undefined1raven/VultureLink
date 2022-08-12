@@ -1,6 +1,6 @@
 
 <script setup>
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import PayloadListItem from "@/components/PayloadListItem.vue";
 </script>
 
@@ -14,12 +14,12 @@ export default {
 
 <template>
   <div id="payload_list_container_actual">
-    <Label
+    <BaseLabel
       v-if="payload_array == undefined || payload_array.length == 0"
       id="no_payloads_l"
       color="#515151"
       v-text="'No Payloads detected in storage'"
-    ></Label>
+    ></BaseLabel>
     <TransitionGroup name="payloadFade">
       <PayloadListItem
         v-for="(payload_obj, index) in payload_array"

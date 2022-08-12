@@ -1,6 +1,6 @@
 
 <script setup>
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import PayloadListItemDeco from "@/components/PayloadListItemDeco.vue";
 </script>
 
@@ -14,16 +14,16 @@ export default {
 
 <template>
   <div class="payload_list_item_container">
-    <Label
+    <BaseLabel
       class="payload_type_l"
       color="#FFF"
       v-text="payload_obj.type"
-    ></Label>
-    <Label
+    ></BaseLabel>
+    <BaseLabel
       class="payload_id"
       color="#AAA"
       v-text="`ID: ${payload_obj.id}`"
-    ></Label>
+    ></BaseLabel>
     <PayloadListItemDeco class="payload_deco_position"></PayloadListItemDeco>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 </script>
 
 <script lang="ts">
@@ -17,12 +17,12 @@ export default {
     class="m_overview_x_btn_container"
     :style="`border: solid 1px ${systemStatusColor}`"
   >
-    <Label class="system_id_l" v-text="friendlySystemLabel"></Label>
-    <Label
+    <BaseLabel class="system_id_l" v-text="friendlySystemLabel"></BaseLabel>
+    <BaseLabel
       class="system_status_l"
       v-text="systemStatusLabel"
       :color="systemStatusColor"
-    ></Label>
+    ></BaseLabel>
   </div>
 </template>
 <style scoped>

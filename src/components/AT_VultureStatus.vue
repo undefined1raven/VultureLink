@@ -1,7 +1,7 @@
 
 
 <script setup>
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 </script>
 
 <script>
@@ -55,78 +55,78 @@ export default {
 
 <template>
   <div id="vulture_status_container" class="animation_group_1">
-    <Label id="vulture_status_l" color="#FFF" v-text="'Vulture Status'"></Label>
+    <BaseLabel id="vulture_status_l" color="#FFF" v-text="'Vulture Status'"></BaseLabel>
     <div class="vulture_status_data_container">
       <div id="vulture_id_container" class="data_container">
-        <Label
+        <BaseLabel
           id="vulture_id_l"
           v-text="'Vulture ID'"
           color="#FFF"
           class="vulture_x_l"
-        ></Label>
-        <Label
+        ></BaseLabel>
+        <BaseLabel
           id="vulture_id_actual"
           v-text="vulture_obj_validator().vn"
           color="#FFF"
           class="vulture_x_actual"
-        ></Label>
+        ></BaseLabel>
       </div>
       <div id="vulture_connection_status_container" class="data_container">
-        <Label
+        <BaseLabel
           id="vulture_connection_status_l"
           v-text="'Connection Status'"
           color="#FFF"
           class="vulture_x_l"
-        ></Label>
-        <Label
+        ></BaseLabel>
+        <BaseLabel
           id="vulture_connection_status_actual"
           v-text="vulture_connection_status_parser().text"
           :color="vulture_connection_status_parser().color"
           class="vulture_x_actual"
-        ></Label>
+        ></BaseLabel>
       </div>
       <div id="vulture_current_status_container" class="data_container">
-        <Label
+        <BaseLabel
           id="vulture_current_status_l"
           v-text="'Current Status'"
           color="#FFF"
           class="vulture_x_l"
-        ></Label>
-        <Label
+        ></BaseLabel>
+        <BaseLabel
           id="vulture_current_status_actual"
           v-text="vulture_current_status_parser().text"
           :color="vulture_current_status_parser().color"
           class="vulture_x_actual"
-        ></Label>
+        ></BaseLabel>
       </div>
       <div id="vulture_mounted_payloads_container" class="data_container">
-        <Label
+        <BaseLabel
           id="vulture_mounted_payloads_l"
           v-text="'Mounted Payloads'"
           color="#FFF"
           class="vulture_x_l"
-        ></Label>
+        ></BaseLabel>
         <div id="vulture_payload_0" class="payload_port_container">
-          <Label class="bay_l" color="#7A7A7A" v-text="'Bay 1'"></Label>
-          <Label class="payload_l" color="#7A7A7A" v-text="'EMPTY'"></Label>
-          <Label class="payload_status" color="#7A7A7A" v-text="'--'"></Label>
+          <BaseLabel class="bay_l" color="#7A7A7A" v-text="'Bay 1'"></BaseLabel>
+          <BaseLabel class="payload_l" color="#7A7A7A" v-text="'EMPTY'"></BaseLabel>
+          <BaseLabel class="payload_status" color="#7A7A7A" v-text="'--'"></BaseLabel>
         </div>
         <div
           id="vulture_payload_1"
           class="payload_port_container"
           style="background-color: #00fff020"
         >
-          <Label class="bay_l" color="#7A7A7A" v-text="'Bay 2'"></Label>
-          <Label
+          <BaseLabel class="bay_l" color="#7A7A7A" v-text="'Bay 2'"></BaseLabel>
+          <BaseLabel
             class="payload_l"
             color="#FFF"
             v-text="'LIDAR Scanner'"
-          ></Label>
-          <Label
+          ></BaseLabel>
+          <BaseLabel
             class="payload_status"
             color="#00FFF0"
             v-text="'Ready'"
-          ></Label>
+          ></BaseLabel>
         </div>
       </div>
     </div>

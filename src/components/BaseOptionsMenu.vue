@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import BaseDotsDeco from "@/components/BaseDotsDeco.vue";
 import BaseXDeco from "@/components/BaseXDeco.vue";
 import BaseOptionsMenuListItem from "@/components/BaseOptionsMenuListItem.vue";

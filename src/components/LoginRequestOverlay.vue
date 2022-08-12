@@ -1,5 +1,5 @@
 <script setup>
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import ActionStatus from "@/components/ActionStatusIndicator.vue";
 </script>
 
@@ -79,38 +79,38 @@ export default {
 <template>
   <div v-if="isVisible" id="login_req_container">
     <div id="bkg_darkner"></div>
-    <Label
+    <BaseLabel
       id="login_request_l"
       color="#FFF"
       text="Login Request Detected"
-    ></Label>
+    ></BaseLabel>
     <div id="login_request_details_container">
       <div id="timestamp_container" class="detail_container">
         <div class="x_l">Time:</div>
-        <Label
+        <BaseLabel
           class="x_acx"
           id="timestamp_acx"
           color="#FFF"
           v-text="timestamp"
-        ></Label>
+        ></BaseLabel>
       </div>
       <div id="location_container" class="detail_container">
         <div class="x_l">Location:</div>
-        <Label
+        <BaseLabel
           class="x_acx"
           id="not_important"
           color="#FFF"
           v-text="location"
-        ></Label>
+        ></BaseLabel>
       </div>
       <div id="platform_container" class="detail_container">
         <div class="x_l">Platform:</div>
-        <Label
+        <BaseLabel
           class="x_acx"
           id="not_important"
           color="#FFF"
           v-text="platform"
-        ></Label>
+        ></BaseLabel>
       </div>
     </div>
     <div id="controls_container">

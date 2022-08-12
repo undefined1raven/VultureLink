@@ -1,7 +1,7 @@
 
 
 <script setup>
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
 import VerticalLine from "@/components/VerticalLine.vue";
 </script>
@@ -54,28 +54,28 @@ export default {
 <template>
   <div @click="issue_onClick" class="issue_list_item_container">
     <div id="issue_label_types_container" v-if="!isMobile">
-      <Label id="issue_system_id_type_l" color="#B7B7B7" class="issue_x_type_l" v-text="'System:'"></Label>
-      <Label id="issue_part_id_type_l" color="#B7B7B7" class="issue_x_type_l" v-text="'Component:'"></Label>
-      <Label id="issue_status_type_l" color="#B7B7B7" class="issue_x_type_l" v-text="'Status:'"></Label>
+      <BaseLabel id="issue_system_id_type_l" color="#B7B7B7" class="issue_x_type_l" v-text="'System:'"></BaseLabel>
+      <BaseLabel id="issue_part_id_type_l" color="#B7B7B7" class="issue_x_type_l" v-text="'Component:'"></BaseLabel>
+      <BaseLabel id="issue_status_type_l" color="#B7B7B7" class="issue_x_type_l" v-text="'Status:'"></BaseLabel>
     </div>
-    <Label
+    <BaseLabel
       id="issue_system_id_l"
       class="issue_x_l"
       v-text="system_id_dictionary[issue_obj.system_id]"
       color="#FFF"
-    ></Label>
-    <Label
+    ></BaseLabel>
+    <BaseLabel
       id="issue_part_id_l"
       class="issue_x_l"
       v-text="component_id_dictionary[issue_obj.component_id]"
       color="#FFF"
-    ></Label>
-    <Label
+    ></BaseLabel>
+    <BaseLabel
       id="issue_part_status_type_l"
       class="issue_x_l"
       v-text="status_type_dictionary[issue_obj.status_type]"
       color="#FFF"
-    ></Label>
+    ></BaseLabel>
   </div>
 </template>
 <style scoped>

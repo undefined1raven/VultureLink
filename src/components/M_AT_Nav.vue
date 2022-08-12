@@ -1,6 +1,6 @@
 
 <script setup>
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import DockDeco from "@/components/DockDeco.vue";
 import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
 import VultureSystemsDeco from "@/components/VultureSystemsDeco.vue";
@@ -109,7 +109,7 @@ export default {
           id="dock_status_btn_container"
           class="square_menu_btn"
         >
-          <Label class="square_menu_l" v-text="'Dock Status'"></Label>
+          <BaseLabel class="square_menu_l" v-text="'Dock Status'"></BaseLabel>
           <DockDeco
             id="dock_deco"
             class="square_menu_deco"
@@ -121,7 +121,7 @@ export default {
           id="vulture_status_btn_container"
           class="square_menu_btn"
         >
-          <Label class="square_menu_l" v-text="'Vulture Status'"></Label>
+          <BaseLabel class="square_menu_l" v-text="'Vulture Status'"></BaseLabel>
           <VultureDetailedDeco
             id="vulture_deco"
             class="square_menu_deco"
@@ -132,28 +132,28 @@ export default {
           id="vulture_systems_btn"
           class="menu_btn"
         >
-          <Label class="menu_l" v-text="'Vulture Systems'"></Label>
+          <BaseLabel class="menu_l" v-text="'Vulture Systems'"></BaseLabel>
           <VultureSystemsDeco id="vulture_systems_deco"></VultureSystemsDeco>
         </div>
         <div class="ln ln_h" id="menu_ln_0"></div>
         <div @click="redirect('/')" id="cmd_btn" class="menu_btn">
-          <Label class="menu_l" v-text="'Command'"></Label>
+          <BaseLabel class="menu_l" v-text="'Command'"></BaseLabel>
           <CommandDeco id="cmd_deco"></CommandDeco>
         </div>
         <div @click="redirect('/security')" id="security_btn" class="menu_btn">
-          <Label class="menu_l" v-text="'Security'"></Label>
+          <BaseLabel class="menu_l" v-text="'Security'"></BaseLabel>
           <SecurityDeco id="security_deco"></SecurityDeco>
         </div>
       </div>
     </Transition>
-    <Label
+    <BaseLabel
       @click="menu_btn_onClick"
       id="main_menu_btn"
       :style="menu_btn_style"
       v-text="menu_btn_l"
       color="#FFF"
-    ></Label>
-    <Label
+    ></BaseLabel>
+    <BaseLabel
       @click="secondary_menu_btn_onClick"
       id="secondary_menu_btn"
       v-text="secondary_menu_btn_l"
@@ -162,7 +162,7 @@ export default {
         menu_btn_l != 'Back'
       "
       color="#FFF"
-    ></Label
+    ></BaseLabel>
     ><!--contextual secondary button next to the 'menu' button-->
   </div>
 </template>

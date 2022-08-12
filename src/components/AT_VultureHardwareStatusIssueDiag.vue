@@ -1,5 +1,5 @@
 <script setup>
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
 import VerticalLine from "@/components/VerticalLine.vue";
 import BaseButton from "@/components/BaseButton.vue";
@@ -36,35 +36,35 @@ export default {
     <div @click="onBackButtonClicked" id="issue_diags_back_btn_container">
       <div id="back_btn_indi"></div>
     </div>
-    <Label
+    <BaseLabel
       id="issue_diags_title_l"
       color="#FFF"
       v-text="issue_diags_title"
-    ></Label>
-    <Label
+    ></BaseLabel>
+    <BaseLabel
       class="issue_diags_x_l"
       id="issue_diags_error_l"
       color="#B6B6B6"
       v-text="'Error ID:'"
-    ></Label>
-    <Label
+    ></BaseLabel>
+    <BaseLabel
       id="issue_diags_error_actual"
       color="#FFF"
       v-text="'Component Signal Lost [NO_SIG]'"
-    ></Label>
-    <Label
+    ></BaseLabel>
+    <BaseLabel
       class="issue_diags_x_l"
       id="issue_diags_reason_l"
       color="#B6B6B6"
       v-text="'Likely Reason:'"
-    ></Label>
-    <Label
+    ></BaseLabel>
+    <BaseLabel
       id="issue_diags_reason_actual"
       color="#FFF"
       v-text="
         `                             The component could be physically disconnected from the flight computer.`
       "
-    ></Label>
+    ></BaseLabel>
     <BaseButton
       class="issue_diags_option_btn"
       id="fix_steps_btn"

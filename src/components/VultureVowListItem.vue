@@ -1,7 +1,7 @@
 
 <script setup>
 import VultureFlatDeco from "@/components/VultureFlatDeco.vue";
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 </script>
 
 <script>
@@ -59,12 +59,12 @@ export default {
       :style="`background-color: ${color}`"
       class="vulture_side_status_indi"
     ></div>
-    <Label
+    <BaseLabel
       v-if="isEmpty"
       class="empty_l"
       color="#515151"
       v-text="'EMPTY'"
-    ></Label>
+    ></BaseLabel>
     <div v-if="isEmpty == undefined" class="vulture_id_l">{{ vn }}</div>
     <Transition name="vulture_selector_t">
       <div

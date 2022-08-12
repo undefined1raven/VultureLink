@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import BaseHardwareStatusItem from "@/components/AT_BaseHardwareStatusItem.vue";
 </script>
 
@@ -36,7 +36,7 @@ export default {
 
 <template>
   <div id="dynamics_hardware_status_container">
-    <Label id="dynamics_hardware_status_l" v-text="'Hardware Status'"></Label>
+    <BaseLabel id="dynamics_hardware_status_l" v-text="'Hardware Status'"></BaseLabel>
     <ul id="dynamics_hardware_status_list" :style="overflowController()">
       <BaseHardwareStatusItem
         v-for="(status_obj, index) in hardware_status_arr"
@@ -62,7 +62,7 @@ export default {
 }
 #dynamics_hardware_status_list::-webkit-scrollbar {
   width: 0.7vh;
-  height: 0.9vh;
+  height: 0px;
 }
 
 #dynamics_hardware_status_list::-webkit-scrollbar-thumb {

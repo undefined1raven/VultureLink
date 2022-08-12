@@ -7,7 +7,7 @@ import UserDropdownMenu from "@/components/UserDropdownMenu.vue";
 import DynamicsTelemetry from "@/components/AT_DynamicsTelemetry.vue";
 import DynamicsControls from "@/components/AT_DynamicsControls.vue";
 import DynamicsHardwareStatus from "@/components/AT_DynamicsHardwareStatus.vue";
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 </script>
 
 <script lang="ts">
@@ -46,11 +46,11 @@ export default {
       left="85.104166667%"
     />
     <HorizontalLine color="#1900FF" id="top_bar_ln"></HorizontalLine>
-    <Label
+    <BaseLabel
       color="#FFF"
       id="system_l"
       v-text="`${selected_vulture_obj.vn} Systems \\\\ Dynamics`"
-    ></Label>
+    ></BaseLabel>
   </div>
   <DynamicsTelemetry :telemetry="telemetry"></DynamicsTelemetry>
   <DynamicsControls></DynamicsControls>

@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import BaseOptionsMenu from "@/components/BaseOptionsMenu.vue";
 import VerticalLine from "@/components/VerticalLine.vue";
 import BaseLineGraph from "@/components/BaseLineGraph.vue";
@@ -87,36 +87,36 @@ export default {
 
 <template>
   <div class="base_linear_controller_unit_container" :style="ContainerStyle">
-    <Label v-text="ControlPanelLabel" class="x_control_panel_l"></Label>
+    <BaseLabel v-text="ControlPanelLabel" class="x_control_panel_l"></BaseLabel>
     <VerticalLine
       class="base_linear_controller_min_ln base_linear_controller_ln"
       color="#555"
     ></VerticalLine>
-    <Label
+    <BaseLabel
       color="#555"
       class="base_linear_controller_min_l"
       v-text="`${BaseLineGraphMin}${MeasurmentUnit}`"
-    ></Label>
+    ></BaseLabel>
 
     <VerticalLine
       class="base_linear_controller_mid_ln base_linear_controller_ln"
       color="#555"
     ></VerticalLine>
-    <Label
+    <BaseLabel
       color="#555"
       class="base_linear_controller_mid_l"
       v-text="`Default`"
-    ></Label>
+    ></BaseLabel>
 
     <VerticalLine
       class="base_linear_controller_max_ln base_linear_controller_ln"
       color="#555"
     ></VerticalLine>
-    <Label
+    <BaseLabel
       color="#555"
       class="base_linear_controller_max_l"
       v-text="`${BaseLineGraphMax}${MeasurmentUnit}`"
-    ></Label>
+    ></BaseLabel>
 
     <BaseLineGraph
       class="x_generic_controls_graph"

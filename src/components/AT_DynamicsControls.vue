@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import DynamicsTelemetryOneAxis from "@/components/AT_DynamicsTelemetryOneAxis.vue";
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 import VerticalLine from "@/components/VerticalLine.vue";
 import BaseOptionsMenu from "@/components/BaseOptionsMenu.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
@@ -22,7 +22,7 @@ export default {
 </script>
 
 <template>
-  <Label id="dynaimcs_controls_l" v-text="'Controls'"></Label>
+  <BaseLabel id="dynaimcs_controls_l" v-text="'Controls'"></BaseLabel>
   <HorizontalLine id="dynamics_controls_ln_0" color="#373737"></HorizontalLine>
   <DynamicsControlPanel
     id="dynamics_rate_controls_container"

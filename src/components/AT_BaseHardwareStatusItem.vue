@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Label from "@/components/Label.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
 </script>
 
 <script lang="ts">
@@ -99,23 +99,23 @@ export default {
       isLast
     )}; height: ${ItemHeightController()}`"
   >
-    <Label
+    <BaseLabel
       class="base_hardware_status_component_name_banner"
       v-text="component_status_obj.name"
       @mouseenter="nameBannerOnMouseEnter"
       @mouseleave="nameBannerOnMouseLeave"
       @click="nameBannerOnClick"
       :style="nameBannerStyleController()"
-    ></Label>
+    ></BaseLabel>
     <div
       id="base_hardware_status_component_details_container"
       v-show="!isMinified"
     >
-      <Label
+      <BaseLabel
         class="base_hardware_connection_status_l"
         v-text="'Hardware Connection'"
-      ></Label>
-      <Label
+      ></BaseLabel>
+      <BaseLabel
         class="base_hardware_connection_status_acx"
         :style="`background-color: ${colorController(
           component_status_obj.hardware_connection
@@ -125,13 +125,13 @@ export default {
         v-text="
           labelController(component_status_obj.hardware_connection, 'Failed')
         "
-      ></Label>
+      ></BaseLabel>
 
-      <Label
+      <BaseLabel
         class="base_hardware_telemetry_latency_l"
         v-text="'Telemetry Latency'"
-      ></Label>
-      <Label
+      ></BaseLabel>
+      <BaseLabel
         class="base_hardware_telemetry_latency_acx"
         :style="`background-color: ${colorController(
           component_status_obj.telemetry.latency
@@ -144,13 +144,13 @@ export default {
             'Out of range'
           )
         "
-      ></Label>
+      ></BaseLabel>
 
-      <Label
+      <BaseLabel
         class="base_hardware_telemetry_data_l"
         v-text="'Telemetry Data'"
-      ></Label>
-      <Label
+      ></BaseLabel>
+      <BaseLabel
         class="base_hardware_telemetry_data_acx"
         :style="`background-color: ${colorController(
           component_status_obj.telemetry.data
@@ -158,7 +158,7 @@ export default {
         v-text="
           labelController(component_status_obj.telemetry.data, 'Out of range')
         "
-      ></Label>
+      ></BaseLabel>
     </div>
   </div>
 </template>
