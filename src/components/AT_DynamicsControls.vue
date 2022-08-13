@@ -6,7 +6,7 @@ import VerticalLine from "@/components/VerticalLine.vue";
 import BaseOptionsMenu from "@/components/BaseOptionsMenu.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
 import DynamicsControlPanel from "@/components/AT_DynamicsControlPanel.vue";
-import { assertLogicalExpression } from "@babel/types";
+import DynamicsControlsImuCalibration from "@/components/AT_DynamicsControlsImuCalibration.vue";
 </script>
 
 <script lang="ts">
@@ -109,6 +109,7 @@ export default {
     class="animation_group_0"
     :DynamicsControlsObject="dynamics_controls"
   ></DynamicsControlPanel>
+  <DynamicsControlsImuCalibration class="animation_group_0"></DynamicsControlsImuCalibration>
 </template>
 
 

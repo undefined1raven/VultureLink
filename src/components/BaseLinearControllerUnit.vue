@@ -115,7 +115,6 @@ export default {
       class="base_linear_controller_max_l"
       v-text="`${BaseLineGraphMax}${MeasurmentUnit}`"
     ></BaseLabel>
-
     <BaseLineGraph
       class="x_generic_controls_graph"
       :max="BaseLineGraphMax"

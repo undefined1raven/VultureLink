@@ -163,6 +163,7 @@ export default {
   align-items: center;
   justify-content: start;
   padding-left: 2.78%;
+  font-size: 1vw;
   background-color: #0500ff20;
 }
 .imu_x_y {

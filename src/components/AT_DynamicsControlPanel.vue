@@ -168,7 +168,7 @@ export default {
   background-color: #0500ff20;
   border-left: solid 1px #0500ff;
   width: 27.298850575%;
-  height: 9.296482412%;
+  height: 10.796482412%;
   display: flex;
   justify-content: start;
   align-items: center;
