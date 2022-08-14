@@ -6,26 +6,57 @@ import HorizontalLine from "@/components/HorizontalLine.vue";
 <script lang="ts">
 export default {
   props: {
-    color: { default: "#FFF" },
-    backgroundColor: { default: "#0500FF20" },
     label: { default: "--" },
-    isActive: { default: false },
+    currentStage: { default: "waiting" },
     completionStatus: { default: 0 },
+  },
+  data() {
+    return {
+      isLoadingBarVisible: false,
+    };
+  },
+  methods: {
+    styleParser() {
+      switch (this.currentStage) {
+        case "waiting":
+          return {
+            card: "background-color: #77777720;",
+            label: "color: #777;",
+          };
+        case "running":
+          this.isLoadingBarVisible = true;
+          return {
+            card: "background-color: #0500FF20;",
+            label: "color: #FFF;",
+          };
+        case "done":
+          this.isLoadingBarVisible = false;
+          return {
+            card: "background-color: #00FFF020;",
+            label: "color: #00FFF0;",
+          };
+        default:
+          return {
+            card: "background-color: #0500FF20;",
+            label: "color: #FFF;",
+          };
+      }
+    },
   },
 };
 </script>
 
 <template>
   <div
-    :style="`background-color: ${backgroundColor};`"
+    :style="styleParser().card"
     class="dynamics_controls_imu_calibration_stage_card_container"
   >
     <BaseLabel
       class="calibration_stage_card_l"
-      :color="color"
+      :style="styleParser().label"
       v-text="label"
     ></BaseLabel>
-    <div v-if="isActive" class="loading_bar_container">
+    <div v-if="isLoadingBarVisible" class="loading_bar_container">
       <HorizontalLine
         :style="`left: ${completionStatus - 100}%`"
         class="loading_bar_slider"
@@ -37,11 +68,13 @@ export default {
 <style scoped>
 .calibration_stage_card_l {
   font-size: 1vw;
+  transition: all linear 0.1s;
 }
 .loading_bar_slider {
   position: absolute;
+  height: 0.06vw;
   width: 100%;
-  height: 100%;
+  transition: all linear 0.1s;
 }
 .loading_bar_container {
   position: absolute;
@@ -49,7 +82,7 @@ export default {
   left: 50%;
   transform: translate(-50%);
   width: 73.770491803%;
-  height: 0.01vw;
+  height: 0.06vw;
   background-color: #0c0055;
   overflow: hidden;
 }
@@ -60,5 +93,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  left: 50%;
+  transform: translate(-50%);
+  transition: all linear 0.1s;
+  border-radius: 8px;
 }
 </style>
