@@ -35,6 +35,9 @@ export default {
     vulture_connection_status: { default: false },
   },
   methods: {
+    DynamicWidth(){
+      return (270 * 100) / document.documentElement.clientWidth;
+    },
     MenuExpendToggleOnClick() {
       this.isMenuExtended = !this.isMenuExtended;
       if (this.isMenuExtended) {
@@ -109,7 +112,7 @@ export default {
   <ul
     class="p-abs"
     id="minimized_menu_container"
-    :style="`left: ${menu_left};`"
+    :style="`left: ${menu_left}; width: ${DynamicWidth()}%;`"
   >
     <div
       title="Back to overview"
@@ -286,7 +289,7 @@ export default {
 .extended_btn_l {
   position: absolute;
   left: 3.064066852%;
-  font-size: 0.9vw;
+  font-size: 1.9vh;
 }
 #minimized_menu_cmd_btn,
 #minimized_menu_security_btn {

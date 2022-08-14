@@ -144,6 +144,7 @@ export default {
   </div>
 </template>
 <style scoped>
+
 @keyframes fade {
   0% {
     opacity: 0;
@@ -252,5 +253,20 @@ export default {
   justify-content: start;
   align-items: center;
   padding-left: 2.97521739%;
+}
+@media only screen and (max-width: 1500px){
+  .dynamics_imu_calibration_controller_container{
+      left: 65%;
+      width: 32.735416667%;
+  }
+  #imu_calibration_ini_btn_l, #imu_calibration_ini_l{
+    font-size: 1.6vh;
+  }
+  .x_controls_l{
+    font-size: 2vh;
+  }
+  #ini_calibration_l_2{
+    font-size: 1.4vh;
+  }
 }
 </style>

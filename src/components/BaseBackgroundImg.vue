@@ -21,7 +21,7 @@ img {
   display: flex;
   top: 0%;
   left: 0%;
-  width: 100%;
+  width: auto;
   height: 100%;
 }
 @media only screen and (max-width: 768px) {
