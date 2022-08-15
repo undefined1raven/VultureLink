@@ -1,6 +1,3 @@
-<script>
-export default {};
-</script>
 
 <template>
   <img
@@ -21,8 +18,18 @@ img {
   display: flex;
   top: 0%;
   left: 0%;
-  width: auto;
+  width: 100%;
   height: 100%;
+}
+@media only screen and (max-width: 1500px) and (min-height: 850px) {
+  #desktop_background{
+    width: auto;
+  }
+}
+@media only screen and (max-width: 683px) and (min-height: 550px) {
+  #desktop_background{
+    width: auto;
+  }
 }
 @media only screen and (max-width: 768px) {
   #desktop_background {

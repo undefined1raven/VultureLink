@@ -10,7 +10,7 @@ import DynamicsControlsImuCalibrationStageCard from "@/components/AT_DynamicsCon
 export default {
   data() {
     return {
-      stageColorObj: {waiting: "#777", running: "#0500FF", done: "#00FFF0"},
+      stageColorObj: { waiting: "#777", running: "#0500FF", done: "#00FFF0" },
       isRunning: false,
       isComplete: false,
       stageStatus: { card_0: "waiting", card_1: "waiting", card_2: "waiting" },
@@ -18,12 +18,19 @@ export default {
     };
   },
   methods: {
-    CalibrationLabelStyleParser(){
-      if(this.isComplete){
-        return {label: "Complete", style: "color: #00FFF0; border-top: solid 1px #00FFF0; background: radial-gradient(60.81% 60.81% at 50% 0%, rgba(0, 255, 240, 0.4) 0%, rgba(0, 255, 240, 0) 105%);"}
-      }
-      else{
-        return {label: "In Progress", style: "color: #FFF; border-top: solid 1px #0500FF; background: radial-gradient(60.81% 60.81% at 50% 0%, rgba(5, 0, 255, 0.4) 0%, rgba(5, 0, 255, 0) 105%);"}
+    CalibrationLabelStyleParser() {
+      if (this.isComplete) {
+        return {
+          label: "Complete",
+          style:
+            "color: #00FFF0; border-top: solid 1px #00FFF0; background: radial-gradient(60.81% 60.81% at 50% 0%, rgba(0, 255, 240, 0.4) 0%, rgba(0, 255, 240, 0) 105%);",
+        };
+      } else {
+        return {
+          label: "In Progress",
+          style:
+            "color: #FFF; border-top: solid 1px #0500FF; background: radial-gradient(60.81% 60.81% at 50% 0%, rgba(5, 0, 255, 0.4) 0%, rgba(5, 0, 255, 0) 105%);",
+        };
       }
     },
     ApplyOffsets() {
@@ -36,7 +43,7 @@ export default {
           this.stageCompletionStatus += 1;
         } else {
           clearInterval(interval);
-          this.stageStatus.card_2 = 'done';
+          this.stageStatus.card_2 = "done";
           this.isComplete = true;
           setTimeout(() => {
             this.isRunning = false;
@@ -116,9 +123,21 @@ export default {
         v-text="CalibrationLabelStyleParser().label"
         :style="CalibrationLabelStyleParser().style"
       ></BaseLabel>
-      <VerticalLine :color="stageColorObj[stageStatus.card_0]" id="calibration_stage_indi_0" class="calibration_stage_indi_x"></VerticalLine>
-      <VerticalLine :color="stageColorObj[stageStatus.card_1]" id="calibration_stage_indi_1" class="calibration_stage_indi_x"></VerticalLine>
-      <VerticalLine :color="stageColorObj[stageStatus.card_2]" id="calibration_stage_indi_2" class="calibration_stage_indi_x"></VerticalLine>
+      <VerticalLine
+        :color="stageColorObj[stageStatus.card_0]"
+        id="calibration_stage_indi_0"
+        class="calibration_stage_indi_x"
+      ></VerticalLine>
+      <VerticalLine
+        :color="stageColorObj[stageStatus.card_1]"
+        id="calibration_stage_indi_1"
+        class="calibration_stage_indi_x"
+      ></VerticalLine>
+      <VerticalLine
+        :color="stageColorObj[stageStatus.card_2]"
+        id="calibration_stage_indi_2"
+        class="calibration_stage_indi_x"
+      ></VerticalLine>
       <DynamicsControlsImuCalibrationStageCard
         id="calibration_pending_stage_card_0"
         color="#FFF"
@@ -144,7 +163,6 @@ export default {
   </div>
 </template>
 <style scoped>
-
 @keyframes fade {
   0% {
     opacity: 0;
@@ -153,21 +171,21 @@ export default {
     opacity: 1;
   }
 }
-.calibration_stage_indi_x{
+.calibration_stage_indi_x {
   height: 5.025125628%;
   left: 50%;
   transform: translate(-50%);
-  width: .01vw;
+  width: 0.01vw;
   transition: all linear 0.1s;
 }
-#calibration_stage_indi_0{
-  top: calc(14.572864322% + 13%); 
+#calibration_stage_indi_0 {
+  top: calc(14.572864322% + 13%);
 }
-#calibration_stage_indi_1{
-  top: calc(39.447236181% + 13%); 
+#calibration_stage_indi_1 {
+  top: calc(39.447236181% + 13%);
 }
-#calibration_stage_indi_2{
-  top: calc(64.32160804% + 13%); 
+#calibration_stage_indi_2 {
+  top: calc(64.32160804% + 13%);
 }
 .fade {
   animation: fade linear 0.1s;
@@ -254,18 +272,35 @@ export default {
   align-items: center;
   padding-left: 2.97521739%;
 }
-@media only screen and (max-width: 1500px){
-  .dynamics_imu_calibration_controller_container{
-      left: 65%;
-      width: 32.735416667%;
+@media only screen and (max-width: 683px) and (min-height: 550px) {
+  .dynamics_imu_calibration_controller_container {
+    left: 65%;
+    width: 32.735416667%;
   }
-  #imu_calibration_ini_btn_l, #imu_calibration_ini_l{
+  #imu_calibration_ini_btn_l,
+  #imu_calibration_ini_l {
     font-size: 1.6vh;
   }
-  .x_controls_l{
+  .x_controls_l {
     font-size: 2vh;
   }
-  #ini_calibration_l_2{
+  #ini_calibration_l_2 {
+    font-size: 1.4vh;
+  }
+}
+@media only screen and (max-width: 1500px) and (min-height: 850px) {
+  .dynamics_imu_calibration_controller_container {
+    left: 65%;
+    width: 32.735416667%;
+  }
+  #imu_calibration_ini_btn_l,
+  #imu_calibration_ini_l {
+    font-size: 1.6vh;
+  }
+  .x_controls_l {
+    font-size: 2vh;
+  }
+  #ini_calibration_l_2 {
     font-size: 1.4vh;
   }
 }

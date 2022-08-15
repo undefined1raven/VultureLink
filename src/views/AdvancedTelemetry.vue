@@ -186,8 +186,8 @@ export default {
 </script>
 
 <template>
-  <Background />
-  <MobileBackground />
+  <Background v-if="!isMobile"/>
+  <MobileBackground v-if="isMobile"/>
 
   <div
     id="overview_container"
