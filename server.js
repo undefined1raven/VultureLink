@@ -670,12 +670,14 @@ if (process.env.NODE_ENV === 'production') {
 //----Authentication [beta]----//
 
 app.post('/logout', (req, res) => {
-    get_snapshot_from_path(`adv_tele_aprvd_tids/${req.cookies.at.tid}`).then(snapshot => {
-        const data = snapshot.val();
-        if (data != null) {
-            remove(ref(db, `adv_tele_aprvd_tids/${req.cookies.at.tid}`));
-        }
-    });
+    if(req.cookies.at != undefined){
+        get_snapshot_from_path(`adv_tele_aprvd_tids/${req.cookies.at.tid}`).then(snapshot => {
+            const data = snapshot.val();
+            if (data != null) {
+                remove(ref(db, `adv_tele_aprvd_tids/${req.cookies.at.tid}`));
+            }
+        });
+    }
     res.clearCookie('acid');
     res.clearCookie('at');
     res.clearCookie('sat');
