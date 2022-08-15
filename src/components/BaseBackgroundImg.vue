@@ -31,9 +31,4 @@ img {
     width: auto;
   }
 }
-@media only screen and (max-width: 768px) {
-  #desktop_background {
-    display: none;
-  }
-}
 </style>

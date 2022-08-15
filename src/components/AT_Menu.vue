@@ -20,8 +20,12 @@ export default {
     return {
       menu_cmd_btn_deco_color: "#0500FF",
       menu_security_btn_deco_color: "#0500FF",
-      menu_left: "-11.041666667%",
+      menuZIndex: 3,
+      menu_left: `${
+        ((212 * 100) / document.documentElement.clientWidth) * -1
+      }%`,
       isMenuExtended: false,
+      viewportWidth: 1920,
       back_l_left: "83.333333333%",
       expand_menu_toggle_btn: {
         deco_rotation: "rotate(45deg)",
@@ -35,19 +39,27 @@ export default {
     vulture_connection_status: { default: false },
   },
   methods: {
-    DynamicWidth(){
-      return (270 * 100) / document.documentElement.clientWidth;
+    DynamicsMenuObfuscatorWidth(){
+      console.log((5 * 100) / this.viewportWidth)
+      return (5 * 100) / this.viewportWidth;
+    },
+    DynamicWidth() {
+      return (270 * 100) / this.viewportWidth;
     },
     MenuExpendToggleOnClick() {
       this.isMenuExtended = !this.isMenuExtended;
       if (this.isMenuExtended) {
         this.menu_left = "0.416666667%";
+        this.menuZIndex = 10;
         this.expand_menu_toggle_btn.deco_rotation = "rotate(-135deg)";
         this.expand_menu_toggle_btn.deco_left = "8%";
         this.expand_menu_toggle_btn.left = "0%";
         this.back_l_left = "3.064066852%";
       } else {
-        this.menu_left = "-11.041666667%";
+        this.menuZIndex = 3;
+        this.menu_left = `${
+          ((212 * 100) / document.documentElement.clientWidth) * -1
+        }%`;
         this.expand_menu_toggle_btn.deco_rotation = "rotate(45deg)";
         this.expand_menu_toggle_btn.deco_left = "-8%";
         this.expand_menu_toggle_btn.left = "80.37037037%";
@@ -91,28 +103,40 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener('click', (e) => {
-      if(e.target != this.$refs.menu_toggle_btn && this.isMenuExtended){
+    window.addEventListener("resize", (e) => {
+      this.viewportWidth = document.documentElement.clientWidth;
+      if (this.isMenuExtended) {
+        this.menu_left = `${(5 * 100) / document.documentElement.clientWidth}%`;
+      } else {
+        this.menu_left = `${
+          ((212 * 100) / document.documentElement.clientWidth) * -1
+        }%`;
+      }
+    });
+    window.addEventListener("click", (e) => {
+      if (e.target != this.$refs.menu_toggle_btn && this.isMenuExtended) {
         this.MenuExpendToggleOnClick();
       }
     });
-    window.addEventListener('keyup', e => {
-      if(e.key == 'Escape'){
-        this.MinimizedMenuButtonOnClick('overview');
+    window.addEventListener("keyup", (e) => {
+      if (e.key == "Escape") {
+        this.MinimizedMenuButtonOnClick("overview");
       }
     });
   },
-  unmounted(){
-    window.removeEventListener('keyup', e => {});
-  }
+  unmounted() {
+    window.removeEventListener("keyup", (e) => {});
+    window.removeEventListener("click", (e) => {});
+    window.removeEventListener("resize", (e) => {});
+  },
 };
 </script>
 <template>
-  <div id="minimized_menu_obfuscator"></div>
+  <div id="minimized_menu_obfuscator" :style="`width: ${DynamicsMenuObfuscatorWidth()}%`"></div>
   <ul
     class="p-abs"
     id="minimized_menu_container"
-    :style="`left: ${menu_left}; width: ${DynamicWidth()}%;`"
+    :style="`left: ${menu_left}; width: ${DynamicWidth()}%; z-index: ${menuZIndex}`"
   >
     <div
       title="Back to overview"
@@ -135,7 +159,11 @@ export default {
       @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'sonar_array')"
       @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'sonar_array')"
     >
-      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Sonar Array'"></BaseLabel>
+      <BaseLabel
+        class="extended_btn_l"
+        color="#FFF"
+        v-text="'Sonar Array'"
+      ></BaseLabel>
       <SonarArrayDeco
         class="p-abs"
         id="sonar_array_deco"
@@ -150,7 +178,11 @@ export default {
       @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'dynamics')"
       @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'dynamics')"
     >
-      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Dynamics'"></BaseLabel>
+      <BaseLabel
+        class="extended_btn_l"
+        color="#FFF"
+        v-text="'Dynamics'"
+      ></BaseLabel>
       <DynamicsDeco
         class="p-abs"
         id="dynamics_deco"
@@ -162,7 +194,11 @@ export default {
       id="minimized_menu_network_btn"
       class="minimized-menu-item"
     >
-      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Network'"></BaseLabel>
+      <BaseLabel
+        class="extended_btn_l"
+        color="#FFF"
+        v-text="'Network'"
+      ></BaseLabel>
       <NetworkDeco class="p-abs" id="network_deco" color="#0500FF" />
     </div>
     <div
@@ -170,7 +206,11 @@ export default {
       id="minimized_menu_propulsion_btn"
       class="minimized-menu-item"
     >
-      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Propulsion'"></BaseLabel>
+      <BaseLabel
+        class="extended_btn_l"
+        color="#FFF"
+        v-text="'Propulsion'"
+      ></BaseLabel>
       <PropulsionDeco class="p-abs" id="propulsion_deco" color="#0500FF" />
     </div>
     <div
@@ -181,7 +221,11 @@ export default {
       @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'navigation')"
       @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'navigation')"
     >
-      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Navigation'"></BaseLabel>
+      <BaseLabel
+        class="extended_btn_l"
+        color="#FFF"
+        v-text="'Navigation'"
+      ></BaseLabel>
       <NavDeco
         class="p-abs"
         id="nav_deco"
@@ -193,7 +237,11 @@ export default {
       id="minimized_menu_autonomy_btn"
       class="minimized-menu-item"
     >
-      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Autonomy'"></BaseLabel>
+      <BaseLabel
+        class="extended_btn_l"
+        color="#FFF"
+        v-text="'Autonomy'"
+      ></BaseLabel>
       <AutonomyDeco class="p-abs" id="autonomy_deco" color="#0500FF" />
     </div>
     <div
@@ -213,7 +261,11 @@ export default {
       id="minimized_menu_power_btn"
       class="minimized-menu-item"
     >
-      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Power'"></BaseLabel>
+      <BaseLabel
+        class="extended_btn_l"
+        color="#FFF"
+        v-text="'Power'"
+      ></BaseLabel>
       <PowerDeco class="p-abs" id="power_deco" color="#0500FF" />
     </div>
     <HorizontalLine id="menu_separator_ln_0" color="#0500FF" />
@@ -230,7 +282,11 @@ export default {
         id="cmd_btn_left_border_emulator"
         color="#0500FF"
       ></VerticalLine>
-      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Command'"></BaseLabel>
+      <BaseLabel
+        class="extended_btn_l"
+        color="#FFF"
+        v-text="'Command'"
+      ></BaseLabel>
       <CommandDeco
         class="p-abs"
         id="cmd_deco"
@@ -250,7 +306,11 @@ export default {
         id="security_btn_left_border_emulator"
         color="#0500FF"
       ></VerticalLine>
-      <BaseLabel class="extended_btn_l" color="#FFF" v-text="'Security'"></BaseLabel>
+      <BaseLabel
+        class="extended_btn_l"
+        color="#FFF"
+        v-text="'Security'"
+      ></BaseLabel>
       <SecurityDeco
         class="p-abs"
         id="security_deco"
@@ -335,8 +395,8 @@ export default {
   border-top: solid 1px #0500ff;
   border-right: solid 1px #0500ff;
   transform: rotate(45deg);
-  width: 0.8vw;
-  height: 0.8vw;
+  width: 1.6vh;
+  height: 1.6vh;
   z-index: -1;
   pointer-events: none;
 }
@@ -437,7 +497,7 @@ export default {
   transition: left ease-in-out 0.1s;
 }
 #minimized_menu_overview_l {
-  font-size: 0.9vw;
+  font-size: 1.9vh;
   transition: left ease-in-out 0.15s;
 }
 #minimized_menu_overview_btn {
