@@ -39,17 +39,18 @@ export default {
     vulture_connection_status: { default: false },
   },
   methods: {
-    Scale(targetValue:number, resolutionRef:number){/*returns relative target width or height depending on screen size*/
-      return ((targetValue * window.screen.availWidth) / resolutionRef);
+    scale(targetValue: number, resolutionRef: number) {
+      /*returns relative target width or height depending on screen size*/
+      return (targetValue * window.screen.availWidth) / resolutionRef;
     },
-    Percentage(inputValue:number, percentageOf:number){
+    percentage(inputValue: number, percentageOf: number) {
       return (inputValue * 100) / percentageOf;
     },
-    DynamicsMenuObfuscatorWidth(){
-      return this.Percentage(this.Scale(5, 1920), this.viewportWidth);
+    DynamicsMenuObfuscatorWidth() {
+      return this.percentage(this.scale(5, 1920), this.viewportWidth);
     },
     DynamicWidth() {
-      return this.Percentage(this.Scale(270, 1920), this.viewportWidth);
+      return this.percentage(this.scale(270, 1920), this.viewportWidth);
     },
     MenuExpendToggleOnClick() {
       this.isMenuExtended = !this.isMenuExtended;
@@ -63,7 +64,7 @@ export default {
       } else {
         this.menuZIndex = 3;
         this.menu_left = `${
-          ((212 * 100) / document.documentElement.clientWidth) * -1
+          this.percentage(this.scale(212, 1920), this.viewportWidth) * -1
         }%`;
         this.expand_menu_toggle_btn.deco_rotation = "rotate(45deg)";
         this.expand_menu_toggle_btn.deco_left = "-8%";
@@ -106,17 +107,21 @@ export default {
     MinimizedMenuButtonOnClick(btn_id: string) {
       this.$emit("MinimizedMenuButtonOnClick", { btn_id: btn_id });
     },
-  },
-  mounted() {
-    window.addEventListener("resize", (e) => {
+    MenuIni() {
       this.viewportWidth = document.documentElement.clientWidth;
       if (this.isMenuExtended) {
         this.menu_left = `${(5 * 100) / document.documentElement.clientWidth}%`;
       } else {
         this.menu_left = `${
-          ((212 * 100) / document.documentElement.clientWidth) * -1
+          this.percentage(this.scale(212, 1920), this.viewportWidth) * -1
         }%`;
       }
+    },
+  },
+  mounted() {
+    this.MenuIni();
+    window.addEventListener("resize", (e) => {
+      this.MenuIni();
     });
     window.addEventListener("click", (e) => {
       if (e.target != this.$refs.menu_toggle_btn && this.isMenuExtended) {
