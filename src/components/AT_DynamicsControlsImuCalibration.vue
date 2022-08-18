@@ -272,7 +272,7 @@ export default {
   align-items: center;
   padding-left: 2.97521739%;
 }
-@media only screen and (max-width: 683px) and (min-height: 550px) {
+@media only screen and (max-width: 1070px) and (min-height: 550px) {
   .dynamics_imu_calibration_controller_container {
     left: 65%;
     width: 32.735416667%;
@@ -304,4 +304,21 @@ export default {
     font-size: 1.4vh;
   }
 }
+@media only screen and (max-width: 1996.8px) and (min-height: 1200px) {
+  .dynamics_imu_calibration_controller_container {
+    left: 65%;
+    width: 32.735416667%;
+  }
+  #imu_calibration_ini_btn_l,
+  #imu_calibration_ini_l {
+    font-size: 1.6vh;
+  }
+  .x_controls_l {
+    font-size: 2vh;
+  }
+  #ini_calibration_l_2 {
+    font-size: 1.4vh;
+  }
+}
+
 </style>
