@@ -39,12 +39,17 @@ export default {
     vulture_connection_status: { default: false },
   },
   methods: {
+    Scale(targetValue:number, resolutionRef:number){/*returns relative target width or height depending on screen size*/
+      return ((targetValue * window.screen.availWidth) / resolutionRef);
+    },
+    Percentage(inputValue:number, percentageOf:number){
+      return (inputValue * 100) / percentageOf;
+    },
     DynamicsMenuObfuscatorWidth(){
-      console.log((((5 * window.screen.availWidth) / 1920) * 100) / this.viewportWidth)
-      return (((5 * window.screen.availWidth) / 1920) * 100) / this.viewportWidth;
+      return this.Percentage(this.Scale(5, 1920), this.viewportWidth);
     },
     DynamicWidth() {
-      return (((270 * window.screen.availWidth) / 1920) * 100) / this.viewportWidth;
+      return this.Percentage(this.Scale(270, 1920), this.viewportWidth);
     },
     MenuExpendToggleOnClick() {
       this.isMenuExtended = !this.isMenuExtended;
@@ -132,7 +137,10 @@ export default {
 };
 </script>
 <template>
-  <div id="minimized_menu_obfuscator" :style="`width: ${DynamicsMenuObfuscatorWidth()}%`"></div>
+  <div
+    id="minimized_menu_obfuscator"
+    :style="`width: ${DynamicsMenuObfuscatorWidth()}%`"
+  ></div>
   <ul
     class="p-abs"
     id="minimized_menu_container"
