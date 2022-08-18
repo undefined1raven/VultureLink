@@ -40,11 +40,11 @@ export default {
   },
   methods: {
     DynamicsMenuObfuscatorWidth(){
-      console.log((5 * 100) / this.viewportWidth)
-      return (5 * 100) / this.viewportWidth;
+      console.log((((5 * window.screen.availWidth) / 1920) * 100) / this.viewportWidth)
+      return (((5 * window.screen.availWidth) / 1920) * 100) / this.viewportWidth;
     },
     DynamicWidth() {
-      return (270 * 100) / this.viewportWidth;
+      return (((270 * window.screen.availWidth) / 1920) * 100) / this.viewportWidth;
     },
     MenuExpendToggleOnClick() {
       this.isMenuExtended = !this.isMenuExtended;
