@@ -1,6 +1,10 @@
 
 <script lang="ts" setup>
 import BaseLabel from "@/components/BaseLabel.vue";
+
+import scale from '@/composables/scale.ts';
+import percentage from '@/composables/percentage.ts';
+
 </script>
 <script lang="ts">
 export default {
@@ -16,17 +20,14 @@ export default {
     };
   },
   methods: {
-    percentage(InputValue: number, percentageOf: number) {
-      return (InputValue * 100) / percentageOf;
-    },
     submit_logout_form() {
       this.$refs.logout_form.submit();
     },
     ComputeUIStyle() {
-      this.DropdownContainerStyle = `width: ${this.percentage(
-        266,
+      this.DropdownContainerStyle = `width: ${percentage(
+        scale(266, 1920),
         this.windowWidth
-      )}%; left: ${98.958333333 - this.percentage(266,this.windowWidth)}%`;
+      )}%; left: ${98.958333333 - percentage(scale(266, 1920), this.windowWidth)}%`;
     },
   },
   mounted() {

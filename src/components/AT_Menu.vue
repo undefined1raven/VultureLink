@@ -12,6 +12,9 @@ import VerticalLine from "@/components/VerticalLine.vue";
 import CommandDeco from "@/components/AT_MinimizedMenuCommandDeco.vue";
 import BaseLabel from "@/components/BaseLabel.vue";
 import SecurityDeco from "@/components/SecurityDeco.vue";
+
+import scale from '@/composables/scale.ts';
+import percentage from '@/composables/percentage.ts';
 </script>
 
 <script lang="ts">
@@ -39,18 +42,11 @@ export default {
     vulture_connection_status: { default: false },
   },
   methods: {
-    scale(targetValue: number, resolutionRef: number) {
-      /*returns relative target width or height depending on screen size*/
-      return (targetValue * window.screen.availWidth) / resolutionRef;
-    },
-    percentage(inputValue: number, percentageOf: number) {
-      return (inputValue * 100) / percentageOf;
-    },
     DynamicsMenuObfuscatorWidth() {
-      return this.percentage(this.scale(5, 1920), this.viewportWidth);
+      return percentage(scale(5, 1920), this.viewportWidth);
     },
     DynamicWidth() {
-      return this.percentage(this.scale(270, 1920), this.viewportWidth);
+      return percentage(scale(270, 1920), this.viewportWidth);
     },
     MenuExpendToggleOnClick() {
       this.isMenuExtended = !this.isMenuExtended;
@@ -64,7 +60,7 @@ export default {
       } else {
         this.menuZIndex = 3;
         this.menu_left = `${
-          this.percentage(this.scale(212, 1920), this.viewportWidth) * -1
+          percentage(scale(212, 1920), this.viewportWidth) * -1
         }%`;
         this.expand_menu_toggle_btn.deco_rotation = "rotate(45deg)";
         this.expand_menu_toggle_btn.deco_left = "-8%";
@@ -113,7 +109,7 @@ export default {
         this.menu_left = `${(5 * 100) / document.documentElement.clientWidth}%`;
       } else {
         this.menu_left = `${
-          this.percentage(this.scale(212, 1920), this.viewportWidth) * -1
+          percentage(scale(212, 1920), this.viewportWidth) * -1
         }%`;
       }
     },

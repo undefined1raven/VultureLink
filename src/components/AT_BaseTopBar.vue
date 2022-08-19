@@ -5,6 +5,9 @@ import VerticalLine from "@/components/VerticalLine.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
 import UserDropdownMenu from "@/components/UserDropdownMenu.vue";
 import BaseLabel from "@/components/BaseLabel.vue";
+
+import scale from '@/composables/scale.ts';
+import percentage from '@/composables/percentage.ts';
 </script>
 
 
@@ -22,12 +25,9 @@ export default {
     };
   },
   methods: {
-    percentage(InputValue: number, percentageOf: number) {
-      return (InputValue * 100) / percentageOf;
-    },
     ComputeUIStyle() {
-      this.logo_ln_left = `left: ${this.percentage(64, this.windowWidth)}%;`;
-      this.system_l_left = `left: ${this.percentage(88, this.windowWidth)}%;`;
+      this.logo_ln_left = `left: ${percentage(scale(64, 1920), this.windowWidth)}%;`;
+      this.system_l_left = `left: ${percentage(scale(88, 1920), this.windowWidth)}%;`;
     },
   },
   mounted() {
