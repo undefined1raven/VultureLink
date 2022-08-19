@@ -129,4 +129,19 @@ export default {
   width: 69.427083333%;
   height: 39.351851852%;
 }
+@media only screen and (max-width: 1070px) and (min-height: 550px) {
+  #dynamics_telemetry_line {
+    left: 58.645833333%;
+  }
+}
+@media only screen and (max-width: 1500px) and (min-height: 850px) {
+  #dynamics_telemetry_line {
+    left: 58.645833333%;
+  }
+}
+@media only screen and (max-width: 1996.8px) and (min-height: 1200px) {
+  #dynamics_telemetry_line {
+    left: 58.645833333%;
+  }
+}
 </style>

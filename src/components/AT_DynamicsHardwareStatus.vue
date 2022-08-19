@@ -36,7 +36,10 @@ export default {
 
 <template>
   <div id="dynamics_hardware_status_container">
-    <BaseLabel id="dynamics_hardware_status_l" v-text="'Hardware Status'"></BaseLabel>
+    <BaseLabel
+      id="dynamics_hardware_status_l"
+      v-text="'Hardware Status'"
+    ></BaseLabel>
     <ul id="dynamics_hardware_status_list" :style="overflowController()">
       <BaseHardwareStatusItem
         v-for="(status_obj, index) in hardware_status_arr"
@@ -92,5 +95,24 @@ export default {
 #dynamics_hardware_status_l {
   top: -2%;
   left: 0%;
+  font-size: 2.1vh;
+}
+@media only screen and (max-width: 1070px) and (min-height: 550px) {
+  #dynamics_hardware_status_container {
+    left: 60.729166667%;
+    width: 37.083333333%;
+  }
+}
+@media only screen and (max-width: 1500px) and (min-height: 850px) {
+  #dynamics_hardware_status_container {
+    left: 60.729166667%;
+    width: 37.083333333%;
+  }
+}
+@media only screen and (max-width: 1996.8px) and (min-height: 1200px) {
+  #dynamics_hardware_status_container {
+    left: 60.729166667%;
+    width: 37.083333333%;
+  }
 }
 </style>

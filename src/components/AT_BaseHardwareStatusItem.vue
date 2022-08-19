@@ -22,7 +22,6 @@ export default {
         this.componentGlobalStatus
       )}${this.nameBannerTransparency};`;
 
-
       let borderLeft = `border-left: solid 1px ${this.colorController(
         this.componentGlobalStatus
       )};`;
@@ -80,7 +79,7 @@ export default {
   props: {
     isLast: { default: false },
     isMinifiable: { default: true },
-    isMinifiedByDefault: {default: false},
+    isMinifiedByDefault: { default: false },
     component_status_obj: {
       default: {
         name: { default: "--" },
@@ -177,12 +176,12 @@ export default {
 .base_hardware_telemetry_latency_acx,
 .base_hardware_telemetry_data_acx {
   top: 31.182795699%;
-  left: 76.956521739%;
-  width: 23.043478261%;
+  left: calc(76.956521739% - 5%);
+  width: calc(23.043478261% + 5%);
   background-color: #00fff020;
   display: flex;
   align-items: center;
-  font-size: 1vw;
+  font-size: 2vh;
   justify-content: center;
   animation: component_status_detail_ani cubic-bezier(0.59, 0.23, 0.49, 1.07)
     0.15s;
@@ -192,7 +191,7 @@ export default {
 .base_hardware_telemetry_data_l {
   top: 31.182795699%;
   left: 0%;
-  font-size: 1vw;
+  font-size: 2vh;
   animation: component_status_detail_ani cubic-bezier(0.59, 0.23, 0.49, 1.07)
     0.15s;
 }
@@ -214,7 +213,7 @@ export default {
   display: flex;
   justify-content: start;
   align-items: center;
-  font-size: 1vw;
+  font-size: 2vh;
 }
 .base_hardware_status_item {
   position: relative;
@@ -222,5 +221,29 @@ export default {
   height: 48.4375%;
   border-bottom: solid 1px #0500ff;
   margin-bottom: 2.513978495%;
+}
+@media only screen and (max-width: 1070px) and (min-height: 550px) {
+  .base_hardware_connection_status_acx,
+  .base_hardware_telemetry_latency_acx,
+  .base_hardware_telemetry_data_acx {
+    width: calc(23.043478261% + 9%);
+    left: calc(76.956521739% - 9%);
+  }
+}
+@media only screen and (max-width: 1500px) and (min-height: 850px) {
+  .base_hardware_connection_status_acx,
+  .base_hardware_telemetry_latency_acx,
+  .base_hardware_telemetry_data_acx {
+    width: calc(23.043478261% + 9%);
+    left: calc(76.956521739% - 9%);
+  }
+}
+@media only screen and (max-width: 1996.8px) and (min-height: 1200px) {
+  .base_hardware_connection_status_acx,
+  .base_hardware_telemetry_latency_acx,
+  .base_hardware_telemetry_data_acx {
+    width: calc(23.043478261% + 9%);
+    left: calc(76.956521739% - 9%);
+  }
 }
 </style>
