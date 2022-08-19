@@ -10,7 +10,8 @@
 <style scoped>
 .vulture_logo_min{
     position: absolute;
-    width: 2.577083333%;
-    height: 4.444444444%;
+    width: 5vh;
+    height: 5vh;
 }
+
 </style>

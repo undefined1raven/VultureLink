@@ -1,26 +1,49 @@
 
-<script setup>
+<script lang="ts" setup>
 import BaseLabel from "@/components/BaseLabel.vue";
 </script>
-<script>
-import Vue from "vue";
+<script lang="ts">
 export default {
-  expose: ['submit_logout_form'],
+  expose: ["submit_logout_form"],
   props: {
     username: "",
     top: "",
-    left: "",
+  },
+  data() {
+    return {
+      DropdownContainerStyle: "",
+      windowWidth: document.documentElement.clientWidth,
+    };
   },
   methods: {
-    submit_logout_form(){
+    percentage(InputValue: number, percentageOf: number) {
+      return (InputValue * 100) / percentageOf;
+    },
+    submit_logout_form() {
       this.$refs.logout_form.submit();
-    }
-  }
+    },
+    ComputeUIStyle() {
+      this.DropdownContainerStyle = `width: ${this.percentage(
+        266,
+        this.windowWidth
+      )}%; left: ${98.958333333 - this.percentage(266,this.windowWidth)}%`;
+    },
+  },
+  mounted() {
+    this.ComputeUIStyle();
+    window.addEventListener("resize", () => {
+      this.windowWidth = document.documentElement.clientWidth;
+      this.ComputeUIStyle();
+    });
+  },
 };
 </script>
 
 <template>
-  <div class="user_dropdown_menu_container" :style="`top: ${top}; left: ${left};`">
+  <div
+    class="user_dropdown_menu_container"
+    :style="`top: ${top}; ${DropdownContainerStyle}`"
+  >
     <BaseLabel
       class="signed_in_as_l"
       color="#4D4D4D"
@@ -39,7 +62,7 @@ export default {
   outline: none;
   border: none;
   color: #fff;
-  font-size: 0.9vw;
+  font-size: 1.8vh;
   font-family: "Titillium Web", sans-serif;
   display: flex;
   align-items: center;
@@ -58,7 +81,7 @@ export default {
 .username_l {
   top: 45.762711864%;
   left: 0;
-  font-size: 0.9vw;
+  font-size: 1.8vh;
   width: calc(63.157894737% - 2%);
   height: 54.237288136%;
   border: solid 1px #001aff;
@@ -67,7 +90,7 @@ export default {
 .signed_in_as_l {
   top: 0;
   left: 0;
-  font-size: 0.7vw;
+  font-size: 1.5vh;
 }
 .user_dropdown_menu_container {
   position: absolute;
