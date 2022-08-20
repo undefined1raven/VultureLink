@@ -6,25 +6,14 @@ import VerticalLine from "@/components/VerticalLine.vue";
 import BaseOptionsMenu from "@/components/BaseOptionsMenu.vue";
 
 import percentage from "@/composables/percentage.ts";
+import UIReactivityStateAssessor from "@/composables/UIReactivityAssessor.ts";
 </script>
 
 <script lang="ts">
 export default {
   methods: {
-    AxisSelectionMenuOnUpdate(args:object){
+    AxisSelectionMenuOnUpdate(args: object) {
       this.VisibleAxisID = args.btn_id;
-    },
-    UIReactivityStateAssessor() {
-      if (
-        percentage(
-          document.documentElement.clientWidth,
-          window.screen.availWidth
-        ) < 78
-      ) {
-        this.isUIMinified = true;
-      } else {
-        this.isUIMinified = false;
-      }
     },
     telemetry_validation() {
       if (this.telemetry.imu_alpha.gyro == undefined) {
@@ -61,9 +50,9 @@ export default {
     },
   },
   mounted() {
-    this.UIReactivityStateAssessor();
+    this.isUIMinified = UIReactivityStateAssessor();
     window.addEventListener("resize", () => {
-      this.UIReactivityStateAssessor();
+      this.isUIMinified = UIReactivityStateAssessor();
     });
   },
   unmounted() {
@@ -71,7 +60,7 @@ export default {
   },
   data() {
     return {
-      isUIMinified: false /*is UI below the reactivity width threshold */,
+      isUIMinified: 0 /*is UI below the reactivity width threshold || 0 == normal || 1 == half width */,
       VisibleAxisID: "x",
       AxisSelectionMenuItems: [
         { label: "X Axis", btn_id: "x" },
@@ -86,7 +75,7 @@ export default {
 <template>
   <div id="dynamics_telemetry_container">
     <BaseOptionsMenu
-      v-if="isUIMinified"
+      v-if="isUIMinified == 1"
       id="axis_selection_menu"
       @update="AxisSelectionMenuOnUpdate"
       :menuItems="AxisSelectionMenuItems"
@@ -100,7 +89,7 @@ export default {
       v-text="'Telemetry'"
     ></BaseLabel>
     <DynamicsTelemetryOneAxis
-      v-show="!isUIMinified || (isUIMinified && VisibleAxisID == 'x')"
+      v-show="isUIMinified == 0 || (isUIMinified == 1 && VisibleAxisID == 'x')"
       id="x_axis_telemetry_container"
       axis_id="X Axis"
       :imu_alpha_axis_telemetry="telemetry_validation().imu_alpha.gyro.pitch"
@@ -113,7 +102,7 @@ export default {
       class="animation_group_0"
     />
     <DynamicsTelemetryOneAxis
-      v-show="!isUIMinified || (isUIMinified && VisibleAxisID == 'y')"
+      v-show="isUIMinified == 0 || (isUIMinified == 1 && VisibleAxisID == 'y')"
       id="y_axis_telemetry_container"
       axis_id="Y Axis"
       :imu_alpha_axis_telemetry="telemetry_validation().imu_alpha.gyro.roll"
@@ -126,7 +115,7 @@ export default {
       class="animation_group_0"
     />
     <DynamicsTelemetryOneAxis
-      v-show="!isUIMinified || (isUIMinified && VisibleAxisID == 'z')"
+      v-show="isUIMinified == 0 || (isUIMinified == 1 && VisibleAxisID == 'z')"
       id="z_axis_telemetry_container"
       axis_id="Z Axis"
       :imu_alpha_axis_telemetry="telemetry_validation().imu_alpha.gyro.yaw"

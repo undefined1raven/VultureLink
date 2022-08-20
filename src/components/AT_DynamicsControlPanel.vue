@@ -185,4 +185,22 @@ export default {
   height: 36.851851852%;
   border-right: solid 1px #0500ff;
 }
+@media only screen and (max-width: 1070px) and (min-height: 550px) {
+.x_controls_options_menu{
+  width: 40.726577438%;
+  height: 31.155778894%;
+}
+}
+@media only screen and (max-width: 1500px) and (min-height: 850px) {
+.x_controls_options_menu{
+  width: 40.726577438%;
+  height: 31.155778894%;
+}
+}
+@media only screen and (max-width: 1996.8px) and (min-height: 1200px) {
+.x_controls_options_menu{
+  width: 40.726577438%;
+  height: 31.155778894%;
+}
+}
 </style>

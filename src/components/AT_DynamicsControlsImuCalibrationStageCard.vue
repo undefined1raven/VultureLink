@@ -67,7 +67,7 @@ export default {
 </template>
 <style scoped>
 .calibration_stage_card_l {
-  font-size: 1vw;
+  font-size: 2vh;
   transition: all linear 0.1s;
 }
 .loading_bar_slider {
@@ -100,7 +100,7 @@ export default {
 }
 @media only screen and (max-width: 1500px){
   .calibration_stage_card_l{
-    font-size: 1.8vh;
+    font-size: 2vh;
   }
 }
 </style>

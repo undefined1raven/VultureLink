@@ -207,6 +207,7 @@ export default {
   justify-content: center;
   align-items: flex-start;
   padding-top: 1%;
+  font-size: 2vh;
   border-top: solid 1px #0500ff;
   background: radial-gradient(
     52.7% 52.7% at 50% 0%,
@@ -279,13 +280,13 @@ export default {
   }
   #imu_calibration_ini_btn_l,
   #imu_calibration_ini_l {
-    font-size: 1.6vh;
+    font-size: 2vh;
   }
   .x_controls_l {
     font-size: 2vh;
   }
   #ini_calibration_l_2 {
-    font-size: 1.4vh;
+    font-size: 1.8vh;
   }
 }
 @media only screen and (max-width: 1500px) and (min-height: 850px) {
@@ -295,13 +296,13 @@ export default {
   }
   #imu_calibration_ini_btn_l,
   #imu_calibration_ini_l {
-    font-size: 1.6vh;
+    font-size: 2vh;
   }
   .x_controls_l {
     font-size: 2vh;
   }
   #ini_calibration_l_2 {
-    font-size: 1.4vh;
+    font-size: 1.8vh;
   }
 }
 @media only screen and (max-width: 1996.8px) and (min-height: 1200px) {
@@ -311,13 +312,13 @@ export default {
   }
   #imu_calibration_ini_btn_l,
   #imu_calibration_ini_l {
-    font-size: 1.6vh;
+    font-size: 2vh;
   }
   .x_controls_l {
     font-size: 2vh;
   }
   #ini_calibration_l_2 {
-    font-size: 1.4vh;
+    font-size: 1.8vh;
   }
 }
 

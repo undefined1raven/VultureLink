@@ -14,10 +14,13 @@ export default {
   methods: {
     InputValueOnChange(args: object, ControlPanelID: string) {
       if (ControlPanelID == "rate") {
-        let object_mapper_array = ["max_pitcmax_pitch_rateh", "max_roll_rate", "max_yaw_rate"];
-        this.dynamics_controls.rate_controls[
-          object_mapper_array[args.LCU_id]
-        ] = args.newValue;
+        let object_mapper_array = [
+          "max_pitcmax_pitch_rateh",
+          "max_roll_rate",
+          "max_yaw_rate",
+        ];
+        this.dynamics_controls.rate_controls[object_mapper_array[args.LCU_id]] =
+          args.newValue;
       }
       if (ControlPanelID == "rotation") {
         if (args.LCU_id < 2) {
@@ -109,7 +112,9 @@ export default {
     class="animation_group_0"
     :DynamicsControlsObject="dynamics_controls"
   ></DynamicsControlPanel>
-  <DynamicsControlsImuCalibration class="animation_group_0"></DynamicsControlsImuCalibration>
+  <DynamicsControlsImuCalibration
+    class="animation_group_0"
+  ></DynamicsControlsImuCalibration>
 </template>
 
 
@@ -141,5 +146,23 @@ export default {
   top: 50.37037037%;
   left: 5.052083333%;
   width: 93.90625%;
+}
+@media only screen and (max-width: 1070px) and (min-height: 550px) {
+  #dynamics_rate_controls_container,
+  #dynamics_rotation_controls_container {
+    width: 54.479166667%;
+  }
+}
+@media only screen and (max-width: 1500px) and (min-height: 850px) {
+  #dynamics_rate_controls_container,
+  #dynamics_rotation_controls_container {
+    width: 54.479166667%;
+  }
+}
+@media only screen and (max-width: 1996.8px) and (min-height: 1200px) {
+  #dynamics_rate_controls_container,
+  #dynamics_rotation_controls_container {
+    width: 54.479166667%;
+  }
 }
 </style>

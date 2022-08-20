@@ -155,11 +155,11 @@ export default {
   position: absolute;
   top: 33.027522936%;
   left: calc(81.325301205% + 2%);
-  width: 6.927710843%;
-  height: 44.401834862%;
+  width: 4.2592vh;
+  height: 4.2592vh;
   border: solid 1px #0500ff;
   color: #fff;
-  font-size: 1.3vw;
+  font-size: 2.1vh;
   display: flex;
   align-items: center;
   justify-content: center;
