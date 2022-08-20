@@ -138,8 +138,8 @@ export default {
   position: absolute;
   top: 0%;
   left: calc(83.253588517% + 3px);
-  width: 1.8229166666667vw;
-  height: 1.8229166666667vw;
+  width: 3.2407vh;
+  height: 3.2407vh;
   border: solid 1px #0500ff;
   display: flex;
   align-items: center;

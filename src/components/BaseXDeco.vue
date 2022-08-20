@@ -15,7 +15,7 @@ export default {
 <style scoped>
 .base_x_deco{
     position: absolute;
-    width: 0.9375vw;
-    height: 0.9375vw;
+    width: 1.2444vh;
+    height: 1.2444vh;
 }
 </style>

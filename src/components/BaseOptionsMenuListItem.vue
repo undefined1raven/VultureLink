@@ -45,7 +45,7 @@ export default {
   justify-content: center;
   color: #fff;
   font-family: "Titillium Web", sans-serif;
-  font-size: 0.9vw;
+  font-size: 1.9vh;
   user-select: none;
   animation: list_item_ani linear 0.1s;
   transition: all linear 0.1s;

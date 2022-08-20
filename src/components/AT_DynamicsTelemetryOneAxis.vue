@@ -26,7 +26,11 @@ export default {
   <div class="dynamics_telemetry_one_axis_container p-abs">
     <BaseLabel id="x_axis_l" class="axis_l" v-text="axis_id"></BaseLabel>
     <div id="imu_alpha_telemetry_container">
-      <BaseLabel id="imu_alpha_l" class="imu_x_l" v-text="'IMU Alpha'"></BaseLabel>
+      <BaseLabel
+        id="imu_alpha_l"
+        class="imu_x_l"
+        v-text="'IMU Alpha'"
+      ></BaseLabel>
       <BaseLabel
         id="imu_alpha_angle_l"
         class="imu_x_y_l"
@@ -70,7 +74,11 @@ export default {
       ></VerticalLine>
     </div>
     <div id="imu_beta_telemetry_container">
-      <BaseLabel id="imu_beta_l" class="imu_x_l" v-text="'IMU Beta'"></BaseLabel>
+      <BaseLabel
+        id="imu_beta_l"
+        class="imu_x_l"
+        v-text="'IMU Beta'"
+      ></BaseLabel>
       <BaseLabel
         id="imu_beta_angle_l"
         class="imu_x_y_l"
@@ -124,7 +132,7 @@ export default {
   display: flex;
   justify-content: end;
   align-items: center;
-  font-size: 1vw;
+  font-size: 2vh;
   padding-right: 2%;
 }
 #imu_beta_ln {
@@ -163,7 +171,7 @@ export default {
   align-items: center;
   justify-content: start;
   padding-left: 2.78%;
-  font-size: 1vw;
+  font-size: 2vh;
   background-color: #0500ff20;
 }
 .imu_x_y {
@@ -186,7 +194,7 @@ export default {
 .imu_x_l,
 .imu_x_y_l {
   left: 2.319587629%;
-  font-size: 1vw;
+  font-size: 2vh;
 }
 #imu_alpha_angle {
   top: 36.96369637%;
@@ -194,5 +202,23 @@ export default {
 .dynamics_telemetry_one_axis_container {
   width: 29.107276819%;
   height: 71.294117647%;
+}
+@media only screen and (max-width: 1070px) and (min-height: 550px) {
+  .dynamics_telemetry_one_axis_container {
+    width: 84.716157205%;
+    left: 7.641921397%;
+  }
+}
+@media only screen and (max-width: 1500px) and (min-height: 850px) {
+  .dynamics_telemetry_one_axis_container {
+    width: 84.716157205%;
+    left: 7.641921397%;
+  }
+}
+@media only screen and (max-width: 1996.8px) and (min-height: 1200px) {
+  .dynamics_telemetry_one_axis_container {
+    width: 84.716157205%;
+    left: 7.641921397%;
+  }
 }
 </style>

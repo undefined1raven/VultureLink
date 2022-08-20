@@ -3,11 +3,29 @@
 import DynamicsTelemetryOneAxis from "@/components/AT_DynamicsTelemetryOneAxis.vue";
 import BaseLabel from "@/components/BaseLabel.vue";
 import VerticalLine from "@/components/VerticalLine.vue";
+import BaseOptionsMenu from "@/components/BaseOptionsMenu.vue";
+
+import percentage from "@/composables/percentage.ts";
 </script>
 
 <script lang="ts">
 export default {
   methods: {
+    AxisSelectionMenuOnUpdate(args:object){
+      this.VisibleAxisID = args.btn_id;
+    },
+    UIReactivityStateAssessor() {
+      if (
+        percentage(
+          document.documentElement.clientWidth,
+          window.screen.availWidth
+        ) < 78
+      ) {
+        this.isUIMinified = true;
+      } else {
+        this.isUIMinified = false;
+      }
+    },
     telemetry_validation() {
       if (this.telemetry.imu_alpha.gyro == undefined) {
         return {
@@ -42,11 +60,39 @@ export default {
       },
     },
   },
+  mounted() {
+    this.UIReactivityStateAssessor();
+    window.addEventListener("resize", () => {
+      this.UIReactivityStateAssessor();
+    });
+  },
+  unmounted() {
+    window.removeEventListener("resize", () => {});
+  },
+  data() {
+    return {
+      isUIMinified: false /*is UI below the reactivity width threshold */,
+      VisibleAxisID: "x",
+      AxisSelectionMenuItems: [
+        { label: "X Axis", btn_id: "x" },
+        { label: "Y Axis", btn_id: "y" },
+        { label: "Z Axis", btn_id: "z" },
+      ],
+    };
+  },
 };
 </script>
 
 <template>
   <div id="dynamics_telemetry_container">
+    <BaseOptionsMenu
+      v-if="isUIMinified"
+      id="axis_selection_menu"
+      @update="AxisSelectionMenuOnUpdate"
+      :menuItems="AxisSelectionMenuItems"
+      height="29.176470588%"
+      width="46.506550218%"
+    ></BaseOptionsMenu>
     <VerticalLine id="dynamics_telemetry_line" color="#373737"></VerticalLine>
     <BaseLabel
       id="dynamics_telemetry_l"
@@ -54,6 +100,7 @@ export default {
       v-text="'Telemetry'"
     ></BaseLabel>
     <DynamicsTelemetryOneAxis
+      v-show="!isUIMinified || (isUIMinified && VisibleAxisID == 'x')"
       id="x_axis_telemetry_container"
       axis_id="X Axis"
       :imu_alpha_axis_telemetry="telemetry_validation().imu_alpha.gyro.pitch"
@@ -66,6 +113,7 @@ export default {
       class="animation_group_0"
     />
     <DynamicsTelemetryOneAxis
+      v-show="!isUIMinified || (isUIMinified && VisibleAxisID == 'y')"
       id="y_axis_telemetry_container"
       axis_id="Y Axis"
       :imu_alpha_axis_telemetry="telemetry_validation().imu_alpha.gyro.roll"
@@ -78,6 +126,7 @@ export default {
       class="animation_group_0"
     />
     <DynamicsTelemetryOneAxis
+      v-show="!isUIMinified || (isUIMinified && VisibleAxisID == 'z')"
       id="z_axis_telemetry_container"
       axis_id="Z Axis"
       :imu_alpha_axis_telemetry="telemetry_validation().imu_alpha.gyro.yaw"
@@ -106,6 +155,7 @@ export default {
 #dynamics_telemetry_l {
   top: 0%;
   left: 0;
+  font-size: 2.1vh;
 }
 #x_axis_telemetry_container {
   top: 12.235294118%;
@@ -130,18 +180,60 @@ export default {
   height: 39.351851852%;
 }
 @media only screen and (max-width: 1070px) and (min-height: 550px) {
+  #axis_selection_menu {
+    top: 15.058823529%;
+    left: 45.633187773%;
+    z-index: 10 !important;
+  }
   #dynamics_telemetry_line {
-    left: 58.645833333%;
+    left: 105%;
+  }
+  #dynamics_telemetry_container {
+    width: 47.708333333%;
+  }
+  #x_axis_telemetry_container,
+  #y_axis_telemetry_container,
+  #z_axis_telemetry_container,
+  #dynamics_telemetry_l {
+    left: 7.641921397%;
   }
 }
 @media only screen and (max-width: 1500px) and (min-height: 850px) {
+  #axis_selection_menu {
+    top: 15.058823529%;
+    left: 45.633187773%;
+    z-index: 10 !important;
+  }
   #dynamics_telemetry_line {
-    left: 58.645833333%;
+    left: 105%;
+  }
+  #dynamics_telemetry_container {
+    width: 47.708333333%;
+  }
+  #x_axis_telemetry_container,
+  #y_axis_telemetry_container,
+  #z_axis_telemetry_container,
+  #dynamics_telemetry_l {
+    left: 7.641921397%;
   }
 }
 @media only screen and (max-width: 1996.8px) and (min-height: 1200px) {
+  #axis_selection_menu {
+    top: 15.058823529%;
+    left: 45.633187773%;
+    z-index: 10 !important;
+  }
   #dynamics_telemetry_line {
-    left: 58.645833333%;
+    left: 105%;
+  }
+  #dynamics_telemetry_container {
+    width: 47.708333333%;
+  }
+  #x_axis_telemetry_container,
+  #y_axis_telemetry_container,
+  #z_axis_telemetry_container,
+  #dynamics_telemetry_l {
+    left: 7.641921397%;
   }
 }
 </style>
