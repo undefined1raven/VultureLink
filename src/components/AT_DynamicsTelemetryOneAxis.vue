@@ -40,11 +40,11 @@ export default {
       <BaseLabel
         id="imu_alpha_angle_acx"
         class="imu_x_y_acx"
-        v-text="`${imu_alpha_axis_telemetry.angle}°`"
+        v-text="`${imu_alpha_axis_telemetry.angle.toFixed(1)}°`"
         color="#FFF"
       ></BaseLabel>
       <BaseLineGraph
-        :input="imu_alpha_axis_telemetry.angle"
+        :input="imu_alpha_axis_telemetry.angle.toFixed(1)"
         class="imu_x_y"
         id="imu_alpha_angle"
       />
@@ -57,11 +57,11 @@ export default {
       <BaseLabel
         id="imu_alpha_acceleration_acx"
         class="imu_x_y_acx"
-        v-text="`${imu_alpha_axis_telemetry.rate}°/s`"
+        v-text="`${imu_alpha_axis_telemetry.rate.toFixed(1)}°/s`"
         color="#FFF"
       ></BaseLabel>
       <BaseLineGraph
-        :input="imu_alpha_axis_telemetry.rate"
+        :input="imu_alpha_axis_telemetry.rate.toFixed(1)"
         :max="250"
         :min="-250"
         class="imu_x_y"
@@ -88,11 +88,11 @@ export default {
       <BaseLabel
         id="imu_beta_angle_acx"
         class="imu_x_y_acx"
-        v-text="`${imu_beta_axis_telemetry.angle}°`"
+        v-text="`${imu_beta_axis_telemetry.angle.toFixed(1)}°`"
         color="#FFF"
       ></BaseLabel>
       <BaseLineGraph
-        :input="imu_beta_axis_telemetry.angle"
+        :input="imu_beta_axis_telemetry.angle.toFixed(1)"
         class="imu_x_y"
         id="imu_beta_angle"
       />
@@ -105,11 +105,11 @@ export default {
       <BaseLabel
         id="imu_beta_acceleration_acx"
         class="imu_x_y_acx"
-        v-text="`${imu_beta_axis_telemetry.rate}°/s`"
+        v-text="`${imu_beta_axis_telemetry.rate.toFixed(1)}°/s`"
         color="#FFF"
       ></BaseLabel>
       <BaseLineGraph
-        :input="imu_beta_axis_telemetry.rate"
+        :input="imu_beta_axis_telemetry.rate.toFixed(1)"
         :max="250"
         :min="-250"
         class="imu_x_y"
