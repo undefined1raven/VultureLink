@@ -105,7 +105,7 @@ export default {
               }
             });
           })
-          // .catch((e) => {
+          // .catch(function c {
           //   this.auth_error_actual = e;
           // });
       }

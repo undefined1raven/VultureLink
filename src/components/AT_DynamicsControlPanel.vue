@@ -9,13 +9,20 @@ import BaseLinearControllerUnit from "@/components/BaseLinearControllerUnit.vue"
 <script lang="ts">
 export default {
   methods: {
-    GlobalValueOnChange(args:Object) {
+    GlobalValueOnChange(args: Object) {
       this.$refs.x_controls_linear_controller_unit.SetInputValue(args.newValue);
-      this.$refs.x_controls_linear_controller_unit_1.SetInputValue(args.newValue);
-      this.$refs.x_controls_linear_controller_unit_2.SetInputValue(args.newValue);
+      this.$refs.x_controls_linear_controller_unit_1.SetInputValue(
+        args.newValue
+      );
+      this.$refs.x_controls_linear_controller_unit_2.SetInputValue(
+        args.newValue
+      );
     },
-    InputValueOnChange(args:Object, LCU_id:number){
-      this.$emit('InputValueOnChange', {newValue: args.newValue, LCU_id: LCU_id});
+    InputValueOnChange(args: Object, LCU_id: number) {
+      this.$emit("InputValueOnChange", {
+        newValue: args.newValue,
+        LCU_id: LCU_id,
+      });
     },
     DynamicsRateControlsOptionsMenuOnUpdate(args: Object) {
       switch (args.btn_id) {
@@ -27,10 +34,17 @@ export default {
           break;
         case "customize":
           this.isExpanded = !this.isExpanded;
-          if(!this.isExpanded){
-            this.GlobalValueOnChange({newValue: this.$refs.x_controls_linear_controller_unit_global.GetCurrentValue()});
+          if (!this.isExpanded) {
+            this.GlobalValueOnChange({
+              newValue:
+                this.$refs.x_controls_linear_controller_unit_global.GetCurrentValue(),
+            });
             /*syncs global value with local ones when controls toggle */
           }
+          break;
+        case "control_toggle":
+          this.$emit("control-type-toggle");
+          break;
         default:
           break;
       }
@@ -40,32 +54,78 @@ export default {
       max = Math.floor(max);
       return Math.floor(Math.random() * (max - min) + min); //max e | min i
     },
+    OptionsMenuToggleControlsLabelController() {
+      if (this.isExpanded) {
+        return "Minimize Controls";
+      } else {
+        return "Expand Controls";
+      }
+    },
+    OptionsMenuControlTypeToggleLabelController() {
+      if (this.VisibleControlsID == "rate") {
+        return "Rotation Controls";
+      } else {
+        return "Rate Controls";
+      }
+    },
+    DynamicsControlsOptionsMenuItemsGen() {
+      if (this.isUIMinified == 1) {
+        return [
+          { label: "Restore Defaults", btn_id: "restore_defaults" },
+          { label: "Select Preset", btn_id: "select_preset" },
+          {
+            label: this.OptionsMenuToggleControlsLabelController(),
+            btn_id: "customize",
+          },
+          {
+            label: this.OptionsMenuControlTypeToggleLabelController(),
+            btn_id: "control_toggle",
+          },
+          { label: "Help", btn_id: "help" },
+        ];
+      } else {
+        return [
+          { label: "Restore Defaults", btn_id: "restore_defaults" },
+          { label: "Select Preset", btn_id: "select_preset" },
+          {
+            label: this.OptionsMenuToggleControlsLabelController(),
+            btn_id: "customize",
+          },
+          { label: "Help", btn_id: "help" },
+        ];
+      }
+    },
   },
   props: {
     ControlPanelLabel: { default: "" },
-    GlobalLinearControllerUnitLabel: {default: ""},
-    GlobalLinearControllerUnitConstraints: {default: {max: 7.5, min: 2.5, default: 5, measurement_unit: "°/s"}},
-    LinearControllerUnitConstraints_0: {default: {max: 7.5, min: 2.5, default: 5, measurement_unit: "°/s"}},
-    LinearControllerUnitConstraints_1: {default: {max: 7.5, min: 2.5, default: 5, measurement_unit: "°/s"}},
-    LinearControllerUnitConstraints_2: {default: {max: 7.5, min: 2.5, default: 5, measurement_unit: "°/s"}},
-    LinearControllerUnitLabel_0: {default: ""},
-    LinearControllerUnitLabel_1: {default: ""},
-    LinearControllerUnitLabel_2: {default: ""},
-    isThirdLinearControllerUsed: {default: true},
+    GlobalLinearControllerUnitLabel: { default: "" },
+    GlobalLinearControllerUnitConstraints: {
+      default: { max: 7.5, min: 2.5, default: 5, measurement_unit: "°/s" },
+    },
+    LinearControllerUnitConstraints_0: {
+      default: { max: 7.5, min: 2.5, default: 5, measurement_unit: "°/s" },
+    },
+    LinearControllerUnitConstraints_1: {
+      default: { max: 7.5, min: 2.5, default: 5, measurement_unit: "°/s" },
+    },
+    LinearControllerUnitConstraints_2: {
+      default: { max: 7.5, min: 2.5, default: 5, measurement_unit: "°/s" },
+    },
+    LinearControllerUnitLabel_0: { default: "" },
+    LinearControllerUnitLabel_1: { default: "" },
+    LinearControllerUnitLabel_2: { default: "" },
+    isThirdLinearControllerUsed: { default: true },
     DynamicsControlsObject: { default: {} },
+    isUIMinified: { default: 0 },
+    VisibleControlsID: { default: "rate" },
   },
   data() {
     return {
-      dynamics_rate_controls_options_menu_items: [
-        { label: "Restore Defaults", btn_id: "restore_defaults" },
-        { label: "Select Preset", btn_id: "select_preset" },
-        { label: "Toggle Controls Type", btn_id: "customize" },
-        { label: "Help", btn_id: "help" },
-      ],
       rf: 0,
       isExpanded: false /* is axis-specific control enabled */,
     };
   },
+  mounted() {},
 };
 </script>
 
@@ -134,7 +194,7 @@ export default {
     ></BaseLinearControllerUnit>
     <BaseOptionsMenu
       class="x_controls_options_menu"
-      :menuItems="dynamics_rate_controls_options_menu_items"
+      :menuItems="DynamicsControlsOptionsMenuItemsGen()"
       @update="DynamicsRateControlsOptionsMenuOnUpdate"
     ></BaseOptionsMenu>
   </div>
@@ -164,7 +224,7 @@ export default {
   position: relative;
   top: 0%;
   left: 0%;
-  font-size: 1vw;
+  font-size: 2vh;
   background-color: #0500ff20;
   border-left: solid 1px #0500ff;
   width: 27.298850575%;
@@ -186,21 +246,33 @@ export default {
   border-right: solid 1px #0500ff;
 }
 @media only screen and (max-width: 1070px) and (min-height: 550px) {
-.x_controls_options_menu{
-  width: 40.726577438%;
-  height: 31.155778894%;
-}
+  .x_controls_options_menu {
+    left: 55.831739962%;
+    width: 40.726577438% !important;
+    height: 31.155778894% !important;
+  }
+  .x_controls_l {
+    width: 40.298850575%;
+  }
 }
 @media only screen and (max-width: 1500px) and (min-height: 850px) {
-.x_controls_options_menu{
-  width: 40.726577438%;
-  height: 31.155778894%;
-}
+  .x_controls_options_menu {
+    left: 55.831739962%;
+    width: 40.726577438% !important;
+    height: 31.155778894% !important;
+  }
+  .x_controls_l {
+    width: 40.298850575%;
+  }
 }
 @media only screen and (max-width: 1996.8px) and (min-height: 1200px) {
-.x_controls_options_menu{
-  width: 40.726577438%;
-  height: 31.155778894%;
-}
+  .x_controls_options_menu {
+    left: 55.831739962%;
+    width: 40.726577438% !important;
+    height: 31.155778894% !important;
+  }
+  .x_controls_l {
+    width: 40.298850575%;
+  }
 }
 </style>

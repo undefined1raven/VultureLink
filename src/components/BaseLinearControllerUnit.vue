@@ -181,7 +181,7 @@ export default {
   height: 42.201834862%;
   border: solid 1px #0500ff;
   color: #fff;
-  font-size: 1vw;
+  font-size: 2vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -216,18 +216,18 @@ export default {
 .base_linear_controller_mid_l {
   top: 62.385321101%;
   left: 25.954216867%;
-  font-size: 0.8vw;
+  font-size: 1.7vh;
 }
 .base_linear_controller_max_l {
   top: 62.385321101%;
   left: 52.259036145%;
-  font-size: 0.8vw;
+  font-size: 1.7vh;
 }
 .base_linear_controller_min_ln {
   left: 2.873563218%;
 }
 .base_linear_controller_min_l {
-  font-size: 0.8vw;
+  font-size: 1.7vh;
   top: 62.385321101%;
   left: calc(0.451807229% + 1%);
 }
@@ -241,6 +241,6 @@ export default {
 .x_control_panel_l {
   top: 0%;
   left: 2.873563218%;
-  font-size: 1vw;
+  font-size: 2vh;
 }
 </style>

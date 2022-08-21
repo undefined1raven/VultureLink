@@ -14,6 +14,14 @@ import UIReactivityStateAssessor from "@/composables/UIReactivityAssessor.ts";
 <script lang="ts">
 export default {
   methods: {
+    OnControlTypeToggle(){
+      if(this.VisibleControlsID == 'rate'){
+        this.VisibleControlsID = 'rotation';
+      }
+      else{
+        this.VisibleControlsID = 'rate';
+      }
+    },
     InputValueOnChange(args: object, ControlPanelID: string) {
       if (ControlPanelID == "rate") {
         let object_mapper_array = [
@@ -66,10 +74,13 @@ export default {
     "
     id="dynamics_rate_controls_container"
     ControlPanelLabel="Rate Controls"
+    :isUIMinified="isUIMinified"
+    :VisibleControlsID="VisibleControlsID"
     GlobalLinearControllerUnitLabel="Max Rate (all axis)"
     LinearControllerUnitLabel_0="Max Pitch Rate"
     LinearControllerUnitLabel_1="Max Roll Rate"
     LinearControllerUnitLabel_2="Max Yaw Rate"
+    @control-type-toggle="OnControlTypeToggle"
     @InputValueOnChange="InputValueOnChange($event, 'rate')"
     :GlobalLinearControllerUnitConstraints="{
       max: 7.5,
@@ -105,11 +116,14 @@ export default {
       (isUIMinified == 1 && VisibleControlsID == 'rotation')
     "
     id="dynamics_rotation_controls_container"
+    :isUIMinified="isUIMinified"
+    :VisibleControlsID="VisibleControlsID"
     ControlPanelLabel="Rotation Controls"
     GlobalLinearControllerUnitLabel="Max Rotation (all axis)"
     LinearControllerUnitLabel_0="Max Pitch"
     LinearControllerUnitLabel_1="Max Roll"
     :isThirdLinearControllerUsed="false"
+    @control-type-toggle="OnControlTypeToggle"
     @InputValueOnChange="InputValueOnChange($event, 'rotation')"
     :GlobalLinearControllerUnitConstraints="{
       max: 40,
