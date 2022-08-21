@@ -105,9 +105,9 @@ export default {
               }
             });
           })
-          .catch((e) => {
-            this.auth_error_actual = e;
-          });
+          // .catch((e) => {
+          //   this.auth_error_actual = e;
+          // });
       }
     },
   },

@@ -7,6 +7,8 @@ import BaseOptionsMenu from "@/components/BaseOptionsMenu.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
 import DynamicsControlPanel from "@/components/AT_DynamicsControlPanel.vue";
 import DynamicsControlsImuCalibration from "@/components/AT_DynamicsControlsImuCalibration.vue";
+
+import UIReactivityStateAssessor from "@/composables/UIReactivityAssessor.ts";
 </script>
 
 <script lang="ts">
@@ -39,7 +41,18 @@ export default {
         rate_controls: { max_pitch_rate: 5, max_roll_rate: 5, max_yaw_rate: 5 },
         rotation_controls: { max_pitch: 30, max_roll: 30 },
       },
+      isUIMinified: 0,
+      VisibleControlsID: "rate",
     };
+  },
+  mounted() {
+    this.isUIMinified = UIReactivityStateAssessor();
+    window.addEventListener("resize", () => {
+      this.isUIMinified = UIReactivityStateAssessor();
+    });
+  },
+  unmounted() {
+    window.removeEventListener("resize", () => {});
   },
 };
 </script>
@@ -48,6 +61,9 @@ export default {
   <BaseLabel id="dynaimcs_controls_l" v-text="'Controls'"></BaseLabel>
   <HorizontalLine id="dynamics_controls_ln_0" color="#373737"></HorizontalLine>
   <DynamicsControlPanel
+    v-show="
+      isUIMinified == 0 || (isUIMinified == 1 && VisibleControlsID == 'rate')
+    "
     id="dynamics_rate_controls_container"
     ControlPanelLabel="Rate Controls"
     GlobalLinearControllerUnitLabel="Max Rate (all axis)"
@@ -84,6 +100,10 @@ export default {
     :DynamicsControlsObject="dynamics_controls"
   ></DynamicsControlPanel>
   <DynamicsControlPanel
+    v-show="
+      isUIMinified == 0 ||
+      (isUIMinified == 1 && VisibleControlsID == 'rotation')
+    "
     id="dynamics_rotation_controls_container"
     ControlPanelLabel="Rotation Controls"
     GlobalLinearControllerUnitLabel="Max Rotation (all axis)"
@@ -141,6 +161,7 @@ export default {
 #dynaimcs_controls_l {
   top: 52.222222222%;
   left: 5.052083333%;
+  font-size: 2.1vh;
 }
 #dynamics_controls_ln_0 {
   top: 50.37037037%;
@@ -151,18 +172,30 @@ export default {
   #dynamics_rate_controls_container,
   #dynamics_rotation_controls_container {
     width: 54.479166667%;
+    left: 7.5%;
+  }
+  #dynaimcs_controls_l {
+    left: 7.5%;
   }
 }
 @media only screen and (max-width: 1500px) and (min-height: 850px) {
   #dynamics_rate_controls_container,
   #dynamics_rotation_controls_container {
     width: 54.479166667%;
+    left: 7.5%;
+  }
+  #dynaimcs_controls_l {
+    left: 7.5%;
   }
 }
 @media only screen and (max-width: 1996.8px) and (min-height: 1200px) {
   #dynamics_rate_controls_container,
   #dynamics_rotation_controls_container {
     width: 54.479166667%;
+    left: 7.5%;
+  }
+  #dynaimcs_controls_l {
+    left: 7.5%;
   }
 }
 </style>
