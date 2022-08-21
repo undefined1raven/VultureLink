@@ -66,12 +66,12 @@ export default {
 #hardware_issues_list {
   height: 100%;
   width: 100%;
-  display: flex;
+  /* display: flex; */
   flex-direction: row;
-  /* overflow-x: scroll; */
+  overflow-y: scroll;
 }
 #hardware_issues_list::-webkit-scrollbar {
-  width: 0.9vh; /* Mostly for vertical scrollbars */
+  width: 0vh; /* Mostly for vertical scrollbars */
   height: 0.9vh; /* Mostly for horizontal scrollbars */
 }
 
@@ -81,7 +81,7 @@ export default {
 }
 #hardware_issues_list::-webkit-scrollbar-track {
   /* Background */
-  background: #FFF;
+  background: #00008320;
 }
 @media only screen and (max-width: 800px) {
   #hardware_issues_list {
