@@ -30,7 +30,6 @@
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
     "chart.js": "^2.9.4",
-    "ci": "^2.2.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "cookie-session": "^1.4.0",
@@ -72,7 +71,9 @@
     "vue": "^3.2.33",
     "vue-router": "^4.0.14",
     "webpack": "^5.73.0",
-    "wrtc": "^0.4.7"
+    "wrtc": "^0.4.7",
+    "vite": "^2.9.5",
+    "vue-tsc": "^0.34.7"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
