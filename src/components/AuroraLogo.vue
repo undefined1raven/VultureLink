@@ -1,9 +1,9 @@
 
 
-<script>
+<script lang="ts">
 export default {
     props: {
-        id: ''
+        id: {default: ''}
     }
 }
 </script>
@@ -31,11 +31,29 @@ export default {
     width: 14%;
     height: 8%;
 }
-@media only screen and (max-width: 768px){
+@media only screen and (-webkit-min-device-pixel-ratio: 2){
     .logo{
         display: block;
         position: absolute;
         width: 65.279611111%;
     }
+}
+@media only screen and (max-width: 1070px) and (min-height: 550px) and (max-height: 800px) and (-webkit-max-device-pixel-ratio: 2) {
+  .logo {
+    width: 28.020833333%;
+    height: 7%;
+  }
+}
+@media only screen and (max-width: 1500px) and (min-height: 850px) and (-webkit-max-device-pixel-ratio: 2) {
+  .logo {
+    width: 28.020833333%;
+    height: 7%;
+  }
+}
+@media only screen and (max-width: 1996.8px) and (min-height: 1200px) and (-webkit-max-device-pixel-ratio: 1) {
+  .logo {
+    width: 28.020833333%;
+    height: 7%;
+  }
 }
 </style>

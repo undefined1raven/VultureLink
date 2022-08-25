@@ -40,7 +40,7 @@ export default {
   background-color: #02008850;
   color: #999999;
   font-family: "Titillium Web", sans-serif;
-  font-size: 1vw;
+  font-size: 2vh;
   outline: none;
   border: solid 1px #02005e;
   transition: border linear 0.1s, background-color linear 0.1s;
@@ -52,7 +52,7 @@ export default {
 .in_field:focus {
   border-right: solid 1px #0400ff;
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
   .in_field {
     width: 61.388888889%;
     height: 6.25%;

@@ -1,16 +1,18 @@
-<script>
+<script lang="ts">
 export default {
   props: {
     id: "",
     text: "",
     type: "",
-    height: ""
+    height: "",
   },
 };
 </script>
 
 <template>
-  <button class="login_btn" :type="type" :id="id" :style="'height:' + height">{{ this.text }}</button>
+  <button class="login_btn" :type="type" :id="id" :style="'height:' + height">
+    {{ this.text }}
+  </button>
 </template>
 
 <style scoped>
@@ -20,7 +22,7 @@ export default {
   height: 4%;
   background-color: #02008850;
   font-family: "Titillium Web", sans-serif;
-  font-size: 1vw;
+  font-size: 2vh;
   outline: none;
   color: #999999;
   border: solid 1px #001485;
@@ -29,7 +31,22 @@ export default {
   justify-content: center;
   align-items: center;
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1070px) and (min-height: 550px) and (max-height: 800px) and (-webkit-max-device-pixel-ratio: 2) {
+  .login_btn {
+    width: 16.041666667%;
+  }
+}
+@media only screen and (max-width: 1500px) and (min-height: 850px) and (-webkit-max-device-pixel-ratio: 2) {
+  .login_btn {
+    width: 16.041666667%;
+  }
+}
+@media only screen and (max-width: 1996.8px) and (min-height: 1200px) and (-webkit-max-device-pixel-ratio: 1) {
+  .login_input_login_btnfield {
+    width: 16.041666667%;
+  }
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
   .login_btn {
     width: 61.388888889%;
     height: 6.25%;

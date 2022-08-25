@@ -1,14 +1,21 @@
 
 <template>
+<div id="desktop_bkg_img_container">
   <img
   draggable="false"
     src="../assets/visual_assets/a_t_desktop_bkg.png"
     id="desktop_background"
     alt="bkg"
   />
+</div>
 </template>
 
 <style>
+#desktop_bkg_img_container{
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
 img {
   user-select: none;
   pointer-events: none;

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 export default {
   props: {
     id: "",
@@ -20,12 +20,12 @@ label{
   position: absolute;
   color: #999;
   font-family: "Titillium Web", sans-serif;
-  font-size: 1vw;
+  font-size: 2vh;
   left: 13%;
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
   .lb {
-    font-size: 3.7vw;
+    font-size: 4vw;
   }
 }
 </style>
