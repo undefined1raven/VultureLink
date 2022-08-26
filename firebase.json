@@ -6,12 +6,15 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites": [ {
-      "source": "**",
-      "destination": "/index.html"
-    }, {
-      "source": "/auth_post",
-      "destination": "/auth_post"
-    }]
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/auth_post",
+        "destination": "/auth_post"
+      }
+    ]
   }
 }
