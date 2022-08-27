@@ -9,5 +9,79 @@ manual_scaling:
   instances: 1
 resources:
   cpu: 1
-  memory_gb: 0.2
-  disk_size_gb: 3
+  memory_gb: 0.5
+  disk_size_gb: 5
+handlers:
+ - url: /auth_post
+   secure: always
+   redirect_http_response_code: 301
+   script: auto
+ - url: /
+   static_files: dist/index.html
+   upload: dist/index.html
+ - url: /login
+   static_files: dist/index.html
+   upload: dist/index.html
+ - url: /advanced_telemetry
+   static_files: dist/index.html
+   upload: dist/index.html
+ - url: /genesis
+   static_files: dist/index.html
+   upload: dist/index.html
+ - url: /MFA_app
+   static_files: dist/index.html
+   upload: dist/index.html
+ - url: /MFA_TOTP
+   static_files: dist/index.html
+   upload: dist/index.html
+ - url: /security
+   static_files: dist/index.html
+   upload: dist/index.html
+ - url: /assets/ActionStatusIndicator.47221644.css
+   static_files: dist/assets/ActionStatusIndicator.47221644.css
+   upload: dist/assets/ActionStatusIndicator.47221644.css
+ - url: /assets/ActionStatusIndicator.74522027.js
+   static_files: dist/assets/ActionStatusIndicator.74522027.js
+   upload: dist/assets/ActionStatusIndicator.74522027.js
+ - url: /assets/AdvancedTelemetry.237f3f28.css
+   static_files: dist/assets/AdvancedTelemetry.237f3f28.css
+   upload: dist/assets/AdvancedTelemetry.237f3f28.css
+ - url: /assets/AdvancedTelemetry.90042f92.js
+   static_files: dist/assets/AdvancedTelemetry.90042f92.js
+   upload: dist/assets/AdvancedTelemetry.90042f92.js
+ - url: /assets/index.0436b673.js
+   static_files: dist/assets/index.0436b673.js
+   upload: dist/assets/index.0436b673.js
+ - url: /assets/index.764777b0.css
+   static_files: dist/assets/index.764777b0.css
+   upload: dist/assets/index.764777b0.css
+ - url: /assets/Login.415939d3.js
+   static_files: dist/assets/Login.415939d3.js
+   upload: dist/assets/Login.415939d3.js
+ - url: /assets/MFA_app.2b84e45b.js
+   static_files: dist/assets/MFA_app.2b84e45b.js
+   upload: dist/assets/MFA_app.2b84e45b.js
+ - url: /assets/MFA_app.9a95b1a9.css
+   static_files: dist/assets/MFA_app.9a95b1a9.css
+   upload: dist/assets/MFA_app.9a95b1a9.css
+ - url: /assets/MFA_TOTP.8dde7568.js
+   static_files: dist/assets/MFA_TOTP.8dde7568.js
+   upload: dist/assets/MFA_TOTP.8dde7568.js
+ - url: /assets/MFA_TOTP.43e2b977.css
+   static_files: dist/assets/MFA_TOTP.43e2b977.css
+   upload: dist/assets/MFA_TOTP.43e2b977.css
+ - url: /assets/MfaOptionsButton.07e59035.css
+   static_files: dist/assets/MfaOptionsButton.07e59035.css
+   upload: dist/assets/MfaOptionsButton.07e59035.css
+ - url: /assets/MfaOptionsButton.cf9fb0f3.js
+   static_files: dist/assets/MfaOptionsButton.cf9fb0f3.js
+   upload: dist/assets/MfaOptionsButton.cf9fb0f3.js
+ - url: /assets/percentage.73c8370d.js
+   static_files: dist/assets/percentage.73c8370d.js
+   upload: dist/assets/percentage.73c8370d.js
+ - url: /facx.png
+   static_files: dist/facx.png
+   upload: dist/facx.png
+
+network:
+  session_affinity: true
