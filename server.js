@@ -3,7 +3,7 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 else {
-    require('newrelic');
+    // require('newrelic');
 }
 
 const secrets = JSON.parse(
