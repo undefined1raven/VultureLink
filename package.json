@@ -4,7 +4,7 @@
   "description": "This template should help get you started developing with Vue 3 in Vite.",
   "author": "raven",
   "engines": {
-    "node": ">=14.0.0",
+    "node": ">=16.0.0",
     "npm": ">=8.10.0"
   },
   "scripts": {
