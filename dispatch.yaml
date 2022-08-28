@@ -1,3 +1,0 @@
-dispatch:
-  - url: '*/auth_post'
-    service: default
