@@ -198,7 +198,7 @@ export default {
     ></Overview>
     <UserDropdownMenu
       ref="UserDropdownMenuRef"
-      v-if="!isMobile"
+      v-show="!isMobile"
       :username="current_user_un"
       top="4.259259259%"
       left="85.104166667%"
