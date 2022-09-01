@@ -652,6 +652,7 @@ app.use((req, res, next) => {
     // res.setHeader('Cache-Control', 'no-store');
     res.setHeader('Permissions-Policy', "autoplay=(self), camera=(), geolocation=(self), microphone=(), usb=(self), interest-cohort=()");
     next();
+    //
 });
 
 
