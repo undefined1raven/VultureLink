@@ -75,31 +75,7 @@ const msg = {
 //     console.error(error)
 //   })
 
-//gcp gae logging 
-const bunyan = require('bunyan');
 
-// Imports the Google Cloud client library for Bunyan
-const {LoggingBunyan} = require('@google-cloud/logging-bunyan');
-
-// Creates a Bunyan Cloud Logging client
-const loggingBunyan = new LoggingBunyan();
-
-// Create a Bunyan logger that streams to Cloud Logging
-// Logs will be written to: "projects/YOUR_PROJECT_ID/logs/bunyan_log"
-const logger = bunyan.createLogger({
-  // The JSON payload of the log as it appears in Cloud Logging
-  // will contain "name": "my-service"
-  name: 'default',
-  streams: [
-    // Log to the console at 'info' and above
-    {stream: process.stdout, level: 'info'},
-    // And log to Cloud Logging, logging at 'info' and above
-    loggingBunyan.stream('info'),
-  ],
-});
-
-// logger.error('warp nacelles offline');
-// logger.info('shields at 99%');
 
 
 var admin = require("firebase-admin");
@@ -2500,5 +2476,3 @@ if (process.env.NODE_ENV !== 'production') {
 else {
     server.listen(process.env.PORT);
 }
-
-logger.info(`server deployed | ${Date.now()}`);
