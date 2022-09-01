@@ -50,7 +50,6 @@ export default {
       current_user_un: "",
       selected_vulture_obj: {default: {vid: "", vn: ""}},
       vulture_status_array: "",
-      isMobile: isMobile(),
       window_manager: {
         visible_window_id: "overview",
       },
@@ -92,7 +91,7 @@ export default {
     },
     new_selected_vulture_obj_handler(obj:Object) {
       console.log(JSON.stringify(obj))
-      if (this.selected_vulture_obj.vid != "" && this.isMobile && obj.options.isManual) {
+      if (this.selected_vulture_obj.vid != "" && isMobile() && obj.options.isManual) {
         this.$refs.MobileNavRef.secondary_menu_btn_onClick(); //don't trigger secondary_menu_btn_onClick if this is the auto vulture selection on load
       }
       this.selected_vulture_obj = obj;
@@ -101,6 +100,7 @@ export default {
     },
   },
   mounted() {
+    isMobile();
     if (getCookie("adv_tele_sio_ath") != undefined) {
       this.current_user_acid = getCookie("acid");
       socket.emit("add_socket_to_acid_room", {
@@ -170,16 +170,16 @@ export default {
 </script>
 
 <template>
-  <Background v-if="!isMobile"/>
-  <MobileBackground v-if="isMobile"/>
+  <Background v-if="!isMobile()"/>
+  <MobileBackground v-if="isMobile()"/>
 
   <div
     id="overview_container"
     v-show="window_manager.visible_window_id == 'overview'"
   >
-    <VultureLogo v-if="!isMobile" id="vulture_logo" />
+    <VultureLogo v-if="!isMobile()" id="vulture_logo" />
     <BaseLabel
-      v-if="!isMobile"
+      v-if="!isMobile()"
       id="adv_tele_l"
       v-text="'\\\\Advanced Telemetry'"
       color="#FFF"
@@ -192,13 +192,13 @@ export default {
       :vulture_hardware_status_obj="vulture_hardware_status_obj"
       :m_active_section_id="mobile.overview_active_section_id"
       :m_isSecondarySectionVisible="mobile.overview_isSecondarySectionVisible"
-      :isMobile="isMobile"
+      :isMobile="isMobile()"
       @new_selected_vulture_obj="new_selected_vulture_obj_handler"
       @onVultureSystemSelected="vulture_system_selected_handler"
     ></Overview>
     <UserDropdownMenu
       ref="UserDropdownMenuRef"
-      v-show="!isMobile"
+      v-show="!isMobile()"
       :username="current_user_un"
       top="4.259259259%"
       left="85.104166667%"
@@ -241,7 +241,7 @@ export default {
     @m_menu_onVisibilityChange="m_menu_onVisibilityChange_handler"
     @m_SecondaryMenuButtonOnClick="m_SecondaryMenuButtonOnClick_handler"
     @MenuButtonOnClick="MenuButtonOnClickHandler"
-    v-if="isMobile"
+    v-if="isMobile()"
     ref="MobileNavRef"
   ></MobileNav>
 </template>

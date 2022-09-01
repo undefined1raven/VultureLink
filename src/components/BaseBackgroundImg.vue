@@ -3,18 +3,9 @@
 import isMobile from "@/composables/isMobile.ts";
 </script>
 
-<script lang="ts">
-export default {
-  data(){
-    return{
-      isMobile: isMobile(),
-    }
-  } 
-}
-</script>
 
 <template>
-<div v-if="!isMobile" id="desktop_bkg_img_container">
+<div v-if="!isMobile()" id="desktop_bkg_img_container">
   <img
   draggable="false"
     src="../assets/visual_assets/a_t_desktop_bkg.png"

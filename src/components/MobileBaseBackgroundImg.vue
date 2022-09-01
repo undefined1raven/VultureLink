@@ -1,20 +1,10 @@
 
 <script setup lang="ts">
-  import isMobile from "@/composables/isMobile.ts";
-  </script>
-  
-  <script lang="ts">
-  export default {
-    data(){
-      return{
-        isMobile: isMobile(),
-      }
-    } 
-  }
-  </script>
+import isMobile from "@/composables/isMobile.ts";
+</script>
 
 <template>
-  <div v-if="isMobile" id="m_bkg_img_container">
+  <div v-if="isMobile()" id="m_bkg_img_container">
     <img
       id="mobile_bkg"
       draggable="false"
