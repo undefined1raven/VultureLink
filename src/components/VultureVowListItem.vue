@@ -1,19 +1,19 @@
 
-<script setup>
+<script setup lang="ts">
 import VultureFlatDeco from "@/components/VultureFlatDeco.vue";
 import BaseLabel from "@/components/BaseLabel.vue";
 </script>
 
-<script>
+<script lang="ts">
 export default {
   props: {
-    vn: "",
-    vid: "",
-    color: "",
-    selected: "",
-    selected_vn: "",
-    index: "",
-    isEmpty: "",
+    vn: {default: ''},
+    vid: {default: ''},
+    color: {default: ''},
+    selected: {default: ''},
+    selected_vn: '',
+    index: {default: 0},
+    isEmpty: undefined,
   },
   methods: {
     vulture_main_mouse_cover_onMouseEnter() {
@@ -28,13 +28,13 @@ export default {
     },
     vulture_main_mouse_cover_onClick() {
       if (!this.isEmpty) {
-        this.$emit("onVultureSelected", this.vid, this.vn);
+        this.$emit("onVultureSelected", this.vid, this.vn, {isManual: true});
       }
     },
   },
   mounted() {
     if (this.index == 0) {
-      this.$emit("onVultureSelected", this.vid, this.vn);
+      this.$emit("onVultureSelected", this.vid, this.vn, {isManual: false});
       this.$emit("hide_loading_deco_sig");
     }
   },

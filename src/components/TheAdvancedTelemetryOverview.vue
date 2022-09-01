@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import VultureSelector from "@/components/VultureSelector.vue";
 import DockSelector from "@/components/DockSelector.vue";
 import BaseButton from "@/components/BaseButton.vue";
@@ -9,8 +9,8 @@ import SystemOverview from "@/components/AT_SystemOverview.vue";
 import VultureHardwareStatus from "@/components/AT_VultureHardwareStatus.vue";
 </script>
 
-<script>
-function getCookie(name) {
+<script lang="ts">
+function getCookie(name:string) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop().split(";").shift();
@@ -39,7 +39,7 @@ export default {
   },
   computed: {},
   methods: {
-    system_selected_emitter(args) {
+    system_selected_emitter(args:object) {
       this.$emit("onVultureSystemSelected", { sys_id: args.sys_id });
     },
     section_visibility_assessor(section_id, isPrimary) {
@@ -59,15 +59,15 @@ export default {
         return true;
       }
     },
-    redirect(path) {
+    redirect(path:string) {
       window.location.pathname = path;
     },
-    new_target_vid_sig_handler(pvid, _vid, vn) {
+    new_target_vid_sig_handler(pvid:string, _vid:string, vn:string, options:object) {
       if (this.vulture_array_received) {
         this.selected_vulture_obj = this.vulture_array_status.find(
           ({ vid }) => vid == _vid
         );
-        this.$emit("new_selected_vulture_obj", { vid: _vid, vn: vn });
+        this.$emit("new_selected_vulture_obj", { vid: _vid, vn: vn, options: options});
         this.socket_ref.emit("new_target_vid", {
           ath: getCookie("adv_tele_sio_ath"),
           pvid: pvid,
@@ -75,7 +75,7 @@ export default {
         });
       }
     },
-    onDockSelected(dock_obj) {
+    onDockSelected(dock_obj:object) {
       this.selected_dock_obj = dock_obj;
       this.dynamic_vulture_selector_array_gen();
     },

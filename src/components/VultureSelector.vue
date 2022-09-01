@@ -1,11 +1,11 @@
 
-<script setup>
+<script setup lang="ts">
 import BaseLabel from "@/components/BaseLabel.vue";
 import VultureVowListItem from "@/components/VultureVowListItem.vue";
 import VultureArrayLoadingDeco from "@/components/VultureArrayLoadingDeco.vue";
 </script>
 
-<script>
+<script lang="ts">
 export default {
   props: {
     vulture_array_status: "",
@@ -29,7 +29,7 @@ export default {
         return `${this.selected_dock_obj.dock_name}\\\\`;
       }
     },
-    color_from_status(vulture_status) {
+    color_from_status(vulture_status:string) {
       if (vulture_status == "active") {
         return "#00FFF0";
       }
@@ -43,11 +43,11 @@ export default {
         return "#FF006B";
       }
     },
-    onVultureSelected(vid, vn) {
+    onVultureSelected(vid:string, vn:string, options:object) {
       this.selected_vn = vn;
       this.pvid = this.target_vid;
       this.target_vid = vid;
-      this.$emit("new_target_vid_sig", this.pvid, vid, vn);
+      this.$emit("new_target_vid_sig", this.pvid, vid, vn, options);
     },
     hide_loading_deco_sig_handler() {
       this.isDecoVisible = false;

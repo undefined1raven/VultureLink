@@ -7,6 +7,7 @@ import ActionStatus from "@/components/ActionStatusIndicator.vue";
 import MfaTotpInput from "@/components/TheMfaTotpInput.vue";
 import MobileBackground from "@/components/MobileBaseBackgroundImg.vue";
 
+import isMobile from "@/composables/isMobile.ts";
 document.title = "Vulture//MFA";
 </script>
 
@@ -52,6 +53,7 @@ export default {
       dynamic_input_field_height: "",
       dynamic_status_indicator_height: "",
       non_fields_visibile: true,
+      isMobile: isMobile(),
     };
   },
   methods: {
