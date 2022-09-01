@@ -163,7 +163,7 @@ export default {
         this.$refs.UserDropdownMenuRef.submit_logout_form();
       });
     } else {
-      this.$refs.UserDropdownMenuRef.submit_logout_form();
+      // this.$refs.UserDropdownMenuRef.submit_logout_form();
     }
   },
 };
