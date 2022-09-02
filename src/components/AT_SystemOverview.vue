@@ -13,7 +13,7 @@ import MobileOverviewButton from "@/components/M_AT_OverviewButton.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
 import BaseLabel from "@/components/BaseLabel.vue";
 
-import useColorFromVultureSystemStatus from '@/composables/ColorFromVultureSystemStatus.js';
+import useColorFromVultureSystemStatus from "@/composables/ColorFromVultureSystemStatus.js";
 </script>
 
 <script>
@@ -25,8 +25,8 @@ export default {
     isMobile: "",
   },
   methods: {
-    system_selected_emitter(sys_id){
-      this.$emit('onVultureSystemSelected', {sys_id: sys_id});
+    system_selected_emitter(sys_id) {
+      this.$emit("onVultureSystemSelected", { sys_id: sys_id });
     },
     network_status_style_parser() {
       if (this.vulture_connection_status) {
@@ -72,7 +72,13 @@ export default {
         <OverviewButton
           id="sonar_array_overview_btn"
           system_label="SONAR ARRAY"
-          :stroke="useColorFromVultureSystemStatus({vulture_connection_status: vulture_connection_status, vulture_hardware_status_obj: vulture_hardware_status_obj, sys_id: 'sonar_array'})"
+          :stroke="
+            useColorFromVultureSystemStatus({
+              vulture_connection_status: vulture_connection_status,
+              vulture_hardware_status_obj: vulture_hardware_status_obj,
+              sys_id: 'sonar_array',
+            })
+          "
         ></OverviewButton>
         <OverviewButton
           id="power_overview_btn"
@@ -112,7 +118,11 @@ export default {
         ></OverviewButton>
       </div>
     </div>
-    <div v-if="isMobile" id="vulture_systems_mobile_container" class="animation_group_2">
+    <div
+      v-if="isMobile"
+      id="vulture_systems_mobile_container"
+      class="animation_group_2"
+    >
       <BaseLabel
         v-text="`${selected_vulture_obj.vn}\\\\Systems`"
         id="vulture_id_l"
@@ -130,6 +140,7 @@ export default {
         friendlySystemLabel="Dynamics"
         :systemStatusLabel="system_status_label_parser('dynamics')"
         :systemStatusColor="system_color_parser('dynamics')"
+        @click="system_selected_emitter('dynamics')"
       ></MobileOverviewButton>
       <MobileOverviewButton
         id="m_overview_network_btn"
@@ -217,8 +228,8 @@ export default {
     opacity: 1;
   }
 }
-.animation_group_2{
-  animation: ui_section_transition_in ease-in-out .1s;
+.animation_group_2 {
+  animation: ui_section_transition_in ease-in-out 0.1s;
 }
 #m_vulture_systems_overview_ln_0 {
   top: 7.1875%;
@@ -236,7 +247,7 @@ export default {
   width: 11.111111111%;
   height: 6.25%;
 }
-#m_overview_power_deco{
+#m_overview_power_deco {
   top: 81.09375%;
   left: 66.388888889%;
   width: 16.944444444%;
