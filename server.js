@@ -75,9 +75,6 @@ const msg = {
 //     console.error(error)
 //   })
 
-
-
-
 var admin = require("firebase-admin");
 var serviceAccount = require("./vulture-uplinkv-SN.json");
 
