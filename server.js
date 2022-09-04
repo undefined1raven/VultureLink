@@ -122,17 +122,17 @@ function getRandomInt(min, max) {
 const firebaseConfig = {
     apiKey: secrets.FIREBASE,
     authDomain: "rt-tlp.firebaseapp.com",
-    databaseURL: "https://rt-tlp-default-rtdb.europe-west1.firebasedatabase.app",
+    databaseURL: "https://vulture-uplink-82774-default-rtdb.europe-west1.firebasedatabase.app/",
     projectId: "rt-tlp",
     storageBucket: "rt-tlp.appspot.com",
     messagingSenderId: "383716944699",
     appId: "1:383716944699:web:6258045d7d25bcfcb8a51e",
-    databaseURL: "https://rt-tlp-default-rtdb.europe-west1.firebasedatabase.app/",
+    databaseURL: "https://vulture-uplink-82774-default-rtdb.europe-west1.firebasedatabase.app/",
     credential: admin.credential.cert(serviceAccount),
 };
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://vulture-uplink-default-rtdb.europe-west1.firebasedatabase.app"
+    databaseURL: "https://vulture-uplink-82774-default-rtdb.europe-west1.firebasedatabase.app/"
 });
 
 const db = admin.database();
