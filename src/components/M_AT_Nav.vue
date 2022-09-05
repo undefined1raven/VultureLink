@@ -1,5 +1,5 @@
 
-<script setup>
+<script setup lang="ts">
 import BaseLabel from "@/components/BaseLabel.vue";
 import DockDeco from "@/components/DockDeco.vue";
 import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
@@ -8,7 +8,7 @@ import CommandDeco from "@/components/CommandDeco.vue";
 import SecurityDeco from "@/components/SecurityDeco.vue";
 </script>
 
-<script>
+<script lang="ts">
 export default {
   expose: ["secondary_menu_btn_onClick"],
   data() {
@@ -80,7 +80,7 @@ export default {
       );
       this.menu_btn_onClick();
     },
-    redirect(pathname) {
+    redirect(pathname:string) {
       window.location.pathname = pathname;
     },
     menu_btn_onClick() {

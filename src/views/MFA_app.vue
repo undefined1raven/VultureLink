@@ -65,7 +65,6 @@ export default {
             setTimeout(() => {
             this.ResendButtonClass = '';
             }, this.resendNotificationTimeout);
-            console.log(rcvd_json);
           });
         });
       }

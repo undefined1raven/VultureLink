@@ -169,7 +169,9 @@ var last_fwd_video_broadcaster_unix = 0;
 var fwd_video_broadcaster_cs = false;
 var ini_ping_time = 0;
 
+
 const deep_storage_link = secrets.MONGO;
+
 
 
 mongoose.connect(deep_storage_link).then(() => console.log('Deep Storage Uplink Established')).catch(e => { console.log(`Deep Storage Link Failed | ${e}`) });

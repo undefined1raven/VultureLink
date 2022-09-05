@@ -6,8 +6,9 @@ import HorizontalLine from "@/components/HorizontalLine.vue";
 import UserDropdownMenu from "@/components/UserDropdownMenu.vue";
 import BaseLabel from "@/components/BaseLabel.vue";
 
-import scale from '@/composables/scale.ts';
-import percentage from '@/composables/percentage.ts';
+import scale from "@/composables/scale.ts";
+import percentage from "@/composables/percentage.ts";
+import isMobile from "@/composables/isMobile.ts";
 </script>
 
 
@@ -25,9 +26,21 @@ export default {
     };
   },
   methods: {
+    ComputeStyleLeft(scale_target:number, scale_ref:number){
+      return `left: ${percentage(
+        scale(scale_target, scale_ref),
+        this.windowWidth
+      )}%;`;
+    },
     ComputeUIStyle() {
-      this.logo_ln_left = `left: ${percentage(scale(64, 1920), this.windowWidth)}%;`;
-      this.system_l_left = `left: ${percentage(scale(88, 1920), this.windowWidth)}%;`;
+      if(isMobile()){
+        this.logo_ln_left = this.ComputeStyleLeft(47, 360);
+        this.system_l_left = this.ComputeStyleLeft(56, 360);
+      }
+      else{
+        this.logo_ln_left = this.ComputeStyleLeft(64, 1920);
+        this.system_l_left = this.ComputeStyleLeft(88, 1920);
+      }
     },
   },
   mounted() {

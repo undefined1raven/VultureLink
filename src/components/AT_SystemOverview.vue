@@ -1,5 +1,5 @@
 
-<script setup>
+<script setup lang="ts">
 import OverviewButton from "@/components/AT_OverviewButton.vue";
 import MobileOverviewSonarArrayDeco from "@/components/BaseSonarArrayDeco.vue";
 import MobileOverviewOpticalArrayDeco from "@/components/BaseOpticalArrayDeco.vue";
@@ -16,16 +16,16 @@ import BaseLabel from "@/components/BaseLabel.vue";
 import useColorFromVultureSystemStatus from "@/composables/ColorFromVultureSystemStatus.js";
 </script>
 
-<script>
+<script lang="ts">
 export default {
   props: {
     vulture_connection_status: "",
     vulture_hardware_status_obj: "",
     selected_vulture_obj: { default: { vn: "", vid: "" } },
-    isMobile: "",
+    isMobile: {default: false},
   },
   methods: {
-    system_selected_emitter(sys_id) {
+    system_selected_emitter(sys_id:string) {
       this.$emit("onVultureSystemSelected", { sys_id: sys_id });
     },
     network_status_style_parser() {
@@ -35,7 +35,7 @@ export default {
         return { label: "Vulture Offline", color: "#FF006B" };
       }
     },
-    system_status_label_parser(sys_id) {
+    system_status_label_parser(sys_id:string) {
       if (!this.vulture_connection_status) {
         return "Awaiting Connection";
       } else {
@@ -46,7 +46,7 @@ export default {
         }
       }
     },
-    system_color_parser(sys_id) {
+    system_color_parser(sys_id:string) {
       if (!this.vulture_connection_status) {
         return "#0400D4";
       } else {

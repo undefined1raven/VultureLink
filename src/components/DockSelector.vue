@@ -1,9 +1,9 @@
 
-<script setup>
+<script setup lang="ts">
 import DockListItem from "@/components/DockListItem.vue";
 import BaseLabel from "@/components/BaseLabel.vue";
 </script>
-<script>
+<script lang="ts">
 export default {
   props: {
     dock_array: "",
@@ -16,7 +16,7 @@ export default {
     };
   },
   methods: {
-    onDockSelected(dock_obj) {
+    onDockSelected(dock_obj:Object) {
       this.selected_dock_id = dock_obj.dock_id;
       this.$emit("new_target_dock_id_sig", dock_obj);
     },

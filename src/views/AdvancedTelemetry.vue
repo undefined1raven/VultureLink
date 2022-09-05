@@ -21,7 +21,7 @@ window.onpageshow = () => {
   sessionStorage.setItem("wid", "/advanced_telemetry");
 };
 
-function getCookie(name:string) {
+function getCookie(name: string) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop().split(";").shift();
@@ -48,7 +48,7 @@ export default {
       socket_ref: socket,
       current_user_acid: "",
       current_user_un: "",
-      selected_vulture_obj: {default: {vid: "", vn: ""}},
+      selected_vulture_obj: { default: { vid: "", vn: "" } },
       vulture_status_array: "",
       window_manager: {
         visible_window_id: "overview",
@@ -71,27 +71,31 @@ export default {
     };
   },
   methods: {
-    MinimizedMenuButtonOnClickHandler(args:Object) {
+    MinimizedMenuButtonOnClickHandler(args: Object) {
       this.window_manager.visible_window_id = args.btn_id;
     },
-    vulture_system_selected_handler(args:Object) {
+    vulture_system_selected_handler(args: Object) {
       this.window_manager.visible_window_id = args.sys_id;
     },
-    m_SecondaryMenuButtonOnClick_handler(visibility_status:boolean) {
+    m_SecondaryMenuButtonOnClick_handler(visibility_status: boolean) {
       this.mobile.overview_isSecondarySectionVisible = visibility_status;
     },
-    MenuButtonOnClickHandler(btn_id:string) {
+    MenuButtonOnClickHandler(btn_id: string) {
       this.mobile.overview_active_section_id = btn_id;
+      this.window_manager.visible_window_id = 'overview';
     },
-    m_menu_onVisibilityChange_handler(m_menu_visibility_status:boolean) {
+    m_menu_onVisibilityChange_handler(m_menu_visibility_status: boolean) {
       this.mobile.isMenuVisible = m_menu_visibility_status;
     },
     visibility_status_update_handler(visibility_status_update) {
       this.login_req_details_obj.isVisible = visibility_status_update;
     },
-    new_selected_vulture_obj_handler(obj:Object) {
-      console.log(JSON.stringify(obj))
-      if (this.selected_vulture_obj.vid != "" && isMobile() && obj.options.isManual) {
+    new_selected_vulture_obj_handler(obj: Object) {
+      if (
+        this.selected_vulture_obj.vid != "" &&
+        isMobile() &&
+        obj.options.isManual
+      ) {
         this.$refs.MobileNavRef.secondary_menu_btn_onClick(); //don't trigger secondary_menu_btn_onClick if this is the auto vulture selection on load
       }
       this.selected_vulture_obj = obj;
@@ -100,7 +104,6 @@ export default {
     },
   },
   mounted() {
-    isMobile();
     if (getCookie("adv_tele_sio_ath") != undefined) {
       this.current_user_acid = getCookie("acid");
       socket.emit("add_socket_to_acid_room", {
@@ -163,15 +166,15 @@ export default {
         this.$refs.UserDropdownMenuRef.submit_logout_form();
       });
     } else {
-      // this.$refs.UserDropdownMenuRef.submit_logout_form();
+      this.$refs.UserDropdownMenuRef.submit_logout_form();
     }
   },
 };
 </script>
 
 <template>
-  <Background v-if="!isMobile()"/>
-  <MobileBackground v-if="isMobile()"/>
+  <Background v-if="!isMobile()" />
+  <MobileBackground v-if="isMobile()" />
 
   <div
     id="overview_container"
@@ -224,7 +227,8 @@ export default {
       v-if="
         !login_req_details_obj.isVisible &&
         !mobile.isMenuVisible &&
-        window_manager.visible_window_id == 'dynamics'
+        window_manager.visible_window_id == 'dynamics'&&
+        (mobile.overview_active_section_id == 2 && isMobile || true)
       "
       :telemetry="vulture_telemetry.dynamics"
       :current_user_un="current_user_un"
