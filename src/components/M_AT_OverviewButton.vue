@@ -38,6 +38,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 5;
 }
 .system_id_l {
   top: 2.608695652%;

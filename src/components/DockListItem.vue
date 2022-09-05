@@ -1,21 +1,22 @@
 
-<script setup>
+<script setup lang="ts">
 import DockDeco from "@/components/DockDeco.vue";
+
+import isMobile from "@/composables/isMobile.ts";
 </script>
 
-<script>
+<script lang="ts">
 export default {
   props: {
-    color: "",
-    dock_name: "",
-    dock_obj: "",
+    color: {default: ""},
+    dock_name: {default: ""},
+    dock_obj: {default: {}},
     vulture_array_status: {default: []},
-    selected_dock_id: "",
-    index: "",
-    isMobile: "",
+    selected_dock_id: {default: ""},
+    index: {default: 0},
   },
   mounted() {
-    if (this.index == 0 && !this.isMobile) {
+    if (this.index == 0 && !isMobile()) {
       this.$emit("new_target_dock_id_sig", this.dock_obj);
     }
   },
@@ -39,7 +40,7 @@ export default {
     main_area_onMouseLeave() {
       this.main_area_background_color_style = `background-color: #00000000;`;
     },
-    color_from_vulture_status(vulture_status) {
+    color_from_vulture_status(vulture_status:string) {
       if (vulture_status == "active") {
         return "#00FFF0";
       }
@@ -53,15 +54,15 @@ export default {
         return "#FF006B";
       }
     },
-    color_style_parser(color) {
+    color_style_parser(color:string) {
       return `background-color: ${color}; border-color: ${color};`;
     },
-    find_vulture_by_dock_vid_array_elm(index) {
+    find_vulture_by_dock_vid_array_elm(index:number) {
       return this.vulture_array_status.find(
         ({ vid }) => vid == this.dock_obj.vid_array[index].vid
       );
     },
-    parse_vulture_array_status(index) {
+    parse_vulture_array_status(index:number) {
       this.dock_paired_vultures_array = [];
       if (this.dock_obj.vid_array[index] != undefined) {
         return `background-color: ${this.color_from_vulture_status(

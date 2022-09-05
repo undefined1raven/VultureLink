@@ -78,6 +78,7 @@ export default {
     onDockSelected(dock_obj:object) {
       this.selected_dock_obj = dock_obj;
       this.dynamic_vulture_selector_array_gen();
+      this.$emit('onDockSelectedSignal');
     },
     dynamic_vulture_selector_array_gen() {
       if (this.selected_dock_obj != false) {

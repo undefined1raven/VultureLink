@@ -71,6 +71,9 @@ export default {
     };
   },
   methods: {
+    onDockSelectedSignalHandler(){
+      this.$refs.MobileNavRef.secondary_menu_btn_onClick();
+    },
     MinimizedMenuButtonOnClickHandler(args: Object) {
       this.window_manager.visible_window_id = args.btn_id;
     },
@@ -198,6 +201,7 @@ export default {
       :isMobile="isMobile()"
       @new_selected_vulture_obj="new_selected_vulture_obj_handler"
       @onVultureSystemSelected="vulture_system_selected_handler"
+      @onDockSelectedSignal="onDockSelectedSignalHandler"
     ></Overview>
     <UserDropdownMenu
       ref="UserDropdownMenuRef"
@@ -228,13 +232,14 @@ export default {
         !login_req_details_obj.isVisible &&
         !mobile.isMenuVisible &&
         window_manager.visible_window_id == 'dynamics'&&
-        (mobile.overview_active_section_id == 2 && isMobile || true)
+        (mobile.overview_active_section_id == 2 && isMobile() || true)
       "
       :telemetry="vulture_telemetry.dynamics"
       :current_user_un="current_user_un"
       :selected_vulture_obj="selected_vulture_obj"
     ></Dynamics>
     <Menu
+      v-if="!isMobile()"
       :vulture_connection_status="vulture_connection.status"
       :vulture_hardware_status_obj="vulture_hardware_status_obj"
       @MinimizedMenuButtonOnClick="MinimizedMenuButtonOnClickHandler"
