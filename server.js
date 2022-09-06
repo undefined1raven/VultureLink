@@ -134,15 +134,6 @@ admin.initializeApp({
 
 const db = admin.database();
 
-function check_sio_ath(sio_payload, data) {
-    if (data != null) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
 var cmd_ping_trigger_unix = 0;
 
 var data_transit_vulture_req_arr = [];

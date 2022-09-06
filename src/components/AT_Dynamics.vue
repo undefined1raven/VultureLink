@@ -7,6 +7,9 @@ import DynamicsTelemetry from "@/components/AT_DynamicsTelemetry.vue";
 import DynamicsControls from "@/components/AT_DynamicsControls.vue";
 import DynamicsHardwareStatus from "@/components/AT_DynamicsHardwareStatus.vue";
 import BaseLabel from "@/components/BaseLabel.vue";
+import MobileBaseFullWidthControls from "@/components/M_BaseFullWidthSelectionControls.vue";
+
+import isMobile from "@/composables/isMobile.ts";
 </script>
 
 <script lang="ts">
@@ -34,11 +37,23 @@ export default {
 </script>
 
 <template>
-  <BaseTopBar :SelectedVultureObject="selected_vulture_obj" :CurrentUsername="current_user_un"></BaseTopBar>
+  <BaseTopBar
+    :SelectedVultureObject="selected_vulture_obj"
+    :CurrentUsername="current_user_un"
+  ></BaseTopBar>
   <DynamicsTelemetry :telemetry="telemetry"></DynamicsTelemetry>
   <DynamicsControls></DynamicsControls>
   <DynamicsHardwareStatus></DynamicsHardwareStatus>
+  <MobileBaseFullWidthControls
+    id="mobile_dynamics_ui_controls"
+    rightSideSelectionButtonLabel="Telemetry"
+    leftSideSelectionButtonLabel="Controls"
+    ControlsTop="12.34375%"
+    v-if="isMobile()"
+  ></MobileBaseFullWidthControls>
 </template>
 <style scoped>
-
+  #mobile_dynamics_ui_controls{
+    top: 0.6% !important;
+  }
 </style>
