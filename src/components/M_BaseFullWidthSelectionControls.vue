@@ -10,8 +10,8 @@ export default {
   props: {
     rightSideSelectionButtonLabel: { default: "" },
     leftSideSelectionButtonLabel: { default: "" },
-    ControlsHeight: {default: "height: 7.6125%;"},
-    ControlsTop: {default: "top: 12.34375%;"},
+    ControlsHeight: { default: "height: 7.6125%;" },
+    ControlsTop: { default: "top: 12.34375%;" },
   },
   methods: {
     RightSideButtonOnClick() {},
@@ -21,7 +21,10 @@ export default {
 </script>
 
 <template>
-  <div class="BaseFullWidthSelectionControlsContainer" :style="ControlsHeight + ControlsTop">
+  <div
+    class="BaseFullWidthSelectionControlsContainer"
+    :style="ControlsHeight + ControlsTop"
+  >
     <BaseLabel
       @click="RightSideButtonOnClick"
       id="right-side_selection_button"
@@ -39,9 +42,9 @@ export default {
 
 <style scoped>
 .BaseFullWidthSelectionControlsContainer {
-    position: absolute;
-    width: 100%;
-    left: 0%;
+  position: absolute;
+  width: 100%;
+  left: 0%;
 }
 #right-side_selection_button {
   top: 92.03125%;
@@ -53,6 +56,7 @@ export default {
   align-items: center;
   justify-content: center;
   border-top: solid 1px #0500ff;
+  border-bottom: solid 1px #0500ff;
   font-size: 4.8vw;
   transition: background-color linear 0.05s;
 }
@@ -66,11 +70,13 @@ export default {
   align-items: center;
   justify-content: center;
   border-top: solid 1px #0500ff;
+  border-bottom: solid 1px #0500ff;
   border-left: solid 1px #0500ff;
   font-size: 4.8vw;
   transition: background-color linear 0.05s;
 }
-#right-side_selection_button:hover, #left-side_selection_button:hover{
-    background-color: #0500ff40;
+#right-side_selection_button:hover,
+#left-side_selection_button:hover {
+  background-color: #0500ff40;
 }
 </style>

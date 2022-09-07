@@ -9,17 +9,17 @@ import DynamicsControlPanel from "@/components/AT_DynamicsControlPanel.vue";
 import DynamicsControlsImuCalibration from "@/components/AT_DynamicsControlsImuCalibration.vue";
 
 import UIReactivityStateAssessor from "@/composables/UIReactivityAssessor.ts";
+import isMobile from "@/composables/isMobile.ts";
 </script>
 
 <script lang="ts">
 export default {
   methods: {
-    OnControlTypeToggle(){
-      if(this.VisibleControlsID == 'rate'){
-        this.VisibleControlsID = 'rotation';
-      }
-      else{
-        this.VisibleControlsID = 'rate';
+    OnControlTypeToggle() {
+      if (this.VisibleControlsID == "rate") {
+        this.VisibleControlsID = "rotation";
+      } else {
+        this.VisibleControlsID = "rate";
       }
     },
     InputValueOnChange(args: object, ControlPanelID: string) {
@@ -66,89 +66,94 @@ export default {
 </script>
 
 <template>
-  <BaseLabel id="dynaimcs_controls_l" v-text="'Controls'"></BaseLabel>
-  <HorizontalLine id="dynamics_controls_ln_0" color="#373737"></HorizontalLine>
-  <DynamicsControlPanel
-    v-show="
-      isUIMinified == 0 || (isUIMinified == 1 && VisibleControlsID == 'rate')
-    "
-    id="dynamics_rate_controls_container"
-    ControlPanelLabel="Rate Controls"
-    :isUIMinified="isUIMinified"
-    :VisibleControlsID="VisibleControlsID"
-    GlobalLinearControllerUnitLabel="Max Rate (all axis)"
-    LinearControllerUnitLabel_0="Max Pitch Rate"
-    LinearControllerUnitLabel_1="Max Roll Rate"
-    LinearControllerUnitLabel_2="Max Yaw Rate"
-    @control-type-toggle="OnControlTypeToggle"
-    @InputValueOnChange="InputValueOnChange($event, 'rate')"
-    :GlobalLinearControllerUnitConstraints="{
-      max: 7.5,
-      min: 2.5,
-      default: 5,
-      measurement_unit: '°/s',
-    }"
-    :LinearControllerUnitConstraints_0="{
-      max: 7.5,
-      min: 2.5,
-      default: 5,
-      measurement_unit: '°/s',
-    }"
-    :LinearControllerUnitConstraints_1="{
-      max: 7.5,
-      min: 2.5,
-      default: 5,
-      measurement_unit: '°/s',
-    }"
-    :LinearControllerUnitConstraints_2="{
-      max: 7.5,
-      min: 2.5,
-      default: 5,
-      measurement_unit: '°/s',
-    }"
-    :isThirdLinearControllerUsed="true"
-    class="animation_group_0"
-    :DynamicsControlsObject="dynamics_controls"
-  ></DynamicsControlPanel>
-  <DynamicsControlPanel
-    v-show="
-      isUIMinified == 0 ||
-      (isUIMinified == 1 && VisibleControlsID == 'rotation')
-    "
-    id="dynamics_rotation_controls_container"
-    :isUIMinified="isUIMinified"
-    :VisibleControlsID="VisibleControlsID"
-    ControlPanelLabel="Rotation Controls"
-    GlobalLinearControllerUnitLabel="Max Rotation (all axis)"
-    LinearControllerUnitLabel_0="Max Pitch"
-    LinearControllerUnitLabel_1="Max Roll"
-    :isThirdLinearControllerUsed="false"
-    @control-type-toggle="OnControlTypeToggle"
-    @InputValueOnChange="InputValueOnChange($event, 'rotation')"
-    :GlobalLinearControllerUnitConstraints="{
-      max: 40,
-      min: 20,
-      default: 30,
-      measurement_unit: '°',
-    }"
-    :LinearControllerUnitConstraints_0="{
-      max: 45,
-      min: 15,
-      default: 30,
-      measurement_unit: '°',
-    }"
-    :LinearControllerUnitConstraints_1="{
-      max: 40,
-      min: 20,
-      default: 30,
-      measurement_unit: '°',
-    }"
-    class="animation_group_0"
-    :DynamicsControlsObject="dynamics_controls"
-  ></DynamicsControlPanel>
-  <DynamicsControlsImuCalibration
-    class="animation_group_0"
-  ></DynamicsControlsImuCalibration>
+  <div id="dynamics_controls_container" v-show="!isMobile()">
+    <BaseLabel id="dynaimcs_controls_l" v-text="'Controls'"></BaseLabel>
+    <HorizontalLine
+      id="dynamics_controls_ln_0"
+      color="#373737"
+    ></HorizontalLine>
+    <DynamicsControlPanel
+      v-show="
+        isUIMinified == 0 || (isUIMinified == 1 && VisibleControlsID == 'rate')
+      "
+      id="dynamics_rate_controls_container"
+      ControlPanelLabel="Rate Controls"
+      :isUIMinified="isUIMinified"
+      :VisibleControlsID="VisibleControlsID"
+      GlobalLinearControllerUnitLabel="Max Rate (all axis)"
+      LinearControllerUnitLabel_0="Max Pitch Rate"
+      LinearControllerUnitLabel_1="Max Roll Rate"
+      LinearControllerUnitLabel_2="Max Yaw Rate"
+      @control-type-toggle="OnControlTypeToggle"
+      @InputValueOnChange="InputValueOnChange($event, 'rate')"
+      :GlobalLinearControllerUnitConstraints="{
+        max: 7.5,
+        min: 2.5,
+        default: 5,
+        measurement_unit: '°/s',
+      }"
+      :LinearControllerUnitConstraints_0="{
+        max: 7.5,
+        min: 2.5,
+        default: 5,
+        measurement_unit: '°/s',
+      }"
+      :LinearControllerUnitConstraints_1="{
+        max: 7.5,
+        min: 2.5,
+        default: 5,
+        measurement_unit: '°/s',
+      }"
+      :LinearControllerUnitConstraints_2="{
+        max: 7.5,
+        min: 2.5,
+        default: 5,
+        measurement_unit: '°/s',
+      }"
+      :isThirdLinearControllerUsed="true"
+      class="animation_group_0"
+      :DynamicsControlsObject="dynamics_controls"
+    ></DynamicsControlPanel>
+    <DynamicsControlPanel
+      v-show="
+        isUIMinified == 0 ||
+        (isUIMinified == 1 && VisibleControlsID == 'rotation')
+      "
+      id="dynamics_rotation_controls_container"
+      :isUIMinified="isUIMinified"
+      :VisibleControlsID="VisibleControlsID"
+      ControlPanelLabel="Rotation Controls"
+      GlobalLinearControllerUnitLabel="Max Rotation (all axis)"
+      LinearControllerUnitLabel_0="Max Pitch"
+      LinearControllerUnitLabel_1="Max Roll"
+      :isThirdLinearControllerUsed="false"
+      @control-type-toggle="OnControlTypeToggle"
+      @InputValueOnChange="InputValueOnChange($event, 'rotation')"
+      :GlobalLinearControllerUnitConstraints="{
+        max: 40,
+        min: 20,
+        default: 30,
+        measurement_unit: '°',
+      }"
+      :LinearControllerUnitConstraints_0="{
+        max: 45,
+        min: 15,
+        default: 30,
+        measurement_unit: '°',
+      }"
+      :LinearControllerUnitConstraints_1="{
+        max: 40,
+        min: 20,
+        default: 30,
+        measurement_unit: '°',
+      }"
+      class="animation_group_0"
+      :DynamicsControlsObject="dynamics_controls"
+    ></DynamicsControlPanel>
+    <DynamicsControlsImuCalibration
+      class="animation_group_0"
+    ></DynamicsControlsImuCalibration>
+  </div>
 </template>
 
 

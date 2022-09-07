@@ -4,6 +4,8 @@ import BaseLabel from "@/components/BaseLabel.vue";
 import VerticalLine from "@/components/VerticalLine.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
 import DynamicsControlsImuCalibrationStageCard from "@/components/AT_DynamicsControlsImuCalibrationStageCard.vue";
+
+import isMobile from "@/composables/isMobile.ts";
 </script>
 
 <script lang="ts">
@@ -88,7 +90,7 @@ export default {
 </script>
 
 <template>
-  <div class="dynamics_imu_calibration_controller_container">
+  <div class="dynamics_imu_calibration_controller_container" v-show="!isMobile()">
     <BaseLabel v-text="'IMU Calibration'" class="x_controls_l"></BaseLabel>
     <div
       class="fade"

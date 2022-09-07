@@ -115,4 +115,12 @@ export default {
     width: 37.083333333%;
   }
 }
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  #dynamics_hardware_status_container {
+    top: 48.074074074%;
+    left: 6.729166667%;
+    width: 84.083333333%;
+  }
+}
 </style>

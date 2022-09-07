@@ -7,6 +7,7 @@ import BaseOptionsMenu from "@/components/BaseOptionsMenu.vue";
 
 import percentage from "@/composables/percentage.ts";
 import UIReactivityStateAssessor from "@/composables/UIReactivityAssessor.ts";
+import isMobile from "@/composables/isMobile";
 </script>
 
 <script lang="ts">
@@ -75,7 +76,7 @@ export default {
 <template>
   <div id="dynamics_telemetry_container">
     <BaseOptionsMenu
-      v-if="isUIMinified == 1"
+      v-if="isUIMinified == 1 || isMobile()"
       id="axis_selection_menu"
       @update="AxisSelectionMenuOnUpdate"
       :menuItems="AxisSelectionMenuItems"
@@ -84,12 +85,16 @@ export default {
     ></BaseOptionsMenu>
     <VerticalLine id="dynamics_telemetry_line" color="#373737"></VerticalLine>
     <BaseLabel
+      v-if="!isMobile()"
       id="dynamics_telemetry_l"
       class="animation_group_0"
       v-text="'Telemetry'"
     ></BaseLabel>
     <DynamicsTelemetryOneAxis
-      v-show="isUIMinified == 0 || (isUIMinified == 1 && VisibleAxisID == 'x')"
+      v-show="
+        (isUIMinified == 0 && !isMobile()) ||
+        ((isUIMinified == 1 || isMobile()) && VisibleAxisID == 'x')
+      "
       id="x_axis_telemetry_container"
       axis_id="X Axis"
       :imu_alpha_axis_telemetry="telemetry_validation().imu_alpha.gyro.pitch"
@@ -102,7 +107,10 @@ export default {
       class="animation_group_0"
     />
     <DynamicsTelemetryOneAxis
-      v-show="isUIMinified == 0 || (isUIMinified == 1 && VisibleAxisID == 'y')"
+      v-show="
+        (isUIMinified == 0 && !isMobile()) ||
+        ((isUIMinified == 1 || isMobile()) && VisibleAxisID == 'y')
+      "
       id="y_axis_telemetry_container"
       axis_id="Y Axis"
       :imu_alpha_axis_telemetry="telemetry_validation().imu_alpha.gyro.roll"
@@ -115,7 +123,10 @@ export default {
       class="animation_group_0"
     />
     <DynamicsTelemetryOneAxis
-      v-show="isUIMinified == 0 || (isUIMinified == 1 && VisibleAxisID == 'z')"
+      v-show="
+        (isUIMinified == 0 && !isMobile()) ||
+        ((isUIMinified == 1 || isMobile()) && VisibleAxisID == 'z')
+      "
       id="z_axis_telemetry_container"
       axis_id="Z Axis"
       :imu_alpha_axis_telemetry="telemetry_validation().imu_alpha.gyro.yaw"
@@ -167,6 +178,7 @@ export default {
   left: 5.052083333%;
   width: 69.427083333%;
   height: 39.351851852%;
+  overflow: hidden;
 }
 @media only screen and (max-width: 1070px) and (min-height: 550px) {
   #axis_selection_menu {
@@ -223,6 +235,13 @@ export default {
   #z_axis_telemetry_container,
   #dynamics_telemetry_l {
     left: 7.641921397%;
+  }
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  #dynamics_telemetry_container {
+    top: 12.4375%;
+    left: 1.388888889%;
+    width: 97.222222222%;
   }
 }
 </style>
