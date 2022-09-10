@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import BaseLabel from "@/components/BaseLabel.vue";
 import BaseHardwareStatusItem from "@/components/AT_BaseHardwareStatusItem.vue";
+
+import isMobile from "@/composables/isMobile.ts";
 </script>
 
 <script lang="ts">
@@ -37,6 +39,7 @@ export default {
 <template>
   <div id="dynamics_hardware_status_container">
     <BaseLabel
+    v-if="!isMobile()"
       id="dynamics_hardware_status_l"
       v-text="'Hardware Status'"
     ></BaseLabel>
