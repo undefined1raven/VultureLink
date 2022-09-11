@@ -164,7 +164,6 @@ var ini_ping_time = 0;
 const deep_storage_link = secrets.MONGO;
 
 
-
 mongoose.connect(deep_storage_link).then(() => console.log('Deep Storage Uplink Established')).catch(e => { console.log(`Deep Storage Link Failed | ${e}`) });
 
 

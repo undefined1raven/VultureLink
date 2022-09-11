@@ -1,0 +1,25 @@
+
+<script lang="ts">
+export default {
+    props:{
+        width: {default: "10%"},
+        height: {default: "11%"},
+        color: {default: "#0500FF"},
+    }
+}
+</script>
+
+<template>
+<svg class="switch_indi" :style="'width: ' + width + '; height: ' + height" width="29" height="20" viewBox="0 0 29 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect y="13.9082" width="1.52294" height="28.3453" transform="rotate(-90 0 13.9082)" :fill="color"/>
+    <rect y="7.81647" width="1.52294" height="28.3453" transform="rotate(-90 0 7.81647)" :fill="color"/>
+    <rect width="1.49348" height="13.823" transform="matrix(-0.381953 -0.924182 0.884986 -0.465617 0.571289 7.81647)" :fill="color"/>
+    <rect width="1.49348" height="13.823" transform="matrix(-0.381953 -0.924182 0.884986 -0.465617 16.7666 20)" :fill="color"/>
+</svg>
+</template>
+
+<style scoped>
+.switch_indi{
+    position: absolute;
+}
+</style>
