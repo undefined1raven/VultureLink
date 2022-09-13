@@ -66,7 +66,7 @@ export default {
 </script>
 
 <template>
-  <div id="dynamics_controls_container" v-show="!isMobile()">
+  <div id="dynamics_controls_container">
     <BaseLabel id="dynaimcs_controls_l" v-text="'Controls'"></BaseLabel>
     <HorizontalLine
       id="dynamics_controls_ln_0"

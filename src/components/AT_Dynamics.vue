@@ -34,6 +34,21 @@ export default {
     },
     selected_vulture_obj: { default: { vid: "", vn: "" } },
   },
+  data() {
+    return {
+      mobile_window_id:
+        "telemetry" /*mobile interface has 2 subcomponents: telmetry | controls */,
+    };
+  },
+  methods: {
+    onButtonSelectedHandler(args: object) {
+      if (args.selectedButtonID == "left") {
+        this.mobile_window_id = "telemetry";
+      } else {
+        this.mobile_window_id = "controls";
+      }
+    },
+  },
 };
 </script>
 
@@ -42,20 +57,35 @@ export default {
     :SelectedVultureObject="selected_vulture_obj"
     :CurrentUsername="current_user_un"
   ></BaseTopBar>
-  <DynamicsTelemetry v-if="!isMobile()" :telemetry="telemetry"></DynamicsTelemetry>
-  <MobileDynamicsTelemetry v-if="isMobile()" :telemetry="telemetry"></MobileDynamicsTelemetry>
-  <DynamicsControls></DynamicsControls>
-  <DynamicsHardwareStatus></DynamicsHardwareStatus>
+  <DynamicsTelemetry
+    v-if="!isMobile()"
+    :telemetry="telemetry"
+  ></DynamicsTelemetry>
+
+  <MobileDynamicsTelemetry
+    v-if="isMobile() && mobile_window_id == 'telemetry'"
+    :telemetry="telemetry"
+  ></MobileDynamicsTelemetry>
+
+  <DynamicsControls
+    v-if="!isMobile() || (isMobile() && (mobile_window_id == 'controls'))"
+  ></DynamicsControls>
+
+  <DynamicsHardwareStatus
+    v-show="!isMobile() || (isMobile() && mobile_window_id == 'telemetry')"
+  ></DynamicsHardwareStatus>
+
   <MobileBaseFullWidthControls
     id="mobile_dynamics_ui_controls"
-    rightSideSelectionButtonLabel="Telemetry"
-    leftSideSelectionButtonLabel="Controls"
+    rightSideSelectionButtonLabel="Controls"
+    leftSideSelectionButtonLabel="Telemetry"
     ControlsTop="12.34375%"
+    @onButtonSelected="onButtonSelectedHandler"
     v-if="isMobile()"
   ></MobileBaseFullWidthControls>
 </template>
 <style scoped>
-  #mobile_dynamics_ui_controls{
-    top: 0.6% !important;
-  }
+#mobile_dynamics_ui_controls {
+  top: 0.6% !important;
+}
 </style>
