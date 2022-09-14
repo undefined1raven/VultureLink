@@ -4,6 +4,8 @@ import BaseLabel from "@/components/BaseLabel.vue";
 import BaseOptionsMenu from "@/components/BaseOptionsMenu.vue";
 import BaseLineGraph from "@/components/BaseLineGraph.vue";
 import BaseLinearControllerUnit from "@/components/BaseLinearControllerUnit.vue";
+
+import isMobile from "@/composables/isMobile.ts";
 </script>
 
 <script lang="ts">
@@ -69,7 +71,7 @@ export default {
       }
     },
     DynamicsControlsOptionsMenuItemsGen() {
-      if (this.isUIMinified == 1) {
+      if (this.isUIMinified == 1 || isMobile()) {
         return [
           { label: "Restore Defaults", btn_id: "restore_defaults" },
           { label: "Select Preset", btn_id: "select_preset" },

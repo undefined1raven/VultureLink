@@ -98,9 +98,14 @@ export default {
   transition: all linear 0.1s;
   border-radius: 8px;
 }
-@media only screen and (max-width: 1500px){
-  .calibration_stage_card_l{
+@media only screen and (max-width: 1500px) {
+  .calibration_stage_card_l {
     font-size: 2vh;
+  }
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  .dynamics_controls_imu_calibration_stage_card_container {
+    border-radius: 2px;
   }
 }
 </style>

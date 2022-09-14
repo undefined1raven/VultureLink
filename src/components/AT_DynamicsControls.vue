@@ -67,14 +67,15 @@ export default {
 
 <template>
   <div id="dynamics_controls_container">
-    <BaseLabel id="dynaimcs_controls_l" v-text="'Controls'"></BaseLabel>
+    <BaseLabel id="dynaimcs_controls_l" v-text="'Controls'" v-if="!isMobile()"></BaseLabel>
     <HorizontalLine
       id="dynamics_controls_ln_0"
       color="#373737"
     ></HorizontalLine>
     <DynamicsControlPanel
       v-show="
-        isUIMinified == 0 || (isUIMinified == 1 && VisibleControlsID == 'rate')
+        (isUIMinified == 0 && !isMobile()) ||
+        ((isMobile() || isUIMinified == 1) && VisibleControlsID == 'rate')
       "
       id="dynamics_rate_controls_container"
       ControlPanelLabel="Rate Controls"
@@ -116,8 +117,8 @@ export default {
     ></DynamicsControlPanel>
     <DynamicsControlPanel
       v-show="
-        isUIMinified == 0 ||
-        (isUIMinified == 1 && VisibleControlsID == 'rotation')
+        (isUIMinified == 0 && !isMobile()) ||
+        ((isMobile() || isUIMinified == 1) && VisibleControlsID == 'rotation')
       "
       id="dynamics_rotation_controls_container"
       :isUIMinified="isUIMinified"
@@ -215,6 +216,19 @@ export default {
   }
   #dynaimcs_controls_l {
     left: 7.5%;
+  }
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  #dynamics_rate_controls_container,
+  #dynamics_rotation_controls_container {
+    top: 16%;
+    left: 1.111111111%;
+    width: 97.777777778%;
+  }
+  #dynamics_controls_ln_0{
+    top: 55.87037037%;
+    left: 0%;
+    width: 99.99%;
   }
 }
 </style>

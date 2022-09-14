@@ -90,7 +90,7 @@ export default {
 </script>
 
 <template>
-  <div class="dynamics_imu_calibration_controller_container" v-show="!isMobile()">
+  <div id="dynamics_imu_calibration_controller_container">
     <BaseLabel v-text="'IMU Calibration'" class="x_controls_l"></BaseLabel>
     <div
       class="fade"
@@ -254,7 +254,7 @@ export default {
   width: 100%;
   font-size: 1vw;
 }
-.dynamics_imu_calibration_controller_container {
+#dynamics_imu_calibration_controller_container {
   position: absolute;
   top: 57.12962963%;
   left: 80.104166667%;
@@ -276,7 +276,7 @@ export default {
   padding-left: 2.97521739%;
 }
 @media only screen and (max-width: 1070px) and (min-height: 550px) {
-  .dynamics_imu_calibration_controller_container {
+  #dynamics_imu_calibration_controller_container {
     left: 65%;
     width: 32.735416667%;
   }
@@ -292,7 +292,7 @@ export default {
   }
 }
 @media only screen and (max-width: 1500px) and (min-height: 850px) {
-  .dynamics_imu_calibration_controller_container {
+  #dynamics_imu_calibration_controller_container {
     left: 65%;
     width: 32.735416667%;
   }
@@ -308,7 +308,7 @@ export default {
   }
 }
 @media only screen and (max-width: 1996.8px) and (min-height: 1200px) {
-  .dynamics_imu_calibration_controller_container {
+  #dynamics_imu_calibration_controller_container {
     left: 65%;
     width: 32.735416667%;
   }
@@ -323,5 +323,12 @@ export default {
     font-size: 1.8vh;
   }
 }
-
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  #dynamics_imu_calibration_controller_container {
+    top: 57.12962963%;
+    left: 1.111111111%;
+    width: 97.777777778%;
+    height: 34.051851852%;
+  }
+}
 </style>
