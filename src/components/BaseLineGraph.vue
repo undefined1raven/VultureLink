@@ -121,7 +121,7 @@ export default {
   width: 3.4vh;
   height: 3.4vh;
   background-color: #0500ff80;
-  transition: all cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s;
+  transition: width cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s, height cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s;
 }
 #mobile_dragable:hover {
   background-color: #0500ff90;
