@@ -22,6 +22,14 @@ export default {
     };
   },
   methods: {
+    slidersBackgroundColorController(){
+      if(this.readOnly){
+        return 'solid_background'
+      }
+      else{
+        return ''
+      }
+    },
     mobileDragableOnTouchEnd() {
       this.mobileDragableSize = "3.4";
     },
@@ -95,14 +103,14 @@ export default {
     :style="`width: ${width}; height: ${height}`"
   >
     <div
-      class="base_line_graph_negative_slider p-abs"
+      :class="`base_line_graph_negative_slider p-abs ${slidersBackgroundColorController()}`"
       :style="`left: ${input_parser().negative_slider_left}; width: ${
         input_parser().negative_slider_width
       }`"
     ></div>
     <div class="base_line_graph_center_indi p-abs"></div>
     <div
-      class="base_line_graph_positive_slider p-abs"
+      :class="`base_line_graph_positive_slider p-abs ${slidersBackgroundColorController()}`"
       :style="`width: ${input_parser().positive_slider_width}`"
     ></div>
     <div
@@ -160,6 +168,9 @@ export default {
   }
   .base_line_graph_positive_slider {
     background: linear-gradient(90deg, rgba(5, 0, 255, 0) 0%, #0500ff 101.05%);
+  }
+  .solid_background{
+    background-color: #0500ff;
   }
 }
 </style>
