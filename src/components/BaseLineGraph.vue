@@ -18,10 +18,15 @@ export default {
   data() {
     return {
       mobileDragableLeft: "50%",
+      mobileDragableSize: "3.4",
     };
   },
   methods: {
+    mobileDragableOnTouchEnd(){
+      this.mobileDragableSize = "3.4"
+    },
     mobileDragableOnMove(e: Event) {
+      this.mobileDragableSize = "2.4"
       let touchX = e.touches[0].clientX;
       let clientWidth = document.documentElement.clientWidth;
       if (
@@ -103,18 +108,20 @@ export default {
     <div
       v-if="isMobile() && !readOnly"
       id="mobile_dragable"
-      :style="`left: ${mobileDragableLeft}`"
+      :style="`left: ${mobileDragableLeft}; width: ${mobileDragableSize}vh; height: ${mobileDragableSize}vh;`"
       @touchmove="mobileDragableOnMove"
       @touchstart="mobileDragableOnMove"
+      @touchend="mobileDragableOnTouchEnd"
     ></div>
   </div>
 </template> 
 <style scoped>
 #mobile_dragable {
   position: absolute;
-  width: 3vh;
-  height: 3vh;
+  width: 3.4vh;
+  height: 3.4vh;
   background-color: #0500ff80;
+  transition: all cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s;
 }
 #mobile_dragable:hover {
   background-color: #0500ff90;
