@@ -1,5 +1,7 @@
 
-
+<script setup lang="ts">
+  import isMobile from "@/composables/isMobile";
+  </script>
 <script lang="ts">
 export default {
   props: {
@@ -89,7 +91,7 @@ export default {
       class="base_line_graph_positive_slider p-abs"
       :style="`width: ${input_parser().positive_slider_width}`"
     ></div>
-    <div id="mobile_dragable" :style="`left: ${mobileDragableLeft}`" @touchmove="mobileDragableOnMove"></div>
+    <div v-if="isMobile()" id="mobile_dragable" :style="`left: ${mobileDragableLeft}`" @touchmove="mobileDragableOnMove"></div>
   </div>
 </template> 
 <style scoped>
