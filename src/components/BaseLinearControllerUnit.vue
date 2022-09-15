@@ -4,6 +4,8 @@ import BaseLabel from "@/components/BaseLabel.vue";
 import BaseOptionsMenu from "@/components/BaseOptionsMenu.vue";
 import VerticalLine from "@/components/VerticalLine.vue";
 import BaseLineGraph from "@/components/BaseLineGraph.vue";
+
+import isMobile from "@/composables/isMobile";
 </script>
 
 <script lang="ts">
@@ -34,11 +36,14 @@ export default {
     };
   },
   methods: {
-    BaseLineGraphSizeController(){
-      if(window.devicePixelRatio < 2){
-        return {height: "0.091vw", width: "50%"}
-      }else{
-        return {height: "7.448275862%", width: "79.261363636%"}
+    onMobileInputHandler(args: object) {
+      this.BaseLineGraphInput = args.input;
+    },
+    BaseLineGraphSizeController() {
+      if (window.devicePixelRatio < 2) {
+        return { height: "0.091vw", width: "50%" };
+      } else {
+        return { height: "7.448275862%", width: "79.261363636%" };
       }
     },
     GetCurrentValue() {
@@ -99,6 +104,7 @@ export default {
     ></VerticalLine>
     <BaseLabel
       color="#555"
+      v-if="!isMobile()"
       class="base_linear_controller_min_l"
       v-text="`${BaseLineGraphMin}${MeasurmentUnit}`"
     ></BaseLabel>
@@ -109,6 +115,7 @@ export default {
     ></VerticalLine>
     <BaseLabel
       color="#555"
+      v-if="!isMobile()"
       class="base_linear_controller_mid_l"
       v-text="`Default`"
     ></BaseLabel>
@@ -119,19 +126,30 @@ export default {
     ></VerticalLine>
     <BaseLabel
       color="#555"
+      v-if="!isMobile()"
       class="base_linear_controller_max_l"
       v-text="`${BaseLineGraphMax}${MeasurmentUnit}`"
     ></BaseLabel>
     <BaseLineGraph
+      :readOnly="false"
       class="x_generic_controls_graph"
       :max="BaseLineGraphMax"
       :min="BaseLineGraphMin"
       :input="BaseLineGraphInput"
       :width="BaseLineGraphSizeController().width"
       :height="BaseLineGraphSizeController().height"
+      @onMobileInput="onMobileInputHandler"
     ></BaseLineGraph>
 
+    <BaseLabel
+      color="#FFF"
+      v-if="isMobile()"
+      id="mobile_base_linear_controller_value_l"
+      v-text="`${BaseLineGraphInput}${MeasurmentUnit}`"
+    ></BaseLabel>
+
     <input
+      v-if="!isMobile()"
       ref="NumericalInputRef"
       @change="LinearControllerUnitInputParser"
       step="0.01"
@@ -142,12 +160,14 @@ export default {
       class="base_linear_controller_input dynamic-font-weight"
     />
     <div
+      v-if="!isMobile()"
       @click="LinearControllerUnitPositiveStepOnClick"
       class="base_linear_controller_positive_step_btn dynamic-font-weight"
     >
       +
     </div>
     <div
+      v-if="!isMobile()"
       @click="LinearControllerUnitNegativeStepOnClick"
       class="base_linear_controller_negative_step_btn dynamic-font-weight"
     >
@@ -157,6 +177,11 @@ export default {
 </template>
 
 <style scoped>
+#mobile_base_linear_controller_value_l {
+  top: 40.770114943%;
+  left: 88.25%;
+  font-size: 2.1vh;
+}
 .base_linear_controller_positive_step_btn,
 .base_linear_controller_negative_step_btn {
   position: absolute;

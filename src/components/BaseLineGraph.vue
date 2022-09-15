@@ -1,36 +1,45 @@
 
 <script setup lang="ts">
-  import isMobile from "@/composables/isMobile";
-  </script>
+import isMobile from "@/composables/isMobile";
+import percentage from "@/composables/percentage";
+import scale from "@/composables/scale";
+import rangeScaler from "@/composables/rangeScaler";
+</script>
 <script lang="ts">
 export default {
   props: {
+    readOnly: {default: true},
     width: { default: "97.680412371%" },
     height: { default: "0.660066007%" },
     min: { default: -90 },
     max: { default: 90 },
     input: { default: 60 },
   },
-  data(){
-    return{
-      mobileDragableLeft: '50%',
-    }
+  data() {
+    return {
+      mobileDragableLeft: "50%",
+    };
   },
   methods: {
-    mobileDragableOnMove(e:Event){
-      let touch = e.touches[0];
-      this.mobileDragableLeft = `${touch.clientX}px`;
-    },
-    scale(
-      num: number,
-      in_min: number,
-      in_max: number,
-      out_min: number,
-      out_max: number
-    ) {
-      return (
-        ((num - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min
-      );
+    mobileDragableOnMove(e: Event) {
+      let touchX = e.touches[0].clientX;
+      let clientWidth = document.documentElement.clientWidth;
+      if (
+        percentage(touchX, clientWidth) >= 5.64 &&
+        percentage(touchX, clientWidth) <= 80
+      ) {
+        let offset = scale(32, clientWidth);
+        this.mobileDragableLeft = `${touchX - offset}px`;
+        this.$emit("onMobileInput", {
+          input: rangeScaler(
+            percentage(touchX, clientWidth),
+            5.64,
+            80,
+            this.min,
+            this.max
+          ).toFixed(2),
+        });
+      }
     },
     input_parser() {
       let midpoint = (this.min + this.max) / 2;
@@ -43,7 +52,7 @@ export default {
         if (this.input > midpoint) {
           negative_slider_width = "0%";
           negative_slider_left = "0%";
-          positive_slider_width = `${this.scale(
+          positive_slider_width = `${rangeScaler(
             this.input,
             midpoint,
             this.max,
@@ -52,7 +61,7 @@ export default {
           )}%`;
         } else {
           positive_slider_width = "0%";
-          negative_slider_width = `${this.scale(
+          negative_slider_width = `${rangeScaler(
             this.input,
             midpoint,
             this.min,
@@ -60,7 +69,7 @@ export default {
             50
           )}%`;
           negative_slider_left = `${
-            50 - this.scale(this.input, midpoint, this.min, 0, 50)
+            50 - rangeScaler(this.input, midpoint, this.min, 0, 50)
           }%`;
         }
       }
@@ -91,7 +100,13 @@ export default {
       class="base_line_graph_positive_slider p-abs"
       :style="`width: ${input_parser().positive_slider_width}`"
     ></div>
-    <div v-if="isMobile()" id="mobile_dragable" :style="`left: ${mobileDragableLeft}`" @touchmove="mobileDragableOnMove"></div>
+    <div
+      v-if="isMobile() && !readOnly"
+      id="mobile_dragable"
+      :style="`left: ${mobileDragableLeft}`"
+      @touchmove="mobileDragableOnMove"
+      @touchstart="mobileDragableOnMove"
+    ></div>
   </div>
 </template> 
 <style scoped>
