@@ -53,4 +53,9 @@ export default {
 .base_options_menu_list_item:hover{
     background-color: #020074aa;
 }
+@media only screen and (-webkit-min-device-pixel-ratio: 2){
+  .base_options_menu_list_item{
+    font-size: 2vh;
+  }
+}
 </style>

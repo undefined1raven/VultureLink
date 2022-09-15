@@ -19,7 +19,7 @@ export default {
     BaseLineGraphMin: { default: 2.5 },
     // BaseLineGraphWidth: { default: "50%" },
     // BaseLineGraphHeight: { default: "0.091vw" },
-    DefaultValue: { default: 5 },
+    DefaultValue: { default: 5.00 },
     MeasurmentUnit: { default: "°/s" },
     isGlobal: {
       default: false,
@@ -99,6 +99,7 @@ export default {
   <div class="base_linear_controller_unit_container" :style="ContainerStyle">
     <BaseLabel v-text="ControlPanelLabel" class="x_control_panel_l"></BaseLabel>
     <VerticalLine
+      v-if="!isMobile()"
       class="base_linear_controller_min_ln base_linear_controller_ln"
       color="#555"
     ></VerticalLine>
@@ -110,6 +111,7 @@ export default {
     ></BaseLabel>
 
     <VerticalLine
+      v-if="!isMobile()"
       class="base_linear_controller_mid_ln base_linear_controller_ln"
       color="#555"
     ></VerticalLine>
@@ -121,6 +123,7 @@ export default {
     ></BaseLabel>
 
     <VerticalLine
+      v-if="!isMobile()"
       class="base_linear_controller_max_ln base_linear_controller_ln"
       color="#555"
     ></VerticalLine>
@@ -145,7 +148,7 @@ export default {
       color="#FFF"
       v-if="isMobile()"
       id="mobile_base_linear_controller_value_l"
-      v-text="`${BaseLineGraphInput}${MeasurmentUnit}`"
+      v-text="`${parseFloat(BaseLineGraphInput.toString()).toFixed(2)}${MeasurmentUnit}`"
     ></BaseLabel>
 
     <input
@@ -181,6 +184,8 @@ export default {
   top: 40.770114943%;
   left: 88.25%;
   font-size: 2.1vh;
+  border-right: solid 1px #0500FF;
+  padding-right: 0.5%;
 }
 .base_linear_controller_positive_step_btn,
 .base_linear_controller_negative_step_btn {

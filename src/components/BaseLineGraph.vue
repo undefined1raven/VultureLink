@@ -8,7 +8,7 @@ import rangeScaler from "@/composables/rangeScaler";
 <script lang="ts">
 export default {
   props: {
-    readOnly: {default: true},
+    readOnly: { default: true },
     width: { default: "97.680412371%" },
     height: { default: "0.660066007%" },
     min: { default: -90 },
@@ -22,11 +22,11 @@ export default {
     };
   },
   methods: {
-    mobileDragableOnTouchEnd(){
-      this.mobileDragableSize = "3.4"
+    mobileDragableOnTouchEnd() {
+      this.mobileDragableSize = "3.4";
     },
     mobileDragableOnMove(e: Event) {
-      this.mobileDragableSize = "2.4"
+      this.mobileDragableSize = "2.4";
       let touchX = e.touches[0].clientX;
       let clientWidth = document.documentElement.clientWidth;
       if (
@@ -121,10 +121,8 @@ export default {
   width: 3.4vh;
   height: 3.4vh;
   background-color: #0500ff80;
-  transition: width cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s, height cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s;
-}
-#mobile_dragable:hover {
-  background-color: #0500ff90;
+  transition: width cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s,
+    height cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s;
 }
 .base_line_graph_center_indi {
   width: 0.104vw;
@@ -151,5 +149,17 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  .base_line_graph_container {
+    border-left: solid 1px #fff;
+    border-right: solid 1px #fff;
+  }
+  .base_line_graph_negative_slider {
+    background: linear-gradient(90deg, #0500ff 0%, rgba(5, 0, 255, 0) 101.05%);
+  }
+  .base_line_graph_positive_slider {
+    background: linear-gradient(90deg, rgba(5, 0, 255, 0) 0%, #0500ff 101.05%);
+  }
 }
 </style>

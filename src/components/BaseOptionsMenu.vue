@@ -146,4 +146,15 @@ export default {
   justify-content: center;
   transition: all linear 0.1s;
 }
+@media only screen and (-webkit-min-device-pixel-ratio: 2){
+  .options_menu_btn{
+    width: 4.3407vh;
+    height: 4.3407vh;
+  }
+  .options_menu_container{
+    left: 42.83174%;
+    height: 45.155778894% !important;
+    width: 55.726577438% !important;
+  }
+}
 </style>

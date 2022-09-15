@@ -68,7 +68,7 @@ export default {
   ></MobileDynamicsTelemetry>
 
   <DynamicsControls
-    v-if="!isMobile() || (isMobile() && (mobile_window_id == 'controls'))"
+    v-show="!isMobile() || (isMobile() && (mobile_window_id == 'controls'))"
   ></DynamicsControls>
 
   <DynamicsHardwareStatus

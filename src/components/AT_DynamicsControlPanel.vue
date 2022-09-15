@@ -260,8 +260,8 @@ export default {
 @media only screen and (max-width: 1500px) and (min-height: 850px) {
   .x_controls_options_menu {
     left: 55.831739962%;
-    width: 40.726577438% !important;
-    height: 31.155778894% !important;
+    width: 40.726577438%;
+    height: 31.155778894%;
   }
   .x_controls_l {
     width: 40.298850575%;
@@ -275,6 +275,16 @@ export default {
   }
   .x_controls_l {
     width: 40.298850575%;
+  }
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  .x_controls_options_menu {
+    left: 45.31739962%;
+    width: 50.726577438% !important;
+    height: 43.72% !important;
+  }
+  .x_controls_container {
+    border: none;
   }
 }
 </style>
