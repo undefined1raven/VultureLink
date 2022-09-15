@@ -51,6 +51,7 @@ export default {
     },
   },
   mounted() {
+    this.$refs.x_axis_telemetry.classList.add('post_ani');
     this.isUIMinified = UIReactivityStateAssessor();
     window.addEventListener("resize", () => {
       this.isUIMinified = UIReactivityStateAssessor();
@@ -96,6 +97,7 @@ export default {
         ((isUIMinified == 1 || isMobile()) && VisibleAxisID == 'x')
       "
       id="x_axis_telemetry_container"
+      ref="x_axis_telemetry"
       axis_id="X Axis"
       :imu_alpha_axis_telemetry="telemetry_validation().imu_alpha.gyro.pitch"
       :imu_beta_axis_telemetry="{
@@ -168,6 +170,9 @@ export default {
 #z_axis_telemetry_container {
   top: 12.235294118%;
   left: 68.117029257%;
+}
+.post_ani{
+  transform: translateY(0%) !important;
 }
 .animation_group_0 {
   animation: ini_ani cubic-bezier(0.59, 0.23, 0.49, 1.07) 0.15s;

@@ -9,8 +9,23 @@ export default {
     max: { default: 90 },
     input: { default: 60 },
   },
+  data(){
+    return{
+      mobileDragableLeft: '50%',
+    }
+  },
   methods: {
-    scale(num:number, in_min:number, in_max:number, out_min:number, out_max:number) {
+    mobileDragableOnMove(e:Event){
+      let touch = e.touches[0];
+      this.mobileDragableLeft = `${touch.clientX}px`;
+    },
+    scale(
+      num: number,
+      in_min: number,
+      in_max: number,
+      out_min: number,
+      out_max: number
+    ) {
       return (
         ((num - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min
       );
@@ -26,10 +41,22 @@ export default {
         if (this.input > midpoint) {
           negative_slider_width = "0%";
           negative_slider_left = "0%";
-          positive_slider_width = `${this.scale(this.input, midpoint, this.max, 0, 50)}%`;
+          positive_slider_width = `${this.scale(
+            this.input,
+            midpoint,
+            this.max,
+            0,
+            50
+          )}%`;
         } else {
           positive_slider_width = "0%";
-          negative_slider_width = `${this.scale(this.input, midpoint, this.min, 0, 50)}%`;
+          negative_slider_width = `${this.scale(
+            this.input,
+            midpoint,
+            this.min,
+            0,
+            50
+          )}%`;
           negative_slider_left = `${
             50 - this.scale(this.input, midpoint, this.min, 0, 50)
           }%`;
@@ -62,9 +89,19 @@ export default {
       class="base_line_graph_positive_slider p-abs"
       :style="`width: ${input_parser().positive_slider_width}`"
     ></div>
+    <div id="mobile_dragable" :style="`left: ${mobileDragableLeft}`" @touchmove="mobileDragableOnMove"></div>
   </div>
 </template> 
 <style scoped>
+#mobile_dragable {
+  position: absolute;
+  width: 3vh;
+  height: 3vh;
+  background-color: #0500ff80;
+}
+#mobile_dragable:hover {
+  background-color: #0500ff90;
+}
 .base_line_graph_center_indi {
   width: 0.104vw;
   height: 100%;
@@ -87,5 +124,8 @@ export default {
 .base_line_graph_container {
   position: absolute;
   background-color: #0500ff40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

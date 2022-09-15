@@ -15,8 +15,8 @@ export default {
     ControlPanelLabel: { default: "" },
     BaseLineGraphMax: { default: 7.5 },
     BaseLineGraphMin: { default: 2.5 },
-    BaseLineGraphWidth: { default: "50%" },
-    BaseLineGraphHeight: { default: "0.091vw" },
+    // BaseLineGraphWidth: { default: "50%" },
+    // BaseLineGraphHeight: { default: "0.091vw" },
     DefaultValue: { default: 5 },
     MeasurmentUnit: { default: "°/s" },
     isGlobal: {
@@ -34,6 +34,13 @@ export default {
     };
   },
   methods: {
+    BaseLineGraphSizeController(){
+      if(window.devicePixelRatio < 2){
+        return {height: "0.091vw", width: "50%"}
+      }else{
+        return {height: "7.448275862%", width: "79.261363636%"}
+      }
+    },
     GetCurrentValue() {
       return this.BaseLineGraphInput;
     },
@@ -120,8 +127,8 @@ export default {
       :max="BaseLineGraphMax"
       :min="BaseLineGraphMin"
       :input="BaseLineGraphInput"
-      :width="BaseLineGraphWidth"
-      :height="BaseLineGraphHeight"
+      :width="BaseLineGraphSizeController().width"
+      :height="BaseLineGraphSizeController().height"
     ></BaseLineGraph>
 
     <input
