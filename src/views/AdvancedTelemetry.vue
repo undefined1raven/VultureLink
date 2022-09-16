@@ -244,6 +244,7 @@ export default {
       v-if="!isMobile()"
       :vulture_connection_status="vulture_connection.status"
       :vulture_hardware_status_obj="vulture_hardware_status_obj"
+      :selectedSystemID="window_manager.visible_window_id"
       @MinimizedMenuButtonOnClick="MinimizedMenuButtonOnClickHandler"
     />
   </div>

@@ -38,10 +38,19 @@ export default {
     };
   },
   props: {
+    selectedSystemID: {default: ""},
     vulture_hardware_status_obj: {},
     vulture_connection_status: { default: false },
   },
   methods: {
+    MenuButtonBorderController(sys_id:string){
+      if(this.selectedSystemID == sys_id){
+        return 'border-right: solid 1px #0500FF';
+      }
+      else{
+        return '';
+      }
+    },
     DynamicsMenuObfuscatorWidth() {
       return percentage(scale(5, 1920), this.viewportWidth);
     },
@@ -164,7 +173,7 @@ export default {
       title="Sonar Array"
       id="minimized_menu_sonar_array_btn"
       class="minimized-menu-item"
-      :style="`background-color: ${system_color_parser('sonar_array')}20;`"
+      :style="`background-color: ${system_color_parser('sonar_array')}20; ${MenuButtonBorderController('sonar_array')}`"
       @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'sonar_array')"
       @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'sonar_array')"
     >
@@ -183,7 +192,7 @@ export default {
       title="Dynamics"
       id="minimized_menu_dynamics_btn"
       class="minimized-menu-item"
-      :style="`background-color: ${system_color_parser('dynamics')}20;`"
+      :style="`background-color: ${system_color_parser('dynamics')}20; ${MenuButtonBorderController('dynamics')}`"
       @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'dynamics')"
       @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'dynamics')"
     >
@@ -202,6 +211,7 @@ export default {
       title="Network"
       id="minimized_menu_network_btn"
       class="minimized-menu-item"
+      :style="`${MenuButtonBorderController('network')};`"
     >
       <BaseLabel
         class="extended_btn_l"
@@ -214,6 +224,7 @@ export default {
       title="Propulsion"
       id="minimized_menu_propulsion_btn"
       class="minimized-menu-item"
+      :style="`${MenuButtonBorderController('propulsion')};`"
     >
       <BaseLabel
         class="extended_btn_l"
@@ -226,7 +237,7 @@ export default {
       title="Nav"
       id="minimized_menu_nav_btn"
       class="minimized-menu-item"
-      :style="`background-color: ${system_color_parser('navigation')}20;`"
+      :style="`background-color: ${system_color_parser('navigation')}20; ${MenuButtonBorderController('nav')};`"
       @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'navigation')"
       @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'navigation')"
     >
@@ -245,6 +256,7 @@ export default {
       title="Autonomy"
       id="minimized_menu_autonomy_btn"
       class="minimized-menu-item"
+      :style="`${MenuButtonBorderController('autonomy')};`"
     >
       <BaseLabel
         class="extended_btn_l"
@@ -269,6 +281,7 @@ export default {
       title="Power"
       id="minimized_menu_power_btn"
       class="minimized-menu-item"
+      :style="`${MenuButtonBorderController('power')};`"
     >
       <BaseLabel
         class="extended_btn_l"
@@ -433,7 +446,7 @@ export default {
 .minimized-menu-item {
   position: relative;
   left: 0%; /*84.621553607 */
-  width: 100%; /*14.380133293 */
+  width: 99.7%; /*14.380133293 */
   height: 7.831325301%;
   background-color: #0500ff20;
   display: flex;

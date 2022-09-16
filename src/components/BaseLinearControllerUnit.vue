@@ -11,7 +11,9 @@ import isMobile from "@/composables/isMobile";
 <script lang="ts">
 export default {
   mounted() {
-    this.$refs.NumericalInputRef.value = this.DefaultValue;
+    if(!isMobile()){
+      this.$refs.NumericalInputRef.value = this.DefaultValue;
+    }
   },
   props: {
     ControlPanelLabel: { default: "" },
@@ -19,7 +21,7 @@ export default {
     BaseLineGraphMin: { default: 2.5 },
     // BaseLineGraphWidth: { default: "50%" },
     // BaseLineGraphHeight: { default: "0.091vw" },
-    DefaultValue: { default: 5.00 },
+    DefaultValue: { default: 5.0 },
     MeasurmentUnit: { default: "°/s" },
     isGlobal: {
       default: false,
@@ -55,11 +57,18 @@ export default {
       }
       this.$emit("InputValueOnChange", { newValue: value });
       this.BaseLineGraphInput = value;
-      this.$refs.NumericalInputRef.value = value;
+      if (!isMobile()) {
+        this.$refs.NumericalInputRef.value = value;
+      }
     },
     ResetToDefault() {
       this.BaseLineGraphInput = this.DefaultValue;
-      this.$refs.NumericalInputRef.value = this.DefaultValue;
+      if (!isMobile()) {
+        this.$refs.NumericalInputRef.value = this.DefaultValue;
+      }
+      else{
+        this.$refs.LineGraph.setMobileDragablePosition(50);
+      }
     },
     LinearControllerUnitNegativeStepOnClick() {
       if (this.BaseLineGraphInput > this.BaseLineGraphMin + 0.5) {
@@ -139,6 +148,7 @@ export default {
       :max="BaseLineGraphMax"
       :min="BaseLineGraphMin"
       :input="BaseLineGraphInput"
+      ref="LineGraph"
       :width="BaseLineGraphSizeController().width"
       :height="BaseLineGraphSizeController().height"
       @onMobileInput="onMobileInputHandler"
@@ -148,7 +158,11 @@ export default {
       color="#FFF"
       v-if="isMobile()"
       id="mobile_base_linear_controller_value_l"
-      v-text="`${parseFloat(BaseLineGraphInput.toString()).toFixed(2)}${MeasurmentUnit}`"
+      v-text="
+        `${parseFloat(BaseLineGraphInput.toString()).toFixed(
+          2
+        )}${MeasurmentUnit}`
+      "
     ></BaseLabel>
 
     <input
@@ -184,7 +198,7 @@ export default {
   top: 40.770114943%;
   left: 88.25%;
   font-size: 2.1vh;
-  border-right: solid 1px #0500FF;
+  border-right: solid 1px #0500ff;
   padding-right: 0.5%;
 }
 .base_linear_controller_positive_step_btn,

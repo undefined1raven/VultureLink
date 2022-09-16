@@ -51,7 +51,6 @@ export default {
     },
   },
   mounted() {
-    this.$refs.x_axis_telemetry.classList.add('post_ani');
     this.isUIMinified = UIReactivityStateAssessor();
     window.addEventListener("resize", () => {
       this.isUIMinified = UIReactivityStateAssessor();

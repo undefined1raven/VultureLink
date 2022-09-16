@@ -21,13 +21,16 @@ export default {
       mobileDragableSize: "3.4",
     };
   },
+  expose: ["setMobileDragablePosition"],
   methods: {
-    slidersBackgroundColorController(){
-      if(this.readOnly){
-        return 'solid_background'
-      }
-      else{
-        return ''
+    setMobileDragablePosition(leftPercentage: number) {
+      this.mobileDragableLeft = `${leftPercentage}%`;
+    },
+    slidersBackgroundColorController() {
+      if (this.readOnly) {
+        return "solid_background";
+      } else {
+        return "";
       }
     },
     mobileDragableOnTouchEnd() {
@@ -169,7 +172,7 @@ export default {
   .base_line_graph_positive_slider {
     background: linear-gradient(90deg, rgba(5, 0, 255, 0) 0%, #0500ff 101.05%);
   }
-  .solid_background{
+  .solid_background {
     background-color: #0500ff;
   }
 }
