@@ -72,7 +72,9 @@ export default {
   },
   methods: {
     onDockSelectedSignalHandler(){
-      this.$refs.MobileNavRef.secondary_menu_btn_onClick();
+      if(isMobile()){
+        this.$refs.MobileNavRef.secondary_menu_btn_onClick();
+      }
     },
     MinimizedMenuButtonOnClickHandler(args: Object) {
       this.window_manager.visible_window_id = args.btn_id;
