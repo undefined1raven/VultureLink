@@ -9,29 +9,17 @@ import isMobile from "@/composables/isMobile.ts";
 export default {
   methods: {
     overflowController() {
-      if (this.hardware_status_arr.length > 2) {
+      if (this.hardwareStatusArray.length > 2) {
         return "overflow-y: scroll;";
       } else {
         return "overflow-y: hidden;";
       }
     },
   },
-  props: {},
-  data() {
-    return {
-      hardware_status_arr: [
-        {
-          name: "IMU Alpha",
-          telemetry: { latency: true, data: true },
-          hardware_connection: true,
-        },
-        {
-          name: "IMU Beta",
-          telemetry: { latency: false, data: true },
-          hardware_connection: false,
-        },
-      ],
-    };
+  props: {
+    hardwareStatusArray: {default: []},
+    isMinifiable: {default: false},
+    isMinifiedByDefault: {default: false},
   },
 };
 </script>
@@ -44,12 +32,12 @@ export default {
     ></BaseLabel>
     <ul id="dynamics_hardware_status_list" :style="overflowController()">
       <BaseHardwareStatusItem
-        v-for="(status_obj, index) in hardware_status_arr"
+        v-for="(status_obj, index) in hardwareStatusArray"
         :key="index"
         :component_status_obj="status_obj"
-        :isLast="index == hardware_status_arr.length - 1"
-        :isMinifiable="false"
-        :isMinifiedByDefault="false"
+        :isLast="index == hardwareStatusArray.length - 1"
+        :isMinifiable="isMinifiable"
+        :isMinifiedByDefault="isMinifiedByDefault"
       ></BaseHardwareStatusItem>
     </ul>
   </div>

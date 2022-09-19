@@ -10,6 +10,7 @@ import UserDropdownMenu from "@/components/UserDropdownMenu.vue";
 import Menu from "@/components/AT_Menu.vue";
 import MobileNav from "@/components/M_AT_Nav.vue";
 import Dynamics from "@/components/AT_Dynamics.vue";
+import SonarArray from "@/components/AT_SonarArray.vue";
 
 import isMobile from "@/composables/isMobile.ts";
 
@@ -71,8 +72,8 @@ export default {
     };
   },
   methods: {
-    onDockSelectedSignalHandler(){
-      if(isMobile()){
+    onDockSelectedSignalHandler() {
+      if (isMobile()) {
         this.$refs.MobileNavRef.secondary_menu_btn_onClick();
       }
     },
@@ -87,7 +88,7 @@ export default {
     },
     MenuButtonOnClickHandler(btn_id: string) {
       this.mobile.overview_active_section_id = btn_id;
-      this.window_manager.visible_window_id = 'overview';
+      this.window_manager.visible_window_id = "overview";
     },
     m_menu_onVisibilityChange_handler(m_menu_visibility_status: boolean) {
       this.mobile.isMenuVisible = m_menu_visibility_status;
@@ -233,19 +234,30 @@ export default {
       v-if="
         !login_req_details_obj.isVisible &&
         !mobile.isMenuVisible &&
-        window_manager.visible_window_id == 'dynamics'&&
-        (mobile.overview_active_section_id == 2 && isMobile() || true)
+        window_manager.visible_window_id == 'dynamics' &&
+        ((mobile.overview_active_section_id == 2 && isMobile()) || true)
       "
       :telemetry="vulture_telemetry.dynamics"
       :current_user_un="current_user_un"
       :selected_vulture_obj="selected_vulture_obj"
     ></Dynamics>
+    <SonarArray
+      v-if="
+        !login_req_details_obj.isVisible &&
+        !mobile.isMenuVisible &&
+        window_manager.visible_window_id == 'sonar_array' &&
+        ((mobile.overview_active_section_id == 2 && isMobile()) || true)
+      "
+      :current_user_un="current_user_un"
+      :selected_vulture_obj="selected_vulture_obj"
+    ></SonarArray>
     <Menu
       v-if="!isMobile()"
       :vulture_connection_status="vulture_connection.status"
       :vulture_hardware_status_obj="vulture_hardware_status_obj"
       :selectedSystemID="window_manager.visible_window_id"
       @MinimizedMenuButtonOnClick="MinimizedMenuButtonOnClickHandler"
+      @onVultureSystemSelected="vulture_system_selected_handler"
     />
   </div>
 

@@ -3,11 +3,12 @@ import Background from "@/components/BaseBackgroundImg.vue";
 import MobileBackground from "@/components/MobileBaseBackgroundImg.vue";
 import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
 import BaseLabel from "@/components/BaseLabel.vue";
+import Main from "@/components/CMD_Main.vue";
 import { io } from "socket.io-client";
 </script>
 
 <script lang="ts">
-function getCookie(name) {
+function getCookie(name: string) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop().split(";").shift();
@@ -37,8 +38,8 @@ export default {
       socket.on("relayed_fwd_cam_rtc_req", (offer) => {
         fwd_rcvng_peer.signal(offer);
       });
-      
-      fwd_rcvng_peer.on("stream", (stream) => {
+
+      fwd_rcvng_peer.on("stream", (stream: MediaStream) => {
         this.hasStream = true;
         let video = this.$refs.vid_container;
         video.srcObject = stream;
@@ -49,7 +50,7 @@ export default {
         video.play();
       });
 
-      fwd_rcvng_peer.on("signal", (answer) => {
+      fwd_rcvng_peer.on("signal", (answer: string) => {
         socket.emit("fwd_cam_rtc_res", answer);
       });
       fwd_rcvng_peer.on("connect", () => {
@@ -63,28 +64,23 @@ export default {
 <template>
   <Background />
   <MobileBackground />
-  <main v-if="!hasStream">
-    <VultureDetailedDeco id="vulture_logo" />
-    <div id="ini_container">
-      <BaseLabel
-        id="current_status"
-        v-text="'Establishing Connection'"
-        color="#FFF"
-      />
-      <BaseLabel id="connection_deco" v-text="'/|/'" color="#1400FF" />
-    </div>
+  <main>
+    <Video v-show="hasStream" id="vid_container" ref="vid_container"></Video>
+    <Main id="ui_overlay"></Main>
   </main>
-  <Video v-show="hasStream" id="vid_container" ref="vid_container"></Video>
 </template>
 <style scoped>
+#ui_overlay {
+  z-index: 10;
+}
 #vid_container {
   position: absolute;
   top: 0%;
   left: 0%;
   width: 100%;
   height: 100%;
-  z-index: 5;
-  background-color: #0500ff20;
+  z-index: 0;
+  background-color: #0500ff00;
 }
 @keyframes can {
   0% {

@@ -13,8 +13,8 @@ import CommandDeco from "@/components/AT_MinimizedMenuCommandDeco.vue";
 import BaseLabel from "@/components/BaseLabel.vue";
 import SecurityDeco from "@/components/SecurityDeco.vue";
 
-import scale from '@/composables/scale.ts';
-import percentage from '@/composables/percentage.ts';
+import scale from "@/composables/scale.ts";
+import percentage from "@/composables/percentage.ts";
 </script>
 
 <script lang="ts">
@@ -38,17 +38,19 @@ export default {
     };
   },
   props: {
-    selectedSystemID: {default: ""},
+    selectedSystemID: { default: "" },
     vulture_hardware_status_obj: {},
     vulture_connection_status: { default: false },
   },
   methods: {
-    MenuButtonBorderController(sys_id:string){
-      if(this.selectedSystemID == sys_id){
-        return 'border-right: solid 1px #0500FF';
-      }
-      else{
-        return '';
+    selectedSystemEmitter(sys_id: string) {
+      this.$emit("onVultureSystemSelected", { sys_id: sys_id });
+    },
+    MenuButtonBorderController(sys_id: string) {
+      if (this.selectedSystemID == sys_id) {
+        return "border-right: solid 1px #0500FF";
+      } else {
+        return "";
       }
     },
     DynamicsMenuObfuscatorWidth() {
@@ -173,9 +175,12 @@ export default {
       title="Sonar Array"
       id="minimized_menu_sonar_array_btn"
       class="minimized-menu-item"
-      :style="`background-color: ${system_color_parser('sonar_array')}20; ${MenuButtonBorderController('sonar_array')}`"
+      :style="`background-color: ${system_color_parser(
+        'sonar_array'
+      )}20; ${MenuButtonBorderController('sonar_array')}`"
       @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'sonar_array')"
       @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'sonar_array')"
+      @click="selectedSystemEmitter('sonar_array')"
     >
       <BaseLabel
         class="extended_btn_l"
@@ -192,9 +197,12 @@ export default {
       title="Dynamics"
       id="minimized_menu_dynamics_btn"
       class="minimized-menu-item"
-      :style="`background-color: ${system_color_parser('dynamics')}20; ${MenuButtonBorderController('dynamics')}`"
+      :style="`background-color: ${system_color_parser(
+        'dynamics'
+      )}20; ${MenuButtonBorderController('dynamics')}`"
       @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'dynamics')"
       @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'dynamics')"
+      @click="selectedSystemEmitter('dynamics')"
     >
       <BaseLabel
         class="extended_btn_l"
@@ -237,7 +245,9 @@ export default {
       title="Nav"
       id="minimized_menu_nav_btn"
       class="minimized-menu-item"
-      :style="`background-color: ${system_color_parser('navigation')}20; ${MenuButtonBorderController('nav')};`"
+      :style="`background-color: ${system_color_parser(
+        'navigation'
+      )}20; ${MenuButtonBorderController('nav')};`"
       @mouseenter="MinimizedMenuButtonOnMouseEnter($event, 'navigation')"
       @mouseleave="MinimizedMenuButtonOnMouseLeave($event, 'navigation')"
     >

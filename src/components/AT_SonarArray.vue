@@ -6,30 +6,21 @@ import BaseTopBar from "@/components/AT_BaseTopBar.vue";
 import DynamicsTelemetry from "@/components/AT_DynamicsTelemetry.vue";
 import MobileDynamicsTelemetry from "@/components/AT_MobileDynamicsTelemetry.vue";
 import DynamicsControls from "@/components/AT_DynamicsControls.vue";
-import DynamicsHardwareStatus from "@/components/AT_BaseHardwareStatus.vue";
+import SonarArrayHardwareStatus from "@/components/AT_BaseHardwareStatus.vue";
 import BaseLabel from "@/components/BaseLabel.vue";
 import MobileBaseFullWidthControls from "@/components/M_BaseFullWidthSelectionControls.vue";
 
 import isMobile from "@/composables/isMobile.ts";
 </script>
-
-<script lang="ts">
+    
+    <script lang="ts">
 export default {
   props: {
     current_user_un: { default: "---" },
     telemetry: {
       type: Object,
       default(rawProps: Object) {
-        return {
-          imu_alpha: {
-            gyro: {
-              pitch: { angle: 0, rate: 0 },
-              roll: { angle: 0, rate: 0 },
-              yaw: { angle: 0, rate: 0 },
-            },
-            accelerometer: { pitch: 0, roll: 0 },
-          },
-        };
+        return {};
       },
     },
     selected_vulture_obj: { default: { vid: "", vn: "" } },
@@ -38,15 +29,30 @@ export default {
     return {
       mobile_window_id:
         "telemetry" /*mobile interface has 2 subcomponents: telmetry | controls */,
-      hardware_status_arr: [
+      hardwareStatusArray: [
         {
-          name: "IMU Alpha",
+          name: "Front Sonar",
           telemetry: { latency: true, data: true },
           hardware_connection: true,
         },
         {
-          name: "IMU Beta",
-          telemetry: { latency: false, data: true },
+          name: "Right-side Sonar",
+          telemetry: { latency: true, data: true },
+          hardware_connection: true,
+        },
+        {
+          name: "Rear Sonar",
+          telemetry: { latency: true, data: true },
+          hardware_connection: true,
+        },
+        {
+          name: "Left-side Sonar",
+          telemetry: { latency: true, data: true },
+          hardware_connection: true,
+        },
+        {
+          name: "Ground Sonar",
+          telemetry: { latency: true, data: true },
           hardware_connection: false,
         },
       ],
@@ -63,33 +69,20 @@ export default {
   },
 };
 </script>
-
-<template>
+    
+    <template>
   <BaseTopBar
     :SelectedVultureObject="selected_vulture_obj"
     :CurrentUsername="current_user_un"
-    systemID="Dynamics"
+    systemID="Sonar Array"
   ></BaseTopBar>
-  <DynamicsTelemetry
-    v-if="!isMobile()"
-    :telemetry="telemetry"
-  ></DynamicsTelemetry>
 
-  <MobileDynamicsTelemetry
-    v-if="isMobile() && mobile_window_id == 'telemetry'"
-    :telemetry="telemetry"
-  ></MobileDynamicsTelemetry>
-
-  <DynamicsControls
-    v-show="!isMobile() || (isMobile() && mobile_window_id == 'controls')"
-  ></DynamicsControls>
-
-  <DynamicsHardwareStatus
+  <SonarArrayHardwareStatus
     v-show="!isMobile() || (isMobile() && mobile_window_id == 'telemetry')"
-    :hardwareStatusArray="hardware_status_arr"
-    :isMinifiable="false"
-    :isMinifiedByDefault="false"
-  ></DynamicsHardwareStatus>
+    :hardwareStatusArray="hardwareStatusArray"
+    :isMinifiable="true"
+    :isMinifiedByDefault="true"
+  ></SonarArrayHardwareStatus>
 
   <MobileBaseFullWidthControls
     id="mobile_dynamics_ui_controls"
@@ -100,7 +93,7 @@ export default {
     v-if="isMobile()"
   ></MobileBaseFullWidthControls>
 </template>
-<style scoped>
+    <style scoped>
 #mobile_dynamics_ui_controls {
   top: 0.6% !important;
 }

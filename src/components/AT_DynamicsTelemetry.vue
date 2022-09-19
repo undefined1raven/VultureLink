@@ -142,7 +142,7 @@ export default {
 <style scoped>
 #dynamics_telemetry_line {
   top: 0%;
-  left: 100%;
+  left: 99%;
   height: 100%;
 }
 @keyframes ini_ani {
@@ -170,7 +170,7 @@ export default {
   top: 12.235294118%;
   left: 68.117029257%;
 }
-.post_ani{
+.post_ani {
   transform: translateY(0%) !important;
 }
 .animation_group_0 {
@@ -182,7 +182,6 @@ export default {
   left: 5.052083333%;
   width: 69.427083333%;
   height: 39.351851852%;
-  overflow: hidden;
 }
 @media only screen and (max-width: 1070px) and (min-height: 550px) {
   #axis_selection_menu {
@@ -246,6 +245,7 @@ export default {
     top: 12.4375%;
     left: 1.388888889%;
     width: 97.222222222%;
+    overflow: hidden;
   }
 }
 </style>

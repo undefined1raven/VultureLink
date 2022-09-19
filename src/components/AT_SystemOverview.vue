@@ -22,10 +22,10 @@ export default {
     vulture_connection_status: "",
     vulture_hardware_status_obj: "",
     selected_vulture_obj: { default: { vn: "", vid: "" } },
-    isMobile: {default: false},
+    isMobile: { default: false },
   },
   methods: {
-    system_selected_emitter(sys_id:string) {
+    system_selected_emitter(sys_id: string) {
       this.$emit("onVultureSystemSelected", { sys_id: sys_id });
     },
     network_status_style_parser() {
@@ -35,7 +35,7 @@ export default {
         return { label: "Vulture Offline", color: "#FF006B" };
       }
     },
-    system_status_label_parser(sys_id:string) {
+    system_status_label_parser(sys_id: string) {
       if (!this.vulture_connection_status) {
         return "Awaiting Connection";
       } else {
@@ -46,7 +46,7 @@ export default {
         }
       }
     },
-    system_color_parser(sys_id:string) {
+    system_color_parser(sys_id: string) {
       if (!this.vulture_connection_status) {
         return "#0400D4";
       } else {
@@ -71,7 +71,8 @@ export default {
         <BaseLabel id="system_menu_l" v-text="'Vulture Systems'"></BaseLabel>
         <OverviewButton
           id="sonar_array_overview_btn"
-          system_label="SONAR ARRAY"
+          system_label="Sonar Array"
+          @click="system_selected_emitter('sonar_array')"
           :stroke="
             useColorFromVultureSystemStatus({
               vulture_connection_status: vulture_connection_status,
@@ -82,38 +83,38 @@ export default {
         ></OverviewButton>
         <OverviewButton
           id="power_overview_btn"
-          system_label="POWER"
+          system_label="Power"
           :stroke="'#0400D4'"
         ></OverviewButton>
         <OverviewButton
           id="propulsion_overview_btn"
-          system_label="PROPULSION"
+          system_label="Propulsion"
           :stroke="'#0400D4'"
         ></OverviewButton>
         <OverviewButton
           id="dynamics_overview_btn"
-          system_label="DYNAMICS"
+          system_label="Dynamics"
           :stroke="system_color_parser('dynamics')"
           @click="system_selected_emitter('dynamics')"
         ></OverviewButton>
         <OverviewButton
           id="optical_array_overview_btn"
-          system_label="OPTICAL ARRAY"
+          system_label="Optical Array"
           :stroke="'#0400D4'"
         ></OverviewButton>
         <OverviewButton
           id="autonomy_overview_btn"
-          system_label="AUTONOMY"
+          system_label="Autonomy"
           :stroke="'#0400D4'"
         ></OverviewButton>
         <OverviewButton
           id="nav_overview_btn"
-          system_label="NAVIGATION"
+          system_label="Navigation"
           :stroke="system_color_parser('navigation')"
         ></OverviewButton>
         <OverviewButton
           id="network_overview_btn"
-          system_label="NETWORK"
+          system_label="Network"
           :stroke="'#0400D4'"
         ></OverviewButton>
       </div>
@@ -134,6 +135,7 @@ export default {
         :systemStatusLabel="system_status_label_parser('sonar_array')"
         :systemStatusColor="system_color_parser('sonar_array')"
         sys_id="'sonar_array'"
+        @click="system_selected_emitter('sonar_array')"
       ></MobileOverviewButton>
       <MobileOverviewButton
         id="m_overview_dynamics_btn"

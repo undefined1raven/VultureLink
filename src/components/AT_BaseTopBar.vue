@@ -17,6 +17,7 @@ export default {
   props: {
     SelectedVultureObject: { default: { vn: "", vid: "" } },
     CurrentUsername: { default: "" },
+    systemID: {default: ''},
   },
   data() {
     return {
@@ -76,7 +77,7 @@ export default {
       color="#FFF"
       id="system_l"
       :style="system_l_left"
-      v-text="`${SelectedVultureObject.vn} Systems \\\\ Dynamics`"
+      v-text="`${SelectedVultureObject.vn} Systems \\\\ ${systemID}`"
     ></BaseLabel>
   </div>
 </template>

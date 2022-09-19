@@ -80,6 +80,6 @@ export default {
   transform: translate(-50%, -50%);
   font-family: "Titillium Web", sans-serif;
   color: #fff;
-  font-size: 0.9vw;
+  font-size: 2.2vh;
 }
 </style>
