@@ -5,11 +5,6 @@ export default {
     side: { default: "left" },
     id: { default: "" },
   },
-  mounted() {
-    setInterval(() => {
-      console.log(this.$refs.lower_lateral_left_ui_bkg.getBBox().width);
-    }, 1000);
-  },
 };
 </script>
 
@@ -25,7 +20,6 @@ export default {
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      ref="lower_lateral_left_ui_bkg"
       d="M525.943 1.00003L726.468 1.00003L496.353 161L293 161L29.5 161L-193 1.00003L90.1562 1.00003L261.734 1.00003L525.943 1.00003Z"
       fill="url(#paint0_diamond_102_4207)"
       stroke="#242424"

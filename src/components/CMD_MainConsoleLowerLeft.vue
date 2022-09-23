@@ -25,7 +25,10 @@ export default {
         document.documentElement.clientWidth
       );
       this.screenAspectRatio = root.clientWidth / root.clientHeight;
-      this.primaryContainerStyle = `width: ${primaryContainerWidth + (Math.abs(1.971252567 - this.screenAspectRatio) * 10)}%;`;
+      this.primaryContainerStyle = `width: ${
+        primaryContainerWidth +
+        Math.abs(1.971252567 - this.screenAspectRatio) * 10
+      }%;`;
     },
   },
   mounted() {
@@ -40,6 +43,7 @@ export default {
   data() {
     return {
       primaryContainerStyle: "",
+      secondary0ContainerStyle: "",
       screenAspectRatio:
         document.documentElement.clientWidth /
         document.documentElement.clientHeight,
@@ -55,6 +59,10 @@ export default {
       id="cmd_main_console_lower_left_primary_container"
       :style="primaryContainerStyle"
     ></div>
+    <div
+      id="cmd_main_console_lower_left_secondary_0_container"
+      :style="secondary0ContainerStyle"
+    ></div>
   </div>
 </template>
 <style scoped>
@@ -64,6 +72,14 @@ export default {
   left: 0%;
   width: 27.1875%;
   height: 12.5%;
+  background-color: #55555540;
+}
+#cmd_main_console_lower_left_secondary_0_container {
+  position: absolute;
+  top: 87.5%;
+  left: 25.75625%;
+  width: 6.458333333%;
+  height: 4.074074074%;
   background-color: #55555540;
 }
 </style>
