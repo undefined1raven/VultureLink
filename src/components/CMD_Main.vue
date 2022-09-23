@@ -8,8 +8,19 @@ import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
 import AuroraLogo from "@/components/AuroraLogo.vue";
 import ConsoleMidSectionBkg from "@/components/CMD_ConsoleMidSectionBkg.vue";
 import ConsoleLowerLateralSectionBkg from "@/components/CMD_ConsoleLowerLateralSectionBkg.vue";
-
+import MainConsoleLowerLeft from "@/components/CMD_MainConsoleLowerLeft.vue";
 import isMobile from "@/composables/isMobile.ts";
+</script>
+
+
+<script lang="ts">
+export default {
+  components: {
+    ConsoleLowerLateralSectionBkg,
+  },
+  mounted() {
+  },
+};
 </script>
     
 <template>
@@ -39,11 +50,15 @@ import isMobile from "@/composables/isMobile.ts";
     <ConsoleLowerLateralSectionBkg
       id="console_lower_left_side_bkg"
       side="left"
+      ref="lower_lateral_left_ref"
     ></ConsoleLowerLateralSectionBkg>
     <ConsoleLowerLateralSectionBkg
       id="console_lower_right_side_bkg"
       side="right"
     ></ConsoleLowerLateralSectionBkg>
+  </div>
+  <div id="ui_actual_container">
+    <MainConsoleLowerLeft></MainConsoleLowerLeft>
   </div>
 </template>
 <style scoped>
