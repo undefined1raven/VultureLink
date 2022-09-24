@@ -40,7 +40,7 @@ export default {
   ></BaseLabel>
   <div id="ui_overlay_container">
     <ConsoleMidSectionBkg id="console_lower_mid_bkg"></ConsoleMidSectionBkg>
-    <ConsoleMidSectionBkg id="console_top_mid_bkg"></ConsoleMidSectionBkg>
+    <ConsoleMidSectionBkg v-if="false" id="console_top_mid_bkg"></ConsoleMidSectionBkg>
     <ConsoleMidSectionBkg
       id="console_vertical_left_side_bkg"
     ></ConsoleMidSectionBkg>
