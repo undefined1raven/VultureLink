@@ -1520,30 +1520,6 @@ app.post('/security_post', (req, res) => {
 });
 
 
-let es = bcrypt.hash('000', 10).then(rx => {
-    const uacq = new UAC_v2({
-        username: 'user',
-        email: 'user@useremail.com',
-        password: rx,
-        vid: uuid.v4(),
-        acid: uuid.v4(),
-        did: [],
-        secca: es,
-        mfa_tkn: mfa_mgr.generateSecret({ length: 40 }),
-        sec_auth_methods_arr: [true, false, false],//pass | mfa | security key
-        sec_rcvry_methods_arr: [],
-        acc_auth_methods_arr: [true, false, false],
-        acc_rcvry_methods_arr: [],
-        rcvry_codes_arr: [gen_rc(), gen_rc(), gen_rc(), gen_rc(), gen_rc(), gen_rc(), gen_rc(), gen_rc()],
-        vow: [{ vid: '5043c9be-1d40-457b-8c38-2dfd39887264', vn: "Void Ray" }, { vid: 'a5ef02a9-7838-42bc-b4e8-f156cc1f06c7', vn: 'Battlecruiser' }, { vid: 'bf4e40bc-7abe-4e3e-afe7-e5e691d4f8ed', vn: 'Tempest' }, { vid: '2932c024-5409-4099-b239-9dc95f778f28', vn: 'Carrier' }, { vid: '202cf027-49ef-4cb2-8147-e98331a38ac5', vn: 'Prism' }],
-        dock_array: [{ dock_id: '536413de-9134-4c61-a859-1da3a12478f7', dock_id: '21f9a158-5953-48fc-a4f1-a9af2bf4d27d' }],
-        contact_emails_arr: [],
-        contact_phone_numbers_arr: [],
-    });
-    // uacq.save().then((r) => console.log(`${r.vid} added to DeepStorage`))
-
-})
-
 app.get('/advanced_telemetry', (req, res) => {
     if (rate_limiter_checker(adv_tele_limiter, res)) {
         check_ua(req, res, 'adv_tele.ejs', 'adv_tele_m.ejs');

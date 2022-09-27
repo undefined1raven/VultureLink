@@ -39,7 +39,7 @@ export default {
     color="#303030"
     v-text="'Vulture Video Downlink /|/'"
   ></BaseLabel>
-  <AltitudeDock></AltitudeDock>
+  <AltitudeDock v-if="!isMobile()"></AltitudeDock>
 
 </template>
 <style scoped>
