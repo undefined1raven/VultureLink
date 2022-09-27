@@ -120,11 +120,12 @@ export default {
       socket.emit("req_un", {
         origin: "adv_tele",
         ath: getCookie("adv_tele_sio_ath"),
-        uid: getCookie("eor"),
+        acid: this.current_user_acid,
       });
 
-      socket.on("un_res", (un) => {
+      socket.on("un_res", (un:string) => {
         this.current_user_un = un.username;
+        console.log(un)
       });
 
       socket.on("sonar_telemetry_pkg_rebound", (payload) => {

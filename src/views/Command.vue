@@ -29,6 +29,7 @@ export default {
     };
   },
   mounted() {
+    socket.emit('start_vulture_uplink_sig');
     setTimeout(() => {
       const fwd_rcvng_peer = new SimplePeer({
         initiator: false,

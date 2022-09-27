@@ -9,6 +9,7 @@ import AuroraLogo from "@/components/AuroraLogo.vue";
 import ConsoleMidSectionBkg from "@/components/CMD_ConsoleMidSectionBkg.vue";
 import ConsoleLowerLateralSectionBkg from "@/components/CMD_ConsoleLowerLateralSectionBkg.vue";
 import MainConsoleLowerLeft from "@/components/CMD_MainConsoleLowerLeft.vue";
+import AltitudeDock from "@/components/CMD_AltitudeDock.vue";
 import isMobile from "@/composables/isMobile.ts";
 </script>
 
@@ -38,28 +39,8 @@ export default {
     color="#303030"
     v-text="'Vulture Video Downlink /|/'"
   ></BaseLabel>
-  <div id="ui_overlay_container">
-    <ConsoleMidSectionBkg id="console_lower_mid_bkg"></ConsoleMidSectionBkg>
-    <ConsoleMidSectionBkg v-if="false" id="console_top_mid_bkg"></ConsoleMidSectionBkg>
-    <ConsoleMidSectionBkg
-      id="console_vertical_left_side_bkg"
-    ></ConsoleMidSectionBkg>
-    <ConsoleMidSectionBkg
-      id="console_vertical_right_side_bkg"
-    ></ConsoleMidSectionBkg>
-    <ConsoleLowerLateralSectionBkg
-      id="console_lower_left_side_bkg"
-      side="left"
-      ref="lower_lateral_left_ref"
-    ></ConsoleLowerLateralSectionBkg>
-    <ConsoleLowerLateralSectionBkg
-      id="console_lower_right_side_bkg"
-      side="right"
-    ></ConsoleLowerLateralSectionBkg>
-  </div>
-  <div id="ui_actual_container">
-    <MainConsoleLowerLeft></MainConsoleLowerLeft>
-  </div>
+  <AltitudeDock></AltitudeDock>
+
 </template>
 <style scoped>
 #console_vertical_right_side_bkg {
