@@ -14,27 +14,76 @@ export default {
     return {
       isFullScreen: false,
       zypStickTop: "50%",
+      zypStickLeft: "50%",
       ZInput: 0,
+      YPrimeInput: 0,
+      zypStickInitialPosition: { x: 0, y: 0 },
+      zypInputDirection: "",
     };
   },
   methods: {
-    zypStickOnTouchEnd(e:Event){
-        this.zypStickTop = '50%';
-        this.ZInput = 0;
+    zypStickOnTouchStart(e: Event) {
+      this.zypStickInitialPosition = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
     },
-    zypStickOnMove(e: Event) {
-      let inPercentage = rangeScaler(
-        percentage(e.touches[0].clientY, document.documentElement.clientHeight),
-        53.333333333,
-        98.888333333,
-        0,
-        100
-      );
-      let currentZIn = rangeScaler(inPercentage, 0, 100, -10, 10) * -1;
-      if (currentZIn < 10 && currentZIn > -10) {
-        this.ZInput = currentZIn.toFixed(2);
+    zypStickOnTouchEnd(e: Event) {
+      this.zypStickTop = "50%";
+      this.zypStickLeft = "50%";
+      this.ZInput = 0;
+      this.YPrimeInput = 0;
+    },
+    zypStickOnMove(e: Event) {;
+      if (this.ZInput == 0) {
+        setTimeout(() => {
+          if (
+            Math.abs(e.touches[0].clientX - this.zypStickInitialPosition.x) >
+            Math.abs(e.touches[0].clientY - this.zypStickInitialPosition.y)
+          ) {
+            this.inputDirection = "x";
+          } else {
+            this.inputDirection = "y";
+          }
+          console.log(this.inputDirection);
+        }, 200);
       }
-      this.zypStickTop = inPercentage + "%";
+      if (this.inputDirection == "y") {
+        let inPercentage = rangeScaler(
+          percentage(
+            e.touches[0].clientY,
+            document.documentElement.clientHeight
+          ),
+          53.333333333,
+          98.888333333,
+          0,
+          100
+        );
+        let currentZIn = rangeScaler(inPercentage, 0, 100, -10, 10) * -1;
+        if (currentZIn < 10 && currentZIn > -10) {
+          this.ZInput = currentZIn.toFixed(2);
+        }
+        this.zypStickTop = inPercentage + "%";
+        this.YPrimeInput = 0;
+      }else{
+        let inPercentage = rangeScaler(
+          percentage(
+            e.touches[0].clientX,
+            document.documentElement.clientWidth
+          ),
+          0.625,
+          26.2496875,
+          0,
+          100
+        );
+        let currentYPrimeIn = rangeScaler(inPercentage, 0, 100, -10, 10);
+        if (currentYPrimeIn < 10 && currentYPrimeIn > -10) {
+          this.YPrimeInput = currentYPrimeIn.toFixed(2);
+        }
+        this.zypStickTop = "50%";
+        this.ZInput = 0;
+        this.zypStickLeft = inPercentage + "%";
+      }
     },
     FullScreenButtonTextController() {
       if (this.isFullScreen) {
@@ -59,9 +108,20 @@ export default {
 <template>
   <div id="xy_controls_container"></div>
   <div id="zyp_controls_container">
-    <div @touchend="zypStickOnTouchEnd" @touchmove="zypStickOnMove" id="z_track"></div>
+    <div
+      @touchstart="zypStickOnTouchStart"
+      @touchend="zypStickOnTouchEnd"
+      @touchmove="zypStickOnMove"
+      id="z_track"
+    ></div>
     <div id="YPrime_track"></div>
-    <div :style="`top: ${zypStickTop};`" @touchend="zypStickOnTouchEnd" @touchmove="zypStickOnMove" id="zyp_stick"></div>
+    <div
+      @touchstart="zypStickOnTouchStart"
+      :style="`top: ${zypStickTop}; left: ${zypStickLeft}`"
+      @touchend="zypStickOnTouchEnd"
+      @touchmove="zypStickOnMove"
+      id="zyp_stick"
+    ></div>
   </div>
   <BaseLabel
     @click="onFullScreenButtonClick"
@@ -69,6 +129,7 @@ export default {
     v-text="FullScreenButtonTextController()"
   ></BaseLabel>
   <BaseLabel id="alt_input_display" v-text="`${ZInput}m/s`"></BaseLabel>
+  <BaseLabel id="yaw_input_display" v-text="`${YPrimeInput}°/s`"></BaseLabel>
 </template>
 
 <style scoped>
@@ -102,10 +163,13 @@ export default {
   background-color: #ffffff90;
   transform: rotate(-45deg);
 }
-#alt_input_display {
+#alt_input_display, #yaw_input_display {
   top: 40.277777778%;
   left: 24.375%;
   font-size: 4vh;
+}
+#yaw_input_display{
+    left: 44.375%;
 }
 #xy_controls_container {
   position: absolute;
