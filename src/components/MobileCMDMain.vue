@@ -3,7 +3,6 @@ import BaseLabel from "@/components/BaseLabel.vue";
 import BaseHardwareStatusItem from "@/components/AT_BaseHardwareStatusItem.vue";
 
 import isMobile from "@/composables/isMobile.ts";
-import { ESLint } from "eslint";
 </script>
 
 <script lang="ts">
@@ -48,6 +47,16 @@ export default {
 </template>
 
 <style scoped>
+#xy_controls_container {
+  position: absolute;
+  top: 53.888888889%;
+  left: 76.5625%;
+  width: 45.555555555556vh;
+  height: 45.555555555556vh;
+  background-color: #ffffff20;
+  border: solid 1px #fff;
+  border-radius: 500px;
+}
 #fs_btn {
   top: 5%;
   left: 5%;
