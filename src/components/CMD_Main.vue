@@ -10,6 +10,7 @@ import ConsoleMidSectionBkg from "@/components/CMD_ConsoleMidSectionBkg.vue";
 import ConsoleLowerLateralSectionBkg from "@/components/CMD_ConsoleLowerLateralSectionBkg.vue";
 import MainConsoleLowerLeft from "@/components/CMD_MainConsoleLowerLeft.vue";
 import AltitudeDock from "@/components/CMD_AltitudeDock.vue";
+import NavDock from "@/components/CMD_NavDock.vue";
 import isMobile from "@/composables/isMobile.ts";
 </script>
 
@@ -19,7 +20,20 @@ export default {
   components: {
     ConsoleLowerLateralSectionBkg,
   },
+  data() {
+    return {
+      telemetryUItoggle: true /*state for the toggle global shortcut */,
+    };
+  },
   mounted() {
+    document.addEventListener("keyup", (e) => {
+      if (e.shiftKey && e.key == "T" || e.shiftKey && e.key == "t") {
+        this.telemetryUItoggle = !this.telemetryUItoggle;
+      }
+    });
+  },
+  unmounted() {
+    document.removeEventListener("keyup", () => {});
   },
 };
 </script>
@@ -28,19 +42,25 @@ export default {
   <CMD_VultureVideoDownlinkPlaceholder
     id="cmd_overview_video_downlink_indi"
     color="#303030"
+    v-if="!isMobile()"
   ></CMD_VultureVideoDownlinkPlaceholder>
   <VultureDetailedDeco
     color="#303030"
     id="detailed_vulture_deco"
+    v-if="!isMobile()"
   ></VultureDetailedDeco>
-  <AuroraLogo id="aurora_logo" color="#303030"></AuroraLogo>
+  <AuroraLogo id="aurora_logo" v-if="!isMobile()" color="#303030"></AuroraLogo>
   <BaseLabel
     id="vulture_downlink_l"
     color="#303030"
     v-text="'Vulture Video Downlink /|/'"
+    v-if="!isMobile()"
   ></BaseLabel>
-  <AltitudeDock v-if="!isMobile()"></AltitudeDock>
-
+  <AltitudeDock
+    :telemetryUItoggle="telemetryUItoggle"
+    v-if="!isMobile()"
+  ></AltitudeDock>
+  <NavDock v-if="!isMobile()" :telemetryUItoggle="telemetryUItoggle"></NavDock>
 </template>
 <style scoped>
 #console_vertical_right_side_bkg {

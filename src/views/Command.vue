@@ -4,6 +4,10 @@ import MobileBackground from "@/components/MobileBaseBackgroundImg.vue";
 import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
 import BaseLabel from "@/components/BaseLabel.vue";
 import Main from "@/components/CMD_Main.vue";
+import MobileMain from "@/components/MobileCMDMain.vue";
+
+import isMobile from "@/composables/isMobile.ts";
+
 import { io } from "socket.io-client";
 </script>
 
@@ -67,11 +71,12 @@ export default {
   <MobileBackground />
   <main>
     <Video v-show="hasStream" id="vid_container" ref="vid_container"></Video>
-    <Main id="ui_overlay"></Main>
+    <Main v-if="!isMobile()" id="ui_overlay"></Main>
+    <MobileMain v-if="isMobile()" id="mobile_main"></MobileMain>
   </main>
 </template>
 <style scoped>
-#ui_overlay {
+#ui_overlay, #mobile_main {
   z-index: 10;
 }
 #vid_container {

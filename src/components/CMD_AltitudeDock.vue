@@ -2,12 +2,16 @@
 <script setup lang="ts">
 import BaseLabel from "@/components/BaseLabel.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
-import { throwStatement } from "@babel/types";
 </script>
     
 <script lang="ts">
 export default {
-  props: {},
+  props: {
+    telemetryUItoggle: {default: true},
+    telemetry: {
+      default: { gps: { rate: "--", value: "--" }, baro: { rate: "--", value: "--" } },
+    },
+  },
   data() {
     return {
       isExtended: true,
@@ -22,7 +26,7 @@ export default {
 </script>
 
 <template>
-  <div id="cmd_main_alt_dock">
+  <div v-if="telemetryUItoggle" id="cmd_main_alt_dock">
     <BaseLabel
       id="altitude_dock_l"
       @click="onAltitudeDockTitleClick"
@@ -37,12 +41,12 @@ export default {
       <BaseLabel
         id="altitude_atm_value_acx"
         class="primary_l"
-        v-text="'00m'"
+        v-text="`${telemetry.baro.value}m`"
       ></BaseLabel>
       <BaseLabel
         id="altitude_atm_rate_acx"
         class="primary_l"
-        v-text="'00m/s'"
+        v-text="`${telemetry.baro.value}m/s`"
       ></BaseLabel>
       <BaseLabel
         id="altitude_gps_l"
@@ -52,12 +56,12 @@ export default {
       <BaseLabel
         id="altitude_gps_value_acx"
         class="primary_l"
-        v-text="'00m'"
+        v-text="`${telemetry.gps.value}m`"
       ></BaseLabel>
       <BaseLabel
         id="altitude_gps_rate_acx"
         class="primary_l"
-        v-text="'00m/s'"
+        v-text="`${telemetry.gps.rate.toString().padStart(2, '0')}m/s`"
       ></BaseLabel>
       <HorizontalLine color="#0500FF" id="altitude_dock_ln"></HorizontalLine>
     </div>
@@ -77,7 +81,7 @@ export default {
 }
 #altitude_gps_value_acx,
 #altitude_gps_rate_acx {
-  top: 76.129032258%;
+  top: 70.94017094%;
   left: 0%;
   width: 50%;
 }
@@ -86,36 +90,38 @@ export default {
   left: 50%;
 }
 #altitude_gps_l {
-  top: 60.64516129%;
+  top: 50.427350427%;
   left: 2.580645161%;
 }
 #altitude_dock_ln {
-  top: 60%;
+  top: 49.572649573%;
   left: 0;
   width: 100%;
 }
 #altitude_dock_l {
+  top: 21.388888889%;
+  left: 0%;
   border-bottom: solid 1px #0500ff;
   font-size: 2vh;
-  width: 95.483870968%;
-  padding-left: 4.516129032%;
+  width: 7.916666667%;
+  padding-left: 0.364583333%;
   background-color: #0500ff00;
   transition: all linear 0.1s;
 }
 #altitude_dock_l:hover {
-  background-color: #0500ff20;
+  background-color: #0500ff40;
 }
 .secondary_l {
   color: #8e8e8e;
   font-size: 1.4vh;
 }
 #altitude_atm_value_acx {
-  top: 39.35483871%;
+  top: 22.222222222%;
   width: 50%;
   left: 0;
 }
 #altitude_atm_rate_acx {
-  top: 39.35483871%;
+  top: 22.222222222%;
   width: 50%;
   left: 50%;
   border-left: solid 1px #0500ff;
@@ -127,14 +133,14 @@ export default {
   justify-content: center;
 }
 #altitude_atm_l {
-  top: 23.026315789%;
+  top: 1.709401709%;
   left: 2.580645161%;
 }
-#cmd_main_alt_dock {
+#altitude_dock_container {
   position: absolute;
-  top: 21.481481481%;
+  top: 24.722222222%;
   left: 0;
-  height: 14.074074074%;
+  height: 10.833333333%;
   width: 7.916666667%;
   background-color: #000000aa;
 }

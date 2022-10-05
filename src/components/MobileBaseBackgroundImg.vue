@@ -27,19 +27,9 @@ img {
   z-index: 0;
   overflow: hidden;
 }
-@media only screen and (min-width: 769px) {
-  #mobile_bkg {
+@media only screen and (-webkit-max-device-pixel-ratio: 1) {
+  #m_bkg_img_container{
     display: none;
-  }
-}
-@media only screen and (max-width: 768px) {
-  #mobile_bkg {
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    width: 270%;
-    height: 100%;
-    z-index: 0;
   }
 }
 </style>
