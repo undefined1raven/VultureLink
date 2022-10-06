@@ -2,6 +2,8 @@
 import BaseLabel from "@/components/BaseLabel.vue";
 import BaseHardwareStatusItem from "@/components/AT_BaseHardwareStatusItem.vue";
 import BaseLineGraph from "@/components/BaseLineGraph.vue";
+import VerticalLine from "@/components/VerticalLine.vue";
+import HorizontalLine from "@/components/HorizontalLine.vue";
 
 import isMobile from "@/composables/isMobile.ts";
 import percentage from "@/composables/percentage.ts";
@@ -34,7 +36,7 @@ export default {
       this.ZInput = 0;
       this.YPrimeInput = 0;
     },
-    zypStickOnMove(e: Event) {;
+    zypStickOnMove(e: Event) {
       if (this.ZInput == 0) {
         setTimeout(() => {
           if (
@@ -62,10 +64,11 @@ export default {
         let currentZIn = rangeScaler(inPercentage, 0, 100, -10, 10) * -1;
         if (currentZIn < 10 && currentZIn > -10) {
           this.ZInput = currentZIn.toFixed(2);
+          this.zypStickTop = inPercentage + "%";
         }
-        this.zypStickTop = inPercentage + "%";
         this.YPrimeInput = 0;
-      }else{
+        this.zypStickLeft = "50%";
+      } else {
         let inPercentage = rangeScaler(
           percentage(
             e.touches[0].clientX,
@@ -79,10 +82,10 @@ export default {
         let currentYPrimeIn = rangeScaler(inPercentage, 0, 100, -10, 10);
         if (currentYPrimeIn < 10 && currentYPrimeIn > -10) {
           this.YPrimeInput = currentYPrimeIn.toFixed(2);
+          this.zypStickLeft = inPercentage + "%";
         }
         this.zypStickTop = "50%";
         this.ZInput = 0;
-        this.zypStickLeft = inPercentage + "%";
       }
     },
     FullScreenButtonTextController() {
@@ -113,8 +116,17 @@ export default {
       @touchend="zypStickOnTouchEnd"
       @touchmove="zypStickOnMove"
       id="z_track"
+      class="track"
+    >
+      <VerticalLine id="z_track_indi" color="#0500FF"></VerticalLine>
+    </div>
+    <div id="YPrime_track" class="track">
+      <HorizontalLine id="yprime_track_indi" color="#0500FF"></HorizontalLine>
+    </div>
+    <div
+      :style="`top: ${zypStickTop}; left: ${zypStickLeft}`"
+      id="zyp_stick_representation"
     ></div>
-    <div id="YPrime_track"></div>
     <div
       @touchstart="zypStickOnTouchStart"
       :style="`top: ${zypStickTop}; left: ${zypStickLeft}`"
@@ -145,31 +157,54 @@ export default {
   background-color: #0500ff20;
   overflow: hidden;
 }
+.track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 #z_track {
   position: absolute;
   height: 100%;
   width: 10vh;
-  background-color: #ffffff30;
+
+  background-color: #ffffff01;
+}
+#z_track_indi {
+  top: 0%;
+  height: 100%;
+}
+#yprime_track_indi {
+  left: 0%;
+  width: 100%;
 }
 #YPrime_track {
   width: 100%;
   height: 10vh;
-  background-color: #ffffff30;
+  background-color: #ffffff01;
 }
 #zyp_stick {
   position: absolute;
-  width: 7vh;
-  height: 7vh;
-  background-color: #ffffff90;
+  width: 8vh;
+  height: 8vh;
+  background-color: #ffffff00;
   transform: rotate(-45deg);
+  z-index: 50;
 }
-#alt_input_display, #yaw_input_display {
+#zyp_stick_representation {
+  position: absolute;
+  width: 5vh;
+  height: 5vh;
+  background-color: #0500ff80;
+  z-index: 2;
+}
+#alt_input_display,
+#yaw_input_display {
   top: 40.277777778%;
   left: 24.375%;
   font-size: 4vh;
 }
-#yaw_input_display{
-    left: 44.375%;
+#yaw_input_display {
+  left: 44.375%;
 }
 #xy_controls_container {
   position: absolute;

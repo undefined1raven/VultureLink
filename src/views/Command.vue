@@ -30,10 +30,22 @@ export default {
   data() {
     return {
       hasStream: false,
+      current_user_acid: getCookie("acid"),
     };
   },
   mounted() {
-    socket.emit('start_vulture_uplink_sig');
+    socket.emit("add_socket_to_acid_room", {
+      sid: socket.id,
+      acid: this.current_user_acid,
+    });
+
+    socket.emit("new_target_vid", {
+      ath: getCookie("adv_tele_sio_ath"),
+      pvid: 'default',
+      vid: 'a5ef02a9-7838-42bc-b4e8-f156cc1f06c7',
+    });
+
+    socket.emit("request_vulture_uplink", {vid: 'a5ef02a9-7838-42bc-b4e8-f156cc1f06c7'});
     setTimeout(() => {
       const fwd_rcvng_peer = new SimplePeer({
         initiator: false,
@@ -76,7 +88,8 @@ export default {
   </main>
 </template>
 <style scoped>
-#ui_overlay, #mobile_main {
+#ui_overlay,
+#mobile_main {
   z-index: 10;
 }
 #vid_container {
@@ -99,6 +112,7 @@ export default {
     background-color: #0500ff20;
   }
 }
+
 #connection_deco {
   top: 73.240740741%;
   left: 50%;
@@ -134,5 +148,10 @@ export default {
   transform: translate(-50%);
   width: 17.291666667%;
   height: 34.351851852%;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  #vid_container {
+    height: auto;
+  }
 }
 </style>

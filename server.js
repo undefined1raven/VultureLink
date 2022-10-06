@@ -484,6 +484,11 @@ io.on('connection', function (socket_l) {
         io.emit('imu_restart_signal_sr');
     });//Origin Advanced_Telemetry F/E | IMU Restart Signal [demo] | Relayed to: Vulture
 
+    socket_l.on('request_vulture_uplink', request_vulture_uplink_payload => {
+        io.to(`${request_vulture_uplink_payload.vid}`).emit('relayed_request_vulture_uplink');
+    });
+
+
     socket_l.on('omega_reboot_signal', () => {
         io.emit('omega_reboot_signal_relay');
     });//Origin Advanced_Telemetry F/E | Omega Hardware Interface Board Restart Signal | Relayed to: Vulture
@@ -1702,6 +1707,7 @@ io.on('connection', socket => {
                 socket.leave(`${new_target_vid_payload.pvid}`);
                 socket.join(`${new_target_vid_payload.vid}`);
             });
+
 
             //--TLP--// tlp
             socket.on('tlp_user_response', (ur) => {
