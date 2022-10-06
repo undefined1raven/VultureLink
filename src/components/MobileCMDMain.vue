@@ -25,6 +25,19 @@ export default {
     };
   },
   methods: {
+    normalizePositionDelta(x: number, y: number) {
+      let screenWidth = document.documentElement.clientWidth;
+      let screenHeight = document.documentElement.clientHeight;
+      if (
+        rangeScaler(Math.abs(x - this.zypStickInitialPosition.x), 0, screenWidth, 0, 200) >
+        rangeScaler(Math.abs(y - this.zypStickInitialPosition.y), 0, screenHeight, 0, 180)
+      ) {
+        return 'x';
+      }
+      else{
+        return 'y';
+      }
+    },
     zypStickOnTouchStart(e: Event) {
       this.zypStickIndiSize = 6;
       this.zypStickInitialPosition = {
@@ -38,21 +51,15 @@ export default {
       this.zypStickLeft = "45%";
       this.ZInput = 0;
       this.YPrimeInput = 0;
+      this.inputDirection = false;
       this.zypStickInitialPosition = { x: 0, y: 0 };
     },
     zypStickOnMove(e: Event) {
       let offset = 5;
       if (this.ZInput == 0) {
         setTimeout(() => {
-          if (
-            Math.abs(e.touches[0].clientX - this.zypStickInitialPosition.x) >
-            Math.abs(e.touches[0].clientY - this.zypStickInitialPosition.y)
-          ) {
-            this.inputDirection = "x";
-          } else {
-            this.inputDirection = "y";
-          }
-        }, 250);
+            this.inputDirection = this.normalizePositionDelta(e.touches[0].clientX, e.touches[0].clientY);
+        }, 75);
       }
       if (this.inputDirection == "y") {
         let inPercentage = rangeScaler(
@@ -168,8 +175,12 @@ export default {
 
 <style scoped>
 @keyframes track_indi_ani {
-  0%{transform: scale(0, 0);}
-  100%{transform: scale(100%, 100%);}
+  0% {
+    transform: scale(0, 0);
+  }
+  100% {
+    transform: scale(100%, 100%);
+  }
 }
 #zyp_controls_container {
   position: absolute;
