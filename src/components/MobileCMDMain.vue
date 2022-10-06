@@ -25,6 +25,9 @@ export default {
     };
   },
   methods: {
+    emitFlightInput(){
+      this.$emit('FlightInputOnChange', {rollRate: 0, pitchRate: 0, yawRate: this.YPrimeInput, altRate: this.ZInput});
+    },
     normalizePositionDelta(x: number, y: number) {
       let screenWidth = document.documentElement.clientWidth;
       let screenHeight = document.documentElement.clientHeight;
@@ -61,6 +64,7 @@ export default {
       this.YPrimeInput = 0;
       this.inputDirection = false;
       this.zypStickInitialPosition = { x: 0, y: 0 };
+      this.emitFlightInput();
     },
     zypStickOnMove(e: Event) {
       let offset = 5;
@@ -106,6 +110,7 @@ export default {
         this.zypStickTop = "45%";
         this.ZInput = 0;
       }
+      this.emitFlightInput();
     },
     FullScreenButtonTextController() {
       if (this.isFullScreen) {

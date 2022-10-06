@@ -488,6 +488,9 @@ io.on('connection', function (socket_l) {
         io.to(`${request_vulture_uplink_payload.vid}`).emit('relayed_request_vulture_uplink');
     });
 
+    socket_l.on('FlightInputOnChange', FlightInputOnChangePayload => {
+        io.to(`${FlightInputOnChangePayload.vid}`).emit('FlightInputOnChange', FlightInputOnChangePayload);
+    });
 
     socket_l.on('omega_reboot_signal', () => {
         io.emit('omega_reboot_signal_relay');

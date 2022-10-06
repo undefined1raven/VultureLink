@@ -31,7 +31,15 @@ export default {
     return {
       hasStream: false,
       current_user_acid: getCookie("acid"),
+      targetVid: 'a5ef02a9-7838-42bc-b4e8-f156cc1f06c7',
     };
+  },
+  methods:{
+    FlightInputOnChangeHandler(args:object){
+      let transit_obj = {telemetry: args, vid: this.targetVid};
+      socket.emit('FlightInputOnChange', transit_obj); 
+      console.log(JSON.stringify(args))
+    }
   },
   mounted() {
     socket.emit("add_socket_to_acid_room", {
@@ -42,10 +50,10 @@ export default {
     socket.emit("new_target_vid", {
       ath: getCookie("adv_tele_sio_ath"),
       pvid: 'default',
-      vid: 'a5ef02a9-7838-42bc-b4e8-f156cc1f06c7',
+      vid: this.targetVid,
     });
 
-    socket.emit("request_vulture_uplink", {vid: 'a5ef02a9-7838-42bc-b4e8-f156cc1f06c7'});
+    socket.emit("request_vulture_uplink", {vid: this.targetVid});
     setTimeout(() => {
       const fwd_rcvng_peer = new SimplePeer({
         initiator: false,
@@ -84,7 +92,7 @@ export default {
   <main>
     <Video v-show="hasStream" id="vid_container" ref="vid_container"></Video>
     <Main v-if="!isMobile()" id="ui_overlay"></Main>
-    <MobileMain v-if="isMobile()" id="mobile_main"></MobileMain>
+    <MobileMain @FlightInputOnChange="FlightInputOnChangeHandler" v-if="isMobile()" id="mobile_main"></MobileMain>
   </main>
 </template>
 <style scoped>
