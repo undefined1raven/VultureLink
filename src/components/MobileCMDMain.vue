@@ -38,6 +38,14 @@ export default {
         return 'y';
       }
     },
+    zypTrackIndiStyleController(axis_id:string){
+      if(axis_id == this.inputDirection){
+        return '#0500FF;'
+      }
+      else{
+        return '#444;'
+      }
+    },
     zypStickOnTouchStart(e: Event) {
       this.zypStickIndiSize = 6;
       this.zypStickInitialPosition = {
@@ -132,7 +140,7 @@ export default {
       <VerticalLine
         id="z_track_indi"
         v-if="zypStickInitialPosition.x != 0 || zypStickInitialPosition.y != 0"
-        color="#0500FF"
+        :color="zypTrackIndiStyleController('y')"
       ></VerticalLine>
       <VerticalLine
         id="z_track_mini_indi"
@@ -144,7 +152,7 @@ export default {
       <HorizontalLine
         id="yprime_track_indi"
         v-if="zypStickInitialPosition.x != 0 || zypStickInitialPosition.y != 0"
-        color="#0500FF"
+        :color="zypTrackIndiStyleController('x')"
       ></HorizontalLine>
       <HorizontalLine
         id="yprime_track_mini_indi"
@@ -198,6 +206,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color linear 0.1s;
 }
 #z_track {
   position: absolute;
