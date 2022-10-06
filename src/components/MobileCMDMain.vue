@@ -238,6 +238,7 @@ export default {
   position: absolute;
   width: 5vh;
   height: 5vh;
+  transform: rotate(-45deg);
   background-color: #0500ff80;
   z-index: 2;
   transition: width linear 0.1s, height linear 0.1s;
