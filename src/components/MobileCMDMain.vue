@@ -15,28 +15,33 @@ export default {
   data() {
     return {
       isFullScreen: false,
-      zypStickTop: "50%",
-      zypStickLeft: "50%",
+      zypStickTop: "45%",
+      zypStickLeft: "45%",
       ZInput: 0,
       YPrimeInput: 0,
       zypStickInitialPosition: { x: 0, y: 0 },
-      zypInputDirection: "",
+      inputDirection: false,
+      zypStickIndiSize: 5,
     };
   },
   methods: {
     zypStickOnTouchStart(e: Event) {
+      this.zypStickIndiSize = 6;
       this.zypStickInitialPosition = {
         x: e.touches[0].clientX,
         y: e.touches[0].clientY,
       };
     },
     zypStickOnTouchEnd(e: Event) {
-      this.zypStickTop = "50%";
-      this.zypStickLeft = "50%";
+      this.zypStickIndiSize = 5;
+      this.zypStickTop = "45%";
+      this.zypStickLeft = "45%";
       this.ZInput = 0;
       this.YPrimeInput = 0;
+      this.zypStickInitialPosition = { x: 0, y: 0 };
     },
     zypStickOnMove(e: Event) {
+      let offset = 5;
       if (this.ZInput == 0) {
         setTimeout(() => {
           if (
@@ -47,8 +52,7 @@ export default {
           } else {
             this.inputDirection = "y";
           }
-          console.log(this.inputDirection);
-        }, 200);
+        }, 250);
       }
       if (this.inputDirection == "y") {
         let inPercentage = rangeScaler(
@@ -64,10 +68,10 @@ export default {
         let currentZIn = rangeScaler(inPercentage, 0, 100, -10, 10) * -1;
         if (currentZIn < 10 && currentZIn > -10) {
           this.ZInput = currentZIn.toFixed(2);
-          this.zypStickTop = inPercentage + "%";
+          this.zypStickTop = inPercentage - offset + "%";
         }
         this.YPrimeInput = 0;
-        this.zypStickLeft = "50%";
+        this.zypStickLeft = "45%";
       } else {
         let inPercentage = rangeScaler(
           percentage(
@@ -82,9 +86,9 @@ export default {
         let currentYPrimeIn = rangeScaler(inPercentage, 0, 100, -10, 10);
         if (currentYPrimeIn < 10 && currentYPrimeIn > -10) {
           this.YPrimeInput = currentYPrimeIn.toFixed(2);
-          this.zypStickLeft = inPercentage + "%";
+          this.zypStickLeft = inPercentage - offset + "%";
         }
-        this.zypStickTop = "50%";
+        this.zypStickTop = "45%";
         this.ZInput = 0;
       }
     },
@@ -118,14 +122,32 @@ export default {
       id="z_track"
       class="track"
     >
-      <VerticalLine id="z_track_indi" color="#0500FF"></VerticalLine>
+      <VerticalLine
+        id="z_track_indi"
+        v-if="zypStickInitialPosition.x != 0 || zypStickInitialPosition.y != 0"
+        color="#0500FF"
+      ></VerticalLine>
+      <VerticalLine
+        id="z_track_mini_indi"
+        v-if="zypStickInitialPosition.x == 0 || zypStickInitialPosition.y == 0"
+        color="#0500FF"
+      ></VerticalLine>
     </div>
     <div id="YPrime_track" class="track">
-      <HorizontalLine id="yprime_track_indi" color="#0500FF"></HorizontalLine>
+      <HorizontalLine
+        id="yprime_track_indi"
+        v-if="zypStickInitialPosition.x != 0 || zypStickInitialPosition.y != 0"
+        color="#0500FF"
+      ></HorizontalLine>
+      <HorizontalLine
+        id="yprime_track_mini_indi"
+        v-if="zypStickInitialPosition.x == 0 || zypStickInitialPosition.y == 0"
+        color="#0500FF"
+      ></HorizontalLine>
     </div>
     <div
-      :style="`top: ${zypStickTop}; left: ${zypStickLeft}`"
-      id="zyp_stick_representation"
+      :style="`top: ${zypStickTop}; left: ${zypStickLeft}; width: ${zypStickIndiSize}vh; height: ${zypStickIndiSize}vh;`"
+      id="zyp_stick_indi"
     ></div>
     <div
       @touchstart="zypStickOnTouchStart"
@@ -145,6 +167,10 @@ export default {
 </template>
 
 <style scoped>
+@keyframes track_indi_ani {
+  0%{transform: scale(0, 0);}
+  100%{transform: scale(100%, 100%);}
+}
 #zyp_controls_container {
   position: absolute;
   top: 53.333333333%;
@@ -154,7 +180,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #0500ff20;
+  background-color: #0500ff00;
   overflow: hidden;
 }
 .track {
@@ -166,16 +192,23 @@ export default {
   position: absolute;
   height: 100%;
   width: 10vh;
-
   background-color: #ffffff01;
 }
 #z_track_indi {
   top: 0%;
   height: 100%;
+  animation: track_indi_ani ease-out 0.1s;
+}
+#z_track_mini_indi {
+  height: 5vh;
 }
 #yprime_track_indi {
   left: 0%;
   width: 100%;
+  animation: track_indi_ani ease-out 0.1s;
+}
+#yprime_track_mini_indi {
+  width: 5vh;
 }
 #YPrime_track {
   width: 100%;
@@ -190,12 +223,13 @@ export default {
   transform: rotate(-45deg);
   z-index: 50;
 }
-#zyp_stick_representation {
+#zyp_stick_indi {
   position: absolute;
   width: 5vh;
   height: 5vh;
   background-color: #0500ff80;
   z-index: 2;
+  transition: width linear 0.1s, height linear 0.1s;
 }
 #alt_input_display,
 #yaw_input_display {
