@@ -38,7 +38,6 @@ export default {
     FlightInputOnChangeHandler(args:object){
       let transit_obj = {telemetry: args, vid: this.targetVid};
       socket.emit('FlightInputOnChange', transit_obj); 
-      console.log(JSON.stringify(args))
     }
   },
   mounted() {

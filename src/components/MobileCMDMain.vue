@@ -22,31 +22,119 @@ export default {
       zypStickInitialPosition: { x: 0, y: 0 },
       inputDirection: false,
       zypStickIndiSize: 5,
+      XY: {
+        input: { roll: 0, pitch: 0 },
+        xyStickPosition: { left: "", top: "" },
+        stickSize: 6
+      },
     };
   },
   methods: {
-    emitFlightInput(){
-      this.$emit('FlightInputOnChange', {rollRate: 0, pitchRate: 0, yawRate: this.YPrimeInput, altRate: this.ZInput});
+    emitFlightInput() {
+      this.$emit("FlightInputOnChange", {
+        rollRate: 0,
+        pitchRate: 0,
+        yawRate: this.YPrimeInput,
+        altRate: this.ZInput,
+      });
     },
     normalizePositionDelta(x: number, y: number) {
       let screenWidth = document.documentElement.clientWidth;
       let screenHeight = document.documentElement.clientHeight;
       if (
-        rangeScaler(Math.abs(x - this.zypStickInitialPosition.x), 0, screenWidth, 0, 200) >
-        rangeScaler(Math.abs(y - this.zypStickInitialPosition.y), 0, screenHeight, 0, 180)
+        rangeScaler(
+          Math.abs(x - this.zypStickInitialPosition.x),
+          0,
+          screenWidth,
+          0,
+          200
+        ) >
+        rangeScaler(
+          Math.abs(y - this.zypStickInitialPosition.y),
+          0,
+          screenHeight,
+          0,
+          180
+        )
       ) {
-        return 'x';
-      }
-      else{
-        return 'y';
+        return "x";
+      } else {
+        return "y";
       }
     },
-    zypTrackIndiStyleController(axis_id:string){
-      if(axis_id == this.inputDirection){
-        return '#0500FF;'
+    zypTrackIndiStyleController(axis_id: string) {
+      if (axis_id == this.inputDirection) {
+        return "#0500FF;";
+      } else {
+        return "#444;";
       }
-      else{
-        return '#444;'
+    },
+    GlobalStickPositionToLocal(
+      screenAxisId: string,
+      minGlobalPercentage: number,
+      maxGlobalPercentage: number,
+      event: Event
+    ) {
+      if (screenAxisId == "x") {
+        return rangeScaler(
+          percentage(
+            event.touches[0].clientX,
+            document.documentElement.clientWidth
+          ),
+          minGlobalPercentage,
+          maxGlobalPercentage,
+          0,
+          100
+        );
+      } else {
+        return rangeScaler(
+          percentage(
+            event.touches[0].clientY,
+            document.documentElement.clientHeight
+          ),
+          minGlobalPercentage,
+          maxGlobalPercentage,
+          0,
+          100
+        );
+      }
+    },
+    xyStickOnTouchStart(){
+      this.XY.stickSize = 9;
+    },
+    xyStickOnTouchEnd() {
+      this.XY.xyStickPosition.left = "";
+      this.XY.xyStickPosition.top = "";
+      this.XY.input.roll = 0;
+      this.XY.input.pitch = 0;
+      this.XY.stickSize = 6;
+    },
+    xyStickOnMove(e: Event) {
+      let XinPercentage = this.GlobalStickPositionToLocal("x", 72.5, 98.125, e);
+      let YinPercentage = this.GlobalStickPositionToLocal(
+        "y",
+        53.333333333,
+        98.888333333,
+        e
+      );
+      let stickOffset = 7;
+      if (
+        XinPercentage >= 0 &&
+        XinPercentage <= 100 &&
+        YinPercentage >= 0 &&
+        YinPercentage <= 100
+      ) {
+        this.XY.xyStickPosition.left = XinPercentage - stickOffset + "%";
+        this.XY.xyStickPosition.top = YinPercentage - stickOffset + "%";
+        this.XY.input.roll = rangeScaler(
+          XinPercentage,
+          0,
+          100,
+          -35,
+          35
+        ).toFixed(2);
+        this.XY.input.pitch =
+          rangeScaler(YinPercentage, 0, 100, -30, 30).toFixed(2) * -1;
       }
     },
     zypStickOnTouchStart(e: Event) {
@@ -70,19 +158,18 @@ export default {
       let offset = 5;
       if (this.ZInput == 0) {
         setTimeout(() => {
-            this.inputDirection = this.normalizePositionDelta(e.touches[0].clientX, e.touches[0].clientY);
+          this.inputDirection = this.normalizePositionDelta(
+            e.touches[0].clientX,
+            e.touches[0].clientY
+          );
         }, 75);
       }
       if (this.inputDirection == "y") {
-        let inPercentage = rangeScaler(
-          percentage(
-            e.touches[0].clientY,
-            document.documentElement.clientHeight
-          ),
+        let inPercentage = this.GlobalStickPositionToLocal(
+          "y",
           53.333333333,
           98.888333333,
-          0,
-          100
+          e
         );
         let currentZIn = rangeScaler(inPercentage, 0, 100, -10, 10) * -1;
         if (currentZIn < 10 && currentZIn > -10) {
@@ -92,15 +179,11 @@ export default {
         this.YPrimeInput = 0;
         this.zypStickLeft = "45%";
       } else {
-        let inPercentage = rangeScaler(
-          percentage(
-            e.touches[0].clientX,
-            document.documentElement.clientWidth
-          ),
+        let inPercentage = this.GlobalStickPositionToLocal(
+          "x",
           0.625,
-          26.2496875,
-          0,
-          100
+          26.625,
+          e
         );
         let currentYPrimeIn = rangeScaler(inPercentage, 0, 100, -10, 10);
         if (currentYPrimeIn < 10 && currentYPrimeIn > -10) {
@@ -133,7 +216,15 @@ export default {
 </script>
 
 <template>
-  <div id="xy_controls_container"></div>
+  <div id="xy_controls_container">
+    <div
+      :style="`left: ${XY.xyStickPosition.left}; top: ${XY.xyStickPosition.top}; width: ${XY.stickSize}vh; height: ${XY.stickSize}vh;`"
+      @touchstart="xyStickOnTouchStart"
+      @touchmove="xyStickOnMove"
+      @touchend="xyStickOnTouchEnd"
+      id="xy_stick"
+    ></div>
+  </div>
   <div id="zyp_controls_container">
     <div
       @touchstart="zypStickOnTouchStart"
@@ -182,8 +273,19 @@ export default {
     id="fs_btn"
     v-text="FullScreenButtonTextController()"
   ></BaseLabel>
-  <BaseLabel id="alt_input_display" v-text="`${ZInput}m/s`"></BaseLabel>
-  <BaseLabel id="yaw_input_display" v-text="`${YPrimeInput}°/s`"></BaseLabel>
+  <BaseLabel id="alt_input_display" v-text="`Alt: ${ZInput}m/s`"></BaseLabel>
+  <BaseLabel
+    id="yaw_input_display"
+    v-text="`Yaw: ${YPrimeInput}°/s`"
+  ></BaseLabel>
+  <BaseLabel
+    id="pitch_input_display"
+    v-text="`Pitch: ${XY.input.pitch}°/s`"
+  ></BaseLabel>
+  <BaseLabel
+    id="roll_input_display"
+    v-text="`Roll: ${XY.input.roll}°/s`"
+  ></BaseLabel>
 </template>
 
 <style scoped>
@@ -195,6 +297,7 @@ export default {
     transform: scale(100%, 100%);
   }
 }
+
 #zyp_controls_container {
   position: absolute;
   top: 53.333333333%;
@@ -258,7 +361,9 @@ export default {
   transition: width linear 0.1s, height linear 0.1s;
 }
 #alt_input_display,
-#yaw_input_display {
+#yaw_input_display,
+#pitch_input_display,
+#roll_input_display {
   top: 40.277777778%;
   left: 24.375%;
   font-size: 4vh;
@@ -266,15 +371,34 @@ export default {
 #yaw_input_display {
   left: 44.375%;
 }
+#pitch_input_display {
+  left: 44.375%;
+  top: 45%;
+}
+#roll_input_display {
+  top: 50%;
+  left: 44.375%;
+}
 #xy_controls_container {
   position: absolute;
-  top: 53.888888889%;
-  left: 76.5625%;
-  width: 45.555555555556vh;
+  top: 53.333333333%;
+  left: 72.5%;
   height: 45.555555555556vh;
-  background-color: #ffffff20;
-  border: solid 1px #fff;
-  border-radius: 500px;
+  width: 45.555555555556vh;
+  background-color: #ffffff00;
+  border: solid 1px #0500ff;
+  border-radius: 1500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#xy_stick {
+  position: absolute;
+  width: 7vh;
+  height: 7vh;
+  background-color: #0500ff80;
+  border: solid 1px #0500ff;
+  border-radius: 1500px;
 }
 #fs_btn {
   top: 5%;
