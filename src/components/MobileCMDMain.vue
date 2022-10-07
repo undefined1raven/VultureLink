@@ -8,6 +8,7 @@ import HorizontalLine from "@/components/HorizontalLine.vue";
 import isMobile from "@/composables/isMobile.ts";
 import percentage from "@/composables/percentage.ts";
 import rangeScaler from "@/composables/rangeScaler.ts";
+import type { EnumStringMember } from "@babel/types";
 </script>
 
 <script lang="ts">
@@ -25,9 +26,18 @@ export default {
       XY: {
         input: { roll: 0, pitch: 0 },
         xyStickPosition: { left: "", top: "" },
-        stickSize: 6
+        stickSize: 6,
       },
+      TouchID: {
+        XY: 0,
+        ZYP: 0,
+      } /*index of the touch for the specific controls*/,
     };
+  },
+  mounted() {
+    document.addEventListener("touchmove", (e) => {
+      this.GlobalTouchIdentifier(e);
+    });
   },
   methods: {
     emitFlightInput() {
@@ -62,6 +72,44 @@ export default {
         return "y";
       }
     },
+    GlobalTouchIdentifier(e: Event) {
+      for (let ix = 0; ix < e.touches.length; ix++) {
+        let XY_XinPercentage = this.GlobalStickPositionToLocal(
+          "x",
+          72.5,
+          98.125,
+          "XY",
+          e
+        );
+        let XY_YinPercentage = this.GlobalStickPositionToLocal(
+          "y",
+          53.333333333,
+          98.888333333,
+          "XY",
+          e
+        );
+        let ZYP_XinPercentage = this.GlobalStickPositionToLocal(
+          "x",
+          0.625,
+          26.625,
+          "ZYP",
+          e
+        );
+        let ZYP_YinPercentage = this.GlobalStickPositionToLocal(
+          "y",
+          53.333333333,
+          98.888333333,
+          "ZYP",
+          e
+        );
+        if(XY_XinPercentage >= 0 && XY_XinPercentage <= 100 && XY_YinPercentage >= 0 && XY_YinPercentage <= 100){
+          this.TouchID.XY = ix;
+        }
+        if(ZYP_XinPercentage >= 0 && ZYP_XinPercentage <= 100 && ZYP_YinPercentage >= 0 && ZYP_YinPercentage <= 100){
+          this.TouchID.ZYP = ix;
+        }
+      }
+    },
     zypTrackIndiStyleController(axis_id: string) {
       if (axis_id == this.inputDirection) {
         return "#0500FF;";
@@ -73,12 +121,13 @@ export default {
       screenAxisId: string,
       minGlobalPercentage: number,
       maxGlobalPercentage: number,
+      controlGroupID: string,
       event: Event
     ) {
       if (screenAxisId == "x") {
         return rangeScaler(
           percentage(
-            event.touches[0].clientX,
+            event.touches[this.TouchID[controlGroupID]].clientX,
             document.documentElement.clientWidth
           ),
           minGlobalPercentage,
@@ -89,7 +138,7 @@ export default {
       } else {
         return rangeScaler(
           percentage(
-            event.touches[0].clientY,
+            event.touches[this.TouchID[controlGroupID]].clientY,
             document.documentElement.clientHeight
           ),
           minGlobalPercentage,
@@ -99,7 +148,7 @@ export default {
         );
       }
     },
-    xyStickOnTouchStart(){
+    xyStickOnTouchStart() {
       this.XY.stickSize = 9;
     },
     xyStickOnTouchEnd() {
@@ -110,11 +159,18 @@ export default {
       this.XY.stickSize = 6;
     },
     xyStickOnMove(e: Event) {
-      let XinPercentage = this.GlobalStickPositionToLocal("x", 72.5, 98.125, e);
+      let XinPercentage = this.GlobalStickPositionToLocal(
+        "x",
+        72.5,
+        98.125,
+        "XY",
+        e
+      );
       let YinPercentage = this.GlobalStickPositionToLocal(
         "y",
         53.333333333,
         98.888333333,
+        "XY",
         e
       );
       let stickOffset = 7;
@@ -140,8 +196,8 @@ export default {
     zypStickOnTouchStart(e: Event) {
       this.zypStickIndiSize = 6;
       this.zypStickInitialPosition = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
+        x: e.touches[this.TouchID["ZYP"]].clientX,
+        y: e.touches[this.TouchID["ZYP"]].clientY,
       };
     },
     zypStickOnTouchEnd(e: Event) {
@@ -159,8 +215,8 @@ export default {
       if (this.ZInput == 0) {
         setTimeout(() => {
           this.inputDirection = this.normalizePositionDelta(
-            e.touches[0].clientX,
-            e.touches[0].clientY
+            e.touches[this.TouchID["ZYP"]].clientX,
+            e.touches[this.TouchID["ZYP"]].clientY
           );
         }, 75);
       }
@@ -169,6 +225,7 @@ export default {
           "y",
           53.333333333,
           98.888333333,
+          "ZYP",
           e
         );
         let currentZIn = rangeScaler(inPercentage, 0, 100, -10, 10) * -1;
@@ -183,6 +240,7 @@ export default {
           "x",
           0.625,
           26.625,
+          "ZYP",
           e
         );
         let currentYPrimeIn = rangeScaler(inPercentage, 0, 100, -10, 10);
