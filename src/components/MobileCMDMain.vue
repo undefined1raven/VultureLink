@@ -8,8 +8,6 @@ import HorizontalLine from "@/components/HorizontalLine.vue";
 import isMobile from "@/composables/isMobile.ts";
 import percentage from "@/composables/percentage.ts";
 import rangeScaler from "@/composables/rangeScaler.ts";
-import { isForXStatement, type EnumStringMember } from "@babel/types";
-import internal from 'stream';
 </script>
 
 <script lang="ts">
@@ -43,10 +41,10 @@ export default {
   methods: {
     emitFlightInput() {
       this.$emit("FlightInputOnChange", {
-        rollRate: 0,
-        pitchRate: 0,
-        yawRate: this.YPrimeInput,
-        altRate: this.ZInput,
+        rollRate: parseFloat(this.XY.input.roll),
+        pitchRate: parseFloat(this.XY.input.pitch),
+        yawRate: parseFloat(this.YPrimeInput),
+        altRate: parseFloat(this.ZInput),
       });
     },
     normalizePositionDelta(x: number, y: number) {
@@ -208,6 +206,7 @@ export default {
         this.XY.input.pitch =
           rangeScaler(YinPercentage, 0, 100, -30, 30).toFixed(2) * -1;
       }
+      this.emitFlightInput();
     },
     zypStickOnTouchStart(e: Event) {
       this.zypStickIndiSize = 6;
