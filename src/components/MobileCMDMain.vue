@@ -8,7 +8,8 @@ import HorizontalLine from "@/components/HorizontalLine.vue";
 import isMobile from "@/composables/isMobile.ts";
 import percentage from "@/composables/percentage.ts";
 import rangeScaler from "@/composables/rangeScaler.ts";
-import type { EnumStringMember } from "@babel/types";
+import { isForXStatement, type EnumStringMember } from "@babel/types";
+import internal from 'stream';
 </script>
 
 <script lang="ts">
@@ -79,6 +80,7 @@ export default {
           72.5,
           98.125,
           "XY",
+          ix,
           e
         );
         let XY_YinPercentage = this.GlobalStickPositionToLocal(
@@ -86,6 +88,7 @@ export default {
           53.333333333,
           98.888333333,
           "XY",
+          ix,
           e
         );
         let ZYP_XinPercentage = this.GlobalStickPositionToLocal(
@@ -93,6 +96,7 @@ export default {
           0.625,
           26.625,
           "ZYP",
+          ix,
           e
         );
         let ZYP_YinPercentage = this.GlobalStickPositionToLocal(
@@ -100,6 +104,7 @@ export default {
           53.333333333,
           98.888333333,
           "ZYP",
+          ix,
           e
         );
         if(XY_XinPercentage >= 0 && XY_XinPercentage <= 100 && XY_YinPercentage >= 0 && XY_YinPercentage <= 100){
@@ -117,17 +122,26 @@ export default {
         return "#444;";
       }
     },
+    GlobalStickPositionToLocalHelper(RelativeTouchIndex:number, controlGroupID:string){
+      if(RelativeTouchIndex == -1){
+        return this.TouchID[controlGroupID];
+      }
+      else{
+        return RelativeTouchIndex
+      }
+    },
     GlobalStickPositionToLocal(
       screenAxisId: string,
       minGlobalPercentage: number,
       maxGlobalPercentage: number,
       controlGroupID: string,
+      RelativeTouchIndex: number,
       event: Event
     ) {
       if (screenAxisId == "x") {
         return rangeScaler(
           percentage(
-            event.touches[this.TouchID[controlGroupID]].clientX,
+            event.touches[this.GlobalStickPositionToLocalHelper(RelativeTouchIndex, controlGroupID)].clientX,
             document.documentElement.clientWidth
           ),
           minGlobalPercentage,
@@ -138,7 +152,7 @@ export default {
       } else {
         return rangeScaler(
           percentage(
-            event.touches[this.TouchID[controlGroupID]].clientY,
+            event.touches[this.GlobalStickPositionToLocalHelper(RelativeTouchIndex, controlGroupID)].clientY,
             document.documentElement.clientHeight
           ),
           minGlobalPercentage,
@@ -164,6 +178,7 @@ export default {
         72.5,
         98.125,
         "XY",
+        -1,
         e
       );
       let YinPercentage = this.GlobalStickPositionToLocal(
@@ -171,6 +186,7 @@ export default {
         53.333333333,
         98.888333333,
         "XY",
+        -1,
         e
       );
       let stickOffset = 7;
@@ -226,6 +242,7 @@ export default {
           53.333333333,
           98.888333333,
           "ZYP",
+          -1,
           e
         );
         let currentZIn = rangeScaler(inPercentage, 0, 100, -10, 10) * -1;
@@ -241,6 +258,7 @@ export default {
           0.625,
           26.625,
           "ZYP",
+          -1,
           e
         );
         let currentYPrimeIn = rangeScaler(inPercentage, 0, 100, -10, 10);
