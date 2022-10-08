@@ -26,6 +26,7 @@ export default {
         input: { roll: 0, pitch: 0 },
         xyStickPosition: { left: "", top: "" },
         stickSize: 6,
+        containerBorderSize: 0,
       },
       TouchID: {
         XY: 0,
@@ -105,10 +106,20 @@ export default {
           ix,
           e
         );
-        if(XY_XinPercentage >= 0 && XY_XinPercentage <= 100 && XY_YinPercentage >= 0 && XY_YinPercentage <= 100){
+        if (
+          XY_XinPercentage >= 0 &&
+          XY_XinPercentage <= 100 &&
+          XY_YinPercentage >= 0 &&
+          XY_YinPercentage <= 100
+        ) {
           this.TouchID.XY = ix;
         }
-        if(ZYP_XinPercentage >= 0 && ZYP_XinPercentage <= 100 && ZYP_YinPercentage >= 0 && ZYP_YinPercentage <= 100){
+        if (
+          ZYP_XinPercentage >= 0 &&
+          ZYP_XinPercentage <= 100 &&
+          ZYP_YinPercentage >= 0 &&
+          ZYP_YinPercentage <= 100
+        ) {
           this.TouchID.ZYP = ix;
         }
       }
@@ -120,12 +131,14 @@ export default {
         return "#444;";
       }
     },
-    GlobalStickPositionToLocalHelper(RelativeTouchIndex:number, controlGroupID:string){
-      if(RelativeTouchIndex == -1){
+    GlobalStickPositionToLocalHelper(
+      RelativeTouchIndex: number,
+      controlGroupID: string
+    ) {
+      if (RelativeTouchIndex == -1) {
         return this.TouchID[controlGroupID];
-      }
-      else{
-        return RelativeTouchIndex
+      } else {
+        return RelativeTouchIndex;
       }
     },
     GlobalStickPositionToLocal(
@@ -139,7 +152,12 @@ export default {
       if (screenAxisId == "x") {
         return rangeScaler(
           percentage(
-            event.touches[this.GlobalStickPositionToLocalHelper(RelativeTouchIndex, controlGroupID)].clientX,
+            event.touches[
+              this.GlobalStickPositionToLocalHelper(
+                RelativeTouchIndex,
+                controlGroupID
+              )
+            ].clientX,
             document.documentElement.clientWidth
           ),
           minGlobalPercentage,
@@ -150,7 +168,12 @@ export default {
       } else {
         return rangeScaler(
           percentage(
-            event.touches[this.GlobalStickPositionToLocalHelper(RelativeTouchIndex, controlGroupID)].clientY,
+            event.touches[
+              this.GlobalStickPositionToLocalHelper(
+                RelativeTouchIndex,
+                controlGroupID
+              )
+            ].clientY,
             document.documentElement.clientHeight
           ),
           minGlobalPercentage,
@@ -162,6 +185,7 @@ export default {
     },
     xyStickOnTouchStart() {
       this.XY.stickSize = 9;
+      this.XY.containerBorderSize = 1;
     },
     xyStickOnTouchEnd() {
       this.XY.xyStickPosition.left = "";
@@ -169,6 +193,7 @@ export default {
       this.XY.input.roll = 0;
       this.XY.input.pitch = 0;
       this.XY.stickSize = 6;
+      this.XY.containerBorderSize = 0;
     },
     xyStickOnMove(e: Event) {
       let XinPercentage = this.GlobalStickPositionToLocal(
@@ -188,14 +213,8 @@ export default {
         e
       );
       let stickOffset = 7;
-      if (
-        XinPercentage >= 0 &&
-        XinPercentage <= 100 &&
-        YinPercentage >= 0 &&
-        YinPercentage <= 100
-      ) {
+      if (XinPercentage >= 0 && XinPercentage <= 100) {
         this.XY.xyStickPosition.left = XinPercentage - stickOffset + "%";
-        this.XY.xyStickPosition.top = YinPercentage - stickOffset + "%";
         this.XY.input.roll = rangeScaler(
           XinPercentage,
           0,
@@ -203,6 +222,9 @@ export default {
           -35,
           35
         ).toFixed(2);
+      }
+      if (YinPercentage >= 0 && YinPercentage <= 100) {
+        this.XY.xyStickPosition.top = YinPercentage - stickOffset + "%";
         this.XY.input.pitch =
           rangeScaler(YinPercentage, 0, 100, -30, 30).toFixed(2) * -1;
       }
@@ -291,7 +313,7 @@ export default {
 </script>
 
 <template>
-  <div id="xy_controls_container">
+  <div id="xy_controls_container" :style="`border: solid ${XY.containerBorderSize}px #0500FF;`">
     <div
       :style="`left: ${XY.xyStickPosition.left}; top: ${XY.xyStickPosition.top}; width: ${XY.stickSize}vh; height: ${XY.stickSize}vh;`"
       @touchstart="xyStickOnTouchStart"
@@ -462,7 +484,7 @@ export default {
   width: 45.555555555556vh;
   background-color: #ffffff00;
   border: solid 1px #0500ff;
-  border-radius: 1500px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
