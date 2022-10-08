@@ -397,7 +397,7 @@ export default {
 
 #zyp_controls_container {
   position: absolute;
-  top: 53.333333333%;
+  top: 49.166666667%;
   left: 0.625%;
   height: 45.555555555556vh;
   width: 45.555555555556vh;
@@ -405,7 +405,6 @@ export default {
   justify-content: center;
   align-items: center;
   background-color: #0500ff00;
-  overflow: hidden;
 }
 .track {
   display: flex;
@@ -466,19 +465,19 @@ export default {
   font-size: 4vh;
 }
 #yaw_input_display {
-  left: 44.375%;
+  top: 45%;
 }
 #pitch_input_display {
   left: 44.375%;
-  top: 45%;
+  top: 40.277777778%;
 }
 #roll_input_display {
-  top: 50%;
+  top: 45%;
   left: 44.375%;
 }
 #xy_controls_container {
   position: absolute;
-  top: 53.333333333%;
+  top: 49.166666667%;
   left: 72.5%;
   height: 45.555555555556vh;
   width: 45.555555555556vh;
