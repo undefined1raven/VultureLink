@@ -32,11 +32,15 @@ export default {
         XY: 0,
         ZYP: 0,
       } /*index of the touch for the specific controls*/,
+      deviceAlpha: 0, /*used to demo the roll indicator */
     };
   },
   mounted() {
     document.addEventListener("touchmove", (e) => {
       this.GlobalTouchIdentifier(e);
+    });
+    window.addEventListener('deviceorientation', (e) => {
+      this.deviceAlpha = rangeScaler(e.alpha, 0, 180, 90, -90);
     });
   },
   methods: {
@@ -212,7 +216,7 @@ export default {
         -1,
         e
       );
-      let stickOffset = 7;
+      let stickOffset = 5;
       if (XinPercentage >= 0 && XinPercentage <= 100) {
         this.XY.xyStickPosition.left = XinPercentage - stickOffset + "%";
         this.XY.input.roll = rangeScaler(
@@ -269,7 +273,7 @@ export default {
         let currentZIn = rangeScaler(inPercentage, 0, 100, -10, 10) * -1;
         if (currentZIn < 10 && currentZIn > -10) {
           this.ZInput = currentZIn.toFixed(2);
-          this.zypStickTop = inPercentage - offset + "%";
+          this.zypStickTop = inPercentage + "%";
         }
         this.YPrimeInput = 0;
         this.zypStickLeft = "45%";
@@ -285,7 +289,7 @@ export default {
         let currentYPrimeIn = rangeScaler(inPercentage, 0, 100, -10, 10);
         if (currentYPrimeIn < 10 && currentYPrimeIn > -10) {
           this.YPrimeInput = currentYPrimeIn.toFixed(2);
-          this.zypStickLeft = inPercentage - offset + "%";
+          this.zypStickLeft = inPercentage + "%";
         }
         this.zypStickTop = "45%";
         this.ZInput = 0;
@@ -313,7 +317,17 @@ export default {
 </script>
 
 <template>
+  <svg :style="`position: absolute; top: 70%; width: 5%; height: auto; left: 50%; transform: rotate(${deviceAlpha}deg);`" width="32" height="9" viewBox="0 0 32 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="1" y="5" width="1" height="12" transform="rotate(-90 1 5)" fill="#0500FF"/>
+<rect x="20" y="5" width="1" height="12" transform="rotate(-90 20 5)" fill="#0500FF"/>
+<rect y="2" width="1" height="6" fill="#0500FF"/>
+<rect x="31" y="2" width="1" height="6" fill="#0500FF"/>
+<rect x="0.726984" y="-2.98023e-08" width="5" height="5" transform="matrix(0.726984 -0.686654 0.726984 0.686654 12.1985 5.09922)" stroke="#0500FF"/>
+</svg>
+
   <div id="xy_controls_container" :style="`border: solid ${XY.containerBorderSize}px #0500FF;`">
+    <HorizontalLine v-if="XY.containerBorderSize == 1" id="xy_x_track_indi" color="#0500FF"></HorizontalLine>
+    <VerticalLine v-if="XY.containerBorderSize == 1" id="xy_y_track_indi" color="#0500FF"></VerticalLine>
     <div
       :style="`left: ${XY.xyStickPosition.left}; top: ${XY.xyStickPosition.top}; width: ${XY.stickSize}vh; height: ${XY.stickSize}vh;`"
       @touchstart="xyStickOnTouchStart"
@@ -394,10 +408,19 @@ export default {
     transform: scale(100%, 100%);
   }
 }
-
+#xy_x_track_indi{
+  left: 0%;
+  width: 100%;
+  animation: track_indi_ani ease-out 0.18s;
+}
+#xy_y_track_indi{
+  top: 0%;
+  height: 100%;
+  animation: track_indi_ani ease-out 0.18s;
+}
 #zyp_controls_container {
   position: absolute;
-  top: 49.166666667%;
+  top: 46.111111111%;
   left: 0.625%;
   height: 45.555555555556vh;
   width: 45.555555555556vh;
@@ -421,7 +444,7 @@ export default {
 #z_track_indi {
   top: 0%;
   height: 100%;
-  animation: track_indi_ani ease-out 0.1s;
+  animation: track_indi_ani ease-out 0.18s;
 }
 #z_track_mini_indi {
   height: 5vh;
@@ -429,7 +452,7 @@ export default {
 #yprime_track_indi {
   left: 0%;
   width: 100%;
-  animation: track_indi_ani ease-out 0.1s;
+  animation: track_indi_ani ease-out 0.18s;
 }
 #yprime_track_mini_indi {
   width: 5vh;
@@ -477,13 +500,13 @@ export default {
 }
 #xy_controls_container {
   position: absolute;
-  top: 49.166666667%;
+  top: 46.111111111%;
   left: 72.5%;
   height: 45.555555555556vh;
   width: 45.555555555556vh;
   background-color: #ffffff00;
   border: solid 1px #0500ff;
-  border-radius: 20px;
+  border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
