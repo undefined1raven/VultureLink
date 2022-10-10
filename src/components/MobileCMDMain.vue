@@ -31,6 +31,10 @@ export default {
       if (!this.isFullScreen) {
         document.documentElement.requestFullscreen();
         this.isFullScreen = true;
+        screen.orientation
+          .lock("landscape")
+          .then((r) => {})
+          .catch((e) => {});
       } else {
         document.exitFullscreen().then((r) => {});
         this.isFullScreen = false;
@@ -42,24 +46,33 @@ export default {
 
 <template>
   <BaseLabel
+    v-if="!isFullScreen"
     @click="onFullScreenButtonClick"
     id="fs_btn"
     v-text="FullScreenButtonTextController()"
   ></BaseLabel>
-  <MobileCMDFlightControls></MobileCMDFlightControls>
-  <MobileCMDPowerDock></MobileCMDPowerDock>
+  <MobileCMDFlightControls v-if="isFullScreen"></MobileCMDFlightControls>
+  <MobileCMDPowerDock v-if="isFullScreen"></MobileCMDPowerDock>
 </template>
 
 <style scoped>
 #fs_btn {
-  top: 5%;
+  top: 50%;
   left: 50%;
-  width: 20%;
-  height: 13%;
-  font-size: 4.1vh;
+  transform: translate(-50%, -50%);
+  height: 7%;
+  width: 40%;
+  font-size: 2vh;
   border: solid 1px #0500ff;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+@media screen and (orientation: landscape) {
+  #fs_btn {
+    height: 13%;
+    width: 20%;
+    font-size: 4.1vh;
+  }
 }
 </style>
