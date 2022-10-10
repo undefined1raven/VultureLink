@@ -17,7 +17,18 @@ export default {
   data() {
     return {
       isFullScreen: false,
+      orientation: 'portrait',
     };
+  },
+  mounted(){
+      window.onresize = (e => {
+          if(document.documentElement.clientHeight < document.documentElement.clientWidth){
+            this.orientation = 'landscape';
+          } 
+          else{
+            this.orientation = 'portrait';
+          }
+      });
   },
   methods: {
     FullScreenButtonTextController() {
@@ -46,13 +57,13 @@ export default {
 
 <template>
   <BaseLabel
-    v-if="!isFullScreen"
+    v-if="!isFullScreen || orientation == 'portrait'"
     @click="onFullScreenButtonClick"
     id="fs_btn"
     v-text="FullScreenButtonTextController()"
   ></BaseLabel>
-  <MobileCMDFlightControls v-if="isFullScreen"></MobileCMDFlightControls>
-  <MobileCMDPowerDock v-if="isFullScreen"></MobileCMDPowerDock>
+  <MobileCMDFlightControls v-if="isFullScreen && orientation == 'landscape'"></MobileCMDFlightControls>
+  <MobileCMDPowerDock v-if="isFullScreen && orientation == 'landscape'"></MobileCMDPowerDock>
 </template>
 
 <style scoped>
