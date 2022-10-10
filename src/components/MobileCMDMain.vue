@@ -6,6 +6,7 @@ import VerticalLine from "@/components/VerticalLine.vue";
 import HorizontalLine from "@/components/HorizontalLine.vue";
 import MobileCMDFlightControls from "@/components/MobileCMDFlightControls.vue";
 import MobileCMDPowerDock from "@/components/MobileCMDPowerDock.vue";
+import MobileCMDNavDock from "@/components/MobileCMDNavDock.vue";
 
 import isMobile from "@/composables/isMobile.ts";
 import percentage from "@/composables/percentage.ts";
@@ -62,8 +63,9 @@ export default {
     id="fs_btn"
     v-text="FullScreenButtonTextController()"
   ></BaseLabel>
-  <MobileCMDFlightControls v-if="isFullScreen && orientation == 'landscape'"></MobileCMDFlightControls>
-  <MobileCMDPowerDock v-if="isFullScreen && orientation == 'landscape'"></MobileCMDPowerDock>
+  <MobileCMDFlightControls></MobileCMDFlightControls><!--v-if="isFullScreen && orientation == 'landscape'-->
+  <MobileCMDPowerDock></MobileCMDPowerDock><!--v-if="isFullScreen && orientation == 'landscape'-->
+  <MobileCMDNavDock></MobileCMDNavDock><!--v-if="isFullScreen && orientation == 'landscape'-->
 </template>
 
 <style scoped>
