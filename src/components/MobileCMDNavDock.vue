@@ -13,12 +13,12 @@ import rangeScaler from "@/composables/rangeScaler.ts";
 
 <template>
     <div id="mobile_cmd_main_nav_dock_container">
-        <VelocityIndicator id="nav_velocity_indi"></VelocityIndicator>
+        <VelocityIndicator width="12.6557%" height="auto" id="nav_velocity_indi"></VelocityIndicator>
         <BaseLabel id="velocity_acx" class="primary_l" v-text="'0 m/s'"></BaseLabel>
-        <AltitudeIndicator id="alt_velocity_indi"></AltitudeIndicator>
-        <BaseLabel id="altitude_acx" class="primary_l" v-text="'0 m'"></BaseLabel>
-        <VSIndicator id="vertical_speed_indi"></VSIndicator>
-        <BaseLabel id="vs_acx" class="primary_l" v-text="'+0 m/s'"></BaseLabel>
+        <AltitudeIndicator width="13%" height="auto" id="alt_indi"></AltitudeIndicator>
+        <BaseLabel id="altitude_acx" class="primary_l" v-text="'-99 km'"></BaseLabel>
+        <VSIndicator width="6.21311%" height="auto" id="vertical_speed_indi"></VSIndicator>
+        <BaseLabel id="vs_acx" class="primary_l" v-text="'+12 m/s'"></BaseLabel>
         <VerticalLine id="nav_dock_ln" color="#0500FF"></VerticalLine>
     </div>
 </template>
@@ -56,15 +56,15 @@ import rangeScaler from "@/composables/rangeScaler.ts";
     border-bottom: solid 1px #0500FF;
 }
 #nav_velocity_indi{
-    top: 16.216216216%;
-    left: 3.278688525%;
+    top: 13.216216216%;
+    left: 2.278689%;
 }
-#alt_velocity_indi{
-    top: 64.864864865%;
-    left: 3.278688525%;
+#alt_indi{
+    top: 57.864864865%;
+    left: 2.278689%;
 }
 #vertical_speed_indi{
-    top: 62.162162162%;
+    top: 50.162162162%;
     left: 78.68852459%;
 }
 </style>

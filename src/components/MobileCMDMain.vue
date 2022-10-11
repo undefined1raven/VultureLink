@@ -63,12 +63,31 @@ export default {
     id="fs_btn"
     v-text="FullScreenButtonTextController()"
   ></BaseLabel>
+  <div id="btn_demo">RTH</div>
   <MobileCMDFlightControls v-if="isFullScreen && orientation == 'landscape'"></MobileCMDFlightControls>
   <MobileCMDPowerDock v-if="isFullScreen && orientation == 'landscape'"></MobileCMDPowerDock>
   <MobileCMDNavDock v-if="isFullScreen && orientation == 'landscape'"></MobileCMDNavDock>
 </template>
 
 <style scoped>
+#btn_demo{
+  position: absolute;
+  top: 0.5%;
+  left: 31.25%;
+  width: 7.96875%;
+  height: 6.111111111%;
+  background-color: #0500FF20;
+  color: #FFF;
+  font-size: 3.6vh;
+  border: solid 1px #0500FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Titillium Web", sans-serif;
+}
+#btn_demo:hover{
+  background-color: #0500FF60;
+}
 #fs_btn {
   top: 50%;
   left: 50%;
