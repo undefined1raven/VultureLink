@@ -3,6 +3,7 @@ import BaseLabel from "@/components/BaseLabel.vue";
 import VelocityIndicator from "@/components/CMDVelocityIndicator.vue";
 import AltitudeIndicator from "@/components/CMDAltIndicator.vue";
 import VSIndicator from "@/components/CMDVsIndicator.vue";
+import VerticalLine from "@/components/VerticalLine.vue";
 
 import isMobile from "@/composables/isMobile.ts";
 import percentage from "@/composables/percentage.ts";
@@ -13,18 +14,46 @@ import rangeScaler from "@/composables/rangeScaler.ts";
 <template>
     <div id="mobile_cmd_main_nav_dock_container">
         <VelocityIndicator id="nav_velocity_indi"></VelocityIndicator>
+        <BaseLabel id="velocity_acx" class="primary_l" v-text="'0 m/s'"></BaseLabel>
         <AltitudeIndicator id="alt_velocity_indi"></AltitudeIndicator>
+        <BaseLabel id="altitude_acx" class="primary_l" v-text="'0 m'"></BaseLabel>
         <VSIndicator id="vertical_speed_indi"></VSIndicator>
+        <BaseLabel id="vs_acx" class="primary_l" v-text="'+0 m/s'"></BaseLabel>
+        <VerticalLine id="nav_dock_ln" color="#0500FF"></VerticalLine>
     </div>
 </template>
 <style scoped>
+#vs_acx{
+    top: 0%;
+    left: 59.016393443%;
+    text-align: center;
+}
+#nav_dock_ln{
+    top: 8.108108108%;
+    height: 81.081081081%;
+    left: 57.37704918%;
+}
+.primary_l{
+    font-size: 3.6vh;
+    width: 39.344262295%;
+    text-align: start;
+}
+#altitude_acx{
+    top: 45.945945946%;
+    left: 18.032786885%;
+}
+#velocity_acx{
+    top: 0%;
+    left: 18.032786885%;
+}
 #mobile_cmd_main_nav_dock_container{
     position: absolute;
     top: 0%;
     left: 80.9375%;
     width: 19.0625%;
     height: 10.277777778%; 
-    background-color: #0500FF40;
+    background-color: #000000aa;
+    border-bottom: solid 1px #0500FF;
 }
 #nav_velocity_indi{
     top: 16.216216216%;

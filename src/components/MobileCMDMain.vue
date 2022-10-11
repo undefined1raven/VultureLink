@@ -63,9 +63,9 @@ export default {
     id="fs_btn"
     v-text="FullScreenButtonTextController()"
   ></BaseLabel>
-  <MobileCMDFlightControls></MobileCMDFlightControls><!--v-if="isFullScreen && orientation == 'landscape'-->
-  <MobileCMDPowerDock></MobileCMDPowerDock><!--v-if="isFullScreen && orientation == 'landscape'-->
-  <MobileCMDNavDock></MobileCMDNavDock><!--v-if="isFullScreen && orientation == 'landscape'-->
+  <MobileCMDFlightControls v-if="isFullScreen && orientation == 'landscape'"></MobileCMDFlightControls>
+  <MobileCMDPowerDock v-if="isFullScreen && orientation == 'landscape'"></MobileCMDPowerDock>
+  <MobileCMDNavDock v-if="isFullScreen && orientation == 'landscape'"></MobileCMDNavDock>
 </template>
 
 <style scoped>
