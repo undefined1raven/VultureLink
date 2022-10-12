@@ -488,12 +488,12 @@ export default {
   top: 45%;
 }
 #pitch_input_display {
-  left: 44.375%;
+  left: 74.375%;
   top: 40.277777778%;
 }
 #roll_input_display {
   top: 45%;
-  left: 44.375%;
+  left: 74.375%;
 }
 #xy_controls_container {
   position: absolute;

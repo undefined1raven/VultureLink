@@ -91,7 +91,7 @@ export default {
   <main>
     <Video v-show="hasStream" id="vid_container" ref="vid_container"></Video>
     <Main v-if="!isMobile()" id="ui_overlay"></Main>
-    <MobileMain @FlightInputOnChange="FlightInputOnChangeHandler" v-if="isMobile()" id="mobile_main"></MobileMain>
+    <MobileMain :hasVideoDownlink="hasStream" @FlightInputOnChange="FlightInputOnChangeHandler" v-if="isMobile()" id="mobile_main"></MobileMain>
   </main>
 </template>
 <style scoped>
