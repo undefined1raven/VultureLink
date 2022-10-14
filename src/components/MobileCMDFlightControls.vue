@@ -480,19 +480,19 @@ export default {
 #yaw_input_display,
 #pitch_input_display,
 #roll_input_display {
-  top: 40.277777778%;
+  top: 30.277777778%;
   left: 24.375%;
   font-size: 4vh;
 }
 #yaw_input_display {
-  top: 45%;
+  top: 35%;
 }
 #pitch_input_display {
   left: 74.375%;
-  top: 40.277777778%;
+  top: 30.277777778%;
 }
 #roll_input_display {
-  top: 45%;
+  top: 35%;
   left: 74.375%;
 }
 #xy_controls_container {

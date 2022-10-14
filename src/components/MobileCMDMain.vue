@@ -9,6 +9,7 @@ import MobileCMDPowerDock from "@/components/MobileCMDPowerDock.vue";
 import MobileCMDNavDock from "@/components/MobileCMDNavDock.vue";
 import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
 import AuroraLogo from "@/components/AuroraLogo.vue";
+import MobileCMDMainQuickSelectMenu from "@/components/MobileCMDMainQuickSelectMenu.vue";
 
 import isMobile from "@/composables/isMobile.ts";
 import percentage from "@/composables/percentage.ts";
@@ -70,7 +71,6 @@ export default {
     id="fs_btn"
     v-text="FullScreenButtonTextController()"
   ></BaseLabel>
-  <div id="btn_demo">RTH</div>
   <div
     id="vulture_downlink_placeholder"
     v-if="isFullScreen && orientation == 'landscape' && !hasVideoDownlink"
@@ -95,6 +95,7 @@ export default {
   <MobileCMDNavDock
     v-if="isFullScreen && orientation == 'landscape'"
   ></MobileCMDNavDock>
+  <MobileCMDMainQuickSelectMenu></MobileCMDMainQuickSelectMenu>
 </template>
 
 <style scoped>
