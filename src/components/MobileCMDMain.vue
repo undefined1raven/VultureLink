@@ -71,31 +71,24 @@ export default {
     id="fs_btn"
     v-text="FullScreenButtonTextController()"
   ></BaseLabel>
-  <div
-    id="vulture_downlink_placeholder"
-    v-if="isFullScreen && orientation == 'landscape' && !hasVideoDownlink"
-  >
-    <VultureDetailedDeco
-      color="#555"
-      id="detailed_vulture_deco"
-    ></VultureDetailedDeco>
-    <AuroraLogo id="aurora_logo" color="#555"></AuroraLogo>
-    <BaseLabel
-      id="vulture_downlink_l"
-      color="#555"
-      v-text="'Vulture Video Downlink /|/'"
-    ></BaseLabel>
+  <div v-if="isFullScreen && orientation == 'landscape'">
+    <div id="vulture_downlink_placeholder" v-if="!hasVideoDownlink">
+      <VultureDetailedDeco
+        color="#555"
+        id="detailed_vulture_deco"
+      ></VultureDetailedDeco>
+      <AuroraLogo id="aurora_logo" color="#555"></AuroraLogo>
+      <BaseLabel
+        id="vulture_downlink_l"
+        color="#555"
+        v-text="'Vulture Video Downlink /|/'"
+      ></BaseLabel>
+    </div>
+    <MobileCMDFlightControls></MobileCMDFlightControls>
+    <MobileCMDPowerDock></MobileCMDPowerDock>
+    <MobileCMDNavDock></MobileCMDNavDock>
+    <MobileCMDMainQuickSelectMenu></MobileCMDMainQuickSelectMenu>
   </div>
-  <MobileCMDFlightControls
-    v-if="isFullScreen && orientation == 'landscape'"
-  ></MobileCMDFlightControls>
-  <MobileCMDPowerDock
-    v-if="isFullScreen && orientation == 'landscape'"
-  ></MobileCMDPowerDock>
-  <MobileCMDNavDock
-    v-if="isFullScreen && orientation == 'landscape'"
-  ></MobileCMDNavDock>
-  <MobileCMDMainQuickSelectMenu></MobileCMDMainQuickSelectMenu>
 </template>
 
 <style scoped>
