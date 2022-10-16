@@ -13,7 +13,34 @@ import rangeScaler from "@/composables/rangeScaler.ts";
 <script lang="ts">
 export default {
   props: {},
+  data(){
+    return{
+        mapInstance: false,
+        isMiniMapExtended: false,
+        MiniMapHeight: 100,
+        MiniMapSizeToggleButtonStyle: "",
+    }
+  },
   methods: {
+    NavMapExtendButtonOnToggle(){
+        if(this.mapInstance){
+            this.isMiniMapExtended = !this.isMiniMapExtended;
+            if(this.isMiniMapExtended){
+                this.mapInstance.remove();
+                this.MiniMapHeight = 200;
+                this.MiniMapSizeToggleButtonStyle = 'transform: rotate(-180deg); top: 272%';
+                setTimeout(() => {
+                    this.mapSetup();
+                }, 50);
+            }
+            else{
+                this.mapInstance.remove();
+                this.MiniMapHeight = 100;
+                this.MiniMapSizeToggleButtonStyle = 'transform: rotate(0deg); top: 172%';
+                this.mapSetup();
+            }
+        }
+    },
     mapSetup() {
       var map = L.map("nav_map_container", {zoomControl: false}).setView([45.43151, 28.05431], 15);
       var gl = L.mapboxGL({
@@ -22,6 +49,7 @@ export default {
         style:
           "https://api.maptiler.com/maps/96f0d0fa-e9c9-43b1-a8ff-09fd5b45a351/style.json?key=R1cyh6lj1mTfNEycg2N1",
       }).addTo(map);
+      this.mapInstance = map;
     },
   },
   mounted() {
@@ -55,10 +83,23 @@ export default {
     ></VSIndicator>
     <BaseLabel id="vs_acx" class="primary_l" v-text="'+12 m/s'"></BaseLabel>
     <VerticalLine id="nav_dock_ln" color="#0500FF"></VerticalLine>
-    <div id="nav_map_container"></div>
+    <div :style="`height: ${MiniMapHeight}%;`" id="nav_map_container"></div>
+    <div @click="NavMapExtendButtonOnToggle" :style="MiniMapSizeToggleButtonStyle" id="extend_nav_map_btn"></div>
   </div>
 </template>
 <style scoped>
+#extend_nav_map_btn{
+    position: absolute;
+    top: 172%;
+    left: 86%;
+    width: 0;
+    height: 0;
+    border-top: solid 3vh #0500ff;
+    border-right: solid 3vh transparent ;
+    border-left: solid 3vh transparent;
+    z-index: 999;
+    transition: all ease-in-out 0.1s;
+}
 #nav_map_container {
   position: absolute;
   top: 104%;
