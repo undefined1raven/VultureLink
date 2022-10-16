@@ -49,7 +49,8 @@ import rangeScaler from "@/composables/rangeScaler.ts";
 #mobile_cmd_main_nav_dock_container{
     position: absolute;
     top: 0%;
-    left: 80.9375%;
+    left: 79.4375%;
+    padding-right: 1.5%;
     width: 19.0625%;
     height: 10.277777778%; 
     background-color: #000000aa;
