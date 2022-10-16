@@ -84,11 +84,20 @@ export default {
     <BaseLabel id="vs_acx" class="primary_l" v-text="'+12 m/s'"></BaseLabel>
     <VerticalLine id="nav_dock_ln" color="#0500FF"></VerticalLine>
     <div :style="`height: ${MiniMapHeight}%;`" id="nav_map_container"></div>
-    <div @click="NavMapExtendButtonOnToggle" :style="MiniMapSizeToggleButtonStyle" id="extend_nav_map_btn"></div>
+    <div @click="NavMapExtendButtonOnToggle" :style="MiniMapSizeToggleButtonStyle" id="extend_nav_map_btn_indi"></div>
+    <div @click="NavMapExtendButtonOnToggle" :style="MiniMapSizeToggleButtonStyle" id="extend_nav_map_btn_touch_target"></div>
   </div>
 </template>
 <style scoped>
-#extend_nav_map_btn{
+#extend_nav_map_btn_touch_target{
+    position: absolute;
+    top: 172%;
+    left: 88%;
+    width: 4vh;
+    height: 4vh;
+    z-index: 999;
+}
+#extend_nav_map_btn_indi{
     position: absolute;
     top: 172%;
     left: 86%;
