@@ -7,6 +7,7 @@ import HorizontalLine from "@/components/HorizontalLine.vue";
 import MobileCMDFlightControls from "@/components/MobileCMDFlightControls.vue";
 import MobileCMDPowerDock from "@/components/MobileCMDPowerDock.vue";
 import MobileCMDNavDock from "@/components/MobileCMDNavDock.vue";
+import MobileCMDLandingAssistDock from "@/components/MobileCMDLandingAssistDock.vue";
 import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
 import AuroraLogo from "@/components/AuroraLogo.vue";
 import MobileCMDMainQuickSelectMenu from "@/components/MobileCMDMainQuickSelectMenu.vue";
@@ -22,6 +23,7 @@ export default {
     return {
       isFullScreen: false,
       orientation: "portrait",
+      isLandingAssistVisible: false,
     };
   },
   props: {
@@ -46,6 +48,9 @@ export default {
       } else {
         return "Go Full Screen";
       }
+    },
+    landingAssistOnToggle(){
+      this.isLandingAssistVisible = !this.isLandingAssistVisible;
     },
     onFullScreenButtonClick() {
       if (!this.isFullScreen) {
@@ -87,7 +92,8 @@ export default {
     <MobileCMDFlightControls></MobileCMDFlightControls>
     <MobileCMDPowerDock></MobileCMDPowerDock>
     <MobileCMDNavDock></MobileCMDNavDock>
-    <MobileCMDMainQuickSelectMenu></MobileCMDMainQuickSelectMenu>
+    <MobileCMDMainQuickSelectMenu @landingAssistOnToggle="landingAssistOnToggle"></MobileCMDMainQuickSelectMenu>
+    <MobileCMDLandingAssistDock :isLandingAssistVisible="isLandingAssistVisible"></MobileCMDLandingAssistDock>
   </div>
 </template>
 
@@ -123,20 +129,20 @@ export default {
   justify-content: center;
 }
 #vulture_downlink_l {
-  top: 85.833333333%;
+  top: 78.833333333%;
   left: 50%;
   transform: translate(-50%);
   font-size: 6vh;
 }
 #aurora_logo {
-  top: 14.166666667%;
+  top: 7.166666667%;
   left: 50%;
   width: 26.184375%;
   height: auto;
   transform: translate(-50%);
 }
 #detailed_vulture_deco {
-  top: 30.833333333%;
+  top: 23.833333333%;
   left: 50%;
   transform: translate(-50%);
   height: auto;

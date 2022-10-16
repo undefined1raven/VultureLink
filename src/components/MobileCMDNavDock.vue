@@ -31,7 +31,7 @@ export default {
                 this.MiniMapSizeToggleButtonStyle = 'transform: rotate(-180deg); top: 272%';
                 setTimeout(() => {
                     this.mapSetup();
-                }, 50);
+                }, 100);
             }
             else{
                 this.mapInstance.remove();
@@ -116,6 +116,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #000000aa;
+  transition: all ease-in-out 0.1s;
 }
 #vs_acx {
   top: 0%;

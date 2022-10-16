@@ -22,6 +22,7 @@ export default {
     },
     landingAssistButtonOnClick(){
         this.menuToggleButtonOnClick();
+        this.$emit('landingAssistOnToggle');
     },
     RTHButtonOnClick(){
         this.menuToggleButtonOnClick();
