@@ -465,7 +465,7 @@ io.on('connection', function (socket_l) {
         io.to(`${payload.vid}`).emit('imu_data_pkg_server_relay', payload.telemetry);
     });//Origin HID [02C] | IMU [temperture(C)[0], x[1], y[2], z[3], pitch[4], roll[5], accel[6], inclination[7], orientation[8], Gyro x[9], Gyro y[10], Gyro z[11], Gyro pitch[12], Gyro roll[13], Gyro yaw[14], Gyro rate[15], Gyro isCalibrated[16]]
     socket_l.on('imu_alpha_data_pkg_broadcast', payload => {
-        io.to(`${payload.vid}`).emit('imu_alpha_data_pkg_server_relay', payload.telemetry);
+        io.emit('imu_alpha_data_pkg_server_relay', payload.telemetry);
     });//Origin HID [02C] | IMU [temperture(C)[0], x[1], y[2], z[3], pitch[4], roll[5], accel[6], inclination[7], orientation[8], Gyro x[9], Gyro y[10], Gyro z[11], Gyro pitch[12], Gyro roll[13], Gyro yaw[14], Gyro rate[15], Gyro isCalibrated[16]]
 
 

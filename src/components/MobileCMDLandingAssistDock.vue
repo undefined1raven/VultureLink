@@ -58,7 +58,7 @@ export default{
 .landing_assist_indi {
   position: absolute;
   top: 61.111111111%;
-  height: 69.444444444%;
+  height: 32.444444%;
   width: 21.367521368%;
   background-color: #0500FF;
 }

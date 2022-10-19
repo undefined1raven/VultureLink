@@ -8,6 +8,7 @@ import MobileCMDFlightControls from "@/components/MobileCMDFlightControls.vue";
 import MobileCMDPowerDock from "@/components/MobileCMDPowerDock.vue";
 import MobileCMDNavDock from "@/components/MobileCMDNavDock.vue";
 import MobileCMDLandingAssistDock from "@/components/MobileCMDLandingAssistDock.vue";
+import MobileCMDRollIndi from "@/components/MobileCMDRollIndi.vue";
 import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
 import AuroraLogo from "@/components/AuroraLogo.vue";
 import MobileCMDMainQuickSelectMenu from "@/components/MobileCMDMainQuickSelectMenu.vue";
@@ -28,6 +29,7 @@ export default {
   },
   props: {
     hasVideoDownlink: { default: false },
+    vultureTelemetry: {default: {}},
   },
   mounted() {
     window.onresize = (e: Event) => {
@@ -94,10 +96,15 @@ export default {
     <MobileCMDNavDock></MobileCMDNavDock>
     <MobileCMDMainQuickSelectMenu @landingAssistOnToggle="landingAssistOnToggle"></MobileCMDMainQuickSelectMenu>
     <MobileCMDLandingAssistDock :isLandingAssistVisible="isLandingAssistVisible"></MobileCMDLandingAssistDock>
+    <MobileCMDRollIndi :roll="vultureTelemetry.imu_alpha.gyro.roll.angle" v-if="hasVideoDownlink" id="roll_indi"></MobileCMDRollIndi>
   </div>
 </template>
 
 <style scoped>
+#roll_indi{
+  top: 48.055555556%;
+  left: 44.375%;
+}
 #btn_demo {
   position: absolute;
   top: 0.5%;

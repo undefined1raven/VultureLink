@@ -31,14 +31,15 @@ export default {
     return {
       hasStream: false,
       current_user_acid: getCookie("acid"),
-      targetVid: 'a5ef02a9-7838-42bc-b4e8-f156cc1f06c7',
+      targetVid: "a5ef02a9-7838-42bc-b4e8-f156cc1f06c7",
+      vultureTelemetry: { imu_alpha: {} },
     };
   },
-  methods:{
-    FlightInputOnChangeHandler(args:object){
-      let transit_obj = {telemetry: args, vid: this.targetVid};
-      socket.emit('FlightInputOnChange', transit_obj); 
-    }
+  methods: {
+    FlightInputOnChangeHandler(args: object) {
+      let transit_obj = { telemetry: args, vid: this.targetVid };
+      socket.emit("FlightInputOnChange", transit_obj);
+    },
   },
   mounted() {
     socket.emit("add_socket_to_acid_room", {
@@ -48,11 +49,11 @@ export default {
 
     socket.emit("new_target_vid", {
       ath: getCookie("adv_tele_sio_ath"),
-      pvid: 'default',
+      pvid: "default",
       vid: this.targetVid,
     });
 
-    socket.emit("request_vulture_uplink", {vid: this.targetVid});
+    socket.emit("request_vulture_uplink", { vid: this.targetVid });
     setTimeout(() => {
       const fwd_rcvng_peer = new SimplePeer({
         initiator: false,
@@ -80,6 +81,11 @@ export default {
       fwd_rcvng_peer.on("connect", () => {
         console.log("connected");
       });
+
+      //- Vulture Telemetry Handling -//
+      socket.on("imu_alpha_data_pkg_server_relay", (telemetry: object) => {
+        this.vultureTelemetry.imu_alpha = telemetry;
+      });
     }, 50);
   },
 };
@@ -91,7 +97,13 @@ export default {
   <main>
     <Video v-show="hasStream" id="vid_container" ref="vid_container"></Video>
     <Main v-if="!isMobile()" id="ui_overlay"></Main>
-    <MobileMain :hasVideoDownlink="hasStream" @FlightInputOnChange="FlightInputOnChangeHandler" v-if="isMobile()" id="mobile_main"></MobileMain>
+    <MobileMain
+      :vultureTelemetry="vultureTelemetry"
+      :hasVideoDownlink="hasStream"
+      @FlightInputOnChange="FlightInputOnChangeHandler"
+      v-if="isMobile()"
+      id="mobile_main"
+    ></MobileMain>
   </main>
 </template>
 <style scoped>
