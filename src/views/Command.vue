@@ -54,6 +54,13 @@ export default {
     });
 
     socket.emit("request_vulture_uplink", { vid: this.targetVid });
+
+    setInterval(() => {
+      if (!this.hasStream) {
+        socket.emit("request_vulture_uplink", { vid: this.targetVid });
+      }
+    }, 1500);
+
     setTimeout(() => {
       const fwd_rcvng_peer = new SimplePeer({
         initiator: false,
@@ -61,7 +68,11 @@ export default {
       });
 
       socket.on("relayed_fwd_cam_rtc_req", (offer) => {
-        fwd_rcvng_peer.signal(offer);
+        try{
+          fwd_rcvng_peer.signal(offer);
+        }catch(e){
+          console.log('bim')
+        }
       });
 
       fwd_rcvng_peer.on("stream", (stream: MediaStream) => {

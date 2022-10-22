@@ -12,6 +12,12 @@ import rangeScaler from "@/composables/rangeScaler.ts";
 export default{
     props:{
         isLandingAssistVisible: {default: false},
+        groundDistance: {default: 2.5},
+    },
+    methods: {
+      LandingAssistController(){
+        return `left: ${rangeScaler(this.groundDistance, 4, 0, 0, 100)}%;`;
+      },
     },
 }
 </script>
@@ -20,14 +26,16 @@ export default{
     <Transition name="ani">
         <div v-if="isLandingAssistVisible" id="mobile_cmd_main_landing_assist_dock_container">
           <HorizontalLine id="landing_assist_ln" color="#0500FF"></HorizontalLine>
-          <BaseLabel id="landing_assist_sonar_alt_acx" v-text="'2m'"></BaseLabel>
-          <div class="landing_assist_indi" id="landing_assist_4m_mark"></div>
-          <div class="landing_assist_indi" id="landing_assist_3m_mark"></div>
-          <div class="landing_assist_indi" id="landing_assist_2m_mark"></div>
-          <div class="landing_assist_indi mini_width" id="landing_assist_075m_mark"></div>
-          <div class="landing_assist_indi mini_width" id="landing_assist_05m_mark"></div>
-          <div class="landing_assist_indi mini_width" id="landing_assist_025m_mark"></div>
-          <div class="landing_assist_indi mini_width" id="landing_assist_0m_mark"></div>
+          <BaseLabel id="landing_assist_sonar_alt_acx" v-text="`${groundDistance.toFixed(1)}m`"></BaseLabel>
+          <div id="landing_assist_indi_container">
+            <div :style="LandingAssistController()" id="landing_assist_indi_acx"></div>
+            <div class="landing_assist_separator" id="landing_assist_4m_mark"></div>
+            <div class="landing_assist_separator" id="landing_assist_3m_mark"></div>
+            <div class="landing_assist_separator" id="landing_assist_2m_mark"></div>
+            <div class="landing_assist_separator" id="landing_assist_075m_mark"></div>
+            <div class="landing_assist_separator" id="landing_assist_05m_mark"></div>
+            <div class="landing_assist_separator" id="landing_assist_025m_mark"></div>
+          </div>
         </div>
     </Transition>
 </template>
@@ -36,31 +44,48 @@ export default{
 
 #landing_assist_0m_mark{
     left: 95.327102804%;
+    display: none;
 }
 #landing_assist_025m_mark{
-    left: 88.785046729%;
+    left: 93.457943925%;
 }
 #landing_assist_05m_mark{
-    left: 82.242990654%;
+    left: 86.91588785%;
 }
 #landing_assist_075m_mark{
-    left: 75.700934579%;
+    left: 80.373831776%;
 }
 #landing_assist_4m_mark{
-    left: 0%;
+    left: 23.364485981%;
 }
 #landing_assist_3m_mark{
-    left: 25.23364486%;
+    left: 48.598130841%;
 }
 #landing_assist_2m_mark{
-    left: 50.46728972%;
+    left: 73.831775701%;
 }
-.landing_assist_indi {
+#landing_assist_indi_acx{
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: #0500FF;
+}
+.landing_assist_separator {
+  position: absolute;
+  top: 0%;
+  height: 100%;
+  width: 1.869158879%;
+  background-color: #000000;
+}
+#landing_assist_indi_container{
   position: absolute;
   top: 61.111111111%;
   height: 32.444444%;
-  width: 21.367521368%;
-  background-color: #0500FF;
+  width: 100%;
+  background-color: #55555540;
+  overflow: hidden;
 }
 .mini_width{
     width: 4.273504274%;

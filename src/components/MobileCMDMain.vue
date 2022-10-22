@@ -9,6 +9,7 @@ import MobileCMDPowerDock from "@/components/MobileCMDPowerDock.vue";
 import MobileCMDNavDock from "@/components/MobileCMDNavDock.vue";
 import MobileCMDLandingAssistDock from "@/components/MobileCMDLandingAssistDock.vue";
 import MobileCMDRollIndi from "@/components/MobileCMDRollIndi.vue";
+import MobileCMDRoleSelector from "@/components/MobileCMDRoleSelector.vue";
 import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
 import AuroraLogo from "@/components/AuroraLogo.vue";
 import MobileCMDMainQuickSelectMenu from "@/components/MobileCMDMainQuickSelectMenu.vue";
@@ -25,11 +26,15 @@ export default {
       isFullScreen: false,
       orientation: "portrait",
       isLandingAssistVisible: false,
+      roleSelected: false,
+      roleID: false,
     };
   },
   props: {
     hasVideoDownlink: { default: false },
-    vultureTelemetry: {default: {}},
+    vultureTelemetry: {
+      default: { imu_alpha: { gyro: { roll: { angle: 0 } } } },
+    },
   },
   mounted() {
     window.onresize = (e: Event) => {
@@ -44,6 +49,10 @@ export default {
     };
   },
   methods: {
+    onRoleSelected(args:object){
+      this.roleSelected = true;
+      this.roleID = args.role_id;
+    },
     FullScreenButtonTextController() {
       if (this.isFullScreen) {
         return "Exit Full Screen";
@@ -51,7 +60,7 @@ export default {
         return "Go Full Screen";
       }
     },
-    landingAssistOnToggle(){
+    landingAssistOnToggle() {
       this.isLandingAssistVisible = !this.isLandingAssistVisible;
     },
     onFullScreenButtonClick() {
@@ -91,17 +100,31 @@ export default {
         v-text="'Vulture Video Downlink /|/'"
       ></BaseLabel>
     </div>
-    <MobileCMDFlightControls></MobileCMDFlightControls>
+    <MobileCMDFlightControls v-if="roleSelected && roleID == 'pilot'"></MobileCMDFlightControls>
     <MobileCMDPowerDock></MobileCMDPowerDock>
     <MobileCMDNavDock></MobileCMDNavDock>
-    <MobileCMDMainQuickSelectMenu @landingAssistOnToggle="landingAssistOnToggle"></MobileCMDMainQuickSelectMenu>
-    <MobileCMDLandingAssistDock :isLandingAssistVisible="isLandingAssistVisible"></MobileCMDLandingAssistDock>
-    <MobileCMDRollIndi :roll="vultureTelemetry.imu_alpha.gyro.roll.angle" v-if="hasVideoDownlink" id="roll_indi"></MobileCMDRollIndi>
+    <MobileCMDMainQuickSelectMenu
+      @landingAssistOnToggle="landingAssistOnToggle"
+    ></MobileCMDMainQuickSelectMenu>
+    <MobileCMDLandingAssistDock
+      :isLandingAssistVisible="isLandingAssistVisible"
+    ></MobileCMDLandingAssistDock>
+    <MobileCMDRollIndi
+      :roll="0 || 0"
+      v-if="hasVideoDownlink"
+      id="roll_indi"
+    ></MobileCMDRollIndi>
+    <MobileCMDRoleSelector v-if="!roleSelected" @onRoleSelected="onRoleSelected" id="role_selector"></MobileCMDRoleSelector>
   </div>
 </template>
 
 <style scoped>
-#roll_indi{
+#role_selector{
+  top: 40.555555556%;
+  left: 50%;
+  transform: translate(-50%);
+}
+#roll_indi {
   top: 48.055555556%;
   left: 44.375%;
 }
