@@ -1707,6 +1707,16 @@ io.on('connection', socket => {
             }, 200);
 
 
+            socket.on('request_vulture_permissions', (request_vulture_permissions_payload) => {
+                VULTURE_SCH.findOne({vid: request_vulture_permissions_payload.vid}).exec().then(vulture_obj => {
+                    for(let ix = 0; ix < vulture_obj.u_access_arr.length; ix++){
+                        if(vulture_obj.u_access_arr[ix].acid == request_vulture_permissions_payload.acid){
+                            socket.emit('vulture_permissions', vulture_obj.u_access_arr[ix]);
+                        }
+                    }
+                 });  
+            });
+
             socket.on('new_target_vid', new_target_vid_payload => {
                 socket.leave(`${new_target_vid_payload.pvid}`);
                 socket.join(`${new_target_vid_payload.vid}`);

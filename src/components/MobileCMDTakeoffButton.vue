@@ -18,7 +18,7 @@ export default {
     },
     takeoffButtonOnTouchStart() {
       let ini_time = Date.now();
-      let target_hold_duration = 3000; //ms
+      let target_hold_duration = 2000; //ms
       this.interval = setInterval(() => {
         this.currentDuration = Math.abs(Date.now() - ini_time);
         this.progress = rangeScaler(

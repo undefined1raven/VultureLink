@@ -38,6 +38,19 @@ export default {
     vultureTelemetry: {
       default: { imu_alpha: { gyro: { roll: { angle: 0 } } } },
     },
+    roleAvailablility: {
+      default: {
+        observer_btn: {
+          default: { isEnabled: true, unavailability_reason: "roleTaken" },
+        },
+        pilot_btn: {
+          default: {
+            isEnabled: true,
+            unavailability_reason: "insufficientPermissions",
+          },
+        },
+      },
+    },
   },
   mounted() {
     window.onresize = (e: Event) => {
@@ -71,8 +84,8 @@ export default {
     landingAssistOnToggle() {
       this.isLandingAssistVisible = !this.isLandingAssistVisible;
     },
-    FlightInputOnChange(args:Event){
-      this.$emit('FlightInputOnChange', args);
+    FlightInputOnChange(args: Event) {
+      this.$emit("FlightInputOnChange", args);
     },
     onFullScreenButtonClick() {
       if (!this.isFullScreen) {
@@ -128,6 +141,8 @@ export default {
     <MobileCMDRoleSelector
       v-if="!roleSelected"
       @onRoleSelected="onRoleSelected"
+      :observer_btn="roleAvailablility.observer_btn"
+      :pilot_btn="roleAvailablility.pilot_btn"
       id="role_selector"
     ></MobileCMDRoleSelector>
     <Transition name="fade">

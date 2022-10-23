@@ -33,9 +33,31 @@ export default {
       current_user_acid: getCookie("acid"),
       targetVid: "a5ef02a9-7838-42bc-b4e8-f156cc1f06c7",
       vultureTelemetry: { imu_alpha: {} },
+      PermissionsAndAccessObj: {},
     };
   },
   methods: {
+    roleSelectorParser(PermissionsAndAccessObj: Object) {
+      let roleUnavailablityReasonObj = {
+        true: false,
+        false: "insufficientPermissions",
+      };
+      let hasAccessToTelemetry = PermissionsAndAccessObj.access["adv_tele"];
+      let hasAccessToCommand = PermissionsAndAccessObj.access["command"];
+
+      let role_obj = {
+        observer_btn: {
+          isEnabled: hasAccessToTelemetry,
+          unavailability_reason:
+            roleUnavailablityReasonObj[hasAccessToTelemetry],
+        },
+        pilot_btn: {
+          isEnabled: hasAccessToCommand,
+          unavailability_reason: roleUnavailablityReasonObj[hasAccessToCommand],
+        },
+      };
+      return role_obj;
+    },
     FlightInputOnChangeHandler(args: object) {
       let transit_obj = { telemetry: args, vid: this.targetVid };
       socket.emit("FlightInputOnChange", transit_obj);
@@ -62,17 +84,26 @@ export default {
     }, 1500);
 
     setTimeout(() => {
+      socket.emit("request_vulture_permissions", {
+        vid: this.targetVid,
+        acid: this.current_user_acid,
+      });
+
       const fwd_rcvng_peer = new SimplePeer({
         initiator: false,
         trickle: false,
       });
 
       socket.on("relayed_fwd_cam_rtc_req", (offer) => {
-        try{
+        try {
           fwd_rcvng_peer.signal(offer);
-        }catch(e){
-          console.log('bim')
+        } catch (e) {
+          console.log("bim");
         }
+      });
+
+      socket.on("vulture_permissions", (vulture_permissions_obj) => {
+        this.PermissionsAndAccessObj = vulture_permissions_obj;
       });
 
       fwd_rcvng_peer.on("stream", (stream: MediaStream) => {
@@ -112,6 +143,7 @@ export default {
       :vultureTelemetry="vultureTelemetry"
       :hasVideoDownlink="hasStream"
       @FlightInputOnChange="FlightInputOnChangeHandler"
+      :roleAvailablility="roleSelectorParser(PermissionsAndAccessObj)"
       v-if="isMobile()"
       id="mobile_main"
     ></MobileMain>
