@@ -735,14 +735,12 @@ app.post('/MFA_mobile_poll', (req, res) => {
                                     setTimeout(() => {
                                         let user_acc_auth_methods_arr = user.acc_auth_methods_arr;
                                         UAC_v2.findOneAndUpdate({ acid: req.cookies.frstp_aprvd_tid.acid }, { acc_auth_methods_arr: { TOTP: user_acc_auth_methods_arr.TOTP, security_key: user_acc_auth_methods_arr.security_key, app: true, email: user_acc_auth_methods_arr.email, first: user_acc_auth_methods_arr.first } }, { upsert: true }, (err, doc) => { });
-                                        if (req.cookies.redirect_id == 0) {
-                                            successful_auth_post(req, res, user, false);
-                                        }
-                                        if (req.cookies.redirect_id == 1) {
-                                            successful_security_post(req, res, user, false);
-                                        }
+                                        
+                                        successful_auth_post(req, res, user, false);
+                                        
                                         res.clearCookie('frstp_aprvd_tid');
-                                        res.json({ failure_id: 'none', res_tx: Date.now(), redirect_id: req.cookies.redirect_id, result: true });
+                                        
+                                        res.json({ failure_id: 'none', res_tx: Date.now(), redirect_path: req.cookies.wid, result: true });
                                         res.end();
                                     }, 100);
                                 }
@@ -813,7 +811,6 @@ function successful_auth_post(req, res, user, redirect) {
         res.cookie('wid', 'advanced_telemetry', { httpOnly: true });
         res.cookie('acid', user.acid, { secure: false });
     }
-    res.clearCookie('redirect_id');
     if (req.cookies.frstp_aprvd_tid != undefined) {
         remove(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`));
     }
@@ -844,10 +841,16 @@ app.post('/auth_post', json_parser, (req, res) => {
                         else {
                             res.cookie('eor', req.body.user_identifier, { httpOnly: false, secure: false });
                         }
+                        if (req.cookies.wid != undefined) {
+                            setTimeout(() => {
+                                res.json({ result: true, redirect_path: req.cookies.wid });
+                            }, 100);
+                        } else {
+                            setTimeout(() => {
+                                res.json({ result: true, redirect_path: '/advanced_telemetry' });
+                            }, 100);
 
-                        setTimeout(() => {
-                            res.json({ result: true, redirect_path: '/advanced_telemetry' });
-                        }, 100);
+                        }
                     }
                 }
                 else {
@@ -965,17 +968,20 @@ function auth_status(req, res, next) {
 //----App Routes----//
 const cic_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 300, interval: 'hour' });
 app.get('/', (req, res) => {
+    // if (rate_limiter_checker(cic_limiter, res)) {
+    //     if (req.useragent.isDesktop) {
+    //         // res.render('cic.ejs');
+    //         res.sendFile(path.join(__dirname, 'dist/index.html'));
+
+    //     }
+    //     if (req.useragent.isMobile) {
+    //         // res.render('cic_m.ejs');
+    //         res.sendFile(path.join(__dirname, 'dist/index.html'));
+    //     }
+    // }
     if (rate_limiter_checker(cic_limiter, res)) {
         console.log(`[00][CIC] | ${Math.round(cic_limiter.getTokensRemaining())} tokens remaining | Status Code [${res.statusCode}]`);
-        if (req.useragent.isDesktop) {
-            // res.render('cic.ejs');
-            res.sendFile(path.join(__dirname, 'dist/index.html'));
-
-        }
-        if (req.useragent.isMobile) {
-            // res.render('cic_m.ejs');
-            res.sendFile(path.join(__dirname, 'dist/index.html'));
-        }
+        check_ua(req, res, 'adv_tele.ejs', 'adv_tele_m.ejs', '/');
     }
 });
 
@@ -1046,7 +1052,7 @@ app.get('/MFA_TOTP', (req, res) => {
             }
             else {
                 if (req.cookies.wid != undefined) {
-                    res.redirect(`/${req.cookies.wid}`);
+                    res.redirect(req.cookies.wid);
                 }
                 else {
                     res.redirect('login');
@@ -1072,8 +1078,7 @@ function MFA_conditional_renderer(req, res) {
     }
     else {
         if (req.cookies.wid != undefined) {
-            l
-            res.redirect(`/${req.cookies.wid}`);
+            res.redirect(req.cookies.wid);
         }
         else {
             res.redirect('login');
@@ -1126,7 +1131,7 @@ app.get('/MFA_app', (req, res) => {
             }
             else {
                 if (req.cookies.wid != undefined) {
-                    res.redirect(`/${req.cookies.wid}`);
+                    res.redirect(req.cookies.wid);
                 }
                 else {
                     res.redirect('login');
@@ -1183,7 +1188,7 @@ function clear_all_session_cookies(res) {
 }
 
 
-function check_ua(req, res, red_d, red_m) {
+function check_ua(req, res, red_d, red_m, target_path) {
     try {
         if (req.cookies.at != undefined || req.cookies.adv_tele_sio_ath != undefined) {
             let rvpx = false;
@@ -1199,10 +1204,12 @@ function check_ua(req, res, red_d, red_m) {
                             rvpx = true;
                         }
                         else {
+                            res.cookie('wid', target_path, { httpOnly: true, secure: true });
                             res.redirect('login');
                         }
                     }
                     catch {
+                        res.cookie('wid', target_path, { httpOnly: true, secure: true });
                         res.redirect('login');
                         rvpx = false;
                     }
@@ -1226,11 +1233,11 @@ function check_ua(req, res, red_d, red_m) {
                         if (process.env.NODE_ENV === 'production') {
                             // res.cookie('at', { tac: new_token, tid: ntid, exp: req.cookies.at.exp }, { httpOnly: true, secure: true });
                             // res.cookie('adv_tele_sio_ath', ntid, { secure: true });
-                            res.cookie('wid', 'advanced_telemetry', { httpOnly: true, secure: true });
+                            res.cookie('wid', target_path, { httpOnly: true, secure: true });
                         } else {
                             // res.cookie('at', { tac: new_token, tid: ntid, exp: req.cookies.at.exp }, { httpOnly: true });
                             // res.cookie('adv_tele_sio_ath', ntid);
-                            res.cookie('wid', 'advanced_telemetry', { httpOnly: true, secure: false });
+                            res.cookie('wid', target_path, { httpOnly: true, secure: false });
                         }
                         res.sendFile(path.join(__dirname, 'dist/index.html'));
                     }
@@ -1239,11 +1246,13 @@ function check_ua(req, res, red_d, red_m) {
                     }
                 }
                 else {
+                    res.cookie('wid', target_path, { httpOnly: true, secure: true });
                     res.redirect('login');
                 }
             });
         }
         else {
+            res.cookie('wid', target_path, { httpOnly: true, secure: true });
             res.redirect('login');
         }
     }
@@ -1379,7 +1388,6 @@ function successful_security_post(req, res, user, redirect) {
         res.cookie('wid', 'security', { httpOnly: true, secure: false });
     }
     remove(ref(db, `frstp_aprvd_tids/${req.cookies.frstp_aprvd_tid.tid}`));
-    res.clearCookie('redirect_id');
     if (redirect) {
         res.redirect('security');
     }
@@ -1434,22 +1442,17 @@ function retrieve_vulture_array_status(user, vow_array) {
 function redirect_id_assessment_fn(req, res, user) {
     let vow_status = [];
 
-    if (req.cookies.redirect_id == 0) {
-        res.clearCookie('redirect_id');
-        res.clearCookie('frstp_aprvd_tid');
-        successful_auth_post(req, res, user, false);
+    res.clearCookie('frstp_aprvd_tid');
+    successful_auth_post(req, res, user, false);
 
-        setTimeout(() => {
-            res.json({ response: true, target_path: '/advanced_telemetry' })
-        }, 100);
-    }
-    if (req.cookies.redirect_id == 1) {
-        res.clearCookie('redirect_id');
-        res.clearCookie('frstp_aprvd_tid');
-        successful_security_post(req, res, user, false);
-        res.json({ response: true, target_path: '/security' });
+    setTimeout(() => {
+        if (req.cookies.wid != undefined) {
+            res.json({ response: true, target_path: req.cookies.wid })
+        } else {
+            res.json({ response: true, target_path: '/' })
+        }
+    }, 100);
 
-    }
 }
 
 app.post('/MFA_TOTP_post', json_parser, (req, res) => {
@@ -1486,17 +1489,15 @@ app.post('/MFA_TOTP_post', json_parser, (req, res) => {
     });
 });
 
-function MFA_prep_and_redirect(req, res, user, redirect_id, tid) {
+function MFA_prep_and_redirect(req, res, user, tid) {
     set(ref(db, `frstp_aprvd_tids/${tid}`), { notification_sent: false, state: 'pending', tx: Date.now(), acid: user.acid });
     if (process.env.NODE_ENV === 'production') {
         res.cookie('eor', req.body.user_identifier, { httpOnly: false, secure: true });
         res.cookie('frstp_aprvd_tid', { tid: tid, un: user.username, acid: user.acid }, { secure: true, httpOnly: true });
-        res.cookie('redirect_id', redirect_id, { secure: true, httpOnly: false });
     }
     else {
         res.cookie('eor', req.body.user_identifier, { httpOnly: false, secure: false });
         res.cookie('frstp_aprvd_tid', { tid: tid, un: user.username, acid: user.acid }, { secure: false, httpOnly: true });
-        res.cookie('redirect_id', redirect_id, { secure: false, httpOnly: false });
     }
 
     res.json({ result: true, redirect_path: `/MFA_${user.acc_auth_methods_arr.first}` });
@@ -1530,7 +1531,7 @@ app.post('/security_post', (req, res) => {
 
 app.get('/advanced_telemetry', (req, res) => {
     if (rate_limiter_checker(adv_tele_limiter, res)) {
-        check_ua(req, res, 'adv_tele.ejs', 'adv_tele_m.ejs');
+        check_ua(req, res, 'adv_tele.ejs', 'adv_tele_m.ejs', '/advanced_telemetry');
     }
 });
 
@@ -1540,7 +1541,7 @@ app.get('/showcase-advanced_telemetry', (req, res) => {
         UAC_v2.findOne({ username: "user" }).exec().then(user => {
             try {
                 successful_auth_post(req, res, user, false);
-                check_ua(req, res, 'adv_tele.ejs', 'adv_tele_m.ejs');
+                check_ua(req, res, 'adv_tele.ejs', 'adv_tele_m.ejs', '/advanced_telemetry');
             } catch (e) {
                 console.log(e)
             }
@@ -1571,7 +1572,7 @@ const security_auth_limiter = new limiter_src.RateLimiter({ tokensPerInterval: 3
 app.get('/security_auth', (req, res) => {
     if (rate_limiter_checker(security_auth_limiter, res)) {
         console.log(`[03][Security] | ${security_auth_limiter.getTokensRemaining()} tokens remaining | Status Code [${res.statusCode}]`);
-        check_ua(req, res, 'security_auth.ejs', 'security_auth.ejs');
+        check_ua(req, res, 'security_auth.ejs', 'security_auth.ejs', '/security');
     }
 });
 

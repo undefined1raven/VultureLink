@@ -71,6 +71,9 @@ export default {
     landingAssistOnToggle() {
       this.isLandingAssistVisible = !this.isLandingAssistVisible;
     },
+    FlightInputOnChange(args:Event){
+      this.$emit('FlightInputOnChange', args);
+    },
     onFullScreenButtonClick() {
       if (!this.isFullScreen) {
         document.documentElement.requestFullscreen();
@@ -110,6 +113,7 @@ export default {
     </div>
     <MobileCMDFlightControls
       v-if="roleSelected && roleID == 'pilot' && hasLaunched"
+      @FlightInputOnChange="FlightInputOnChange"
     ></MobileCMDFlightControls>
     <MobileCMDPowerDock></MobileCMDPowerDock>
     <MobileCMDNavDock></MobileCMDNavDock>

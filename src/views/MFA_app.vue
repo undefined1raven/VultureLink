@@ -21,12 +21,7 @@ setInterval(() => {
           if (msg.result == true) {
             this.action_status_color = "00FFF0";
             setTimeout(() => {
-              if (msg.redirect_id == 0) {
-                window.location.pathname = "/advanced_telemetry";
-              }
-              if (msg.redirect_id == 1) {
-                window.location.pathname = "/security";
-              }
+                window.location.pathname = msg.redirect_path;
             }, 700);
           }
           if (msg.result == false) {

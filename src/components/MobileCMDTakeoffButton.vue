@@ -77,6 +77,7 @@ export default {
   height: 8.510638298%;
   overflow: hidden;
   border-right: solid 1px #0500ff;
+  border-left: solid 1px #0500ff;
 }
 #hold_progress_acx {
   position: absolute;
