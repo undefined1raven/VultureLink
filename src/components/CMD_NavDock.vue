@@ -9,7 +9,13 @@ import VerticalLine from "@/components/VerticalLine.vue";
 <script lang="ts">
 export default {
   props: {
-    telemetryUItoggle: {default: true},
+    NavDockStyleObj: {
+      default: {
+        labelTop: "top: 36.203703704%;",
+        dockActualTop: "top: 39.537037037%;",
+      },
+    },
+    telemetryUItoggle: { default: true },
     telemetry: {
       default: {
         gps: { range: "--", velocity: "--", heading: "24" },
@@ -20,20 +26,52 @@ export default {
   data() {
     return {
       isExtended: true,
+      mapInstance: false,
+      showLoadingMapLabel: true,
     };
   },
-  methods:{
-    onNavDockTitleClick(){
-        this.isExtended = !this.isExtended;
+  methods: {
+    onNavDockTitleClick() {
+      this.isExtended = !this.isExtended;
     },
-  }
+    mapSetup() {
+      var map = L.map("nav_map_container", { zoomControl: false }).setView(
+        [45.43151, 28.05431],
+        15
+      );
+      var gl = L.mapboxGL({
+        attribution:
+          '\u003ca href="https://www.maptiler.com/copyright/" target="_blank"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href="https://www.openstreetmap.org/copyright" target="_blank"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e',
+        style:
+          "https://api.maptiler.com/maps/96f0d0fa-e9c9-43b1-a8ff-09fd5b45a351/style.json?key=R1cyh6lj1mTfNEycg2N1",
+      }).addTo(map);
+      this.mapInstance = map;
+      setTimeout(() => {
+        this.showLoadingMapLabel = false;
+      }, 200);
+    },
+  },
+  mounted() {
+    this.mapSetup();
+  },
 };
 </script>
 
 <template>
   <div v-if="telemetryUItoggle" id="cmd_main_nav_dock">
-    <BaseLabel @click="onNavDockTitleClick" id="nav_dock_l" v-text="'Nav'"></BaseLabel>
-    <div id="nav_dock_container" v-if="isExtended">
+    <BaseLabel
+      @click="onNavDockTitleClick"
+      class="transition"
+      :style="NavDockStyleObj.labelTop"
+      id="nav_dock_l"
+      v-text="'Nav'"
+    ></BaseLabel>
+    <div
+      id="nav_dock_container"
+      class="transition"
+      :style="NavDockStyleObj.dockActualTop"
+      v-if="isExtended"
+    >
       <BaseLabel
         id="nav_dock_hdg_l"
         class="primary_l"
@@ -72,11 +110,22 @@ export default {
         v-text="`${telemetry.gps.range}km`"
         class="primary_l"
       ></BaseLabel>
+      <div id="nav_map_container">
+        <BaseLabel
+          id="loading_map_l"
+          v-if="showLoadingMapLabel"
+          color="#777"
+          v-text="'Loading Map'"
+        ></BaseLabel>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.transition {
+  transition: top ease-in-out 0.1s;
+}
 #nav_dock_range_l {
   top: 28.689189189%;
   padding-left: 4.580645161%;
@@ -87,6 +136,20 @@ export default {
   justify-content: start;
   border-top: solid 1px #0500ff;
   border-bottom: solid 1px #0500ff;
+}
+#loading_map_l {
+  font-size: 1.7vh;
+}
+#nav_map_container {
+  position: absolute;
+  top: 42%;
+  left: 0%;
+  width: 102.7%;
+  height: 58%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000aa;
 }
 #nav_dock_range_value_acx {
   top: 28.689189189%;
@@ -128,8 +191,8 @@ export default {
   background-color: #0500ff00;
   transition: all linear 0.1s;
 }
-#nav_dock_l:hover{
-    background-color: #0500FF40;
+#nav_dock_l:hover {
+  background-color: #0500ff40;
 }
 #nav_dock_hdg_ln {
   top: 10.135135135%;

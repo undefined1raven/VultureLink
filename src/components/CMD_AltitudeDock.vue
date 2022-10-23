@@ -19,6 +19,7 @@ export default {
   },
   methods: {
     onAltitudeDockTitleClick() {
+      this.$emit('altitudeDockOnExtendedToggle', {isExtended: !this.isExtended});
       this.isExtended = !this.isExtended;
     },
   },

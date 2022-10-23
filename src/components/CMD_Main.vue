@@ -20,9 +20,22 @@ export default {
   components: {
     ConsoleLowerLateralSectionBkg,
   },
+  methods:{
+    altitudeDockOnExtendedToggle(args:object){
+      args.isExtended;
+      if(args.isExtended){
+        this.NavDockStyleObj = {labelTop: "top: 36.203703704%;", dockActualTop: "top: 39.537037037%;"};
+      }
+      else{
+        this.NavDockStyleObj = {labelTop: "top: 24.722222222%;", dockActualTop: "top: 28.055555556%;"};
+      }
+    },
+  },
   data() {
     return {
       telemetryUItoggle: true /*state for the toggle global shortcut */,
+      isAltDockExtended: true,
+      NavDockStyleObj: {labelTop: "36.203703704%", dockActualTop: "39.537037037%"},
     };
   },
   mounted() {
@@ -58,9 +71,10 @@ export default {
   ></BaseLabel>
   <AltitudeDock
     :telemetryUItoggle="telemetryUItoggle"
+    @altitudeDockOnExtendedToggle="altitudeDockOnExtendedToggle"
     v-if="!isMobile()"
   ></AltitudeDock>
-  <NavDock v-if="!isMobile()" :telemetryUItoggle="telemetryUItoggle"></NavDock>
+  <NavDock v-if="!isMobile()" :NavDockStyleObj="NavDockStyleObj" :telemetryUItoggle="telemetryUItoggle"></NavDock>
 </template>
 <style scoped>
 #console_vertical_right_side_bkg {
