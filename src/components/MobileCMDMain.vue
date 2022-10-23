@@ -9,6 +9,7 @@ import MobileCMDPowerDock from "@/components/MobileCMDPowerDock.vue";
 import MobileCMDNavDock from "@/components/MobileCMDNavDock.vue";
 import MobileCMDLandingAssistDock from "@/components/MobileCMDLandingAssistDock.vue";
 import MobileCMDRollIndi from "@/components/MobileCMDRollIndi.vue";
+import MobileCMDTakeoffButton from "@/components/MobileCMDTakeoffButton.vue";
 import MobileCMDRoleSelector from "@/components/MobileCMDRoleSelector.vue";
 import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
 import AuroraLogo from "@/components/AuroraLogo.vue";
@@ -28,6 +29,7 @@ export default {
       isLandingAssistVisible: false,
       roleSelected: false,
       roleID: false,
+      isReadyForTakeoff: false,
     };
   },
   props: {
@@ -49,8 +51,10 @@ export default {
     };
   },
   methods: {
-    onRoleSelected(args:object){
+    onRoleSelected(args: object) {
       this.roleSelected = true;
+      //-- this <---> vulture comms for preflight checks --//
+      this.isReadyForTakeoff = true;
       this.roleID = args.role_id;
     },
     FullScreenButtonTextController() {
@@ -100,7 +104,9 @@ export default {
         v-text="'Vulture Video Downlink /|/'"
       ></BaseLabel>
     </div>
-    <MobileCMDFlightControls v-if="roleSelected && roleID == 'pilot'"></MobileCMDFlightControls>
+    <MobileCMDFlightControls
+      v-if="roleSelected && roleID == 'pilot'"
+    ></MobileCMDFlightControls>
     <MobileCMDPowerDock></MobileCMDPowerDock>
     <MobileCMDNavDock></MobileCMDNavDock>
     <MobileCMDMainQuickSelectMenu
@@ -114,12 +120,25 @@ export default {
       v-if="hasVideoDownlink"
       id="roll_indi"
     ></MobileCMDRollIndi>
-    <MobileCMDRoleSelector v-if="!roleSelected" @onRoleSelected="onRoleSelected" id="role_selector"></MobileCMDRoleSelector>
+    <MobileCMDRoleSelector
+      v-if="!roleSelected"
+      @onRoleSelected="onRoleSelected"
+      id="role_selector"
+    ></MobileCMDRoleSelector>
+    <MobileCMDTakeoffButton
+      v-if="isReadyForTakeoff"
+      id="takeoff_btn"
+    ></MobileCMDTakeoffButton>
   </div>
 </template>
 
 <style scoped>
-#role_selector{
+#takeoff_btn {
+  top: 75.277777778%;
+  left: 50%;
+  transform: translate(-50%);
+}
+#role_selector {
   top: 40.555555556%;
   left: 50%;
   transform: translate(-50%);

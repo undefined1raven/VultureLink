@@ -6,7 +6,6 @@ import HorizontalLine from "@/components/HorizontalLine.vue";
 import isMobile from "@/composables/isMobile.ts";
 import percentage from "@/composables/percentage.ts";
 import rangeScaler from "@/composables/rangeScaler.ts";
-import { tSParenthesizedType } from "@babel/types";
 </script>
 
 
@@ -15,10 +14,40 @@ export default {
   props: {
     width: { default: "66.875%" },
     height: { default: "50.5%" },
+    observer_btn: {
+      default: { isEnabled: true, unavailability_reason: "roleTaken" },
+    },
+    pilot_btn: {
+      default: {
+        isEnabled: false,
+        unavailability_reason: "insufficientPermissions",
+      },
+    },
+  },
+  data() {
+    return {
+      unavailability_label_obj: {
+        none: "",
+        roleTaken: "Another user already has this role",
+        insufficientPermissions: "Insufficient Permissions",
+      },
+      role_button_style_obj: {
+        false: {
+          button: "border: solid 1px #999; background-color: #0500FF00",
+          labels: "color: #999;",
+        },
+        true: {
+          button: "border: solid 1px #0500FF; background-color: #0500FF20",
+          labels: "color: #FFF;",
+        },
+      },
+    };
   },
   methods: {
     onRoleSelected(role_id: string) {
-      this.$emit("onRoleSelected", { role_id: role_id });
+      if(this.$props[`${role_id}_btn`].isEnabled){
+        this.$emit("onRoleSelected", { role_id: role_id });
+      }
     },
   },
 };
@@ -42,22 +71,46 @@ export default {
         @click="onRoleSelected('observer')"
         class="role_btn"
         id="observer_role_btn"
+        :style="role_button_style_obj[observer_btn.isEnabled].button"
       >
-        <BaseLabel class="role_l" v-text="'Observer'"></BaseLabel>
+        <BaseLabel
+          class="unavailability_l"
+          v-if="!observer_btn.isEnabled"
+          v-text="unavailability_label_obj[observer_btn.unavailability_reason]"
+          :style="role_button_style_obj[observer_btn.isEnabled].labels"
+        ></BaseLabel>
+        <BaseLabel
+          class="role_l"
+          v-text="'Observer'"
+          :style="role_button_style_obj[observer_btn.isEnabled].labels"
+        ></BaseLabel>
         <BaseLabel
           class="role_description_l"
           v-text="'Access to live telemetry'"
+          :style="role_button_style_obj[observer_btn.isEnabled].labels"
         ></BaseLabel>
       </div>
       <div
         @click="onRoleSelected('pilot')"
         class="role_btn"
         id="pilot_role_btn"
+        :style="role_button_style_obj[pilot_btn.isEnabled].button"
       >
-        <BaseLabel class="role_l" v-text="'Pilot'"></BaseLabel>
+        <BaseLabel
+          class="role_l"
+          v-text="'Pilot'"
+          :style="role_button_style_obj[pilot_btn.isEnabled].labels"
+        ></BaseLabel>
+        <BaseLabel
+          class="unavailability_l"
+          v-if="!pilot_btn.isEnabled"
+          v-text="unavailability_label_obj[pilot_btn.unavailability_reason]"
+          :style="role_button_style_obj[pilot_btn.isEnabled].labels"
+        ></BaseLabel>
         <BaseLabel
           class="role_description_l"
           v-text="'Operational Command'"
+          :style="role_button_style_obj[pilot_btn.isEnabled].labels"
         ></BaseLabel>
       </div>
     </div>
@@ -65,6 +118,12 @@ export default {
 </template>
 
 <style scoped>
+.unavailability_l {
+  top: 110%;
+  font-size: 3.5vh;
+  color: #aaa;
+  white-space: nowrap;
+}
 .role_description_l {
   font-size: 3.5vh;
   top: 60%;
