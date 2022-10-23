@@ -19,7 +19,7 @@ export default {
     },
     pilot_btn: {
       default: {
-        isEnabled: false,
+        isEnabled: true,
         unavailability_reason: "insufficientPermissions",
       },
     },

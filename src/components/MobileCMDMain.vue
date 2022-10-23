@@ -30,6 +30,7 @@ export default {
       roleSelected: false,
       roleID: false,
       isReadyForTakeoff: false,
+      hasLaunched: false,
     };
   },
   props: {
@@ -51,6 +52,9 @@ export default {
     };
   },
   methods: {
+    onLaunchSignal() {
+      this.hasLaunched = true;
+    },
     onRoleSelected(args: object) {
       this.roleSelected = true;
       //-- this <---> vulture comms for preflight checks --//
@@ -105,13 +109,10 @@ export default {
       ></BaseLabel>
     </div>
     <MobileCMDFlightControls
-      v-if="roleSelected && roleID == 'pilot'"
+      v-if="roleSelected && roleID == 'pilot' && hasLaunched"
     ></MobileCMDFlightControls>
     <MobileCMDPowerDock></MobileCMDPowerDock>
     <MobileCMDNavDock></MobileCMDNavDock>
-    <MobileCMDMainQuickSelectMenu
-      @landingAssistOnToggle="landingAssistOnToggle"
-    ></MobileCMDMainQuickSelectMenu>
     <MobileCMDLandingAssistDock
       :isLandingAssistVisible="isLandingAssistVisible"
     ></MobileCMDLandingAssistDock>
@@ -125,10 +126,17 @@ export default {
       @onRoleSelected="onRoleSelected"
       id="role_selector"
     ></MobileCMDRoleSelector>
-    <MobileCMDTakeoffButton
-      v-if="isReadyForTakeoff"
-      id="takeoff_btn"
-    ></MobileCMDTakeoffButton>
+    <Transition name="fade">
+      <MobileCMDMainQuickSelectMenu
+        v-if="hasLaunched"
+        @landingAssistOnToggle="landingAssistOnToggle"
+      ></MobileCMDMainQuickSelectMenu>
+      <MobileCMDTakeoffButton
+        v-if="isReadyForTakeoff && !hasLaunched && roleID == 'pilot'"
+        id="takeoff_btn"
+        @launchSignal="onLaunchSignal"
+      ></MobileCMDTakeoffButton>
+    </Transition>
   </div>
 </template>
 
@@ -197,6 +205,17 @@ export default {
   height: auto;
   width: 20.9375%;
 }
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.1s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 @media screen and (orientation: landscape) {
   #fs_btn {
     height: 13%;
