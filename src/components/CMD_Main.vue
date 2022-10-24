@@ -10,6 +10,7 @@ import ConsoleMidSectionBkg from "@/components/CMD_ConsoleMidSectionBkg.vue";
 import ConsoleLowerLateralSectionBkg from "@/components/CMD_ConsoleLowerLateralSectionBkg.vue";
 import MainConsoleLowerLeft from "@/components/CMD_MainConsoleLowerLeft.vue";
 import AltitudeDock from "@/components/CMD_AltitudeDock.vue";
+import PowerDock from "@/components/CMD_PowerDock.vue";
 import NavDock from "@/components/CMD_NavDock.vue";
 import isMobile from "@/composables/isMobile.ts";
 </script>
@@ -20,14 +21,19 @@ export default {
   components: {
     ConsoleLowerLateralSectionBkg,
   },
-  methods:{
-    altitudeDockOnExtendedToggle(args:object){
+  methods: {
+    altitudeDockOnExtendedToggle(args: object) {
       args.isExtended;
-      if(args.isExtended){
-        this.NavDockStyleObj = {labelTop: "top: 36.203703704%;", dockActualTop: "top: 39.537037037%;"};
-      }
-      else{
-        this.NavDockStyleObj = {labelTop: "top: 24.722222222%;", dockActualTop: "top: 28.055555556%;"};
+      if (args.isExtended) {
+        this.NavDockStyleObj = {
+          labelTop: "top: 36.203703704%;",
+          dockActualTop: "top: 39.537037037%;",
+        };
+      } else {
+        this.NavDockStyleObj = {
+          labelTop: "top: 24.722222222%;",
+          dockActualTop: "top: 28.055555556%;",
+        };
       }
     },
   },
@@ -35,12 +41,15 @@ export default {
     return {
       telemetryUItoggle: true /*state for the toggle global shortcut */,
       isAltDockExtended: true,
-      NavDockStyleObj: {labelTop: "36.203703704%", dockActualTop: "39.537037037%"},
+      NavDockStyleObj: {
+        labelTop: "36.203703704%",
+        dockActualTop: "39.537037037%",
+      },
     };
   },
   mounted() {
     document.addEventListener("keyup", (e) => {
-      if (e.shiftKey && e.key == "T" || e.shiftKey && e.key == "t") {
+      if ((e.shiftKey && e.key == "T") || (e.shiftKey && e.key == "t")) {
         this.telemetryUItoggle = !this.telemetryUItoggle;
       }
     });
@@ -55,26 +64,26 @@ export default {
   <CMD_VultureVideoDownlinkPlaceholder
     id="cmd_overview_video_downlink_indi"
     color="#303030"
-    v-if="!isMobile()"
   ></CMD_VultureVideoDownlinkPlaceholder>
   <VultureDetailedDeco
     color="#303030"
     id="detailed_vulture_deco"
-    v-if="!isMobile()"
   ></VultureDetailedDeco>
-  <AuroraLogo id="aurora_logo" v-if="!isMobile()" color="#303030"></AuroraLogo>
+  <AuroraLogo id="aurora_logo" color="#303030"></AuroraLogo>
   <BaseLabel
     id="vulture_downlink_l"
     color="#303030"
     v-text="'Vulture Video Downlink /|/'"
-    v-if="!isMobile()"
   ></BaseLabel>
   <AltitudeDock
     :telemetryUItoggle="telemetryUItoggle"
     @altitudeDockOnExtendedToggle="altitudeDockOnExtendedToggle"
-    v-if="!isMobile()"
   ></AltitudeDock>
-  <NavDock v-if="!isMobile()" :NavDockStyleObj="NavDockStyleObj" :telemetryUItoggle="telemetryUItoggle"></NavDock>
+  <NavDock
+    :NavDockStyleObj="NavDockStyleObj"
+    :telemetryUItoggle="telemetryUItoggle"
+  ></NavDock>
+  <PowerDock></PowerDock>
 </template>
 <style scoped>
 #console_vertical_right_side_bkg {

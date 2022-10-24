@@ -33,6 +33,12 @@ export default {
   methods: {
     onNavDockTitleClick() {
       this.isExtended = !this.isExtended;
+      if (this.isExtended) {
+        this.mapInstance.remove();
+        setTimeout(() => {
+          this.mapSetup();
+        }, 150);
+      }
     },
     mapSetup() {
       var map = L.map("nav_map_container", { zoomControl: false }).setView(
