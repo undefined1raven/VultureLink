@@ -6,12 +6,13 @@ import BaseLabel from "@/components/BaseLabel.vue";
 import CMD_VultureVideoDownlinkPlaceholder from "@/components/CMD_VultureVideoDownlinkPlaceholderIndi.vue";
 import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
 import AuroraLogo from "@/components/AuroraLogo.vue";
-import ConsoleMidSectionBkg from "@/components/CMD_ConsoleMidSectionBkg.vue";
 import ConsoleLowerLateralSectionBkg from "@/components/CMD_ConsoleLowerLateralSectionBkg.vue";
-import MainConsoleLowerLeft from "@/components/CMD_MainConsoleLowerLeft.vue";
 import AltitudeDock from "@/components/CMD_AltitudeDock.vue";
 import PowerDock from "@/components/CMD_PowerDock.vue";
+import ControlsOverview from "@/components/CMD_ControlsOverview.vue";
+import MobileCMDRoleSelector from "@/components/MobileCMDRoleSelector.vue";
 import NavDock from "@/components/CMD_NavDock.vue";
+
 import isMobile from "@/composables/isMobile.ts";
 </script>
 
@@ -21,7 +22,34 @@ export default {
   components: {
     ConsoleLowerLateralSectionBkg,
   },
+  props: {
+    vn: { default: "--" },
+    roleAvailablility: {
+      default: {
+        observer_btn: {
+          default: { isEnabled: true, unavailability_reason: "roleTaken" },
+        },
+        pilot_btn: {
+          default: {
+            isEnabled: true,
+            unavailability_reason: "insufficientPermissions",
+          },
+        },
+      },
+    },
+  },
   methods: {
+    continueButtonOnClick(){
+      this.isControlOverviewVisible = false;
+      this.isReadyForTakeoff = true;
+    },
+    onRoleSelected(args: object) {
+      this.roleSelected = true;
+      //-- this <---> vulture comms for preflight checks --//
+      this.isReadyForTakeoff = false;
+      this.isControlOverviewVisible = true;
+      this.roleID = args.role_id;
+    },
     altitudeDockOnExtendedToggle(args: object) {
       args.isExtended;
       if (args.isExtended) {
@@ -39,6 +67,12 @@ export default {
   },
   data() {
     return {
+      isControlOverviewVisible: false,
+      isLandingAssistVisible: false,
+      roleSelected: false,
+      roleID: false,
+      isReadyForTakeoff: false,
+      hasLaunched: false,
       telemetryUItoggle: true /*state for the toggle global shortcut */,
       isAltDockExtended: true,
       NavDockStyleObj: {
@@ -85,8 +119,29 @@ export default {
     ref="NavDockRef"
   ></NavDock>
   <PowerDock></PowerDock>
+  <MobileCMDRoleSelector
+    v-if="!roleSelected"
+    :vn="vn"
+    @onRoleSelected="onRoleSelected"
+    :observer_btn="roleAvailablility.observer_btn"
+    :pilot_btn="roleAvailablility.pilot_btn"
+    id="role_selector"
+    width="41.510416667%"
+    height="41.510416667%"
+  ></MobileCMDRoleSelector>
+  <ControlsOverview @continueButtonOnClick="continueButtonOnClick" id="control_overview" v-if="isControlOverviewVisible && roleID == 'pilot'"></ControlsOverview>
 </template>
 <style scoped>
+#control_overview{
+  top: 23.888888889%;
+  left: 50%;
+  transform: translate(-50%);
+}
+#role_selector {
+  top: 24.907407407%;
+  left: 50%;
+  transform: translate(-50%);
+}
 #console_vertical_right_side_bkg {
   top: 50%;
   left: 75.28125%;

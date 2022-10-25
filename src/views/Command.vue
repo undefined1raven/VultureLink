@@ -34,6 +34,7 @@ export default {
       targetVid: "a5ef02a9-7838-42bc-b4e8-f156cc1f06c7",
       vultureTelemetry: { imu_alpha: {} },
       PermissionsAndAccessObj: {},
+      vn: "",
     };
   },
   methods: {
@@ -102,8 +103,9 @@ export default {
         }
       });
 
-      socket.on("vulture_permissions", (vulture_permissions_obj) => {
-        this.PermissionsAndAccessObj = vulture_permissions_obj;
+      socket.on("vulture_permissions", (vulture_permissions_res) => {
+        this.PermissionsAndAccessObj = vulture_permissions_res.permissions;
+        this.vn = vulture_permissions_res.vn;
       });
 
       fwd_rcvng_peer.on("stream", (stream: MediaStream) => {
@@ -136,18 +138,17 @@ export default {
 <template>
   <Background />
   <MobileBackground />
-  <main>
-    <Video v-show="hasStream" id="vid_container" ref="vid_container"></Video>
-    <Main v-if="!isMobile()" id="ui_overlay"></Main>
-    <MobileMain
-      :vultureTelemetry="vultureTelemetry"
-      :hasVideoDownlink="hasStream"
-      @FlightInputOnChange="FlightInputOnChangeHandler"
-      :roleAvailablility="roleSelectorParser(PermissionsAndAccessObj)"
-      v-if="isMobile()"
-      id="mobile_main"
-    ></MobileMain>
-  </main>
+  <Video v-show="hasStream" id="vid_container" ref="vid_container"></Video>
+  <Main :vn="vn" :roleAvailablility="roleSelectorParser(PermissionsAndAccessObj)" v-if="!isMobile()" id="ui_overlay"></Main>
+  <MobileMain
+    :vn="vn"
+    :vultureTelemetry="vultureTelemetry"
+    :hasVideoDownlink="hasStream"
+    @FlightInputOnChange="FlightInputOnChangeHandler"
+    :roleAvailablility="roleSelectorParser(PermissionsAndAccessObj)"
+    v-if="isMobile()"
+    id="mobile_main"
+  ></MobileMain>
 </template>
 <style scoped>
 #ui_overlay,

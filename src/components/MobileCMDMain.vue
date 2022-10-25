@@ -34,6 +34,7 @@ export default {
     };
   },
   props: {
+    vn: {default: "--"},
     hasVideoDownlink: { default: false },
     vultureTelemetry: {
       default: { imu_alpha: { gyro: { roll: { angle: 0 } } } },
@@ -140,6 +141,7 @@ export default {
     ></MobileCMDRollIndi>
     <MobileCMDRoleSelector
       v-if="!roleSelected"
+      :vn="vn"
       @onRoleSelected="onRoleSelected"
       :observer_btn="roleAvailablility.observer_btn"
       :pilot_btn="roleAvailablility.pilot_btn"

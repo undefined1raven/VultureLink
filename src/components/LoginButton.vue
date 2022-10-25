@@ -30,6 +30,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  user-select: none;
 }
 @media only screen and (max-width: 1070px) and (min-height: 550px) and (max-height: 800px) and (-webkit-max-device-pixel-ratio: 2) {
   .login_btn {

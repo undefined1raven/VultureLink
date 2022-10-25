@@ -12,6 +12,7 @@ import rangeScaler from "@/composables/rangeScaler.ts";
 <script lang="ts">
 export default {
   props: {
+    vn: { default: "--" },
     width: { default: "66.875%" },
     height: { default: "50.5%" },
     observer_btn: {
@@ -37,7 +38,7 @@ export default {
           labels: "color: #999;",
         },
         true: {
-          button: "border: solid 1px #0500FF; background-color: #0500FF20",
+          button: "@media only screen and (-webkit-min-device-pixel-ratio: 2) {border: solid 1px #0500FF; background-color: #0500FF20} @media only screen and (-webkit-min-device-pixel-ratio: 2) {border: solid 1px #0500FF; background-color: #0500FF00}",
           labels: "color: #FFF;",
         },
       },
@@ -45,7 +46,7 @@ export default {
   },
   methods: {
     onRoleSelected(role_id: string) {
-      if(this.$props[`${role_id}_btn`].isEnabled){
+      if (this.$props[`${role_id}_btn`].isEnabled) {
         this.$emit("onRoleSelected", { role_id: role_id });
       }
     },
@@ -59,7 +60,7 @@ export default {
       :style="`width: ${width}; height: ${height};`"
       class="mobile_cmd_role_selector_container"
     >
-      <BaseLabel id="vulture_name_l" v-text="'Void Ray'"></BaseLabel>
+      <BaseLabel id="vulture_name_l" v-text="vn"></BaseLabel>
       <BaseLabel
         color="#AAA"
         id="role_selector_l"
@@ -190,5 +191,27 @@ export default {
 
 .ani-leave-active {
   position: absolute;
+}
+
+@media only screen and (-webkit-max-device-pixel-ratio: 1) {
+  /*desktop detection */
+  .role_btn {
+    background-color: #0500ff00;
+  }
+  .role_btn:hover {
+    background-color: #0500ff20;
+  }
+  .role_description_l{
+    font-size: 2.1vh;
+  }
+  .role_l{
+    font-size: 2.7vh;
+  }
+  #vulture_name_l{
+    font-size: 2.7vh;
+  }
+  #role_selector_l{
+    font-size: 2.3vh;
+  }
 }
 </style>

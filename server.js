@@ -1711,7 +1711,7 @@ io.on('connection', socket => {
                 VULTURE_SCH.findOne({vid: request_vulture_permissions_payload.vid}).exec().then(vulture_obj => {
                     for(let ix = 0; ix < vulture_obj.u_access_arr.length; ix++){
                         if(vulture_obj.u_access_arr[ix].acid == request_vulture_permissions_payload.acid){
-                            socket.emit('vulture_permissions', vulture_obj.u_access_arr[ix]);
+                            socket.emit('vulture_permissions', {permissions: vulture_obj.u_access_arr[ix], vn: vulture_obj.vn} );
                         }
                     }
                  });  
