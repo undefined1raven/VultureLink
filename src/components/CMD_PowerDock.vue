@@ -10,7 +10,7 @@ export default {
     telemetryUItoggle: { default: true },
     telemetry: {
       default: {
-        flt_bat: { percentage: "--", voltage: "--" },
+        flt_bat: { percentage: "55", voltage: "--" },
         fc_bat: { percentage: "--", voltage: "--" },
       },
     },
@@ -49,6 +49,9 @@ export default {
         class="primary_l"
         v-text="`${telemetry.flt_bat.percentage}%`"
       ></BaseLabel>
+      <div id="flt_bat_charge_indi_container">
+        <div id="flt_bat_charge_indi_acx" :style="`top: ${telemetry.flt_bat.percentage}%`"></div>
+      </div>
       <BaseLabel
         id="flt_bat_voltage_acx"
         class="primary_l"
@@ -59,6 +62,9 @@ export default {
         class="secondary_l"
         v-text="'FC Battery'"
       ></BaseLabel>
+      <div id="fc_bat_charge_indi_container">
+        <div id="fc_bat_charge_indi_acx" :style="`top: ${telemetry.fc_bat.percentage}%`"></div>
+      </div>
       <BaseLabel
         id="fc_bat_percentage_acx"
         class="primary_l"
@@ -74,6 +80,42 @@ export default {
   </div>
 </template>
 <style scoped>
+#flt_bat_charge_indi_container{
+  position: absolute;
+  top: 5.128205128%;
+  left: -5.161290323%;
+  width: 2.580645161%;
+  height: 41.025641026%;
+  background-color: #333333aa;
+  border-top: solid 1px #FFF;
+  overflow: hidden;
+}
+#flt_bat_charge_indi_acx{
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: #0500FF;
+}
+#fc_bat_charge_indi_container{
+  position: absolute;
+  top: 54.700854701%;
+  left: -5.161290323%;
+  width: 2.580645161%;
+  height: 41.025641026%;
+  background-color: #333333aa;
+  border-top: solid 1px #FFF;
+  overflow: hidden;
+}
+#fc_bat_charge_indi_acx{
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: #333;
+}
 @keyframes ini_ani {
   0% {
     transform: translateY(-1%);
@@ -111,11 +153,11 @@ export default {
   font-size: 2vh;
   width: 7.916666667%;
   padding-left: 0.364583333%;
-  background-color: #0500ff00;
+  background-color: #000000aa;
   transition: all linear 0.1s;
 }
 #power_dock_l:hover {
-  background-color: #0500ff40;
+  background-color: #0500ff99;
 }
 .secondary_l {
   color: #8e8e8e;
@@ -147,7 +189,7 @@ export default {
   top: 24.722222222%;
   left: 91.875%;
   height: 10.833333333%;
-  width: 7.916666667%;
+  width: 8.12916667%;
   background-color: #000000aa;
 }
 </style>

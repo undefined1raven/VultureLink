@@ -82,6 +82,7 @@ export default {
   <NavDock
     :NavDockStyleObj="NavDockStyleObj"
     :telemetryUItoggle="telemetryUItoggle"
+    ref="NavDockRef"
   ></NavDock>
   <PowerDock></PowerDock>
 </template>

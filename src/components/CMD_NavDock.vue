@@ -30,15 +30,17 @@ export default {
       showLoadingMapLabel: true,
     };
   },
+  expose: ["resetMinimap"],
   methods: {
+    resetMinimap() {
+      this.mapInstance.remove();
+      setTimeout(() => {
+        this.mapSetup();
+      }, 150);
+      console.log('boop')
+    },
     onNavDockTitleClick() {
       this.isExtended = !this.isExtended;
-      if (this.isExtended) {
-        this.mapInstance.remove();
-        setTimeout(() => {
-          this.mapSetup();
-        }, 150);
-      }
     },
     mapSetup() {
       var map = L.map("nav_map_container", { zoomControl: false }).setView(
@@ -64,7 +66,7 @@ export default {
 </script>
 
 <template>
-  <div v-if="telemetryUItoggle" id="cmd_main_nav_dock">
+  <div v-show="telemetryUItoggle" id="cmd_main_nav_dock">
     <BaseLabel
       @click="onNavDockTitleClick"
       class="transition"
@@ -76,7 +78,7 @@ export default {
       id="nav_dock_container"
       class="transition"
       :style="NavDockStyleObj.dockActualTop"
-      v-if="isExtended"
+      v-show="isExtended"
     >
       <BaseLabel
         id="nav_dock_hdg_l"
@@ -192,13 +194,13 @@ export default {
   left: 0%;
   border-bottom: solid 1px #0500ff;
   font-size: 2vh;
-  width: 7.916666667%;
+  width: 7.716666667%;
   padding-left: 0.364583333%;
-  background-color: #0500ff00;
+  background-color: #000000aa;
   transition: all linear 0.1s;
 }
 #nav_dock_l:hover {
-  background-color: #0500ff40;
+  background-color: #0500ff99;
 }
 #nav_dock_hdg_ln {
   top: 10.135135135%;
@@ -214,6 +216,7 @@ export default {
   width: 8.072916667%;
   height: 27.407407407%;
   background-color: #000000aa;
+  overflow: hidden;
 }
 #nav_dock_hdg_l {
   top: 0%;

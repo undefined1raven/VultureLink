@@ -104,13 +104,13 @@ export default {
   left: 0%;
   border-bottom: solid 1px #0500ff;
   font-size: 2vh;
-  width: 7.916666667%;
+  width: 7.716666667%;
   padding-left: 0.364583333%;
-  background-color: #0500ff00;
+  background-color: #000000aa;
   transition: all linear 0.1s;
 }
 #altitude_dock_l:hover {
-  background-color: #0500ff40;
+  background-color: #0500ff99;
 }
 .secondary_l {
   color: #8e8e8e;
@@ -142,7 +142,7 @@ export default {
   top: 24.722222222%;
   left: 0;
   height: 10.833333333%;
-  width: 7.916666667%;
+  width: 8.072916667%;
   background-color: #000000aa;
 }
 </style>
