@@ -10,6 +10,7 @@ import ConsoleLowerLateralSectionBkg from "@/components/CMD_ConsoleLowerLateralS
 import AltitudeDock from "@/components/CMD_AltitudeDock.vue";
 import PowerDock from "@/components/CMD_PowerDock.vue";
 import ControlsOverview from "@/components/CMD_ControlsOverview.vue";
+import TakeoffPanel from "@/components/CMD_TakeoffPanel.vue";
 import MobileCMDRoleSelector from "@/components/MobileCMDRoleSelector.vue";
 import NavDock from "@/components/CMD_NavDock.vue";
 
@@ -39,6 +40,9 @@ export default {
     },
   },
   methods: {
+    onLaunchSignal() {
+      this.hasLaunched = true;
+    },
     continueButtonOnClick(){
       this.isControlOverviewVisible = false;
       this.isReadyForTakeoff = true;
@@ -130,8 +134,14 @@ export default {
     height="41.510416667%"
   ></MobileCMDRoleSelector>
   <ControlsOverview @continueButtonOnClick="continueButtonOnClick" id="control_overview" v-if="isControlOverviewVisible && roleID == 'pilot'"></ControlsOverview>
+  <TakeoffPanel @launchSignal="onLaunchSignal" id="takeoff_panel" v-if="isReadyForTakeoff && roleID == 'pilot' && !hasLaunched"></TakeoffPanel>
 </template>
 <style scoped>
+#takeoff_panel{
+  top: 30.425926%;
+  left: 50%;
+  transform: translate(-50%);
+}
 #control_overview{
   top: 23.888888889%;
   left: 50%;

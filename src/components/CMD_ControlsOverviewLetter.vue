@@ -36,7 +36,7 @@ export default {
 }
 .key {
   position: absolute;
-  border: solid 1px #0500ff;
+  border: solid 2px #0500ff;
   border-radius: 5px;
   display: flex;
   justify-content: center;
