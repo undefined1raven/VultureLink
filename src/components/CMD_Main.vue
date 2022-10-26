@@ -8,6 +8,7 @@ import VultureDetailedDeco from "@/components/VultureDetailedDeco.vue";
 import AuroraLogo from "@/components/AuroraLogo.vue";
 import ConsoleLowerLateralSectionBkg from "@/components/CMD_ConsoleLowerLateralSectionBkg.vue";
 import AltitudeDock from "@/components/CMD_AltitudeDock.vue";
+import DiagsDock from "@/components/CMD_DiagsDock.vue";
 import PowerDock from "@/components/CMD_PowerDock.vue";
 import ControlsOverview from "@/components/CMD_ControlsOverview.vue";
 import TakeoffPanel from "@/components/CMD_TakeoffPanel.vue";
@@ -123,6 +124,7 @@ export default {
     ref="NavDockRef"
   ></NavDock>
   <PowerDock></PowerDock>
+  <DiagsDock></DiagsDock>
   <MobileCMDRoleSelector
     v-if="!roleSelected"
     :vn="vn"
