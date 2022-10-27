@@ -44,7 +44,7 @@ export default {
     onLaunchSignal() {
       this.hasLaunched = true;
     },
-    continueButtonOnClick(){
+    continueButtonOnClick() {
       this.isControlOverviewVisible = false;
       this.isReadyForTakeoff = true;
     },
@@ -55,19 +55,24 @@ export default {
       this.isControlOverviewVisible = true;
       this.roleID = args.role_id;
     },
-    altitudeDockOnExtendedToggle(args: object) {
-      args.isExtended;
+    UIDockOnExtendedToggleHandle(args:object){
       if (args.isExtended) {
-        this.NavDockStyleObj = {
+        return {
           labelTop: "top: 36.203703704%;",
           dockActualTop: "top: 39.537037037%;",
         };
       } else {
-        this.NavDockStyleObj = {
+        return {
           labelTop: "top: 24.722222222%;",
           dockActualTop: "top: 28.055555556%;",
         };
       }
+    },
+    altitudeDockOnExtendedToggle(args: object) {
+      this.NavDockStyleObj = this.UIDockOnExtendedToggleHandle(args);
+    },
+    powerDockOnExtendedToggle(args: object){
+      this.DiagsDockStyleObj = this.UIDockOnExtendedToggleHandle(args);
     },
   },
   data() {
@@ -81,6 +86,10 @@ export default {
       telemetryUItoggle: true /*state for the toggle global shortcut */,
       isAltDockExtended: true,
       NavDockStyleObj: {
+        labelTop: "36.203703704%",
+        dockActualTop: "39.537037037%",
+      },
+      DiagsDockStyleObj: {
         labelTop: "36.203703704%",
         dockActualTop: "39.537037037%",
       },
@@ -123,8 +132,8 @@ export default {
     :telemetryUItoggle="telemetryUItoggle"
     ref="NavDockRef"
   ></NavDock>
-  <PowerDock></PowerDock>
-  <DiagsDock></DiagsDock>
+  <PowerDock @powerDockOnExtendedToggle="powerDockOnExtendedToggle"></PowerDock>
+  <DiagsDock :DiagsDockStyleObj="DiagsDockStyleObj"></DiagsDock>
   <MobileCMDRoleSelector
     v-if="!roleSelected"
     :vn="vn"
@@ -135,16 +144,24 @@ export default {
     width="41.510416667%"
     height="41.510416667%"
   ></MobileCMDRoleSelector>
-  <ControlsOverview @continueButtonOnClick="continueButtonOnClick" id="control_overview" v-if="isControlOverviewVisible && roleID == 'pilot'"></ControlsOverview>
-  <TakeoffPanel @launchSignal="onLaunchSignal" id="takeoff_panel" v-if="isReadyForTakeoff && roleID == 'pilot' && !hasLaunched"></TakeoffPanel>
+  <ControlsOverview
+    @continueButtonOnClick="continueButtonOnClick"
+    id="control_overview"
+    v-if="isControlOverviewVisible && roleID == 'pilot'"
+  ></ControlsOverview>
+  <TakeoffPanel
+    @launchSignal="onLaunchSignal"
+    id="takeoff_panel"
+    v-if="isReadyForTakeoff && roleID == 'pilot' && !hasLaunched"
+  ></TakeoffPanel>
 </template>
 <style scoped>
-#takeoff_panel{
+#takeoff_panel {
   top: 30.425926%;
   left: 50%;
   transform: translate(-50%);
 }
-#control_overview{
+#control_overview {
   top: 23.888888889%;
   left: 50%;
   transform: translate(-50%);

@@ -7,14 +7,32 @@ import CommsIndi from "@/components/CMD_CommsIndi.vue";
 import SonarArrayIndi from "@/components/CMD_SonarArrayIndi.vue";
 </script>
 
+<script lang="ts">
+export default {
+  props: {
+    DiagsDockStyleObj: {
+      default: {
+        labelTop: "top: 36.203703704%",
+        dockActualTop: "top: 39.537037037%",
+      },
+    },
+  },
+};
+</script>
+
 
 <template>
   <BaseLabel
     class="transition"
     id="diags_dock_l"
+    :style="DiagsDockStyleObj.labelTop"
     v-text="'Diagnostics'"
   ></BaseLabel>
-  <div class="cmd_diags_dock_container">
+
+  <div
+    class="cmd_diags_dock_container transition"
+    :style="DiagsDockStyleObj.dockActualTop"
+  >
     <CommsIndi id="diags_comms_indi"></CommsIndi>
     <BaseLabel
       id="diags_imu_status_indi"
@@ -52,17 +70,23 @@ import SonarArrayIndi from "@/components/CMD_SonarArrayIndi.vue";
       v-text="'ω HID'"
     ></BaseLabel>
     <HorizontalLine id="diags_ln" color="#0500FF"></HorizontalLine>
-    <SonarArrayIndi id="sonar_array_indi"></SonarArrayIndi>
+    <SonarArrayIndi
+      :telemetry="{ fwd: -1, bwd: -1, rgt: -1, lft: -1, gnd: -1 }"
+      id="sonar_array_indi"
+    ></SonarArrayIndi>
   </div>
 </template>
 <style scoped>
-#sonar_array_indi{
-    top: 47.972972973%;
+.transition {
+  transition: top ease-in-out 0.1s;
 }
-#diags_ln{
-    top: 46.283783784%;
-    left: 0%;
-    width: 100%;
+#sonar_array_indi {
+  top: 47.972972973%;
+}
+#diags_ln {
+  top: 46.283783784%;
+  left: 0%;
+  width: 100%;
 }
 
 #diags_omega_hardware_interface_board_status_indi {
