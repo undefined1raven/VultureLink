@@ -35,9 +35,20 @@ export default {
       vultureTelemetry: { imu_alpha: {} },
       PermissionsAndAccessObj: {},
       vn: "",
+      vultureConnection: {
+        lastHeartBeadUnix: 0,
+        isActive: false
+      }
     };
   },
   methods: {
+    vultureConnectionAssessor(){
+      if(Math.abs(this.vultureConnection.lastHeartBeadUnix - Date.now()) > 3000){
+        this.vultureConnection.isActive = false;
+      }else{
+        this.vultureConnection.isActive = true;
+      }
+    },
     roleSelectorParser(PermissionsAndAccessObj: Object) {
       let roleUnavailablityReasonObj = {
         true: false,
@@ -82,6 +93,7 @@ export default {
       if (!this.hasStream) {
         socket.emit("request_vulture_uplink", { vid: this.targetVid });
       }
+      this.vultureConnectionAssessor();
     }, 1500);
 
     setTimeout(() => {
@@ -93,6 +105,11 @@ export default {
       const fwd_rcvng_peer = new SimplePeer({
         initiator: false,
         trickle: false,
+      });
+
+      socket.on('vulture_heartbeat', (vulture_heartbeat_payload) => {
+          this.vultureConnection.lastHeartBeadUnix = vulture_heartbeat_payload.tx;
+          this.$refs.DesktopCommandRef.onVultureHeartbeat();
       });
 
       socket.on("relayed_fwd_cam_rtc_req", (offer) => {
@@ -139,7 +156,7 @@ export default {
   <Background />
   <MobileBackground />
   <Video v-show="hasStream" id="vid_container" ref="vid_container"></Video>
-  <Main :vn="vn" :roleAvailablility="roleSelectorParser(PermissionsAndAccessObj)" v-if="!isMobile()" id="ui_overlay"></Main>
+  <Main @FlightInputOnChange="FlightInputOnChangeHandler" ref="DesktopCommandRef" :isVultureLinkActive="vultureConnection.isActive" :vn="vn" :roleAvailablility="roleSelectorParser(PermissionsAndAccessObj)" v-if="!isMobile()" id="ui_overlay"></Main>
   <MobileMain
     :vn="vn"
     :vultureTelemetry="vultureTelemetry"

@@ -49,6 +49,7 @@ export default {
           this.isComplete = true;
           setTimeout(() => {
             this.isRunning = false;
+            this.$emit('IMUCalibrationOnEnd');
           }, 4000);
         }
       }, 50);
@@ -83,6 +84,7 @@ export default {
     },
     ImuCalibrationButtonOnClick() {
       this.isRunning = true;
+      this.$emit('IMUCalibrationOnStart');
       this.ImuCalibrationSequance();
     },
   },

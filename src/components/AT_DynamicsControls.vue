@@ -15,6 +15,12 @@ import isMobile from "@/composables/isMobile.ts";
 <script lang="ts">
 export default {
   methods: {
+    IMUCalibrationOnStart() {
+      this.$emit("IMUCalibrationOnStart");
+    },
+    IMUCalibrationOnEnd() {
+      this.$emit("IMUCalibrationOnEnd");
+    },
     OnControlTypeToggle() {
       if (this.VisibleControlsID == "rate") {
         this.VisibleControlsID = "rotation";
@@ -67,7 +73,11 @@ export default {
 
 <template>
   <div id="dynamics_controls_container">
-    <BaseLabel id="dynaimcs_controls_l" v-text="'Controls'" v-if="!isMobile()"></BaseLabel>
+    <BaseLabel
+      id="dynaimcs_controls_l"
+      v-text="'Controls'"
+      v-if="!isMobile()"
+    ></BaseLabel>
     <HorizontalLine
       id="dynamics_controls_ln_0"
       color="#373737"
@@ -153,6 +163,8 @@ export default {
     ></DynamicsControlPanel>
     <DynamicsControlsImuCalibration
       class="animation_group_0"
+      @IMUCalibrationOnStart="IMUCalibrationOnStart"
+      @IMUCalibrationOnEnd="IMUCalibrationOnEnd"
     ></DynamicsControlsImuCalibration>
   </div>
 </template>
@@ -225,7 +237,7 @@ export default {
     left: 1.111111111%;
     width: 97.777777778%;
   }
-  #dynamics_controls_ln_0{
+  #dynamics_controls_ln_0 {
     top: 55.87037037%;
     left: 0%;
     width: 99.99%;

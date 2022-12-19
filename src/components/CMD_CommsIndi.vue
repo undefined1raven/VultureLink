@@ -46,7 +46,7 @@ export default {
     <rect x="40.7812" y="48.2024" width="9.01265" height="0.215198" transform="rotate(-180 40.7812 48.2024)" :fill="color"/>
     <rect width="8.8126" height="0.220315" transform="matrix(-0.723158 0.690682 -0.723158 -0.690682 47.7656 41.9005)" :fill="color"/>
     <rect width="9.09435" height="0.220315" transform="matrix(-0.723158 -0.690682 0.723158 -0.690682 31.1582 47.9872)" :fill="color"/>
-    <rect x="0.723158" width="5.38913" height="5.38913" transform="matrix(0.723158 -0.690682 0.723158 0.690682 19.4658 24.7105)" :fill="color" fill-opacity="0.5" stroke="#0500FF"/>
+    <rect x="0.723158" width="5.38913" height="5.38913" transform="matrix(0.723158 -0.690682 0.723158 0.690682 19.4658 24.7105)" :fill="color" fill-opacity="0.5" :stroke="color"/>
     <rect width="16.5236" height="16.5236" transform="matrix(0.723158 -0.690682 0.723158 0.690682 11.9414 27.1219)" :fill="color" fill-opacity="0.01"/>
     <rect x="6.98438" y="2.79749" width="9.01265" height="0.215198" :fill="color"/>
     <rect width="8.8126" height="0.220315" transform="matrix(0.723158 -0.690682 0.723158 0.690682 0 9.09949)" :fill="color"/>
@@ -83,7 +83,7 @@ export default {
     <rect x="40.7812" y="50.9999" width="9.01265" height="0.215198" transform="rotate(-180 40.7812 50.9999)" :fill="color"/>
     <rect width="8.8126" height="0.220315" transform="matrix(-0.723158 0.690682 -0.723158 -0.690682 47.7656 44.6979)" :fill="color"/>
     <rect width="9.09435" height="0.220315" transform="matrix(-0.723158 -0.690682 0.723158 -0.690682 31.1582 50.7847)" :fill="color"/>
-    <rect x="0.723158" width="5.38913" height="5.38913" transform="matrix(0.723158 -0.690682 0.723158 0.690682 19.4658 27.508)" :fill="color" fill-opacity="0.5" stroke="#0500FF"/>
+    <rect x="0.723158" width="5.38913" height="5.38913" transform="matrix(0.723158 -0.690682 0.723158 0.690682 19.4658 27.508)" :fill="color" fill-opacity="0.5" :stroke="color"/>
     <rect x="66.9414" y="27.911" width="0.647251" height="7.90456" transform="rotate(-90 66.9414 27.911)" :fill="color"/>
     <rect x="66.9414" y="25.322" width="0.647251" height="7.90456" transform="rotate(-90 66.9414 25.322)" :fill="color"/>
     <rect width="0.607795" height="4.37266" transform="matrix(-0.261728 -0.965142 0.780169 -0.625569 67.1016 25.322)" :fill="color"/>
@@ -93,12 +93,15 @@ export default {
     <rect x="76.498" y="24.55" width="10.3495" height="0.85" :fill="color"/>
     <rect x="76.498" y="27.1" width="10.3495" height="0.85" :fill="color"/>
     <rect x="91" y="42" width="57.488" height="2.26667" :fill="color"/>
-    <rect x="96.5" y="11.8334" width="47.1022" height="28.4667" :fill="color" fill-opacity="0.4" stroke="#0500FF"/>
+    <rect x="96.5" y="11.8334" width="47.1022" height="28.4667" :fill="color" fill-opacity="0.4" :stroke="color"/>
     </svg>
 </template>
     
 
 <style scoped>
+rect, path{
+    transition: all ease-in-out 0.2s;
+}
 .comms_indi{
     position: absolute;
 }

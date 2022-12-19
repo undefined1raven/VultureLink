@@ -8,6 +8,7 @@ import BaseOptionsMenu from "@/components/BaseOptionsMenu.vue";
 import percentage from "@/composables/percentage.ts";
 import UIReactivityStateAssessor from "@/composables/UIReactivityAssessor.ts";
 import isMobile from "@/composables/isMobile";
+import RangeScaler from "@/composables/rangeScaler.ts";
 </script>
 
 <script lang="ts">
@@ -34,6 +35,7 @@ export default {
     },
   },
   props: {
+    isIMUCalibrationRunning: { default: false },
     telemetry: {
       type: Object,
       default(rawProps: Object) {
@@ -61,12 +63,16 @@ export default {
   },
   data() {
     return {
+      calibrationObj: {
+        pitch: { max: 90, min: -90 },
+        roll: { max: 90, min: -90 },
+      },
       isUIMinified: 0 /*is UI below the reactivity width threshold || 0 == normal || 1 == half width */,
       VisibleAxisID: "x",
       AxisSelectionMenuItems: [
-        { label: "X Axis", btn_id: "x" },
-        { label: "Y Axis", btn_id: "y" },
-        { label: "Z Axis", btn_id: "z" },
+        { label: "Pitch", btn_id: "x" },
+        { label: "Roll", btn_id: "y" },
+        { label: "Yaw", btn_id: "z" },
       ],
     };
   },
@@ -97,11 +103,15 @@ export default {
       "
       id="x_axis_telemetry_container"
       ref="x_axis_telemetry"
-      axis_id="X Axis"
+      axis_id="Pitch"
       :imu_alpha_axis_telemetry="telemetry_validation().imu_alpha.gyro.pitch"
       :imu_beta_axis_telemetry="{
-        angle: Math.round(
-          telemetry_validation().imu_alpha.accelerometer.pitch * -1
+        angle: RangeScaler(
+          Math.round(telemetry_validation().imu_alpha.accelerometer.pitch * -1),
+          calibrationObj.pitch.min,
+          calibrationObj.pitch.max,
+          -90,
+          90
         ),
         rate: 0,
       }"
@@ -113,11 +123,15 @@ export default {
         ((isUIMinified == 1 || isMobile()) && VisibleAxisID == 'y')
       "
       id="y_axis_telemetry_container"
-      axis_id="Y Axis"
+      axis_id="Roll"
       :imu_alpha_axis_telemetry="telemetry_validation().imu_alpha.gyro.roll"
       :imu_beta_axis_telemetry="{
-        angle: Math.round(
-          telemetry_validation().imu_alpha.accelerometer.roll * -1
+        angle: RangeScaler(
+          Math.round(telemetry_validation().imu_alpha.accelerometer.roll * -1),
+          calibrationObj.roll.min,
+          calibrationObj.roll.max,
+          -90,
+          90
         ),
         rate: 0,
       }"
@@ -129,7 +143,7 @@ export default {
         ((isUIMinified == 1 || isMobile()) && VisibleAxisID == 'z')
       "
       id="z_axis_telemetry_container"
-      axis_id="Z Axis"
+      axis_id="Yaw"
       :imu_alpha_axis_telemetry="telemetry_validation().imu_alpha.gyro.yaw"
       :imu_beta_axis_telemetry="{
         angle: 0,

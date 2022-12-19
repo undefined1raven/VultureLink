@@ -10,6 +10,7 @@ import ConsoleLowerLateralSectionBkg from "@/components/CMD_ConsoleLowerLateralS
 import AltitudeDock from "@/components/CMD_AltitudeDock.vue";
 import DiagsDock from "@/components/CMD_DiagsDock.vue";
 import PowerDock from "@/components/CMD_PowerDock.vue";
+import Menu from "@/components/CMD_Menu.vue";
 import ControlsOverview from "@/components/CMD_ControlsOverview.vue";
 import TakeoffPanel from "@/components/CMD_TakeoffPanel.vue";
 import MobileCMDRoleSelector from "@/components/MobileCMDRoleSelector.vue";
@@ -25,6 +26,7 @@ export default {
     ConsoleLowerLateralSectionBkg,
   },
   props: {
+    isVultureLinkActive: { default: false },
     vn: { default: "--" },
     roleAvailablility: {
       default: {
@@ -40,7 +42,40 @@ export default {
       },
     },
   },
+  expose: ["onVultureHeartbeat"],
   methods: {
+    flightControlInputKeyOnKeyUp(keyRef: string, flightInputAxisRef: string) {
+      this.flightInputKeyStates[keyRef] = false;
+      this.flightInput[flightInputAxisRef] = 0;
+      this.emitFlightInput();
+    },
+    emitFlightInput() {
+      this.$emit("FlightInputOnChange", this.flightInput);
+    },
+    controlLoopCore(
+      fligtInputAxisRef: string,
+      positiveKeyStateRef: string,
+      negativeKeyStateRef: string,
+      absoluteRange: number
+    ) {
+      if (
+        this["flightInput"][fligtInputAxisRef] < absoluteRange &&
+        this["flightInputKeyStates"][positiveKeyStateRef]
+      ) {
+        this["flightInput"][fligtInputAxisRef] += 0.5;
+        this.emitFlightInput();
+      }
+      if (
+        this["flightInput"][fligtInputAxisRef] > absoluteRange * -1 &&
+        this["flightInputKeyStates"][negativeKeyStateRef]
+      ) {
+        this["flightInput"][fligtInputAxisRef] -= 0.5;
+        this.emitFlightInput();
+      }
+    },
+    onVultureHeartbeat() {
+      this.$refs.DiagsDockRef.onVultureHeartbeat();
+    },
     onLaunchSignal() {
       this.hasLaunched = true;
     },
@@ -55,7 +90,7 @@ export default {
       this.isControlOverviewVisible = true;
       this.roleID = args.role_id;
     },
-    UIDockOnExtendedToggleHandle(args:object){
+    UIDockOnExtendedToggleHandle(args: object) {
       if (args.isExtended) {
         return {
           labelTop: "top: 36.203703704%;",
@@ -71,7 +106,7 @@ export default {
     altitudeDockOnExtendedToggle(args: object) {
       this.NavDockStyleObj = this.UIDockOnExtendedToggleHandle(args);
     },
-    powerDockOnExtendedToggle(args: object){
+    powerDockOnExtendedToggle(args: object) {
       this.DiagsDockStyleObj = this.UIDockOnExtendedToggleHandle(args);
     },
   },
@@ -93,12 +128,85 @@ export default {
         labelTop: "36.203703704%",
         dockActualTop: "39.537037037%",
       },
+      flightInput: { pitchRate: 0, rollRate: 0, yawRate: 0, altRate: 0 },
+      flightInputKeyStates: {
+        isWdown: false,
+        isSdown: false,
+        isAdown: false,
+        isDdown: false,
+        isCdown: false,
+        isSpacedown: false,
+        isEdown: false,
+        isQdown: false,
+      },
     };
   },
   mounted() {
+    let controlLoopInterval = 25; //ms
+    setInterval(() => {
+      this.controlLoopCore("pitchRate", "isWdown", "isSdown", 30);
+
+      this.controlLoopCore("rollRate", "isDdown", "isAdown", 35);
+
+      this.controlLoopCore("yawRate", "isEdown", "isQdown", 10);
+
+      this.controlLoopCore("altRate", "isSpacedown", "isCdown", 10);
+    }, controlLoopInterval);
+
     document.addEventListener("keyup", (e) => {
       if ((e.shiftKey && e.key == "T") || (e.shiftKey && e.key == "t")) {
         this.telemetryUItoggle = !this.telemetryUItoggle;
+      }
+      switch (e.key.toUpperCase()) {
+        case "W":
+          this.flightControlInputKeyOnKeyUp("isWdown", "pitchRate");
+          break;
+        case "S":
+          this.flightControlInputKeyOnKeyUp("isSdown", "pitchRate");
+        case "A":
+          this.flightControlInputKeyOnKeyUp("isAdown", "rollRate");
+        case "D":
+          this.flightControlInputKeyOnKeyUp("isDdown", "rollRate");
+        case "C":
+          this.flightControlInputKeyOnKeyUp("isCdown", "altRate");
+        case " ":
+          this.flightControlInputKeyOnKeyUp("isSpacedown", "altRate");
+        case "E":
+          this.flightControlInputKeyOnKeyUp("isEdown", "yawRate");
+        case "Q":
+          this.flightControlInputKeyOnKeyUp("isQdown", "yawRate");
+        default:
+          break;
+      }
+    });
+    document.addEventListener("keydown", (e: Event) => {
+      switch (e.key.toUpperCase()) {
+        case "W":
+          this.flightInputKeyStates.isWdown = true;
+          break;
+        case "S":
+          this.flightInputKeyStates.isSdown = true;
+          break;
+        case "A":
+          this.flightInputKeyStates.isAdown = true;
+          break;
+        case "D":
+          this.flightInputKeyStates.isDdown = true;
+          break;
+        case "C":
+          this.flightInputKeyStates.isCdown = true;
+          break;
+        case " ":
+          this.flightInputKeyStates.isSpacedown = true;
+          break;
+        case "E":
+          this.flightInputKeyStates.isEdown = true;
+          break;
+        case "Q":
+          this.flightInputKeyStates.isQdown = true;
+          break;
+        default:
+          break;
       }
     });
   },
@@ -133,7 +241,11 @@ export default {
     ref="NavDockRef"
   ></NavDock>
   <PowerDock @powerDockOnExtendedToggle="powerDockOnExtendedToggle"></PowerDock>
-  <DiagsDock :DiagsDockStyleObj="DiagsDockStyleObj"></DiagsDock>
+  <DiagsDock
+    :isVultureLinkActive="isVultureLinkActive"
+    ref="DiagsDockRef"
+    :DiagsDockStyleObj="DiagsDockStyleObj"
+  ></DiagsDock>
   <MobileCMDRoleSelector
     v-if="!roleSelected"
     :vn="vn"
@@ -154,8 +266,13 @@ export default {
     id="takeoff_panel"
     v-if="isReadyForTakeoff && roleID == 'pilot' && !hasLaunched"
   ></TakeoffPanel>
+  <Menu id="menu"></Menu>
 </template>
 <style scoped>
+#menu{
+  top: 0.555555556%;
+  left: 0%;
+}
 #takeoff_panel {
   top: 30.425926%;
   left: 50%;

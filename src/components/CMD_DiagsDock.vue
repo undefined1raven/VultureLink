@@ -10,11 +10,37 @@ import SonarArrayIndi from "@/components/CMD_SonarArrayIndi.vue";
 <script lang="ts">
 export default {
   props: {
+    isVultureLinkActive: { default: false },
     DiagsDockStyleObj: {
       default: {
         labelTop: "top: 36.203703704%",
         dockActualTop: "top: 39.537037037%",
       },
+    },
+  },
+  data() {
+    return {
+      isExtended: true,
+      CommsIndiColor: "#777777",
+    };
+  },
+  mounted() {
+    setInterval(() => {
+      if (!this.isVultureLinkActive) {
+        this.CommsIndiColor = "#777777";
+      }
+    }, 1000);
+  },
+  expose: ["onVultureHeartbeat"],
+  methods: {
+    onVultureHeartbeat() {
+      this.CommsIndiColor = "#00FF94";
+      setTimeout(() => {
+        this.CommsIndiColor = "#005038";
+      }, 700);
+    },
+    DiagsDockOnClick() {
+      this.isExtended = !this.isExtended;
     },
   },
 };
@@ -27,13 +53,15 @@ export default {
     id="diags_dock_l"
     :style="DiagsDockStyleObj.labelTop"
     v-text="'Diagnostics'"
+    @click="DiagsDockOnClick"
   ></BaseLabel>
 
   <div
     class="cmd_diags_dock_container transition"
     :style="DiagsDockStyleObj.dockActualTop"
+    v-if="isExtended"
   >
-    <CommsIndi id="diags_comms_indi"></CommsIndi>
+    <CommsIndi :color="CommsIndiColor" id="diags_comms_indi"></CommsIndi>
     <BaseLabel
       id="diags_imu_status_indi"
       class="status_indi"

@@ -17,7 +17,8 @@ export default {
   props: {
     SelectedVultureObject: { default: { vn: "", vid: "" } },
     CurrentUsername: { default: "" },
-    systemID: {default: ''},
+    systemID: { default: "" },
+    ConnectionStatus: { default: false },
   },
   data() {
     return {
@@ -27,18 +28,25 @@ export default {
     };
   },
   methods: {
-    ComputeStyleLeft(scale_target:number, scale_ref:number){
+    connectionStatusLabelStyleController() {
+      if (!this.ConnectionStatus) {
+        return {style: `color: #FF006B; border-left: solid 1px #FF006B; background-color: #FF006B20`, text: 'Failed to connect'};
+      }
+      if (this.ConnectionStatus) {
+        return {style: `color: #00FFF0; border-left: solid 1px #00FFF0; background-color: #00FFF020`, text: 'Link Established'};
+      }
+    },
+    ComputeStyleLeft(scale_target: number, scale_ref: number) {
       return `left: ${percentage(
         scale(scale_target, scale_ref),
         this.windowWidth
       )}%;`;
     },
     ComputeUIStyle() {
-      if(isMobile()){
+      if (isMobile()) {
         this.logo_ln_left = this.ComputeStyleLeft(47, 360);
         this.system_l_left = this.ComputeStyleLeft(56, 360);
-      }
-      else{
+      } else {
         this.logo_ln_left = this.ComputeStyleLeft(64, 1920);
         this.system_l_left = this.ComputeStyleLeft(88, 1920);
       }
@@ -79,6 +87,7 @@ export default {
       :style="system_l_left"
       v-text="`${SelectedVultureObject.vn} Systems \\\\ ${systemID}`"
     ></BaseLabel>
+    <BaseLabel :style="connectionStatusLabelStyleController()?.style" v-text="connectionStatusLabelStyleController()?.text" id="connection_status_l"></BaseLabel>
   </div>
 </template>
 <style scoped>
@@ -100,5 +109,14 @@ export default {
 #vulture_logo_min {
   top: 1.203703704%;
   left: 0.416666667%;
+}
+#connection_status_l {
+  top: 2.12962963%;
+  left: 90.260416667%;
+  width: 8.297916667%;
+  height: 3.425925926%;
+  padding-left: 0.4%;
+  font-size: 2.2vh;
+  transition: all linear 0.1s;
 }
 </style>

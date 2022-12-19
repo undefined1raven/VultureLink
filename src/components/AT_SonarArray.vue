@@ -12,8 +12,7 @@ import MobileBaseFullWidthControls from "@/components/M_BaseFullWidthSelectionCo
 
 import isMobile from "@/composables/isMobile.ts";
 </script>
-    
-    <script lang="ts">
+<script lang="ts">
 export default {
   props: {
     current_user_un: { default: "---" },

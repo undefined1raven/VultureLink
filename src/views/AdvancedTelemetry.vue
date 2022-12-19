@@ -64,9 +64,9 @@ export default {
       },
       vulture_connection: {
         status: false,
-        last_unix: "",
-        signal_emit_last_unix: "",
-        latency: "",
+        last_unix: 0,
+        signal_emit_last_unix: 0,
+        latency: 0,
       },
       vulture_hardware_status_obj: "",
     };
@@ -148,7 +148,7 @@ export default {
           ath: getCookie("adv_tele_sio_ath"),
           vid: this.selected_vulture_obj.vid,
         });
-        this.signal_emit_last_unix = Date.now();
+        this.vulture_connection.signal_emit_last_unix = Date.now();
       }, 200);
 
       setInterval(() => {
@@ -163,7 +163,7 @@ export default {
           this.vulture_connection.last_unix = connection_vitals.tx;
         } else {
           this.vulture_connection.last_unix = 0;
-          this.vulture_connection.status = null;
+          this.vulture_connection.status = false;
         }
       });
       //[][][][][]
@@ -240,6 +240,7 @@ export default {
       "
       :telemetry="vulture_telemetry.dynamics"
       :current_user_un="current_user_un"
+      :vulture_connection="vulture_connection"
       :selected_vulture_obj="selected_vulture_obj"
     ></Dynamics>
     <SonarArray

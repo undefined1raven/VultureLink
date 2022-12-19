@@ -115,7 +115,6 @@ function getRandomInt(min, max) {
 
 
 
-
 const firebaseConfig = {
     apiKey: secrets.FIREBASE,
     authDomain: "rt-tlp.firebaseapp.com",
@@ -286,6 +285,8 @@ function add_activity_log_tdb(req, ipx, service_id, email) {//- [X315] -//
         });
     }
 }
+
+
 
 
 
@@ -479,6 +480,10 @@ io.on('connection', function (socket_l) {
     // })
 
     ////--Advanced_Telemetry F/E ⇄ this ⇄ Vulture | Special Controls--////
+
+    socket_l.on('vulture_heartbeat_emitter', (vulture_heartbeat_emitter_payload) => {
+        io.to(`${vulture_heartbeat_emitter_payload.vid}`).emit('vulture_heartbeat', vulture_heartbeat_emitter_payload);
+    });
 
     socket_l.on('imu_restart_signal', () => {
         io.emit('imu_restart_signal_sr');
@@ -735,11 +740,11 @@ app.post('/MFA_mobile_poll', (req, res) => {
                                     setTimeout(() => {
                                         let user_acc_auth_methods_arr = user.acc_auth_methods_arr;
                                         UAC_v2.findOneAndUpdate({ acid: req.cookies.frstp_aprvd_tid.acid }, { acc_auth_methods_arr: { TOTP: user_acc_auth_methods_arr.TOTP, security_key: user_acc_auth_methods_arr.security_key, app: true, email: user_acc_auth_methods_arr.email, first: user_acc_auth_methods_arr.first } }, { upsert: true }, (err, doc) => { });
-                                        
+
                                         successful_auth_post(req, res, user, false);
-                                        
+
                                         res.clearCookie('frstp_aprvd_tid');
-                                        
+
                                         res.json({ failure_id: 'none', res_tx: Date.now(), redirect_path: req.cookies.wid, result: true });
                                         res.end();
                                     }, 100);
@@ -1708,13 +1713,13 @@ io.on('connection', socket => {
 
 
             socket.on('request_vulture_permissions', (request_vulture_permissions_payload) => {
-                VULTURE_SCH.findOne({vid: request_vulture_permissions_payload.vid}).exec().then(vulture_obj => {
-                    for(let ix = 0; ix < vulture_obj.u_access_arr.length; ix++){
-                        if(vulture_obj.u_access_arr[ix].acid == request_vulture_permissions_payload.acid){
-                            socket.emit('vulture_permissions', {permissions: vulture_obj.u_access_arr[ix], vn: vulture_obj.vn} );
+                VULTURE_SCH.findOne({ vid: request_vulture_permissions_payload.vid }).exec().then(vulture_obj => {
+                    for (let ix = 0; ix < vulture_obj.u_access_arr.length; ix++) {
+                        if (vulture_obj.u_access_arr[ix].acid == request_vulture_permissions_payload.acid) {
+                            socket.emit('vulture_permissions', { permissions: vulture_obj.u_access_arr[ix], vn: vulture_obj.vn });
                         }
                     }
-                 });  
+                });
             });
 
             socket.on('new_target_vid', new_target_vid_payload => {

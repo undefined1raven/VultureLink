@@ -16,6 +16,9 @@ import isMobile from "@/composables/isMobile.ts";
 <script lang="ts">
 export default {
   props: {
+    vulture_connection: {
+      default: { lastUnix: 0, status: false, signal_emit_last_unix: 0 },
+    },
     current_user_un: { default: "---" },
     telemetry: {
       type: Object,
@@ -36,6 +39,8 @@ export default {
   },
   data() {
     return {
+      isIMUCalibrationRunning: false,
+      vulture_connection_display_status: 0,
       mobile_window_id:
         "telemetry" /*mobile interface has 2 subcomponents: telmetry | controls */,
       hardware_status_arr: [
@@ -53,6 +58,12 @@ export default {
     };
   },
   methods: {
+    IMUCalibrationOnStart() {
+      this.isIMUCalibrationRunning = true;
+    },
+    IMUCalibrationOnEnd() {
+      this.isIMUCalibrationRunning = false;
+    },
     onButtonSelectedHandler(args: object) {
       if (args.selectedButtonID == "left") {
         this.mobile_window_id = "telemetry";
@@ -69,10 +80,13 @@ export default {
     :SelectedVultureObject="selected_vulture_obj"
     :CurrentUsername="current_user_un"
     systemID="Dynamics"
+    :ConnectionStatus="vulture_connection.status"
+    ref="baseTopBarRef"
   ></BaseTopBar>
   <DynamicsTelemetry
     v-if="!isMobile()"
     :telemetry="telemetry"
+    :isIMUCalibrationRunning="isIMUCalibrationRunning"
   ></DynamicsTelemetry>
 
   <MobileDynamicsTelemetry
@@ -82,6 +96,8 @@ export default {
 
   <DynamicsControls
     v-show="!isMobile() || (isMobile() && mobile_window_id == 'controls')"
+    @IMUCalibrationOnStart="IMUCalibrationOnStart"
+    @IMUCalibrationOnEnd="IMUCalibrationOnEnd"
   ></DynamicsControls>
 
   <DynamicsHardwareStatus
