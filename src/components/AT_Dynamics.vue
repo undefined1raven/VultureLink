@@ -60,9 +60,11 @@ export default {
   methods: {
     IMUCalibrationOnStart() {
       this.isIMUCalibrationRunning = true;
+      this.$refs.DynamicsTelemetryRef.IMUCalibrationActual()
     },
     IMUCalibrationOnEnd() {
       this.isIMUCalibrationRunning = false;
+      this.$refs.DynamicsTelemetryRef.IMUCalibrationEnd()
     },
     onButtonSelectedHandler(args: object) {
       if (args.selectedButtonID == "left") {
@@ -87,6 +89,7 @@ export default {
     v-if="!isMobile()"
     :telemetry="telemetry"
     :isIMUCalibrationRunning="isIMUCalibrationRunning"
+    ref="DynamicsTelemetryRef"
   ></DynamicsTelemetry>
 
   <MobileDynamicsTelemetry
