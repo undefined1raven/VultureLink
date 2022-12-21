@@ -233,6 +233,7 @@ export default {
       id="minimized_menu_propulsion_btn"
       class="minimized-menu-item"
       :style="`${MenuButtonBorderController('propulsion')};`"
+      @click="selectedSystemEmitter('propulsion')"
     >
       <BaseLabel
         class="extended_btn_l"

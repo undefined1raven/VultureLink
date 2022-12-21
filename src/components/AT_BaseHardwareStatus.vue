@@ -8,6 +8,16 @@ import isMobile from "@/composables/isMobile.ts";
 <script lang="ts">
 export default {
   methods: {
+    borderController(){
+      if(this.hasTelemetry()){
+        return '';
+      }else{
+        return 'border-left: solid 1px #777;';
+      }
+    },
+    hasTelemetry() {
+      return this.hardwareStatusArray.length > 0;
+    },
     overflowController() {
       if (this.hardwareStatusArray.length > 2) {
         return "overflow-y: scroll;";
@@ -17,9 +27,9 @@ export default {
     },
   },
   props: {
-    hardwareStatusArray: {default: []},
-    isMinifiable: {default: false},
-    isMinifiedByDefault: {default: false},
+    hardwareStatusArray: { default: [] },
+    isMinifiable: { default: false },
+    isMinifiedByDefault: { default: false },
   },
 };
 </script>
@@ -30,7 +40,13 @@ export default {
       id="dynamics_hardware_status_l"
       v-text="'Hardware Status'"
     ></BaseLabel>
-    <ul id="dynamics_hardware_status_list" :style="overflowController()">
+    <BaseLabel
+      v-text="'No Status Telemetry Available'"
+      color="#9B9B9B"
+      id="hardware_status_no_telemetry"
+      v-if="!hasTelemetry()"
+    ></BaseLabel>
+    <ul id="dynamics_hardware_status_list" :style="overflowController() + borderController()">
       <BaseHardwareStatusItem
         v-for="(status_obj, index) in hardwareStatusArray"
         :key="index"
@@ -87,6 +103,13 @@ export default {
   left: 0%;
   font-size: 2.1vh;
 }
+#hardware_status_no_telemetry {
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  border-top: solid 1px #9b9b9b;
+}
 @media only screen and (max-width: 1070px) and (min-height: 550px) {
   #dynamics_hardware_status_container {
     left: 60.729166667%;
@@ -112,7 +135,7 @@ export default {
     left: 1.111111111%;
     width: 97.777777778%;
   }
-  #dynamics_hardware_status_l{
+  #dynamics_hardware_status_l {
     font-size: 2.3vh;
   }
 }

@@ -90,6 +90,7 @@ export default {
           id="propulsion_overview_btn"
           system_label="Propulsion"
           :stroke="'#0400D4'"
+          @click="system_selected_emitter('propulsion')"
         ></OverviewButton>
         <OverviewButton
           id="dynamics_overview_btn"

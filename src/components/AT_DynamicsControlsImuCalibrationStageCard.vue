@@ -35,6 +35,12 @@ export default {
             card: "background-color: #00FFF020;",
             label: "color: #00FFF0;",
           };
+        case "failed":
+          this.isLoadingBarVisible = false;
+          return {
+            card: "background-color: #FF003D20;",
+            label: "color: #FF003D;",
+          };
         default:
           return {
             card: "background-color: #0500FF20;",

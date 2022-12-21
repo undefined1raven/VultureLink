@@ -44,9 +44,6 @@ export default {
       this.calibrationObj.calibrationInterval = setInterval(() => {
         this.IMUCalibrationUnit("accelerometer");
         this.IMUCalibrationUnit("gyro");
-        console.log(
-          `min: ${this.calibrationObj.gyro.roll.min} | max: ${this.calibrationObj.gyro.roll.max}`
-        );
       }, 20);
     },
     AxisSelectionMenuOnUpdate(args: object) {
@@ -57,9 +54,15 @@ export default {
       calibrationKey: string,
       inputKey: string
     ) {
+      let input =
+        this.telemetry_validation().imu_alpha[inputKey][calibrationKey];
+      if (inputKey == "gyro") {
+        input =
+          this.telemetry_validation().imu_alpha[inputKey][calibrationKey].angle;
+      }
       if (angle >= 0) {
         return RangeScaler(
-          this.telemetry_validation().imu_alpha[inputKey][calibrationKey],
+          input,
           0,
           this.calibrationObj[inputKey][calibrationKey].max,
           0,
@@ -67,7 +70,7 @@ export default {
         );
       } else {
         return RangeScaler(
-          this.telemetry_validation().imu_alpha.accelerometer[calibrationKey],
+          input,
           0,
           Math.abs(this.calibrationObj[inputKey][calibrationKey].min),
           0,
@@ -174,7 +177,8 @@ export default {
           telemetry_validation().imu_alpha.gyro.pitch.angle,
           'pitch',
           'gyro'
-        ), rate: telemetry_validation().imu_alpha.gyro.pitch.rate
+        ) * -1,
+        rate: telemetry_validation().imu_alpha.gyro.pitch.rate,
       }"
       :imu_beta_axis_telemetry="{
         angle: telemetryCalibration(
@@ -198,7 +202,8 @@ export default {
           telemetry_validation().imu_alpha.gyro.roll.angle,
           'roll',
           'gyro'
-        ), rate: telemetry_validation().imu_alpha.gyro.roll.rate
+        ) * -1,
+        rate: telemetry_validation().imu_alpha.gyro.roll.rate,
       }"
       :imu_beta_axis_telemetry="{
         angle:

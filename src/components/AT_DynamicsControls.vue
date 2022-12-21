@@ -14,6 +14,9 @@ import isMobile from "@/composables/isMobile.ts";
 
 <script lang="ts">
 export default {
+  props: {
+    hasValidTelemetry: { default: false },
+  },
   methods: {
     IMUCalibrationOnStart() {
       this.$emit("IMUCalibrationOnStart");
@@ -165,6 +168,7 @@ export default {
       class="animation_group_0"
       @IMUCalibrationOnStart="IMUCalibrationOnStart"
       @IMUCalibrationOnEnd="IMUCalibrationOnEnd"
+      :hasValidTelemetry="hasValidTelemetry"
     ></DynamicsControlsImuCalibration>
   </div>
 </template>

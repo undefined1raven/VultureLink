@@ -58,13 +58,20 @@ export default {
     };
   },
   methods: {
+    hasValidTelemetry() {
+      if (this.telemetry.imu_alpha.gyro == undefined) {
+        return false;
+      } else {
+        return true;
+      }
+    },
     IMUCalibrationOnStart() {
       this.isIMUCalibrationRunning = true;
-      this.$refs.DynamicsTelemetryRef.IMUCalibrationActual()
+      this.$refs.DynamicsTelemetryRef.IMUCalibrationActual();
     },
     IMUCalibrationOnEnd() {
       this.isIMUCalibrationRunning = false;
-      this.$refs.DynamicsTelemetryRef.IMUCalibrationEnd()
+      this.$refs.DynamicsTelemetryRef.IMUCalibrationEnd();
     },
     onButtonSelectedHandler(args: object) {
       if (args.selectedButtonID == "left") {
@@ -101,6 +108,7 @@ export default {
     v-show="!isMobile() || (isMobile() && mobile_window_id == 'controls')"
     @IMUCalibrationOnStart="IMUCalibrationOnStart"
     @IMUCalibrationOnEnd="IMUCalibrationOnEnd"
+    :hasValidTelemetry="hasValidTelemetry()"
   ></DynamicsControls>
 
   <DynamicsHardwareStatus

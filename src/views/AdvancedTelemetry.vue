@@ -11,6 +11,7 @@ import Menu from "@/components/AT_Menu.vue";
 import MobileNav from "@/components/M_AT_Nav.vue";
 import Dynamics from "@/components/AT_Dynamics.vue";
 import SonarArray from "@/components/AT_SonarArray.vue";
+import Propulsion from "@/components/AT_Propulsion.vue";
 
 import isMobile from "@/composables/isMobile.ts";
 
@@ -123,9 +124,9 @@ export default {
         acid: this.current_user_acid,
       });
 
-      socket.on("un_res", (un:string) => {
+      socket.on("un_res", (un: string) => {
         this.current_user_un = un.username;
-        console.log(un)
+        console.log(un);
       });
 
       socket.on("sonar_telemetry_pkg_rebound", (payload) => {
@@ -253,6 +254,16 @@ export default {
       :current_user_un="current_user_un"
       :selected_vulture_obj="selected_vulture_obj"
     ></SonarArray>
+    <Propulsion
+      v-if="
+        !login_req_details_obj.isVisible &&
+        !mobile.isMenuVisible &&
+        window_manager.visible_window_id == 'propulsion' &&
+        ((mobile.overview_active_section_id == 2 && isMobile()) || true)
+      "
+      :current_user_un="current_user_un"
+      :selected_vulture_obj="selected_vulture_obj"
+    ></Propulsion>
     <Menu
       v-if="!isMobile()"
       :vulture_connection_status="vulture_connection.status"

@@ -10,9 +10,17 @@ import isMobile from "@/composables/isMobile.ts";
 
 <script lang="ts">
 export default {
+  props: {
+    hasValidTelemetry: { default: false },
+  },
   data() {
     return {
-      stageColorObj: { waiting: "#777", running: "#0500FF", done: "#00FFF0" },
+      stageColorObj: {
+        waiting: "#777",
+        running: "#0500FF",
+        done: "#00FFF0",
+        failed: "#FF003D",
+      },
       isRunning: false,
       isComplete: false,
       stageStatus: { card_0: "waiting", card_1: "waiting", card_2: "waiting" },
@@ -21,17 +29,25 @@ export default {
   },
   methods: {
     CalibrationLabelStyleParser() {
-      if (this.isComplete) {
+      if (this.isComplete == true) {
         return {
           label: "Complete",
           style:
             "color: #00FFF0; border-top: solid 1px #00FFF0; background: radial-gradient(60.81% 60.81% at 50% 0%, rgba(0, 255, 240, 0.4) 0%, rgba(0, 255, 240, 0) 105%);",
         };
-      } else {
+      }
+      if (this.isComplete == false) {
         return {
           label: "In Progress",
           style:
             "color: #FFF; border-top: solid 1px #0500FF; background: radial-gradient(60.81% 60.81% at 50% 0%, rgba(5, 0, 255, 0.4) 0%, rgba(5, 0, 255, 0) 105%);",
+        };
+      }
+      if (this.isComplete == "failed") {
+        return {
+          label: "Failed [NX_TLE]",
+          style:
+            "color: #FF003D; border-top: solid 1px #FF003D; background: radial-gradient(60.81% 60.81% at 50% 0%, rgba(255, 0, 61, 0.4) 0%, rgba(255, 0, 61, 0) 100%);",
         };
       }
     },
@@ -49,10 +65,10 @@ export default {
           this.isComplete = true;
           setTimeout(() => {
             this.isRunning = false;
-            this.$emit('IMUCalibrationOnEnd');
-          }, 4000);
+            this.$emit("IMUCalibrationOnEnd");
+          }, 3000);
         }
-      }, 50);
+      }, 10);
     },
     MeasureOffsets() {
       this.stageCompletionStatus = 0;
@@ -65,7 +81,7 @@ export default {
           clearInterval(interval);
           this.ApplyOffsets();
         }
-      }, 500);
+      }, 300);
     },
     ImuCalibrationSequance() {
       this.stageCompletionStatus = 0;
@@ -73,18 +89,29 @@ export default {
       this.stageStatus.card_0 = "running";
       this.stageStatus.card_1 = "waiting";
       this.stageStatus.card_2 = "waiting";
-      let intv = setInterval(() => {
-        if (this.stageCompletionStatus < 100) {
-          this.stageCompletionStatus += 1;
-        } else {
-          clearInterval(intv);
-          this.MeasureOffsets();
-        }
-      }, 100);
+      if (this.hasValidTelemetry) {
+        let intv = setInterval(() => {
+          if (this.stageCompletionStatus < 100) {
+            this.stageCompletionStatus += 1;
+          } else {
+            clearInterval(intv);
+            this.MeasureOffsets();
+          }
+        }, 10);
+      } else {
+        this.stageStatus.card_0 = "failed";
+        setTimeout(() => {
+          this.isComplete = "failed";
+        }, 500);
+        setTimeout(() => {
+          this.isRunning = false;
+          this.$emit("IMUCalibrationOnEnd");
+        }, 3000);
+      }
     },
     ImuCalibrationButtonOnClick() {
       this.isRunning = true;
-      this.$emit('IMUCalibrationOnStart');
+      this.$emit("IMUCalibrationOnStart");
       this.ImuCalibrationSequance();
     },
   },
@@ -146,21 +173,21 @@ export default {
         id="calibration_pending_stage_card_0"
         color="#FFF"
         :currentStage="stageStatus.card_0"
-        label="Validating Stability"
+        label="Telemetry Check"
         :completionStatus="stageCompletionStatus"
       ></DynamicsControlsImuCalibrationStageCard>
       <DynamicsControlsImuCalibrationStageCard
         id="calibration_pending_stage_card_1"
         :currentStage="stageStatus.card_1"
         color="#FFF"
-        label="Measuring Offsets"
+        label="Measuring Ranges"
         :completionStatus="stageCompletionStatus"
       ></DynamicsControlsImuCalibrationStageCard>
       <DynamicsControlsImuCalibrationStageCard
         id="calibration_pending_stage_card_2"
         :currentStage="stageStatus.card_2"
         color="#FFF"
-        label="Applying Offsets"
+        label="Applying Corrections"
         :completionStatus="stageCompletionStatus"
       ></DynamicsControlsImuCalibrationStageCard>
     </div>
