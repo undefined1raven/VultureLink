@@ -46,7 +46,7 @@
     "flash": "^1.1.0",
     "gsap": "^3.10.4",
     "http2": "^3.3.7",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "limiter": "^2.1.0",
     "logrocket": "^2.2.1",
     "mime": "^3.0.0",
