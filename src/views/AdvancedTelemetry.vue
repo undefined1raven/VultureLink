@@ -73,6 +73,18 @@ export default {
     };
   },
   methods: {
+    onMotor1NewThrustLevel(thrustLevel:number){
+      this.socket_ref.emit('m1_manual_thrust_lvl', thrustLevel)
+    },
+    onMotor2NewThrustLevel(thrustLevel:number){
+      this.socket_ref.emit('m2_manual_thrust_lvl', thrustLevel)
+    },
+    onMotor3NewThrustLevel(thrustLevel:number){
+      this.socket_ref.emit('m3_manual_thrust_lvl', thrustLevel)
+    },
+    onMotor4NewThrustLevel(thrustLevel:number){
+      this.socket_ref.emit('m4_manual_thrust_lvl', thrustLevel)
+    },
     onDockSelectedSignalHandler() {
       if (isMobile()) {
         this.$refs.MobileNavRef.secondary_menu_btn_onClick();
@@ -126,7 +138,6 @@ export default {
 
       socket.on("un_res", (un: string) => {
         this.current_user_un = un.username;
-        console.log(un);
       });
 
       socket.on("sonar_telemetry_pkg_rebound", (payload) => {
@@ -263,6 +274,10 @@ export default {
       "
       :current_user_un="current_user_un"
       :selected_vulture_obj="selected_vulture_obj"
+      @onMotor1NewThrustLevel="onMotor1NewThrustLevel"
+      @onMotor2NewThrustLevel="onMotor2NewThrustLevel"
+      @onMotor3NewThrustLevel="onMotor3NewThrustLevel"
+      @onMotor4NewThrustLevel="onMotor4NewThrustLevel"
     ></Propulsion>
     <Menu
       v-if="!isMobile()"

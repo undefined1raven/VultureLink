@@ -15,6 +15,16 @@ export default {
   },
   data() {
     return {
+      newRangeIndicators: {
+        accelerometer: {
+          pitch: { min: "#0500FF00", max: "#0500FF00" },
+          roll: { min: "#0500FF00", max: "#0500FF00" },
+        },
+        gyro: {
+          pitch: { min: "#0500FF00", max: "#0500FF00" },
+          roll: { min: "#0500FF00", max: "#0500FF00" },
+        },
+      },
       stageColorObj: {
         waiting: "#777",
         running: "#0500FF",
@@ -27,7 +37,20 @@ export default {
       stageCompletionStatus: 0,
     };
   },
+  expose: ["pulseRangeIndicator"],
   methods: {
+    pulseRangeIndicator(type: string, axis: string, rangeEnd: string) {
+      console.log(JSON.stringify(this.newRangeIndicators[type][axis]));
+      this.newRangeIndicators[type][axis][rangeEnd] = "#0500FF";
+      setTimeout(() => {
+        this.newRangeIndicators[type][axis][rangeEnd] = "#0500FF00";
+      }, 200);
+    },
+    getRandomInt(min: number, max: number) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min) + min); //max e | min i
+    },
     CalibrationLabelStyleParser() {
       if (this.isComplete == true) {
         return {
@@ -176,6 +199,50 @@ export default {
         label="Telemetry Check"
         :completionStatus="stageCompletionStatus"
       ></DynamicsControlsImuCalibrationStageCard>
+      <div v-if="stageStatus.card_1 == 'running'">
+        <div
+          :style="`background-color: ${newRangeIndicators.accelerometer.pitch.max};`"
+          id="pitch_accel_high_new_range"
+          class="new_range_indi right h"
+        ></div>
+        <div
+          :style="`background-color: ${newRangeIndicators.accelerometer.pitch.min};`"
+          id="pitch_accel_low_new_range"
+          class="new_range_indi right low"
+        ></div>
+        <div
+          :style="`background-color: ${newRangeIndicators.gyro.pitch.max};`"
+          id="pitch_gyro_high_new_range"
+          class="new_range_indi left h"
+        ></div>
+        <div
+          :style="`background-color: ${newRangeIndicators.gyro.pitch.min};`"
+          id="pitch_gyro_low_new_range"
+          class="new_range_indi left low"
+        ></div>
+
+        <div
+          :style="`background-color: ${newRangeIndicators.accelerometer.roll.max};`"
+          id="roll_accel_high_new_range"
+          class="new_range_indi right_r h"
+        ></div>
+        <div
+          :style="`background-color: ${newRangeIndicators.accelerometer.roll.min};`"
+          id="roll_accel_low_new_range"
+          class="new_range_indi right_r low"
+        ></div>
+        <div
+          :style="`background-color: ${newRangeIndicators.gyro.roll.max};`"
+          id="roll_gyro_high_new_range"
+          class="new_range_indi left_r h"
+        ></div>
+        <div
+          :style="`background-color: ${newRangeIndicators.gyro.roll.min};`"
+          id="roll_gyro_low_new_range"
+          class="new_range_indi left_r low"
+        ></div>
+      </div>
+
       <DynamicsControlsImuCalibrationStageCard
         id="calibration_pending_stage_card_1"
         :currentStage="stageStatus.card_1"
@@ -194,6 +261,33 @@ export default {
   </div>
 </template>
 <style scoped>
+.new_range_indi {
+  position: absolute;
+  left: 13.114754098%;
+  width: 1.388888vh;
+  height: 1.388888vh;
+  border: solid 1px #0500ff;
+  background-color: #0500ff90;
+  transition: all cubic-bezier(0.18, 0.89, 0.62, 0.85) 0s;
+}
+.right_r {
+  left: 82.786885246%;
+}
+.left_r {
+  left: 76.775956284%;
+}
+.h {
+  top: calc(59.793814433% + 2.4%);
+}
+.low {
+  top: calc(65.463917526% + 2.4%);
+}
+.left {
+  left: 13.114754098%;
+}
+.right {
+  left: 19.12568306%;
+}
 @keyframes fade {
   0% {
     opacity: 0;

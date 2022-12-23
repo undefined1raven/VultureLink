@@ -17,7 +17,11 @@ export default {
   props: {
     hasValidTelemetry: { default: false },
   },
+  expose: ['pulseRangeIndicator'],
   methods: {
+    pulseRangeIndicator(type: string, axis: string, rangeEnd: string) {
+      this.$refs.IMUCalibrationRef.pulseRangeIndicator(type, axis, rangeEnd);
+    },
     IMUCalibrationOnStart() {
       this.$emit("IMUCalibrationOnStart");
     },
@@ -169,6 +173,7 @@ export default {
       @IMUCalibrationOnStart="IMUCalibrationOnStart"
       @IMUCalibrationOnEnd="IMUCalibrationOnEnd"
       :hasValidTelemetry="hasValidTelemetry"
+      ref="IMUCalibrationRef"
     ></DynamicsControlsImuCalibration>
   </div>
 </template>

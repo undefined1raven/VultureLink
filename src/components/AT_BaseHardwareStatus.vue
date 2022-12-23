@@ -8,13 +8,6 @@ import isMobile from "@/composables/isMobile.ts";
 <script lang="ts">
 export default {
   methods: {
-    borderController(){
-      if(this.hasTelemetry()){
-        return '';
-      }else{
-        return 'border-left: solid 1px #777;';
-      }
-    },
     hasTelemetry() {
       return this.hardwareStatusArray.length > 0;
     },
@@ -46,7 +39,7 @@ export default {
       id="hardware_status_no_telemetry"
       v-if="!hasTelemetry()"
     ></BaseLabel>
-    <ul id="dynamics_hardware_status_list" :style="overflowController() + borderController()">
+    <ul id="dynamics_hardware_status_list" :style="overflowController()">
       <BaseHardwareStatusItem
         v-for="(status_obj, index) in hardwareStatusArray"
         :key="index"

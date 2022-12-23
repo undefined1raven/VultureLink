@@ -80,6 +80,9 @@ export default {
         this.mobile_window_id = "controls";
       }
     },
+    onNewRange(args:object){
+      this.$refs.DynamicControlsRef.pulseRangeIndicator(args.type, args.axis, args.rangeEnd)
+    },
   },
 };
 </script>
@@ -97,6 +100,7 @@ export default {
     :telemetry="telemetry"
     :isIMUCalibrationRunning="isIMUCalibrationRunning"
     ref="DynamicsTelemetryRef"
+    @onNewRange="onNewRange"
   ></DynamicsTelemetry>
 
   <MobileDynamicsTelemetry
@@ -109,6 +113,7 @@ export default {
     @IMUCalibrationOnStart="IMUCalibrationOnStart"
     @IMUCalibrationOnEnd="IMUCalibrationOnEnd"
     :hasValidTelemetry="hasValidTelemetry()"
+    ref="DynamicControlsRef"
   ></DynamicsControls>
 
   <DynamicsHardwareStatus
