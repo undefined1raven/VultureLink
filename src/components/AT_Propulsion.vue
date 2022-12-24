@@ -137,9 +137,47 @@ export default {
     thrustLevelEmitEventName="onMotor4NewThrustLevel"
     @onMotor4NewThrustLevel="onMotor4NewThrustLevel"
   ></PropulsionMotorUnit>
+  <VerticalLine id="prop_ln_0" color="#373737"></VerticalLine>
+  <VerticalLine id="prop_ln_1" color="#373737"></VerticalLine>
+  <HorizontalLine id="prop_ln_2" color="#373737"></HorizontalLine>
+  <HorizontalLine id="prop_ln_3" color="#373737"></HorizontalLine>
+  <VerticalLine id="prop_ln_4" color="#373737"></VerticalLine>
+  <VerticalLine id="prop_ln_5" color="#373737"></VerticalLine>
+  <VerticalLine id="prop_ln_6" color="#373737"></VerticalLine>
 </template>
 
 <style scoped>
+#prop_ln_6{
+  top: 14.259259259%;
+  left: 71.197916667%;
+  height: 71.481481481%;
+}
+#prop_ln_4, #prop_ln_5{
+  top: 46.851851852%;
+  left: 38.541666667%;
+  height: 6.203703704%;
+}
+#prop_ln_5{
+  transform: rotate(-90deg);
+}
+#prop_ln_2{
+  top: 49.907407407%;
+  left: 7.760416667%;
+  width: 26.666666667%;
+}
+#prop_ln_3{
+  top: 49.907407407%;
+  left: 42.65625%;
+  width: 26.666666667%;
+}
+#prop_ln_0, #prop_ln_1{
+  top: 14.259259259%;
+  left: 38.541666667%;
+  height: 29.537037037%;
+}
+#prop_ln_1{
+  top: 56.203703704%;
+}
 #motor_1_unit {
   top: 14.259259259%;
   left: 7.760416667%;
