@@ -198,6 +198,7 @@ export default {
       this.XY.input.pitch = 0;
       this.XY.stickSize = 6;
       this.XY.containerBorderSize = 0;
+      this.emitFlightInput()
     },
     xyStickOnMove(e: Event) {
       let XinPercentage = this.GlobalStickPositionToLocal(

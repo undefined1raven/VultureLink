@@ -34,7 +34,8 @@ export default {
     };
   },
   props: {
-    vn: {default: "--"},
+    baseThrustLvl: { default: "UNK" },
+    vn: { default: "--" },
     hasVideoDownlink: { default: false },
     vultureTelemetry: {
       default: { imu_alpha: { gyro: { roll: { angle: 0 } } } },
@@ -66,6 +67,9 @@ export default {
     };
   },
   methods: {
+    onEAX(){
+      this.$emit('onEAX')
+    },
     onLaunchSignal() {
       this.hasLaunched = true;
     },
@@ -151,6 +155,7 @@ export default {
       <MobileCMDMainQuickSelectMenu
         v-if="hasLaunched"
         @landingAssistOnToggle="landingAssistOnToggle"
+        @onEAX="onEAX"
       ></MobileCMDMainQuickSelectMenu>
       <MobileCMDTakeoffButton
         v-if="isReadyForTakeoff && !hasLaunched && roleID == 'pilot'"
@@ -158,10 +163,21 @@ export default {
         @launchSignal="onLaunchSignal"
       ></MobileCMDTakeoffButton>
     </Transition>
+    <BaseLabel color="#AAA" id="baseThrustLvlL" v-text="`${baseThrustLvl}%`"></BaseLabel>
   </div>
 </template>
 
 <style scoped>
+#baseThrustLvlL{
+  top: 93.6%;
+  left: 0%;
+  font-size: 4vh;
+  width: 4%;
+  border-top: solid 1px #0300a1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 #takeoff_btn {
   top: 75.277777778%;
   left: 50%;

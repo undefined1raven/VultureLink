@@ -9,6 +9,7 @@ import MobileMain from "@/components/MobileCMDMain.vue";
 import isMobile from "@/composables/isMobile.ts";
 
 import { io } from "socket.io-client";
+import { Console } from 'console';
 </script>
 
 <script lang="ts">
@@ -29,6 +30,7 @@ var socket = io({
 export default {
   data() {
     return {
+      baseThrustLvl: "UNK",
       hasStream: false,
       current_user_acid: getCookie("acid"),
       targetVid: "a5ef02a9-7838-42bc-b4e8-f156cc1f06c7",
@@ -37,15 +39,21 @@ export default {
       vn: "",
       vultureConnection: {
         lastHeartBeadUnix: 0,
-        isActive: false
-      }
+        isActive: false,
+      },
     };
   },
   methods: {
-    vultureConnectionAssessor(){
-      if(Math.abs(this.vultureConnection.lastHeartBeadUnix - Date.now()) > 3000){
+    onEAX(){
+      socket.emit("onEAX", { vid: this.targetVid });
+      console.log('Emergency All Stop')
+    },
+    vultureConnectionAssessor() {
+      if (
+        Math.abs(this.vultureConnection.lastHeartBeadUnix - Date.now()) > 3000
+      ) {
         this.vultureConnection.isActive = false;
-      }else{
+      } else {
         this.vultureConnection.isActive = true;
       }
     },
@@ -107,9 +115,9 @@ export default {
         trickle: false,
       });
 
-      socket.on('vulture_heartbeat', (vulture_heartbeat_payload) => {
-          this.vultureConnection.lastHeartBeadUnix = vulture_heartbeat_payload.tx;
-          this.$refs.DesktopCommandRef.onVultureHeartbeat();
+      socket.on("vulture_heartbeat", (vulture_heartbeat_payload) => {
+        this.vultureConnection.lastHeartBeadUnix = vulture_heartbeat_payload.tx;
+        this.$refs.DesktopCommandRef.onVultureHeartbeat();
       });
 
       socket.on("relayed_fwd_cam_rtc_req", (offer) => {
@@ -118,6 +126,10 @@ export default {
         } catch (e) {
           console.log("bim");
         }
+      });
+
+      socket.on("baseThrustLvl", (baseThrustLvl) => {
+        this.baseThrustLvl = baseThrustLvl;
       });
 
       socket.on("vulture_permissions", (vulture_permissions_res) => {
@@ -156,12 +168,22 @@ export default {
   <Background />
   <MobileBackground />
   <Video v-show="hasStream" id="vid_container" ref="vid_container"></Video>
-  <Main @FlightInputOnChange="FlightInputOnChangeHandler" ref="DesktopCommandRef" :isVultureLinkActive="vultureConnection.isActive" :vn="vn" :roleAvailablility="roleSelectorParser(PermissionsAndAccessObj)" v-if="!isMobile()" id="ui_overlay"></Main>
+  <Main
+    @FlightInputOnChange="FlightInputOnChangeHandler"
+    ref="DesktopCommandRef"
+    :isVultureLinkActive="vultureConnection.isActive"
+    :vn="vn"
+    :roleAvailablility="roleSelectorParser(PermissionsAndAccessObj)"
+    v-if="!isMobile()"
+    id="ui_overlay"
+  ></Main>
   <MobileMain
     :vn="vn"
+    :baseThrustLvl="baseThrustLvl"
     :vultureTelemetry="vultureTelemetry"
     :hasVideoDownlink="hasStream"
     @FlightInputOnChange="FlightInputOnChangeHandler"
+    @onEAX="onEAX"
     :roleAvailablility="roleSelectorParser(PermissionsAndAccessObj)"
     v-if="isMobile()"
     id="mobile_main"

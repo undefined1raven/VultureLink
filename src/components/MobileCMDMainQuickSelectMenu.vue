@@ -20,16 +20,26 @@ export default {
         this.menuContainerLeft = -78.571428571;
       }
     },
-    landingAssistButtonOnClick(){
-        this.menuToggleButtonOnClick();
-        this.$emit('landingAssistOnToggle');
+    landingAssistButtonOnClick() {
+      this.menuToggleButtonOnClick();
+      this.$emit("landingAssistOnToggle");
     },
-    RTHButtonOnClick(){
-        this.menuToggleButtonOnClick();
+    RTHButtonOnClick() {
+      this.isEAX = !this.isEAX;
+      this.menuToggleButtonOnClick();
+      this.$emit("onEAX");
+    },
+    EAXBkgController(){
+      if(this.isEAX){
+        return '#ff002250'
+      }else{
+        return '#ff002220'
+      }
     },
   },
   data() {
     return {
+      isEAX: false,
       isExtended: false,
       menuContainerLeft: -78.571428571,
     };
@@ -40,27 +50,45 @@ export default {
 <template>
   <div id="mobile_cmd_main_quickSelect_menu_container">
     <div id="menu_container_acx" :style="`left: ${menuContainerLeft}%;`">
-      <BaseLabel @click="RTHButtonOnClick" class="btn" id="rth_btn" v-text="'RTH'"></BaseLabel>
-      <div @click="landingAssistButtonOnClick" class="btn" id="landing_assist_btn">
+      <BaseLabel
+        @click="RTHButtonOnClick"
+        class="btn"
+        id="rth_btn"
+        v-text="'AX_ALL'"
+        :style="`background-color: ${EAXBkgController()};`"
+      ></BaseLabel>
+      <div
+        @click="landingAssistButtonOnClick"
+        class="btn"
+        id="landing_assist_btn"
+      >
         <BaseLandingIndi></BaseLandingIndi>
       </div>
       <div @click="menuToggleButtonOnClick" class="btn" id="menu_toggle_btn">
-        <VerticalLine color="#0500FF" class="menu_toggle_btn_deco" id="menu_toggle_btn_deco_left"></VerticalLine>
-        <VerticalLine color="#0500FF" class="menu_toggle_btn_deco" id="menu_toggle_btn_deco_right"></VerticalLine>
+        <VerticalLine
+          color="#0500FF"
+          class="menu_toggle_btn_deco"
+          id="menu_toggle_btn_deco_left"
+        ></VerticalLine>
+        <VerticalLine
+          color="#0500FF"
+          class="menu_toggle_btn_deco"
+          id="menu_toggle_btn_deco_right"
+        ></VerticalLine>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.menu_toggle_btn_deco{
-    height: 75%;
+.menu_toggle_btn_deco {
+  height: 75%;
 }
-#menu_toggle_btn_deco_left{
-    left: 35%;
+#menu_toggle_btn_deco_left {
+  left: 35%;
 }
-#menu_toggle_btn_deco_right{
-    left: 60%;
+#menu_toggle_btn_deco_right {
+  left: 60%;
 }
 #mobile_cmd_main_quickSelect_menu_container {
   position: absolute;
@@ -97,6 +125,9 @@ export default {
 #rth_btn {
   left: 7.142857143%;
   font-size: 3.6vh;
+  background-color: #ff002220;
+  color: #ff0022;
+  border: solid 1px #ff0022;
 }
 #landing_assist_btn {
   left: 46.428571429%;
