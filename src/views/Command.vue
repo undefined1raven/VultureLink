@@ -30,6 +30,7 @@ var socket = io({
 export default {
   data() {
     return {
+      baseThrustLvlUnix: 0,
       baseThrustLvl: "UNK",
       hasStream: false,
       current_user_acid: getCookie("acid"),
@@ -117,7 +118,8 @@ export default {
 
       socket.on("vulture_heartbeat", (vulture_heartbeat_payload) => {
         this.vultureConnection.lastHeartBeadUnix = vulture_heartbeat_payload.tx;
-        this.$refs.DesktopCommandRef.onVultureHeartbeat();
+        // this.$refs.DesktopCommandRef.onVultureHeartbeat();
+        this.$refs.MobileCommandRef.onVultureHeartbeat();
       });
 
       socket.on("relayed_fwd_cam_rtc_req", (offer) => {
@@ -130,6 +132,7 @@ export default {
 
       socket.on("baseThrustLvl", (baseThrustLvl) => {
         this.baseThrustLvl = baseThrustLvl;
+        this.baseThrustLvlUnix = Date.now()
       });
 
       socket.on("vulture_permissions", (vulture_permissions_res) => {
@@ -180,11 +183,13 @@ export default {
   <MobileMain
     :vn="vn"
     :baseThrustLvl="baseThrustLvl"
+    :baseThrustLvlUnix="baseThrustLvlUnix"
     :vultureTelemetry="vultureTelemetry"
     :hasVideoDownlink="hasStream"
     @FlightInputOnChange="FlightInputOnChangeHandler"
     @onEAX="onEAX"
     :roleAvailablility="roleSelectorParser(PermissionsAndAccessObj)"
+    ref="MobileCommandRef"
     v-if="isMobile()"
     id="mobile_main"
   ></MobileMain>

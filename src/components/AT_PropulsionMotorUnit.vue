@@ -12,7 +12,7 @@ import isMobile from "@/composables/isMobile.ts";
 export default {
   props: {
     motorID: { default: "--" },
-    FCThrustLevel: { default: 40 },
+    FCThrustLevel: { default: 0 },
     thrustLevelEmitEventName: { default: "--" },
   },
   mounted() {

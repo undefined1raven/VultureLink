@@ -34,6 +34,7 @@ export default {
     };
   },
   props: {
+    baseThrustLvlUnix: { default: "UNK" },
     baseThrustLvl: { default: "UNK" },
     vn: { default: "--" },
     hasVideoDownlink: { default: false },
@@ -66,9 +67,13 @@ export default {
       }
     };
   },
+  expose: ["onVultureHeartbeat"],
   methods: {
-    onEAX(){
-      this.$emit('onEAX')
+    onVultureHeartbeat() {
+      console.log(`Vulture Heartbear at ${Date.now()}`);
+    },
+    onEAX() {
+      this.$emit("onEAX");
     },
     onLaunchSignal() {
       this.hasLaunched = true;
@@ -163,14 +168,33 @@ export default {
         @launchSignal="onLaunchSignal"
       ></MobileCMDTakeoffButton>
     </Transition>
-    <BaseLabel color="#AAA" id="baseThrustLvlL" v-text="`${baseThrustLvl}%`"></BaseLabel>
+    <BaseLabel
+      color="#AAA"
+      id="baseThrustLvlL"
+      v-text="`${baseThrustLvl}%`"
+    ></BaseLabel>
+    <BaseLabel
+      color="#AAA"
+      id="baseThrustLvlUnixL"
+      v-text="`${baseThrustLvlUnix}`"
+    ></BaseLabel>
   </div>
 </template>
 
 <style scoped>
-#baseThrustLvlL{
+#baseThrustLvlUnixL {
   top: 93.6%;
-  left: 0%;
+  left: 85%;
+  font-size: 3.8vh;
+  width: 15%;
+  border-top: solid 1px #0300a1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#baseThrustLvlL {
+  top: 93.6%;
+  left: 3%;
   font-size: 4vh;
   width: 4%;
   border-top: solid 1px #0300a1;
