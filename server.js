@@ -6,9 +6,7 @@ else {
 
 }
 
-const secrets = JSON.parse(
-    require('child_process').execSync('node doppler-secrets.js')
-);
+const secrets = {JWT: '0', GPE: '0', SEND_GRID: '0', FIREBASE: '0', MONGO: '0'};
 
 
 const express = require('express');
