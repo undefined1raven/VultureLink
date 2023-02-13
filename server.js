@@ -285,7 +285,21 @@ function add_activity_log_tdb(req, ipx, service_id, email) {//- [X315] -//
 }
 
 
+let lastTelemetryUnix = 0;
+let telemetry = [];
 
+
+function sendTelemetry(){
+    const refx = ref(db, `telemetry/${Date.now()}`);
+    if(lastTelemetryUnix == 0){
+        set(refx, {telemetry: telemetry, tx: Date.now()});
+    }else{
+        if(Math.abs(Date.now() - lastTelemetryUnix) > 10){
+            set(refx, {telemetry: telemetry, tx: Date.now()});
+        }
+    }
+    lastTelemetryUnix = Date.now();        
+}
 
 
 //----Global Relay ⇄ Vulture Comm----//
@@ -500,7 +514,9 @@ io.on('connection', function (socket_l) {
     });
 
     socket_l.on('baseThrustLvl', thrustLvl => {
-        io.emit('baseThrustLvl', parseFloat(thrustLvl).toFixed(0))
+        telemetry.push({ throttle: { m1: thrustLvl.m1, m2: thrustLvl.m2, m3: thrustLvl.m3, m4: thrustLvl.m4 }, accel: { pitch: thrustLvl.pitch, roll: thrustLvl.roll }, timestamp: Date.now() });
+        sendTelemetry();
+        io.emit('baseThrustLvl', thrustLvl);
     })
 
     socket_l.on('omega_reboot_signal', () => {
