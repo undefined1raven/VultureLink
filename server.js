@@ -298,7 +298,8 @@ function sendTelemetry(){
             set(refx, {telemetry: telemetry, tx: Date.now()});
         }
     }
-    lastTelemetryUnix = Date.now();        
+    lastTelemetryUnix = Date.now();   
+    telemetry = [];     
 }
 
 
@@ -512,7 +513,6 @@ io.on('connection', function (socket_l) {
         io.to(`${EAX.vid}`).emit('onFCRestart', '0');
     });
     socket_l.on('onTELCO', status => {
-        console.log(status.TE)
         io.to(`${status.vid}`).emit('onTELCO', status.TELCO);
     });
     socket_l.on('FlightInputOnChange', FlightInputOnChangePayload => {
@@ -521,7 +521,9 @@ io.on('connection', function (socket_l) {
 
     socket_l.on('baseThrustLvl', thrustLvl => {
         telemetry.push({ throttle: { m1: thrustLvl.m1, m2: thrustLvl.m2, m3: thrustLvl.m3, m4: thrustLvl.m4 }, accel: { pitch: thrustLvl.pitch, roll: thrustLvl.roll }, timestamp: Date.now() });
-        sendTelemetry();
+        if(thrustLvl.TELCO){
+            sendTelemetry();
+        }
         io.emit('baseThrustLvl', thrustLvl);
     })
 
