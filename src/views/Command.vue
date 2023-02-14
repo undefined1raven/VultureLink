@@ -9,7 +9,6 @@ import MobileMain from "@/components/MobileCMDMain.vue";
 import isMobile from "@/composables/isMobile.ts";
 
 import { io } from "socket.io-client";
-import { Console } from 'console';
 </script>
 
 <script lang="ts">
@@ -30,11 +29,15 @@ var socket = io({
 export default {
   data() {
     return {
+      TELCO_P: false,
+      currentPitch: 0,
+      currentRoll: 0,
+      lastIMUUnix: 0,
       baseThrustLvlUnix: 0,
       baseThrustLvl: "UNK",
       hasStream: false,
       current_user_acid: getCookie("acid"),
-      targetVid: "a5ef02a9-7838-42bc-b4e8-f156cc1f06c7",
+      targetVid: "<Vulture ID>",
       vultureTelemetry: { imu_alpha: {} },
       PermissionsAndAccessObj: {},
       vn: "",
@@ -45,17 +48,24 @@ export default {
     };
   },
   methods: {
-    onEAX(){
+    onEAX() {
       socket.emit("onEAX", { vid: this.targetVid });
-      console.log('Emergency All Stop')
+      console.log("Emergency All Stop");
+    },
+    onFCRestart(){
+      socket.emit("onFCRestart", { vid: this.targetVid });
+    },
+    onTELCO(args:object){
+      socket.emit("onTELCO", { vid: this.targetVid, TELCO: args });
     },
     vultureConnectionAssessor() {
       if (
-        Math.abs(this.vultureConnection.lastHeartBeadUnix - Date.now()) > 3000
+        Math.abs(this.baseThrustLvlUnix - Date.now()) > 3000
       ) {
         this.vultureConnection.isActive = false;
       } else {
         this.vultureConnection.isActive = true;
+        this.$refs.MobileCommandRef.onVultureHeartbeat();
       }
     },
     roleSelectorParser(PermissionsAndAccessObj: Object) {
@@ -103,7 +113,7 @@ export default {
         socket.emit("request_vulture_uplink", { vid: this.targetVid });
       }
       this.vultureConnectionAssessor();
-    }, 1500);
+    }, 500);
 
     setTimeout(() => {
       socket.emit("request_vulture_permissions", {
@@ -122,6 +132,10 @@ export default {
         this.$refs.MobileCommandRef.onVultureHeartbeat();
       });
 
+      socket.on('imu_alpha_data_pkg_server_relay', imu_pkg => {
+        this.lastIMUUnix = Date.now()
+      });
+
       socket.on("relayed_fwd_cam_rtc_req", (offer) => {
         try {
           fwd_rcvng_peer.signal(offer);
@@ -130,9 +144,12 @@ export default {
         }
       });
 
-      socket.on("baseThrustLvl", (baseThrustLvl) => {
-        this.baseThrustLvl = baseThrustLvl;
-        this.baseThrustLvlUnix = Date.now()
+      socket.on("baseThrustLvl", (baseThrustLvlPkg) => {
+        this.baseThrustLvl = `[${(parseFloat(baseThrustLvlPkg.m1)).toFixed(0)}][${(parseFloat(baseThrustLvlPkg.m2)).toFixed(0)}][${(parseFloat(baseThrustLvlPkg.m3)).toFixed(0)}][${(parseFloat(baseThrustLvlPkg.m4)).toFixed(0)}]`;
+        this.currentPitch = parseFloat(baseThrustLvlPkg.pitch).toFixed(3);
+        this.currentRoll = parseFloat(baseThrustLvlPkg.roll).toFixed(3);
+        this.baseThrustLvlUnix = Date.now();
+        this.TELCO_P = baseThrustLvlPkg.TELCO;
       });
 
       socket.on("vulture_permissions", (vulture_permissions_res) => {
@@ -188,6 +205,12 @@ export default {
     :hasVideoDownlink="hasStream"
     @FlightInputOnChange="FlightInputOnChangeHandler"
     @onEAX="onEAX"
+    :lastIMUUnix="lastIMUUnix"
+    @FCRestart="onFCRestart"
+    @TELCO="onTELCO"
+    :currentPitch="currentPitch"
+    :currentRoll="currentRoll"
+    :TELCO_P="TELCO_P"
     :roleAvailablility="roleSelectorParser(PermissionsAndAccessObj)"
     ref="MobileCommandRef"
     v-if="isMobile()"

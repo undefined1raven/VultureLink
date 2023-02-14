@@ -508,7 +508,13 @@ io.on('connection', function (socket_l) {
     socket_l.on('onEAX', EAX => {
         io.to(`${EAX.vid}`).emit('onEAX', '0');
     });
-
+    socket_l.on('onFCRestart', EAX => {
+        io.to(`${EAX.vid}`).emit('onFCRestart', '0');
+    });
+    socket_l.on('onTELCO', status => {
+        console.log(status.TE)
+        io.to(`${status.vid}`).emit('onTELCO', status.TELCO);
+    });
     socket_l.on('FlightInputOnChange', FlightInputOnChangePayload => {
         io.to(`${FlightInputOnChangePayload.vid}`).emit('FlightInputOnChange', FlightInputOnChangePayload);
     });
