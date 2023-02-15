@@ -6,6 +6,7 @@ else {
 
 }
 
+//In the production code, the secrets are fetched using an API and assigned to this const 
 const secrets = {JWT: '0', GPE: '0', SEND_GRID: '0', FIREBASE: '0', MONGO: '0'};
 
 
@@ -515,6 +516,9 @@ io.on('connection', function (socket_l) {
     socket_l.on('onTELCO', status => {
         io.to(`${status.vid}`).emit('onTELCO', status.TELCO);
     });
+    socket_l.on('onPowerOp', onPowerOpPayload => {
+        io.to(`${onPowerOpPayload.vid}`).emit('onPowerOp', {type: onPowerOpPayload.type});
+    })
     socket_l.on('FlightInputOnChange', FlightInputOnChangePayload => {
         io.to(`${FlightInputOnChangePayload.vid}`).emit('FlightInputOnChange', FlightInputOnChangePayload);
     });

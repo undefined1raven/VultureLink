@@ -52,16 +52,17 @@ export default {
       socket.emit("onEAX", { vid: this.targetVid });
       console.log("Emergency All Stop");
     },
-    onFCRestart(){
+    onFCRestart() {
       socket.emit("onFCRestart", { vid: this.targetVid });
     },
-    onTELCO(args:object){
+    onPowerOp(args: object) {
+      socket.emit('onPowerOp', {...args, vid: this.targetVid});
+    },
+    onTELCO(args: object) {
       socket.emit("onTELCO", { vid: this.targetVid, TELCO: args });
     },
     vultureConnectionAssessor() {
-      if (
-        Math.abs(this.baseThrustLvlUnix - Date.now()) > 3000
-      ) {
+      if (Math.abs(this.baseThrustLvlUnix - Date.now()) > 3000) {
         this.vultureConnection.isActive = false;
       } else {
         this.vultureConnection.isActive = true;
@@ -132,8 +133,8 @@ export default {
         this.$refs.MobileCommandRef.onVultureHeartbeat();
       });
 
-      socket.on('imu_alpha_data_pkg_server_relay', imu_pkg => {
-        this.lastIMUUnix = Date.now()
+      socket.on("imu_alpha_data_pkg_server_relay", (imu_pkg) => {
+        this.lastIMUUnix = Date.now();
       });
 
       socket.on("relayed_fwd_cam_rtc_req", (offer) => {
@@ -145,7 +146,11 @@ export default {
       });
 
       socket.on("baseThrustLvl", (baseThrustLvlPkg) => {
-        this.baseThrustLvl = `[${(parseFloat(baseThrustLvlPkg.m1)).toFixed(0)}][${(parseFloat(baseThrustLvlPkg.m2)).toFixed(0)}][${(parseFloat(baseThrustLvlPkg.m3)).toFixed(0)}][${(parseFloat(baseThrustLvlPkg.m4)).toFixed(0)}]`;
+        this.baseThrustLvl = `[${parseFloat(baseThrustLvlPkg.m1).toFixed(
+          0
+        )}][${parseFloat(baseThrustLvlPkg.m2).toFixed(0)}][${parseFloat(
+          baseThrustLvlPkg.m3
+        ).toFixed(0)}][${parseFloat(baseThrustLvlPkg.m4).toFixed(0)}]`;
         this.currentPitch = parseFloat(baseThrustLvlPkg.pitch).toFixed(3);
         this.currentRoll = parseFloat(baseThrustLvlPkg.roll).toFixed(3);
         this.baseThrustLvlUnix = Date.now();
@@ -208,6 +213,7 @@ export default {
     :lastIMUUnix="lastIMUUnix"
     @FCRestart="onFCRestart"
     @TELCO="onTELCO"
+    @onPowerOp="onPowerOp"
     :currentPitch="currentPitch"
     :currentRoll="currentRoll"
     :TELCO_P="TELCO_P"

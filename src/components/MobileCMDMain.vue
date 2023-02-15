@@ -16,6 +16,7 @@ import AuroraLogo from "@/components/AuroraLogo.vue";
 import MobileCMDMainQuickSelectMenu from "@/components/MobileCMDMainQuickSelectMenu.vue";
 import DynamicsIndi from "@/components/CMD_DynamicsIndi.vue";
 import DiagsDock from "@/components/CMD_DiagsDock.vue";
+import PowerOptions from "@/components/MobileCMDPowerOptions.vue";
 
 import isMobile from "@/composables/isMobile.ts";
 import percentage from "@/composables/percentage.ts";
@@ -35,6 +36,7 @@ export default {
       isReadyForTakeoff: false,
       hasLaunched: false,
       TELCO: false,
+      arePowerOptionsVisible: false,
     };
   },
   props: {
@@ -142,6 +144,12 @@ export default {
     onTELCOToggle() {
       this.$emit("TELCO", !this.TELCO);
     },
+    onPowerOp(args:object){
+      this.$emit("onPowerOp", args);
+    },
+    onPowerOptionsToggle(){
+      this.arePowerOptionsVisible = !this.arePowerOptionsVisible;
+    },
     onFullScreenButtonClick() {
       if (!this.isFullScreen) {
         document.documentElement.requestFullscreen();
@@ -238,8 +246,8 @@ export default {
       @click="onFCRestart"
       id="fc_restart_btn"
       color="#ff0037"
-      style="'background-color: #ff003720;'"
-      v-text="'FC Restart'"
+      style="background-color: #ff003720"
+      v-text="'FC Soft Restart'"
     ></BaseLabel>
     <BaseLabel
       @click="onTELCOToggle"
@@ -249,6 +257,13 @@ export default {
         TELCOStyleController().color
       }; background-color: ${TELCOStyleController().color}20`"
       v-text="TELCOStyleController().text"
+    ></BaseLabel>
+    <BaseLabel
+      @click="onPowerOptionsToggle"
+      id="power_options_toggle_btn"
+      color="#FFF"
+      style="'color: #0500FF; background-color: #0500FF20;'"
+      v-text="'Power Options'"
     ></BaseLabel>
     <BaseLabel
       class="x_error_indi"
@@ -262,6 +277,7 @@ export default {
       :style="`color: ${rollEA().color}; border: solid 1px ${rollEA().color}`"
       v-text="rollEA().text"
     ></BaseLabel>
+    <PowerOptions @onPowerOp="onPowerOp" @togglePowerOptions="onPowerOptionsToggle" v-if="arePowerOptionsVisible"></PowerOptions>
   </div>
 </template>
 
@@ -284,7 +300,8 @@ export default {
   font-size: 4vh;
 }
 #fc_restart_btn,
-#telemetry_toggle_btn {
+#telemetry_toggle_btn, 
+#power_options_toggle_btn {
   top: 21%;
   left: 78.5%;
   width: 20.4%;
@@ -299,6 +316,11 @@ export default {
 #telemetry_toggle_btn {
   top: 31%;
   transition: all linear 0.1s;
+}
+#power_options_toggle_btn{
+  top: 41%;
+  border: solid 1px #0500ff;
+  color: #FFF;
 }
 #dynamics_indi {
   top: 5%;
